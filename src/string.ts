@@ -7,7 +7,8 @@ export function isChar(test: unknown): test is string {
 }
 
 export function isRune(test: unknown): test is string {
-  return isString(test) && (test.length <= 2) && ([...test].length === 1) && test.isWellFormed();
+  return isString(test) && (test.length <= 2) && ([...test].length === 1) &&
+    test.isWellFormed();
 }
 
 export function assertString(test: unknown, label: string): void {
@@ -18,6 +19,12 @@ export function assertString(test: unknown, label: string): void {
 
 export function assertChar(test: unknown, label: string): void {
   if (isChar(test) !== true) {
-    throw new TypeError(`\`${label}\` must be a character.`);
+    throw new TypeError(`\`${label}\` must be a UTF-16 code unit.`);
+  }
+}
+
+export function assertRune(test: unknown, label: string): void {
+  if (isRune(test) !== true) {
+    throw new TypeError(`\`${label}\` must be a Unicode scalar value.`);
   }
 }

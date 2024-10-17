@@ -1,7 +1,7 @@
 import { assertStrictEquals, fail, unreachable } from "./deps.ts";
 import { Type } from "../mod.ts";
 
-const { assertChar, assertString, isChar, isRune, isString } = Type;
+const { assertChar, assertRune, assertString, isChar, isRune, isString } = Type;
 
 Deno.test("assertChar()", () => {
   try {
@@ -15,6 +15,13 @@ Deno.test("assertChar()", () => {
 
   try {
     assertChar("\u{10000}", "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    assertChar("", "test-1");
     unreachable();
   } catch {
     //
@@ -43,6 +50,60 @@ Deno.test("assertChar()", () => {
 
   try {
     assertChar(new String("0"), "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+});
+
+Deno.test("assertRune()", () => {
+  try {
+    assertRune(" ", "test-1");
+    assertRune("0", "test-1");
+    assertRune("\u0000", "test-1");
+    assertRune("\uFFFF", "test-1");
+    assertRune("\u{10000}", "test-1");
+  } catch (exception) {
+    fail((exception as Error).toString());
+  }
+
+  try {
+    assertRune("\u{10000}\u{10000}", "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    assertRune("", "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    assertRune("00", "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    assertRune(undefined, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    assertRune(0, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    assertRune(new String("0"), "test-1");
     unreachable();
   } catch {
     //
