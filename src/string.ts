@@ -6,6 +6,10 @@ export function isChar(test: unknown): test is string {
   return isString(test) && (test.length === 1);
 }
 
+export function isRune(test: unknown): test is string {
+  return isString(test) && (test.length <= 2) && ([...test].length === 1) && test.isWellFormed();
+}
+
 export function assertString(test: unknown, label: string): void {
   if (isString(test) !== true) {
     throw new TypeError(`\`${label}\` must be a \`string\`.`);

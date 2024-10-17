@@ -1,7 +1,7 @@
 import { assertStrictEquals, fail, unreachable } from "./deps.ts";
 import { Type } from "../mod.ts";
 
-const { assertChar, assertString, isChar, isString } = Type;
+const { assertChar, assertString, isChar, isRune, isString } = Type;
 
 Deno.test("assertChar()", () => {
   try {
@@ -106,6 +106,43 @@ Deno.test("isChar()", () => {
   assertStrictEquals(isChar("\uFFFF"), true);
   assertStrictEquals(isChar("\u{10000}"), false);
   assertStrictEquals(isChar("\u0000\u0000"), false);
+
+  assertStrictEquals(isChar("\uD800"), true);
+  assertStrictEquals(isChar("\uDC00"), true);
+  assertStrictEquals(isChar("\uD800\uD800"), false);
+  assertStrictEquals(isChar("\uD800\uDC00"), false);
+  assertStrictEquals(isChar("\uDC00\uD800"), false);
+  assertStrictEquals(isChar("\uDC00\uDC00"), false);
+  assertStrictEquals(isChar("\u{10FFFF}"), false);
+});
+
+Deno.test("isRune()", () => {
+  assertStrictEquals(isRune(0), false);
+  assertStrictEquals(isRune(0n), false);
+  assertStrictEquals(isRune(Number.NaN), false);
+  assertStrictEquals(isRune(Number.POSITIVE_INFINITY), false);
+  assertStrictEquals(isRune(Number.MAX_SAFE_INTEGER), false);
+  assertStrictEquals(isRune(Number.MIN_SAFE_INTEGER), false);
+  assertStrictEquals(isRune(Number.NEGATIVE_INFINITY), false);
+
+  assertStrictEquals(isRune(undefined), false);
+  assertStrictEquals(isRune(null), false);
+  assertStrictEquals(isRune(true), false);
+  assertStrictEquals(isRune(false), false);
+  assertStrictEquals(isRune(""), false);
+  assertStrictEquals(isRune("0"), true);
+  assertStrictEquals(isRune("\u0000"), true);
+  assertStrictEquals(isRune("\uFFFF"), true);
+  assertStrictEquals(isRune("\u{10000}"), true);
+  assertStrictEquals(isRune("\u0000\u0000"), false);
+
+  assertStrictEquals(isRune("\uD800"), false);
+  assertStrictEquals(isRune("\uDC00"), false);
+  assertStrictEquals(isRune("\uD800\uD800"), false);
+  assertStrictEquals(isRune("\uD800\uDC00"), true);
+  assertStrictEquals(isRune("\uDC00\uD800"), false);
+  assertStrictEquals(isRune("\uDC00\uDC00"), false);
+  assertStrictEquals(isRune("\u{10FFFF}"), true);
 });
 
 Deno.test("isString()", () => {

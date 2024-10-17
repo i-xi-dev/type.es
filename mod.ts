@@ -1,6 +1,12 @@
 import { assertBigInt, isBigInt } from "./src/bigint.ts";
 import { assertNumber, assertSafeInteger, isNumber } from "./src/number.ts";
-import { assertChar, assertString, isChar, isString } from "./src/string.ts";
+import {
+  assertChar,
+  assertString,
+  isChar,
+  isRune,
+  isString,
+} from "./src/string.ts";
 
 export const Type = {
   assertBigInt,
@@ -11,5 +17,6 @@ export const Type = {
   isBigInt,
   isChar,
   isNumber,
+  isRune,
   isString,
 };
