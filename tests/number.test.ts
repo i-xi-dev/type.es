@@ -1,10 +1,14 @@
 import { assertStrictEquals, fail, unreachable } from "./deps.ts";
 import {
   assertNegativeNumber,
+  assertNegativeSafeInteger,
   assertNonNegativeNumber,
+  assertNonNegativeSafeInteger,
   assertNonPositiveNumber,
+  assertNonPositiveSafeInteger,
   assertNumber,
   assertPositiveNumber,
+  assertPositiveSafeInteger,
   assertSafeInteger,
   isNegativeNumber,
   isNegativeSafeInteger,
@@ -313,6 +317,268 @@ Deno.test("assertSafeInteger()", () => {
 
   try {
     assertSafeInteger(new Number(0), "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+});
+
+Deno.test("assertPositiveSafeInteger()", () => {
+  try {
+    assertPositiveSafeInteger(1, "test-1");
+    assertPositiveSafeInteger(Number.MAX_SAFE_INTEGER, "test-1");
+  } catch (exception) {
+    fail((exception as Error).toString());
+  }
+
+  try {
+    assertPositiveSafeInteger(0, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    assertPositiveSafeInteger(Number.POSITIVE_INFINITY, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    assertPositiveSafeInteger(Number.NEGATIVE_INFINITY, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    assertPositiveSafeInteger(Number.NaN, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    assertPositiveSafeInteger(0.5, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    assertPositiveSafeInteger(undefined, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    assertPositiveSafeInteger(0n, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    assertPositiveSafeInteger(new Number(0), "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+});
+
+Deno.test("assertNonNegativeSafeInteger()", () => {
+  try {
+    assertNonNegativeSafeInteger(0, "test-1");
+    assertNonNegativeSafeInteger(1, "test-1");
+    assertNonNegativeSafeInteger(Number.MAX_SAFE_INTEGER, "test-1");
+  } catch (exception) {
+    fail((exception as Error).toString());
+  }
+
+  try {
+    assertNonNegativeSafeInteger(-1, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    assertNonNegativeSafeInteger(Number.POSITIVE_INFINITY, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    assertNonNegativeSafeInteger(Number.NEGATIVE_INFINITY, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    assertNonNegativeSafeInteger(Number.NaN, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    assertNonNegativeSafeInteger(0.5, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    assertNonNegativeSafeInteger(undefined, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    assertNonNegativeSafeInteger(0n, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    assertNonNegativeSafeInteger(new Number(0), "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+});
+
+Deno.test("assertNonPositiveSafeInteger()", () => {
+  try {
+    assertNonPositiveSafeInteger(0, "test-1");
+    assertNonPositiveSafeInteger(-1, "test-1");
+    assertNonPositiveSafeInteger(Number.MIN_SAFE_INTEGER, "test-1");
+  } catch (exception) {
+    fail((exception as Error).toString());
+  }
+
+  try {
+    assertNonPositiveSafeInteger(1, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    assertNonPositiveSafeInteger(Number.POSITIVE_INFINITY, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    assertNonPositiveSafeInteger(Number.NEGATIVE_INFINITY, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    assertNonPositiveSafeInteger(Number.NaN, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    assertNonPositiveSafeInteger(0.5, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    assertNonPositiveSafeInteger(undefined, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    assertNonPositiveSafeInteger(0n, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    assertNonPositiveSafeInteger(new Number(0), "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+});
+
+Deno.test("assertNegativeSafeInteger()", () => {
+  try {
+    assertNegativeSafeInteger(-1, "test-1");
+    assertNegativeSafeInteger(Number.MIN_SAFE_INTEGER, "test-1");
+  } catch (exception) {
+    fail((exception as Error).toString());
+  }
+
+  try {
+    assertNegativeSafeInteger(0, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    assertNegativeSafeInteger(Number.POSITIVE_INFINITY, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    assertNegativeSafeInteger(Number.NEGATIVE_INFINITY, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    assertNegativeSafeInteger(Number.NaN, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    assertNegativeSafeInteger(0.5, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    assertNegativeSafeInteger(undefined, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    assertNegativeSafeInteger(0n, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    assertNegativeSafeInteger(new Number(0), "test-1");
     unreachable();
   } catch {
     //

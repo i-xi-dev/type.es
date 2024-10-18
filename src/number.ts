@@ -73,3 +73,33 @@ export function assertSafeInteger(test: unknown, label: string): void {
     throw new TypeError(`\`${label}\` must be a safe integer.`);
   }
 }
+
+export function assertPositiveSafeInteger(test: unknown, label: string): void {
+  if (isPositiveSafeInteger(test) !== true) {
+    throw new TypeError(`\`${label}\` must be a positive safe integer.`);
+  }
+}
+
+export function assertNonNegativeSafeInteger(
+  test: unknown,
+  label: string,
+): void {
+  if (isNonNegativeSafeInteger(test) !== true) {
+    throw new TypeError(`\`${label}\` must be a non-negative safe integer.`);
+  }
+}
+
+export function assertNonPositiveSafeInteger(
+  test: unknown,
+  label: string,
+): void {
+  if (isNonPositiveSafeInteger(test) !== true) {
+    throw new TypeError(`\`${label}\` must be a non-positive safe integer.`);
+  }
+}
+
+export function assertNegativeSafeInteger(test: unknown, label: string): void {
+  if (isNegativeSafeInteger(test) !== true) {
+    throw new TypeError(`\`${label}\` must be a negative safe integer.`);
+  }
+}
