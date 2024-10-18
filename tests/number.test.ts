@@ -7,10 +7,14 @@ import {
   assertPositiveNumber,
   assertSafeInteger,
   isNegativeNumber,
+  isNegativeSafeInteger,
   isNonNegativeNumber,
+  isNonNegativeSafeInteger,
   isNonPositiveNumber,
+  isNonPositiveSafeInteger,
   isNumber,
   isPositiveNumber,
+  isPositiveSafeInteger,
   isSafeInteger,
 } from "../mod.ts";
 
@@ -493,4 +497,124 @@ Deno.test("isSafeInteger()", () => {
   assertStrictEquals(isSafeInteger(false), false);
   assertStrictEquals(isSafeInteger(""), false);
   assertStrictEquals(isSafeInteger("0"), false);
+});
+
+Deno.test("isPositiveSafeInteger()", () => {
+  assertStrictEquals(isPositiveSafeInteger(0), false);
+  assertStrictEquals(isPositiveSafeInteger(-0), false);
+  assertStrictEquals(isPositiveSafeInteger(1), true);
+  assertStrictEquals(isPositiveSafeInteger(-1), false);
+
+  assertStrictEquals(isPositiveSafeInteger(-10.1), false);
+  assertStrictEquals(isPositiveSafeInteger(-9.9), false);
+  assertStrictEquals(isPositiveSafeInteger(9.9), false);
+  assertStrictEquals(isPositiveSafeInteger(10.1), false);
+
+  assertStrictEquals(isPositiveSafeInteger(0n), false);
+  assertStrictEquals(isPositiveSafeInteger(-0n), false);
+  assertStrictEquals(isPositiveSafeInteger(1n), false);
+  assertStrictEquals(isPositiveSafeInteger(-1n), false);
+
+  assertStrictEquals(isPositiveSafeInteger(Number.NaN), false);
+  assertStrictEquals(isPositiveSafeInteger(Number.POSITIVE_INFINITY), false);
+  assertStrictEquals(isPositiveSafeInteger(Number.MAX_SAFE_INTEGER), true);
+  assertStrictEquals(isPositiveSafeInteger(Number.MIN_SAFE_INTEGER), false);
+  assertStrictEquals(isPositiveSafeInteger(Number.NEGATIVE_INFINITY), false);
+
+  assertStrictEquals(isPositiveSafeInteger(undefined), false);
+  assertStrictEquals(isPositiveSafeInteger(null), false);
+  assertStrictEquals(isPositiveSafeInteger(true), false);
+  assertStrictEquals(isPositiveSafeInteger(false), false);
+  assertStrictEquals(isPositiveSafeInteger(""), false);
+  assertStrictEquals(isPositiveSafeInteger("0"), false);
+});
+
+Deno.test("isNonNegativeSafeInteger()", () => {
+  assertStrictEquals(isNonNegativeSafeInteger(0), true);
+  assertStrictEquals(isNonNegativeSafeInteger(-0), true);
+  assertStrictEquals(isNonNegativeSafeInteger(1), true);
+  assertStrictEquals(isNonNegativeSafeInteger(-1), false);
+
+  assertStrictEquals(isNonNegativeSafeInteger(-10.1), false);
+  assertStrictEquals(isNonNegativeSafeInteger(-9.9), false);
+  assertStrictEquals(isNonNegativeSafeInteger(9.9), false);
+  assertStrictEquals(isNonNegativeSafeInteger(10.1), false);
+
+  assertStrictEquals(isNonNegativeSafeInteger(0n), false);
+  assertStrictEquals(isNonNegativeSafeInteger(-0n), false);
+  assertStrictEquals(isNonNegativeSafeInteger(1n), false);
+  assertStrictEquals(isNonNegativeSafeInteger(-1n), false);
+
+  assertStrictEquals(isNonNegativeSafeInteger(Number.NaN), false);
+  assertStrictEquals(isNonNegativeSafeInteger(Number.POSITIVE_INFINITY), false);
+  assertStrictEquals(isNonNegativeSafeInteger(Number.MAX_SAFE_INTEGER), true);
+  assertStrictEquals(isNonNegativeSafeInteger(Number.MIN_SAFE_INTEGER), false);
+  assertStrictEquals(isNonNegativeSafeInteger(Number.NEGATIVE_INFINITY), false);
+
+  assertStrictEquals(isNonNegativeSafeInteger(undefined), false);
+  assertStrictEquals(isNonNegativeSafeInteger(null), false);
+  assertStrictEquals(isNonNegativeSafeInteger(true), false);
+  assertStrictEquals(isNonNegativeSafeInteger(false), false);
+  assertStrictEquals(isNonNegativeSafeInteger(""), false);
+  assertStrictEquals(isNonNegativeSafeInteger("0"), false);
+});
+
+Deno.test("isNonPositiveSafeInteger()", () => {
+  assertStrictEquals(isNonPositiveSafeInteger(0), true);
+  assertStrictEquals(isNonPositiveSafeInteger(-0), true);
+  assertStrictEquals(isNonPositiveSafeInteger(1), false);
+  assertStrictEquals(isNonPositiveSafeInteger(-1), true);
+
+  assertStrictEquals(isNonPositiveSafeInteger(-10.1), false);
+  assertStrictEquals(isNonPositiveSafeInteger(-9.9), false);
+  assertStrictEquals(isNonPositiveSafeInteger(9.9), false);
+  assertStrictEquals(isNonPositiveSafeInteger(10.1), false);
+
+  assertStrictEquals(isNonPositiveSafeInteger(0n), false);
+  assertStrictEquals(isNonPositiveSafeInteger(-0n), false);
+  assertStrictEquals(isNonPositiveSafeInteger(1n), false);
+  assertStrictEquals(isNonPositiveSafeInteger(-1n), false);
+
+  assertStrictEquals(isNonPositiveSafeInteger(Number.NaN), false);
+  assertStrictEquals(isNonPositiveSafeInteger(Number.POSITIVE_INFINITY), false);
+  assertStrictEquals(isNonPositiveSafeInteger(Number.MAX_SAFE_INTEGER), false);
+  assertStrictEquals(isNonPositiveSafeInteger(Number.MIN_SAFE_INTEGER), true);
+  assertStrictEquals(isNonPositiveSafeInteger(Number.NEGATIVE_INFINITY), false);
+
+  assertStrictEquals(isNonPositiveSafeInteger(undefined), false);
+  assertStrictEquals(isNonPositiveSafeInteger(null), false);
+  assertStrictEquals(isNonPositiveSafeInteger(true), false);
+  assertStrictEquals(isNonPositiveSafeInteger(false), false);
+  assertStrictEquals(isNonPositiveSafeInteger(""), false);
+  assertStrictEquals(isNonPositiveSafeInteger("0"), false);
+});
+
+Deno.test("isNegativeSafeInteger()", () => {
+  assertStrictEquals(isNegativeSafeInteger(0), false);
+  assertStrictEquals(isNegativeSafeInteger(-0), false);
+  assertStrictEquals(isNegativeSafeInteger(1), false);
+  assertStrictEquals(isNegativeSafeInteger(-1), true);
+
+  assertStrictEquals(isNegativeSafeInteger(-10.1), false);
+  assertStrictEquals(isNegativeSafeInteger(-9.9), false);
+  assertStrictEquals(isNegativeSafeInteger(9.9), false);
+  assertStrictEquals(isNegativeSafeInteger(10.1), false);
+
+  assertStrictEquals(isNegativeSafeInteger(0n), false);
+  assertStrictEquals(isNegativeSafeInteger(-0n), false);
+  assertStrictEquals(isNegativeSafeInteger(1n), false);
+  assertStrictEquals(isNegativeSafeInteger(-1n), false);
+
+  assertStrictEquals(isNegativeSafeInteger(Number.NaN), false);
+  assertStrictEquals(isNegativeSafeInteger(Number.POSITIVE_INFINITY), false);
+  assertStrictEquals(isNegativeSafeInteger(Number.MAX_SAFE_INTEGER), false);
+  assertStrictEquals(isNegativeSafeInteger(Number.MIN_SAFE_INTEGER), true);
+  assertStrictEquals(isNegativeSafeInteger(Number.NEGATIVE_INFINITY), false);
+
+  assertStrictEquals(isNegativeSafeInteger(undefined), false);
+  assertStrictEquals(isNegativeSafeInteger(null), false);
+  assertStrictEquals(isNegativeSafeInteger(true), false);
+  assertStrictEquals(isNegativeSafeInteger(false), false);
+  assertStrictEquals(isNegativeSafeInteger(""), false);
+  assertStrictEquals(isNegativeSafeInteger("0"), false);
 });

@@ -22,6 +22,22 @@ export function isSafeInteger(test: unknown): test is number {
   return Number.isSafeInteger(test);
 }
 
+export function isPositiveSafeInteger(test: unknown): test is number {
+  return isSafeInteger(test) && (test > 0);
+}
+
+export function isNonNegativeSafeInteger(test: unknown): test is number {
+  return isSafeInteger(test) && (test >= 0);
+}
+
+export function isNonPositiveSafeInteger(test: unknown): test is number {
+  return isSafeInteger(test) && (test <= 0);
+}
+
+export function isNegativeSafeInteger(test: unknown): test is number {
+  return isSafeInteger(test) && (test < 0);
+}
+
 export function assertNumber(test: unknown, label: string): void {
   if (isNumber(test) !== true) {
     throw new TypeError(`\`${label}\` must be a \`number\`.`);
