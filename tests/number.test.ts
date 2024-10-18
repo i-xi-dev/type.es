@@ -1,6 +1,10 @@
 import { assertStrictEquals, fail, unreachable } from "./deps.ts";
 import {
+  assertNegativeNumber,
+  assertNonNegativeNumber,
+  assertNonPositiveNumber,
   assertNumber,
+  assertPositiveNumber,
   assertSafeInteger,
   isNegativeNumber,
   isNonNegativeNumber,
@@ -37,6 +41,215 @@ Deno.test("assertNumber()", () => {
 
   try {
     assertNumber(new Number(0), "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+});
+
+Deno.test("assertPositiveNumber()", () => {
+  try {
+    assertPositiveNumber(1, "test-1");
+    assertPositiveNumber(0.5, "test-1");
+    assertPositiveNumber(Number.POSITIVE_INFINITY, "test-1");
+  } catch (exception) {
+    fail((exception as Error).toString());
+  }
+
+  try {
+    assertPositiveNumber(0, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    assertPositiveNumber(Number.NEGATIVE_INFINITY, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    assertPositiveNumber(Number.NaN, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    assertPositiveNumber(undefined, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    assertPositiveNumber(0n, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    assertPositiveNumber(new Number(0), "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+});
+
+Deno.test("assertNonNegativeNumber()", () => {
+  try {
+    assertNonNegativeNumber(1, "test-1");
+    assertNonNegativeNumber(0.5, "test-1");
+    assertNonNegativeNumber(0, "test-1");
+    assertNonNegativeNumber(Number.POSITIVE_INFINITY, "test-1");
+  } catch (exception) {
+    fail((exception as Error).toString());
+  }
+
+  try {
+    assertNonNegativeNumber(-0.1, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    assertNonNegativeNumber(Number.NEGATIVE_INFINITY, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    assertNonNegativeNumber(Number.NaN, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    assertNonNegativeNumber(undefined, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    assertNonNegativeNumber(0n, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    assertNonNegativeNumber(new Number(0), "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+});
+
+Deno.test("assertNonPositiveNumber()", () => {
+  try {
+    assertNonPositiveNumber(-1, "test-1");
+    assertNonPositiveNumber(-0.5, "test-1");
+    assertNonPositiveNumber(Number.NEGATIVE_INFINITY, "test-1");
+  } catch (exception) {
+    fail((exception as Error).toString());
+  }
+
+  try {
+    assertNonPositiveNumber(0, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    assertNonPositiveNumber(Number.POSITIVE_INFINITY, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    assertNonPositiveNumber(Number.NaN, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    assertNonPositiveNumber(undefined, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    assertNonPositiveNumber(0n, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    assertNonPositiveNumber(new Number(0), "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+});
+
+Deno.test("assertNegativeNumber()", () => {
+  try {
+    assertNegativeNumber(-1, "test-1");
+    assertNegativeNumber(-0.5, "test-1");
+    assertNegativeNumber(Number.NEGATIVE_INFINITY, "test-1");
+  } catch (exception) {
+    fail((exception as Error).toString());
+  }
+
+  try {
+    assertNegativeNumber(0, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    assertNegativeNumber(Number.POSITIVE_INFINITY, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    assertNegativeNumber(Number.NaN, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    assertNegativeNumber(undefined, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    assertNegativeNumber(0n, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    assertNegativeNumber(new Number(0), "test-1");
     unreachable();
   } catch {
     //

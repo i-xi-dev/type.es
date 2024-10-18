@@ -28,6 +28,30 @@ export function assertNumber(test: unknown, label: string): void {
   }
 }
 
+export function assertPositiveNumber(test: unknown, label: string): void {
+  if (isPositiveNumber(test) !== true) {
+    throw new TypeError(`\`${label}\` must be a positive \`number\`.`);
+  }
+}
+
+export function assertNonNegativeNumber(test: unknown, label: string): void {
+  if (isNonNegativeNumber(test) !== true) {
+    throw new TypeError(`\`${label}\` must be a non-negative \`number\`.`);
+  }
+}
+
+export function assertNonPositiveNumber(test: unknown, label: string): void {
+  if (isNonPositiveNumber(test) !== true) {
+    throw new TypeError(`\`${label}\` must be a non-positive \`number\`.`);
+  }
+}
+
+export function assertNegativeNumber(test: unknown, label: string): void {
+  if (isNegativeNumber(test) !== true) {
+    throw new TypeError(`\`${label}\` must be a negative \`number\`.`);
+  }
+}
+
 export function assertSafeInteger(test: unknown, label: string): void {
   if (Number.isSafeInteger(test) !== true) {
     throw new TypeError(`\`${label}\` must be a safe integer.`);
