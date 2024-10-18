@@ -1,5 +1,6 @@
 import { assertStrictEquals, fail, unreachable } from "./deps.ts";
 import {
+  assertEvenSafeInteger,
   assertNegativeNumber,
   assertNegativeSafeInteger,
   assertNonNegativeNumber,
@@ -7,9 +8,11 @@ import {
   assertNonPositiveNumber,
   assertNonPositiveSafeInteger,
   assertNumber,
+  assertOddSafeInteger,
   assertPositiveNumber,
   assertPositiveSafeInteger,
   assertSafeInteger,
+  isEvenSafeInteger,
   isNegativeNumber,
   isNegativeSafeInteger,
   isNonNegativeNumber,
@@ -17,6 +20,7 @@ import {
   isNonPositiveNumber,
   isNonPositiveSafeInteger,
   isNumber,
+  isOddSafeInteger,
   isPositiveNumber,
   isPositiveSafeInteger,
   isSafeInteger,
@@ -883,4 +887,80 @@ Deno.test("isNegativeSafeInteger()", () => {
   assertStrictEquals(isNegativeSafeInteger(false), false);
   assertStrictEquals(isNegativeSafeInteger(""), false);
   assertStrictEquals(isNegativeSafeInteger("0"), false);
+});
+
+Deno.test("isOddSafeInteger()", () => {
+  assertStrictEquals(isOddSafeInteger(0), false);
+  assertStrictEquals(isOddSafeInteger(-0), false);
+  assertStrictEquals(isOddSafeInteger(1), true);
+  assertStrictEquals(isOddSafeInteger(-1), true);
+  assertStrictEquals(isOddSafeInteger(2), false);
+  assertStrictEquals(isOddSafeInteger(-2), false);
+  assertStrictEquals(isOddSafeInteger(3), true);
+  assertStrictEquals(isOddSafeInteger(-3), true);
+  assertStrictEquals(isOddSafeInteger(4), false);
+  assertStrictEquals(isOddSafeInteger(-4), false);
+});
+
+Deno.test("isEvenSafeInteger()", () => {
+  assertStrictEquals(isEvenSafeInteger(0), true);
+  assertStrictEquals(isEvenSafeInteger(-0), true);
+  assertStrictEquals(isEvenSafeInteger(1), false);
+  assertStrictEquals(isEvenSafeInteger(-1), false);
+  assertStrictEquals(isEvenSafeInteger(2), true);
+  assertStrictEquals(isEvenSafeInteger(-2), true);
+  assertStrictEquals(isEvenSafeInteger(3), false);
+  assertStrictEquals(isEvenSafeInteger(-3), false);
+  assertStrictEquals(isEvenSafeInteger(4), true);
+  assertStrictEquals(isEvenSafeInteger(-4), true);
+});
+
+Deno.test("assertOddSafeInteger()", () => {
+  try {
+    assertOddSafeInteger(1, "test-1");
+    assertOddSafeInteger(-1, "test-1");
+    assertOddSafeInteger(3, "test-1");
+    assertOddSafeInteger(-3, "test-1");
+  } catch (exception) {
+    fail((exception as Error).toString());
+  }
+
+  try {
+    assertOddSafeInteger(0, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    assertOddSafeInteger(2, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+});
+
+Deno.test("assertEvenSafeInteger()", () => {
+  try {
+    assertEvenSafeInteger(0, "test-1");
+    assertEvenSafeInteger(-0, "test-1");
+    assertEvenSafeInteger(2, "test-1");
+    assertEvenSafeInteger(-2, "test-1");
+  } catch (exception) {
+    fail((exception as Error).toString());
+  }
+
+  try {
+    assertEvenSafeInteger(1, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    assertEvenSafeInteger(-1, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
 });

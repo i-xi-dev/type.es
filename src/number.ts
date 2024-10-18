@@ -38,6 +38,14 @@ export function isNegativeSafeInteger(test: unknown): test is number {
   return isSafeInteger(test) && (test < 0);
 }
 
+export function isOddSafeInteger(test: unknown): test is number {
+  return isSafeInteger(test) && ((test % 2) !== 0);
+}
+
+export function isEvenSafeInteger(test: unknown): test is number {
+  return isSafeInteger(test) && ((test % 2) === 0);
+}
+
 export function assertNumber(test: unknown, label: string): void {
   if (isNumber(test) !== true) {
     throw new TypeError(`\`${label}\` must be a \`number\`.`);
@@ -101,5 +109,17 @@ export function assertNonPositiveSafeInteger(
 export function assertNegativeSafeInteger(test: unknown, label: string): void {
   if (isNegativeSafeInteger(test) !== true) {
     throw new TypeError(`\`${label}\` must be a negative safe integer.`);
+  }
+}
+
+export function assertOddSafeInteger(test: unknown, label: string): void {
+  if (isOddSafeInteger(test) !== true) {
+    throw new TypeError(`\`${label}\` must be an odd safe integer.`);
+  }
+}
+
+export function assertEvenSafeInteger(test: unknown, label: string): void {
+  if (isEvenSafeInteger(test) !== true) {
+    throw new TypeError(`\`${label}\` must be an even safe integer.`);
   }
 }

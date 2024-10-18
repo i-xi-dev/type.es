@@ -1,14 +1,18 @@
 import { assertStrictEquals, fail, unreachable } from "./deps.ts";
 import {
   assertBigInt,
+  assertEvenBigInt,
   assertNegativeBigInt,
   assertNonNegativeBigInt,
   assertNonPositiveBigInt,
+  assertOddBigInt,
   assertPositiveBigInt,
   isBigInt,
+  isEvenBigInt,
   isNegativeBigInt,
   isNonNegativeBigInt,
   isNonPositiveBigInt,
+  isOddBigInt,
   isPositiveBigInt,
 } from "../mod.ts";
 
@@ -300,4 +304,80 @@ Deno.test("isNegativeBigInt()", () => {
   assertStrictEquals(isNegativeBigInt(false), false);
   assertStrictEquals(isNegativeBigInt(""), false);
   assertStrictEquals(isNegativeBigInt("0"), false);
+});
+
+Deno.test("isOddBigInt()", () => {
+  assertStrictEquals(isOddBigInt(0n), false);
+  assertStrictEquals(isOddBigInt(-0n), false);
+  assertStrictEquals(isOddBigInt(1n), true);
+  assertStrictEquals(isOddBigInt(-1n), true);
+  assertStrictEquals(isOddBigInt(2n), false);
+  assertStrictEquals(isOddBigInt(-2n), false);
+  assertStrictEquals(isOddBigInt(3n), true);
+  assertStrictEquals(isOddBigInt(-3n), true);
+  assertStrictEquals(isOddBigInt(4n), false);
+  assertStrictEquals(isOddBigInt(-4n), false);
+});
+
+Deno.test("isEvenBigInt()", () => {
+  assertStrictEquals(isEvenBigInt(0n), true);
+  assertStrictEquals(isEvenBigInt(-0n), true);
+  assertStrictEquals(isEvenBigInt(1n), false);
+  assertStrictEquals(isEvenBigInt(-1n), false);
+  assertStrictEquals(isEvenBigInt(2n), true);
+  assertStrictEquals(isEvenBigInt(-2n), true);
+  assertStrictEquals(isEvenBigInt(3n), false);
+  assertStrictEquals(isEvenBigInt(-3n), false);
+  assertStrictEquals(isEvenBigInt(4n), true);
+  assertStrictEquals(isEvenBigInt(-4n), true);
+});
+
+Deno.test("assertOddBigInt()", () => {
+  try {
+    assertOddBigInt(1n, "test-1");
+    assertOddBigInt(-1n, "test-1");
+    assertOddBigInt(3n, "test-1");
+    assertOddBigInt(-3n, "test-1");
+  } catch (exception) {
+    fail((exception as Error).toString());
+  }
+
+  try {
+    assertOddBigInt(0n, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    assertOddBigInt(2n, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+});
+
+Deno.test("assertEvenBigInt()", () => {
+  try {
+    assertEvenBigInt(0n, "test-1");
+    assertEvenBigInt(-0n, "test-1");
+    assertEvenBigInt(2n, "test-1");
+    assertEvenBigInt(-2n, "test-1");
+  } catch (exception) {
+    fail((exception as Error).toString());
+  }
+
+  try {
+    assertEvenBigInt(1n, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    assertEvenBigInt(-1n, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
 });
