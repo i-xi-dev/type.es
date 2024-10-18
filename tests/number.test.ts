@@ -1,7 +1,10 @@
 import { assertStrictEquals, fail, unreachable } from "./deps.ts";
-import { Type } from "../mod.ts";
-
-const { assertNumber, assertSafeInteger, isNumber } = Type;
+import {
+  assertNumber,
+  assertSafeInteger,
+  isNumber,
+  isSafeInteger,
+} from "../mod.ts";
 
 Deno.test("assertNumber()", () => {
   try {
@@ -123,4 +126,34 @@ Deno.test("isNumber()", () => {
   assertStrictEquals(isNumber(false), false);
   assertStrictEquals(isNumber(""), false);
   assertStrictEquals(isNumber("0"), false);
+});
+
+Deno.test("isSafeInteger()", () => {
+  assertStrictEquals(isSafeInteger(0), true);
+  assertStrictEquals(isSafeInteger(-0), true);
+  assertStrictEquals(isSafeInteger(1), true);
+  assertStrictEquals(isSafeInteger(-1), true);
+
+  assertStrictEquals(isSafeInteger(-10.1), false);
+  assertStrictEquals(isSafeInteger(-9.9), false);
+  assertStrictEquals(isSafeInteger(9.9), false);
+  assertStrictEquals(isSafeInteger(10.1), false);
+
+  assertStrictEquals(isSafeInteger(0n), false);
+  assertStrictEquals(isSafeInteger(-0n), false);
+  assertStrictEquals(isSafeInteger(1n), false);
+  assertStrictEquals(isSafeInteger(-1n), false);
+
+  assertStrictEquals(isSafeInteger(Number.NaN), false);
+  assertStrictEquals(isSafeInteger(Number.POSITIVE_INFINITY), false);
+  assertStrictEquals(isSafeInteger(Number.MAX_SAFE_INTEGER), true);
+  assertStrictEquals(isSafeInteger(Number.MIN_SAFE_INTEGER), true);
+  assertStrictEquals(isSafeInteger(Number.NEGATIVE_INFINITY), false);
+
+  assertStrictEquals(isSafeInteger(undefined), false);
+  assertStrictEquals(isSafeInteger(null), false);
+  assertStrictEquals(isSafeInteger(true), false);
+  assertStrictEquals(isSafeInteger(false), false);
+  assertStrictEquals(isSafeInteger(""), false);
+  assertStrictEquals(isSafeInteger("0"), false);
 });

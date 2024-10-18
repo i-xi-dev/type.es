@@ -1,7 +1,16 @@
 import { assertStrictEquals, fail, unreachable } from "./deps.ts";
-import { Type } from "../mod.ts";
-
-const { assertChar, assertRune, assertString, isChar, isRune, isString } = Type;
+import {
+  assertChar,
+  assertEmptyString,
+  assertNonEmptyString,
+  assertRune,
+  assertString,
+  isChar,
+  isEmptyString,
+  isNonEmptyString,
+  isRune,
+  isString,
+} from "../mod.ts";
 
 Deno.test("assertChar()", () => {
   try {
@@ -148,6 +157,86 @@ Deno.test("assertString()", () => {
   }
 });
 
+Deno.test("assertEmptyString()", () => {
+  try {
+    assertEmptyString("", "test-1");
+  } catch (exception) {
+    fail((exception as Error).toString());
+  }
+
+  try {
+    assertEmptyString("0", "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    assertEmptyString("00", "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    assertEmptyString(undefined, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    assertEmptyString(0, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    assertEmptyString(new String("0"), "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+});
+
+Deno.test("assertNonEmptyString()", () => {
+  try {
+    assertNonEmptyString("0", "test-1");
+    assertNonEmptyString("00", "test-1");
+  } catch (exception) {
+    fail((exception as Error).toString());
+  }
+
+  try {
+    assertNonEmptyString("", "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    assertNonEmptyString(undefined, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    assertNonEmptyString(0, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    assertNonEmptyString(new String("0"), "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+});
+
 Deno.test("isChar()", () => {
   assertStrictEquals(isChar(0), false);
   assertStrictEquals(isChar(0n), false);
@@ -221,4 +310,40 @@ Deno.test("isString()", () => {
   assertStrictEquals(isString(false), false);
   assertStrictEquals(isString(""), true);
   assertStrictEquals(isString("0"), true);
+});
+
+Deno.test("isEmptyString()", () => {
+  assertStrictEquals(isEmptyString(0), false);
+  assertStrictEquals(isEmptyString(0n), false);
+  assertStrictEquals(isEmptyString(Number.NaN), false);
+  assertStrictEquals(isEmptyString(Number.POSITIVE_INFINITY), false);
+  assertStrictEquals(isEmptyString(Number.MAX_SAFE_INTEGER), false);
+  assertStrictEquals(isEmptyString(Number.MIN_SAFE_INTEGER), false);
+  assertStrictEquals(isEmptyString(Number.NEGATIVE_INFINITY), false);
+
+  assertStrictEquals(isEmptyString(undefined), false);
+  assertStrictEquals(isEmptyString(null), false);
+  assertStrictEquals(isEmptyString(true), false);
+  assertStrictEquals(isEmptyString(false), false);
+  assertStrictEquals(isEmptyString(""), true);
+  assertStrictEquals(isEmptyString("0"), false);
+  assertStrictEquals(isEmptyString("00"), false);
+});
+
+Deno.test("isNonEmptyString()", () => {
+  assertStrictEquals(isNonEmptyString(0), false);
+  assertStrictEquals(isNonEmptyString(0n), false);
+  assertStrictEquals(isNonEmptyString(Number.NaN), false);
+  assertStrictEquals(isNonEmptyString(Number.POSITIVE_INFINITY), false);
+  assertStrictEquals(isNonEmptyString(Number.MAX_SAFE_INTEGER), false);
+  assertStrictEquals(isNonEmptyString(Number.MIN_SAFE_INTEGER), false);
+  assertStrictEquals(isNonEmptyString(Number.NEGATIVE_INFINITY), false);
+
+  assertStrictEquals(isNonEmptyString(undefined), false);
+  assertStrictEquals(isNonEmptyString(null), false);
+  assertStrictEquals(isNonEmptyString(true), false);
+  assertStrictEquals(isNonEmptyString(false), false);
+  assertStrictEquals(isNonEmptyString(""), false);
+  assertStrictEquals(isNonEmptyString("0"), true);
+  assertStrictEquals(isNonEmptyString("00"), true);
 });

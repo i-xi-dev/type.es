@@ -1,7 +1,5 @@
 import { assertStrictEquals, fail, unreachable } from "./deps.ts";
-import { Type } from "../mod.ts";
-
-const { assertBigInt, isBigInt } = Type;
+import { assertBigInt, isBigInt } from "../mod.ts";
 
 Deno.test("assertBigInt()", () => {
   try {
