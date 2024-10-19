@@ -87,3 +87,11 @@ export function maxBigIntOf<T extends bigint>(value0: T, ...values: T[]): T {
   }
   return provMax;
 }
+
+export function isBigIntInRange<T extends bigint>(
+  test: unknown,
+  min: T,
+  max: T,
+): test is T {
+  return isBigInt(test) && (min <= test) && (max >= test);
+}

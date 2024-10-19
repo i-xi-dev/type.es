@@ -8,6 +8,7 @@ import {
   assertOddBigInt,
   assertPositiveBigInt,
   isBigInt,
+  isBigIntInRange,
   isEvenBigInt,
   isNegativeBigInt,
   isNonNegativeBigInt,
@@ -428,4 +429,30 @@ Deno.test("maxBigIntOf()", () => {
   assertStrictEquals(maxBigIntOf(0n, -1n, -2n), 0n);
   assertStrictEquals(maxBigIntOf(1n, -2n, 0n), 1n);
   assertStrictEquals(maxBigIntOf(-1n, -2n, 0n), 0n);
+});
+
+Deno.test("isBigIntInRange()", () => {
+  assertStrictEquals(isBigIntInRange(0n, 0n, 0n), true);
+  assertStrictEquals(isBigIntInRange(0n, 1n, 0n), false); // 負のrange
+  assertStrictEquals(isBigIntInRange(0n, 0n, 1n), true);
+  assertStrictEquals(isBigIntInRange(0n, -1n, 0n), true);
+  assertStrictEquals(isBigIntInRange(0n, 0n, -1n), false); // 負のrange
+  assertStrictEquals(isBigIntInRange(0n, 1n, 1n), false);
+  assertStrictEquals(isBigIntInRange(0n, -1n, -1n), false);
+
+  assertStrictEquals(isBigIntInRange(1n, 0n, 0n), false);
+  assertStrictEquals(isBigIntInRange(1n, 1n, 0n), false); // 負のrange
+  assertStrictEquals(isBigIntInRange(1n, 0n, 1n), true);
+  assertStrictEquals(isBigIntInRange(1n, -1n, 0n), false);
+  assertStrictEquals(isBigIntInRange(1n, 0n, -1n), false); // 負のrange
+  assertStrictEquals(isBigIntInRange(1n, 1n, 1n), true);
+  assertStrictEquals(isBigIntInRange(1n, -1n, -1n), false);
+
+  assertStrictEquals(isBigIntInRange(-1n, 0n, 0n), false);
+  assertStrictEquals(isBigIntInRange(-1n, 1n, 0n), false); // 負のrange
+  assertStrictEquals(isBigIntInRange(-1n, 0n, 1n), false);
+  assertStrictEquals(isBigIntInRange(-1n, -1n, 0n), true);
+  assertStrictEquals(isBigIntInRange(-1n, 0n, -1n), false); // 負のrange
+  assertStrictEquals(isBigIntInRange(-1n, 1n, 1n), false);
+  assertStrictEquals(isBigIntInRange(-1n, -1n, -1n), true);
 });
