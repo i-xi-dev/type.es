@@ -14,6 +14,8 @@ import {
   isNonPositiveBigInt,
   isOddBigInt,
   isPositiveBigInt,
+  maxBigIntOf,
+  minBigIntOf,
 } from "../mod.ts";
 
 Deno.test("assertBigInt()", () => {
@@ -380,4 +382,50 @@ Deno.test("assertEvenBigInt()", () => {
   } catch {
     //
   }
+});
+
+Deno.test("minBigIntOf()", () => {
+  assertStrictEquals(minBigIntOf(0n), 0n);
+  assertStrictEquals(minBigIntOf(1n), 1n);
+  assertStrictEquals(minBigIntOf(-1n), -1n);
+
+  assertStrictEquals(minBigIntOf(0n, 1n), 0n);
+  assertStrictEquals(minBigIntOf(0n, -1n), -1n);
+
+  assertStrictEquals(minBigIntOf(2n, 0n, 1n), 0n);
+  assertStrictEquals(minBigIntOf(2n, 0n, -1n), -1n);
+  assertStrictEquals(minBigIntOf(0n, 1n, 2n), 0n);
+  assertStrictEquals(minBigIntOf(0n, -1n, 2n), -1n);
+  assertStrictEquals(minBigIntOf(1n, 2n, 0n), 0n);
+  assertStrictEquals(minBigIntOf(-1n, 2n, 0n), -1n);
+
+  assertStrictEquals(minBigIntOf(-2n, 0n, 1n), -2n);
+  assertStrictEquals(minBigIntOf(-2n, 0n, -1n), -2n);
+  assertStrictEquals(minBigIntOf(0n, 1n, -2n), -2n);
+  assertStrictEquals(minBigIntOf(0n, -1n, -2n), -2n);
+  assertStrictEquals(minBigIntOf(1n, -2n, 0n), -2n);
+  assertStrictEquals(minBigIntOf(-1n, -2n, 0n), -2n);
+});
+
+Deno.test("maxBigIntOf()", () => {
+  assertStrictEquals(maxBigIntOf(0n), 0n);
+  assertStrictEquals(maxBigIntOf(1n), 1n);
+  assertStrictEquals(maxBigIntOf(-1n), -1n);
+
+  assertStrictEquals(maxBigIntOf(0n, 1n), 1n);
+  assertStrictEquals(maxBigIntOf(0n, -1n), 0n);
+
+  assertStrictEquals(maxBigIntOf(2n, 0n, 1n), 2n);
+  assertStrictEquals(maxBigIntOf(2n, 0n, -1n), 2n);
+  assertStrictEquals(maxBigIntOf(0n, 1n, 2n), 2n);
+  assertStrictEquals(maxBigIntOf(0n, -1n, 2n), 2n);
+  assertStrictEquals(maxBigIntOf(1n, 2n, 0n), 2n);
+  assertStrictEquals(maxBigIntOf(-1n, 2n, 0n), 2n);
+
+  assertStrictEquals(maxBigIntOf(-2n, 0n, 1n), 1n);
+  assertStrictEquals(maxBigIntOf(-2n, 0n, -1n), 0n);
+  assertStrictEquals(maxBigIntOf(0n, 1n, -2n), 1n);
+  assertStrictEquals(maxBigIntOf(0n, -1n, -2n), 0n);
+  assertStrictEquals(maxBigIntOf(1n, -2n, 0n), 1n);
+  assertStrictEquals(maxBigIntOf(-1n, -2n, 0n), 0n);
 });

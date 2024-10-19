@@ -67,3 +67,23 @@ export function assertEvenBigInt(test: unknown, label: string): void {
     throw new TypeError(`\`${label}\` must be an even \`bigint\`.`);
   }
 }
+
+export function minBigIntOf<T extends bigint>(value0: T, ...values: T[]): T {
+  let provMin = value0;
+  for (const i of values) {
+    if (i < provMin) {
+      provMin = i;
+    }
+  }
+  return provMin;
+}
+
+export function maxBigIntOf<T extends bigint>(value0: T, ...values: T[]): T {
+  let provMax = value0;
+  for (const i of values) {
+    if (i > provMax) {
+      provMax = i;
+    }
+  }
+  return provMax;
+}
