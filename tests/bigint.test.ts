@@ -455,4 +455,6 @@ Deno.test("isBigIntInRange()", () => {
   assertStrictEquals(isBigIntInRange(-1n, 0n, -1n), false); // 負のrange
   assertStrictEquals(isBigIntInRange(-1n, 1n, 1n), false);
   assertStrictEquals(isBigIntInRange(-1n, -1n, -1n), true);
+
+  assertStrictEquals(isBigIntInRange(0, 0n, 0n), false);
 });

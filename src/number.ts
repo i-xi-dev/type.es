@@ -123,3 +123,19 @@ export function assertEvenSafeInteger(test: unknown, label: string): void {
     throw new TypeError(`\`${label}\` must be an even safe integer.`);
   }
 }
+
+export function isNumberInRange<T extends number>(
+  test: unknown,
+  min: T,
+  max: T,
+): test is T {
+  return isNumber(test) && (min <= test) && (max >= test);
+}
+
+export function isSafeIntegerInRange<T extends number>(
+  test: unknown,
+  min: T,
+  max: T,
+): test is T {
+  return isSafeInteger(test) && (min <= test) && (max >= test);
+}

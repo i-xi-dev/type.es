@@ -20,10 +20,12 @@ import {
   isNonPositiveNumber,
   isNonPositiveSafeInteger,
   isNumber,
+  isNumberInRange,
   isOddSafeInteger,
   isPositiveNumber,
   isPositiveSafeInteger,
   isSafeInteger,
+  isSafeIntegerInRange,
 } from "../mod.ts";
 
 Deno.test("assertNumber()", () => {
@@ -963,4 +965,147 @@ Deno.test("assertEvenSafeInteger()", () => {
   } catch {
     //
   }
+});
+
+Deno.test("isNumberInRange()", () => {
+  assertStrictEquals(isNumberInRange(0, 0, 0), true);
+  assertStrictEquals(isNumberInRange(0, 1, 0), false); // 負のrange
+  assertStrictEquals(isNumberInRange(0, 0, 1), true);
+  assertStrictEquals(isNumberInRange(0, -1, 0), true);
+  assertStrictEquals(isNumberInRange(0, 0, -1), false); // 負のrange
+  assertStrictEquals(isNumberInRange(0, 1, 1), false);
+  assertStrictEquals(isNumberInRange(0, -1, -1), false);
+
+  assertStrictEquals(isNumberInRange(0.5, 0, 0), false);
+  assertStrictEquals(isNumberInRange(0.5, 1, 0), false); // 負のrange
+  assertStrictEquals(isNumberInRange(0.5, 0, 1), true);
+  assertStrictEquals(isNumberInRange(0.5, -1, 0), false);
+  assertStrictEquals(isNumberInRange(0.5, 0, -1), false); // 負のrange
+  assertStrictEquals(isNumberInRange(0.5, 1, 1), false);
+  assertStrictEquals(isNumberInRange(0.5, -1, -1), false);
+
+  assertStrictEquals(isNumberInRange(1, 0, 0), false);
+  assertStrictEquals(isNumberInRange(1, 1, 0), false); // 負のrange
+  assertStrictEquals(isNumberInRange(1, 0, 1), true);
+  assertStrictEquals(isNumberInRange(1, -1, 0), false);
+  assertStrictEquals(isNumberInRange(1, 0, -1), false); // 負のrange
+  assertStrictEquals(isNumberInRange(1, 1, 1), true);
+  assertStrictEquals(isNumberInRange(1, -1, -1), false);
+
+  assertStrictEquals(isNumberInRange(-0.5, 0, 0), false);
+  assertStrictEquals(isNumberInRange(-0.5, 1, 0), false); // 負のrange
+  assertStrictEquals(isNumberInRange(-0.5, 0, 1), false);
+  assertStrictEquals(isNumberInRange(-0.5, -1, 0), true);
+  assertStrictEquals(isNumberInRange(-0.5, 0, -1), false); // 負のrange
+  assertStrictEquals(isNumberInRange(-0.5, 1, 1), false);
+  assertStrictEquals(isNumberInRange(-0.5, -1, -1), false);
+
+  assertStrictEquals(isNumberInRange(-1, 0, 0), false);
+  assertStrictEquals(isNumberInRange(-1, 1, 0), false); // 負のrange
+  assertStrictEquals(isNumberInRange(-1, 0, 1), false);
+  assertStrictEquals(isNumberInRange(-1, -1, 0), true);
+  assertStrictEquals(isNumberInRange(-1, 0, -1), false); // 負のrange
+  assertStrictEquals(isNumberInRange(-1, 1, 1), false);
+  assertStrictEquals(isNumberInRange(-1, -1, -1), true);
+
+  assertStrictEquals(isNumberInRange(0n, 0, 0), false);
+  assertStrictEquals(isNumberInRange(0, -0.5, 0.5), true);
+
+  assertStrictEquals(isNumberInRange(0, 0, Number.MAX_SAFE_INTEGER), true);
+  assertStrictEquals(isNumberInRange(0, 0, Number.POSITIVE_INFINITY), true);
+  assertStrictEquals(isNumberInRange(0, 0, Number.NaN), false);
+  assertStrictEquals(isNumberInRange(0, Number.MIN_SAFE_INTEGER, 0), true);
+  assertStrictEquals(isNumberInRange(0, Number.NEGATIVE_INFINITY, 0), true);
+  assertStrictEquals(isNumberInRange(0, Number.NaN, 0), false);
+
+  assertStrictEquals(isNumberInRange(0, 1, Number.MAX_SAFE_INTEGER), false);
+  assertStrictEquals(isNumberInRange(0, 1, Number.POSITIVE_INFINITY), false);
+  assertStrictEquals(isNumberInRange(0, 1, Number.NaN), false);
+  assertStrictEquals(isNumberInRange(0, Number.MIN_SAFE_INTEGER, 1), true);
+  assertStrictEquals(isNumberInRange(0, Number.NEGATIVE_INFINITY, 1), true);
+  assertStrictEquals(isNumberInRange(0, Number.NaN, 1), false);
+
+  assertStrictEquals(isNumberInRange(0, -1, Number.MAX_SAFE_INTEGER), true);
+  assertStrictEquals(isNumberInRange(0, -1, Number.POSITIVE_INFINITY), true);
+  assertStrictEquals(isNumberInRange(0, -1, Number.NaN), false);
+  assertStrictEquals(isNumberInRange(0, Number.MIN_SAFE_INTEGER, -1), false);
+  assertStrictEquals(isNumberInRange(0, Number.NEGATIVE_INFINITY, -1), false);
+  assertStrictEquals(isNumberInRange(0, Number.NaN, -1), false);
+});
+
+Deno.test("isSafeIntegerInRange()", () => {
+  assertStrictEquals(isSafeIntegerInRange(0, 0, 0), true);
+  assertStrictEquals(isSafeIntegerInRange(0, 1, 0), false); // 負のrange
+  assertStrictEquals(isSafeIntegerInRange(0, 0, 1), true);
+  assertStrictEquals(isSafeIntegerInRange(0, -1, 0), true);
+  assertStrictEquals(isSafeIntegerInRange(0, 0, -1), false); // 負のrange
+  assertStrictEquals(isSafeIntegerInRange(0, 1, 1), false);
+  assertStrictEquals(isSafeIntegerInRange(0, -1, -1), false);
+
+  assertStrictEquals(isSafeIntegerInRange(1, 0, 0), false);
+  assertStrictEquals(isSafeIntegerInRange(1, 1, 0), false); // 負のrange
+  assertStrictEquals(isSafeIntegerInRange(1, 0, 1), true);
+  assertStrictEquals(isSafeIntegerInRange(1, -1, 0), false);
+  assertStrictEquals(isSafeIntegerInRange(1, 0, -1), false); // 負のrange
+  assertStrictEquals(isSafeIntegerInRange(1, 1, 1), true);
+  assertStrictEquals(isSafeIntegerInRange(1, -1, -1), false);
+
+  assertStrictEquals(isSafeIntegerInRange(-1, 0, 0), false);
+  assertStrictEquals(isSafeIntegerInRange(-1, 1, 0), false); // 負のrange
+  assertStrictEquals(isSafeIntegerInRange(-1, 0, 1), false);
+  assertStrictEquals(isSafeIntegerInRange(-1, -1, 0), true);
+  assertStrictEquals(isSafeIntegerInRange(-1, 0, -1), false); // 負のrange
+  assertStrictEquals(isSafeIntegerInRange(-1, 1, 1), false);
+  assertStrictEquals(isSafeIntegerInRange(-1, -1, -1), true);
+
+  assertStrictEquals(isSafeIntegerInRange(0n, 0, 0), false);
+  assertStrictEquals(isSafeIntegerInRange(0.5, -1, 1), false);
+
+  assertStrictEquals(isSafeIntegerInRange(0, 0, Number.MAX_SAFE_INTEGER), true);
+  assertStrictEquals(
+    isSafeIntegerInRange(0, 0, Number.POSITIVE_INFINITY),
+    true,
+  );
+  assertStrictEquals(isSafeIntegerInRange(0, 0, Number.NaN), false);
+  assertStrictEquals(isSafeIntegerInRange(0, Number.MIN_SAFE_INTEGER, 0), true);
+  assertStrictEquals(
+    isSafeIntegerInRange(0, Number.NEGATIVE_INFINITY, 0),
+    true,
+  );
+  assertStrictEquals(isSafeIntegerInRange(0, Number.NaN, 0), false);
+
+  assertStrictEquals(
+    isSafeIntegerInRange(0, 1, Number.MAX_SAFE_INTEGER),
+    false,
+  );
+  assertStrictEquals(
+    isSafeIntegerInRange(0, 1, Number.POSITIVE_INFINITY),
+    false,
+  );
+  assertStrictEquals(isSafeIntegerInRange(0, 1, Number.NaN), false);
+  assertStrictEquals(isSafeIntegerInRange(0, Number.MIN_SAFE_INTEGER, 1), true);
+  assertStrictEquals(
+    isSafeIntegerInRange(0, Number.NEGATIVE_INFINITY, 1),
+    true,
+  );
+  assertStrictEquals(isSafeIntegerInRange(0, Number.NaN, 1), false);
+
+  assertStrictEquals(
+    isSafeIntegerInRange(0, -1, Number.MAX_SAFE_INTEGER),
+    true,
+  );
+  assertStrictEquals(
+    isSafeIntegerInRange(0, -1, Number.POSITIVE_INFINITY),
+    true,
+  );
+  assertStrictEquals(isSafeIntegerInRange(0, -1, Number.NaN), false);
+  assertStrictEquals(
+    isSafeIntegerInRange(0, Number.MIN_SAFE_INTEGER, -1),
+    false,
+  );
+  assertStrictEquals(
+    isSafeIntegerInRange(0, Number.NEGATIVE_INFINITY, -1),
+    false,
+  );
+  assertStrictEquals(isSafeIntegerInRange(0, Number.NaN, -1), false);
 });
