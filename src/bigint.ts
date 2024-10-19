@@ -95,3 +95,14 @@ export function isBigIntInRange<T extends bigint>(
 ): test is T {
   return isBigInt(test) && (min <= test) && (max >= test);
 }
+
+export function toClampedBigInt<T extends bigint>(
+  value: bigint,
+  min: T,
+  max: T,
+): T {
+  if (min > max) {
+    throw new RangeError("`max` must be greater than or equal to `min`.");
+  }
+  return minBigIntOf(maxBigIntOf(value, min), max) as T;
+}

@@ -1,4 +1,4 @@
-import { assertStrictEquals, fail, unreachable } from "./deps.ts";
+import { assertStrictEquals, assertThrows, fail, unreachable } from "./deps.ts";
 import {
   assertBigInt,
   assertEvenBigInt,
@@ -17,6 +17,7 @@ import {
   isPositiveBigInt,
   maxBigIntOf,
   minBigIntOf,
+  toClampedBigInt,
 } from "../mod.ts";
 
 Deno.test("assertBigInt()", () => {
@@ -457,4 +458,71 @@ Deno.test("isBigIntInRange()", () => {
   assertStrictEquals(isBigIntInRange(-1n, -1n, -1n), true);
 
   assertStrictEquals(isBigIntInRange(0, 0n, 0n), false);
+});
+
+Deno.test("toClampedBigInt()", () => {
+  const e1 = "`max` must be greater than or equal to `min`.";
+
+  assertStrictEquals(toClampedBigInt(0n, 0n, 0n), 0n);
+  assertStrictEquals(toClampedBigInt(0n, 0n, 1n), 0n);
+  assertStrictEquals(toClampedBigInt(0n, -1n, 0n), 0n);
+  assertStrictEquals(toClampedBigInt(0n, 1n, 1n), 1n);
+  assertStrictEquals(toClampedBigInt(0n, -1n, -1n), -1n);
+
+  assertThrows(
+    () => {
+      toClampedBigInt(0n, 1n, 0n); // 負のrange
+    },
+    RangeError,
+    e1,
+  );
+  assertThrows(
+    () => {
+      toClampedBigInt(0n, 0n, -1n); // 負のrange
+    },
+    RangeError,
+    e1,
+  );
+
+  assertStrictEquals(toClampedBigInt(1n, 0n, 0n), 0n);
+  assertStrictEquals(toClampedBigInt(1n, 0n, 1n), 1n);
+  assertStrictEquals(toClampedBigInt(1n, -1n, 0n), 0n);
+  assertStrictEquals(toClampedBigInt(1n, 1n, 1n), 1n);
+  assertStrictEquals(toClampedBigInt(1n, -1n, -1n), -1n);
+
+  assertThrows(
+    () => {
+      toClampedBigInt(1n, 1n, 0n); // 負のrange
+    },
+    RangeError,
+    e1,
+  );
+  assertThrows(
+    () => {
+      toClampedBigInt(1n, 0n, -1n); // 負のrange
+    },
+    RangeError,
+    e1,
+  );
+
+  assertStrictEquals(toClampedBigInt(-1n, 0n, 0n), 0n);
+  assertStrictEquals(toClampedBigInt(-1n, 0n, 1n), 0n);
+  assertStrictEquals(toClampedBigInt(-1n, -1n, 0n), -1n);
+  assertStrictEquals(toClampedBigInt(-1n, 1n, 1n), 1n);
+  assertStrictEquals(toClampedBigInt(-1n, -1n, -1n), -1n);
+
+  assertThrows(
+    () => {
+      toClampedBigInt(-1n, 1n, 0n); // 負のrange
+    },
+    RangeError,
+    e1,
+  );
+  assertThrows(
+    () => {
+      toClampedBigInt(-1n, 0n, -1n); // 負のrange
+    },
+    RangeError,
+    e1,
+  );
 });

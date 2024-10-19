@@ -1,4 +1,4 @@
-import { assertStrictEquals, fail, unreachable } from "./deps.ts";
+import { assertStrictEquals, assertThrows, fail, unreachable } from "./deps.ts";
 import {
   assertEvenSafeInteger,
   assertNegativeNumber,
@@ -26,6 +26,8 @@ import {
   isPositiveSafeInteger,
   isSafeInteger,
   isSafeIntegerInRange,
+  toClampedNumber,
+  toNormalizedNumber,
 } from "../mod.ts";
 
 Deno.test("assertNumber()", () => {
@@ -1108,4 +1110,107 @@ Deno.test("isSafeIntegerInRange()", () => {
     false,
   );
   assertStrictEquals(isSafeIntegerInRange(0, Number.NaN, -1), false);
+});
+
+Deno.test("toNormalizedNumber()", () => {
+  assertStrictEquals(Object.is(toNormalizedNumber(0), 0), true);
+  assertStrictEquals(Object.is(toNormalizedNumber(-0), 0), true);
+  assertStrictEquals(Object.is(toNormalizedNumber(-0), -0), false);
+
+  assertStrictEquals(
+    toNormalizedNumber(Number.POSITIVE_INFINITY),
+    Number.POSITIVE_INFINITY,
+  );
+  assertStrictEquals(
+    toNormalizedNumber(Number.NEGATIVE_INFINITY),
+    Number.NEGATIVE_INFINITY,
+  );
+  assertStrictEquals(toNormalizedNumber(Number.NaN), Number.NaN);
+  assertStrictEquals(
+    toNormalizedNumber(Number.MIN_SAFE_INTEGER),
+    Number.MIN_SAFE_INTEGER,
+  );
+  assertStrictEquals(
+    toNormalizedNumber(Number.MAX_SAFE_INTEGER),
+    Number.MAX_SAFE_INTEGER,
+  );
+});
+
+Deno.test("toClampedNumber()", () => {
+  const e1 = "`max` must be greater than or equal to `min`.";
+
+  assertStrictEquals(toClampedNumber(0, 0, 0), 0);
+  assertStrictEquals(toClampedNumber(0, 0, 1), 0);
+  assertStrictEquals(toClampedNumber(0, -1, 0), 0);
+  assertStrictEquals(toClampedNumber(0, 1, 1), 1);
+  assertStrictEquals(toClampedNumber(0, -1, -1), -1);
+
+  assertThrows(
+    () => {
+      toClampedNumber(0, 1, 0); // 負のrange
+    },
+    RangeError,
+    e1,
+  );
+  assertThrows(
+    () => {
+      toClampedNumber(0, 0, -1); // 負のrange
+    },
+    RangeError,
+    e1,
+  );
+
+  assertStrictEquals(toClampedNumber(0.5, 0, 0), 0);
+  assertStrictEquals(toClampedNumber(0.5, 0, 1), 0.5);
+  assertStrictEquals(toClampedNumber(0.5, -1, 0), 0);
+  assertStrictEquals(toClampedNumber(0.5, 1, 1), 1);
+  assertStrictEquals(toClampedNumber(0.5, -1, -1), -1);
+
+  assertStrictEquals(toClampedNumber(1, 0, 0), 0);
+  assertStrictEquals(toClampedNumber(1, 0, 1), 1);
+  assertStrictEquals(toClampedNumber(1, -1, 0), 0);
+  assertStrictEquals(toClampedNumber(1, 1, 1), 1);
+  assertStrictEquals(toClampedNumber(1, -1, -1), -1);
+
+  assertThrows(
+    () => {
+      toClampedNumber(1, 1, 0); // 負のrange
+    },
+    RangeError,
+    e1,
+  );
+  assertThrows(
+    () => {
+      toClampedNumber(1, 0, -1); // 負のrange
+    },
+    RangeError,
+    e1,
+  );
+
+  assertStrictEquals(toClampedNumber(-0.5, 0, 0), 0);
+  assertStrictEquals(toClampedNumber(-0.5, 0, 1), 0);
+  assertStrictEquals(toClampedNumber(-0.5, -1, 0), -0.5);
+  assertStrictEquals(toClampedNumber(-0.5, 1, 1), 1);
+  assertStrictEquals(toClampedNumber(-0.5, -1, -1), -1);
+
+  assertStrictEquals(toClampedNumber(-1, 0, 0), 0);
+  assertStrictEquals(toClampedNumber(-1, 0, 1), 0);
+  assertStrictEquals(toClampedNumber(-1, -1, 0), -1);
+  assertStrictEquals(toClampedNumber(-1, 1, 1), 1);
+  assertStrictEquals(toClampedNumber(-1, -1, -1), -1);
+
+  assertThrows(
+    () => {
+      toClampedNumber(-1, 1, 0); // 負のrange
+    },
+    RangeError,
+    e1,
+  );
+  assertThrows(
+    () => {
+      toClampedNumber(-1, 0, -1); // 負のrange
+    },
+    RangeError,
+    e1,
+  );
 });

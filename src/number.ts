@@ -139,3 +139,18 @@ export function isSafeIntegerInRange<T extends number>(
 ): test is T {
   return isSafeInteger(test) && (min <= test) && (max >= test);
 }
+
+export function toNormalizedNumber<T extends number>(value: T): T {
+  return ((value === 0) ? (value + 0) : value) as T; // -0を0
+}
+
+export function toClampedNumber<T extends number>(
+  value: number,
+  min: T,
+  max: T,
+): T {
+  if (min > max) {
+    throw new RangeError("`max` must be greater than or equal to `min`.");
+  }
+  return toNormalizedNumber(Math.min(Math.max(value, min), max)) as T;
+}
