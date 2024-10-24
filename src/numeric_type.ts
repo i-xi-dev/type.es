@@ -1,4 +1,4 @@
-import { isString } from "./string.ts";
+import { isString } from "./string_type.ts";
 
 export const Radix = {
   BINARY: 2,
@@ -33,7 +33,8 @@ function _labelOfRadix(radix?: unknown): string {
     : _RADIX_LABEL[Radix.DECIMAL];
 }
 
-export function isStringifiedInteger(
+//TODO integerTypeに移す
+export function isStringified(
   test: unknown,
   radix?: Radix,
 ): test is string {
@@ -43,12 +44,13 @@ export function isStringifiedInteger(
   return isString(test) && regex.test(test);
 }
 
-export function assertStringifiedInteger(
+//TODO integerTypeに移す
+export function assertStringified(
   test: unknown,
   label: string,
   radix?: Radix,
 ): void {
-  if (isStringifiedInteger(test, radix) !== true) {
+  if (isStringified(test, radix) !== true) {
     throw new TypeError(
       `\`${label}\` must be a ${
         _labelOfRadix(radix)
