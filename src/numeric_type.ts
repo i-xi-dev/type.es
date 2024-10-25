@@ -1,5 +1,3 @@
-import { isString } from "./string_type.ts";
-
 export const Radix = {
   BINARY: 2,
   DECIMAL: 10,
@@ -9,52 +7,52 @@ export const Radix = {
 
 export type Radix = typeof Radix[keyof typeof Radix];
 
-const _INTEGER_REGEX: Record<Radix, RegExp> = {
-  [Radix.BINARY]: /^[-+]?[01]+$/,
-  [Radix.DECIMAL]: /^[-+]?[0-9]+$/,
-  [Radix.HEXADECIMAL]: /^[-+]?[0-9a-fA-F]+$/,
-  [Radix.OCTAL]: /^[-+]?[0-7]+$/,
+// function _isSupportedRadix(radix?: unknown): radix is Radix {
+//   return Object.values(Radix).includes(radix as Radix);
+// }
+
+type RadixProperties = {
+  digitsRegex: RegExp;
+  label: string;
+  radix: Radix;
+};
+
+const _binaryRadixProperties: RadixProperties = {
+  digitsRegex: /^[-+]?[01]+$/,
+  label: "a binary",
+  radix: Radix.BINARY,
 } as const;
 
-function _isSupportedRadix(radix?: unknown): radix is Radix {
-  return Object.values(Radix).includes(radix as Radix);
-}
-
-const _RADIX_LABEL: Record<Radix, string> = {
-  [Radix.BINARY]: "a binary",
-  [Radix.OCTAL]: "an octal",
-  [Radix.DECIMAL]: "a decimal",
-  [Radix.HEXADECIMAL]: "a hexadecimal",
+const _decimalRadixProperties: RadixProperties = {
+  digitsRegex: /^[-+]?[0-9]+$/,
+  label: "a decimal",
+  radix: Radix.DECIMAL,
 } as const;
 
-function _labelOfRadix(radix?: unknown): string {
-  return _isSupportedRadix(radix)
-    ? _RADIX_LABEL[radix]
-    : _RADIX_LABEL[Radix.DECIMAL];
-}
+const _hexadecimalRadixProperties: RadixProperties = {
+  digitsRegex: /^[-+]?[0-9a-fA-F]+$/,
+  label: "a hexadecimal",
+  radix: Radix.HEXADECIMAL,
+} as const;
 
-//TODO integerTypeに移す
-export function isStringified(
-  test: unknown,
-  radix?: Radix,
-): test is string {
-  const regex = _isSupportedRadix(radix)
-    ? _INTEGER_REGEX[radix]
-    : _INTEGER_REGEX[Radix.DECIMAL];
-  return isString(test) && regex.test(test);
-}
+const _octalRadixProperties: RadixProperties = {
+  digitsRegex: /^[-+]?[0-7]+$/,
+  label: "an octal",
+  radix: Radix.OCTAL,
+} as const;
 
-//TODO integerTypeに移す
-export function assertStringified(
-  test: unknown,
-  label: string,
-  radix?: Radix,
-): void {
-  if (isStringified(test, radix) !== true) {
-    throw new TypeError(
-      `\`${label}\` must be a ${
-        _labelOfRadix(radix)
-      } representation of an integer.`,
-    );
+export function radixPropertiesOf(radix?: Radix): RadixProperties {
+  switch (radix) {
+    case Radix.BINARY:
+      return _binaryRadixProperties;
+
+    case Radix.HEXADECIMAL:
+      return _hexadecimalRadixProperties;
+
+    case Radix.OCTAL:
+      return _octalRadixProperties;
+
+    default: // case Radix.DECIMAL:
+      return _decimalRadixProperties;
   }
 }

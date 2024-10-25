@@ -1,7 +1,5 @@
-import {
-  assertStringified as assertStringifiedInteger,
-  Radix,
-} from "./numeric_type.ts";
+import { assertStringified as assertStringifiedInteger } from "./integer_type.ts";
+import { Radix } from "./numeric_type.ts";
 
 export function isBigInt(test: unknown): test is bigint {
   return (typeof test === "bigint");
