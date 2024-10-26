@@ -74,12 +74,12 @@ export function clamp<T extends number>(
   return normalize(Math.min(Math.max(value, min), max)) as T;
 }
 
-export function round(input: number, roundingMode?: RoundingMode): number {
-  if (Number.isFinite(input) !== true) {
-    throw new TypeError("`input` must be a finite number.");
+export function round(value: number, roundingMode?: RoundingMode): number {
+  if (Number.isFinite(value) !== true) {
+    throw new TypeError("`value` must be a finite number.");
   }
 
-  const integralPart = normalize(Math.trunc(input));
+  const integralPart = normalize(Math.trunc(value));
   const integralPartIsEven = isEvenSafeInteger(integralPart);
 
   const resolvedRoundingMode =
@@ -87,22 +87,22 @@ export function round(input: number, roundingMode?: RoundingMode): number {
       ? roundingMode
       : RoundingMode.TRUNCATE;
 
-  if (Number.isInteger(input)) {
-    return normalize(input);
+  if (Number.isInteger(value)) {
+    return normalize(value);
   }
 
-  const nearestP = normalize(Math.ceil(input));
-  const nearestN = normalize(Math.floor(input));
-  const sourceIsNegative = input < 0;
+  const nearestP = normalize(Math.ceil(value));
+  const nearestN = normalize(Math.floor(value));
+  const sourceIsNegative = value < 0;
   const nearestPH = nearestP - 0.5;
   const nearestNH = nearestN + 0.5;
 
   const halfUp = (): number => {
-    return (input >= nearestPH) ? nearestP : nearestN;
+    return (value >= nearestPH) ? nearestP : nearestN;
   };
 
   const halfDown = (): number => {
-    return (input <= nearestNH) ? nearestN : nearestP;
+    return (value <= nearestNH) ? nearestN : nearestP;
   };
 
   switch (resolvedRoundingMode) {
@@ -132,13 +132,13 @@ export function round(input: number, roundingMode?: RoundingMode): number {
 
     case RoundingMode.HALF_TO_EVEN:
       if (sourceIsNegative) {
-        if (input === nearestPH) {
+        if (value === nearestPH) {
           return integralPartIsEven ? integralPart : nearestN;
         }
         return halfDown();
       }
 
-      if (input === nearestNH) {
+      if (value === nearestNH) {
         return integralPartIsEven ? integralPart : nearestP;
       }
       return halfUp();

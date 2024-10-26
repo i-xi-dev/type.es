@@ -1,4 +1,4 @@
-import { assertStrictEquals, fail, unreachable } from "./deps.ts";
+import { assertStrictEquals, assertThrows, fail, unreachable } from "./deps.ts";
 import { SafeIntegerType } from "../mod.ts";
 
 Deno.test("SafeIntegerType.isSafeInteger()", () => {
@@ -686,4 +686,94 @@ Deno.test("SafeIntegerType.isInRange()", () => {
     false,
   );
   assertStrictEquals(SafeIntegerType.isInRange(0, Number.NaN, -1), false);
+});
+
+const MIN = Number.MIN_SAFE_INTEGER;
+const MAX = Number.MAX_SAFE_INTEGER;
+
+Deno.test("SafeIntegerType.fromBigInt()", () => {
+  const rfe1 = "`value` must be a `bigint`.";
+  const rfe2 = "`value` must be within the range of safe integer.";
+
+  assertThrows(
+    () => {
+      SafeIntegerType.fromBigInt(undefined as unknown as bigint);
+    },
+    TypeError,
+    rfe1,
+  );
+
+  assertThrows(
+    () => {
+      SafeIntegerType.fromBigInt(0 as unknown as bigint);
+    },
+    TypeError,
+    rfe1,
+  );
+
+  assertThrows(
+    () => {
+      SafeIntegerType.fromBigInt(BigInt(MIN) - 1n);
+    },
+    RangeError,
+    rfe2,
+  );
+
+  assertThrows(
+    () => {
+      SafeIntegerType.fromBigInt(BigInt(MAX) + 1n);
+    },
+    RangeError,
+    rfe2,
+  );
+
+  assertStrictEquals(SafeIntegerType.fromBigInt(BigInt(MIN)), MIN);
+  assertStrictEquals(SafeIntegerType.fromBigInt(-1n), -1);
+  assertStrictEquals(SafeIntegerType.fromBigInt(-0n), 0);
+  assertStrictEquals(SafeIntegerType.fromBigInt(0n), 0);
+  assertStrictEquals(SafeIntegerType.fromBigInt(1n), 1);
+  assertStrictEquals(SafeIntegerType.fromBigInt(BigInt(MAX)), MAX);
+});
+
+Deno.test("SafeIntegerType.toBigInt()", () => {
+  const rfe1 = "`self` must be a safe integer.";
+
+  assertThrows(
+    () => {
+      SafeIntegerType.toBigInt(undefined as unknown as number);
+    },
+    TypeError,
+    rfe1,
+  );
+
+  assertThrows(
+    () => {
+      SafeIntegerType.toBigInt(0n as unknown as number);
+    },
+    TypeError,
+    rfe1,
+  );
+
+  assertThrows(
+    () => {
+      SafeIntegerType.toBigInt("0" as unknown as number);
+    },
+    TypeError,
+    rfe1,
+  );
+
+  assertThrows(
+    () => {
+      SafeIntegerType.toBigInt(1.5);
+    },
+    TypeError,
+    rfe1,
+  );
+
+  assertStrictEquals(SafeIntegerType.toBigInt(MIN), BigInt(MIN));
+  assertStrictEquals(SafeIntegerType.toBigInt(-1), -1n);
+  assertStrictEquals(SafeIntegerType.toBigInt(-0), 0n);
+  assertStrictEquals(SafeIntegerType.toBigInt(0), 0n);
+  assertStrictEquals(SafeIntegerType.toBigInt(1), 1n);
+  assertStrictEquals(SafeIntegerType.toBigInt(MAX), BigInt(MAX));
 });

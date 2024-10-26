@@ -1,3 +1,5 @@
+import { assertBigInt, isInRange as isBigIntInRange } from "./bigint_type.ts";
+
 export function isSafeInteger(test: unknown): test is number {
   return Number.isSafeInteger(test);
 }
@@ -74,4 +76,25 @@ export function isInRange<T extends number>(
   max: T,
 ): test is T {
   return isSafeInteger(test) && (min <= test) && (max >= test);
+}
+
+export function fromBigInt(value: bigint): number {
+  assertBigInt(value, "value");
+
+  if (
+    isBigIntInRange(
+      value,
+      BigInt(Number.MIN_SAFE_INTEGER),
+      BigInt(Number.MAX_SAFE_INTEGER),
+    ) !== true
+  ) {
+    throw new RangeError("`value` must be within the range of safe integer.");
+  }
+
+  return Number(value);
+}
+
+export function toBigInt(self: number): bigint {
+  assertSafeInteger(self, "self");
+  return BigInt(self);
 }

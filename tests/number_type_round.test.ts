@@ -5,7 +5,7 @@ const MIN = Number.MIN_SAFE_INTEGER;
 const MAX = Number.MAX_SAFE_INTEGER;
 
 Deno.test("NumberType.round()", () => {
-  const rfe1 = "`input` must be a finite number.";
+  const rfe1 = "`value` must be a finite number.";
 
   assertThrows(
     () => {
