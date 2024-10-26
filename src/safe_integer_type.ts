@@ -1,4 +1,9 @@
-import { assertBigInt, isInRange as isBigIntInRange } from "./bigint_type.ts";
+import {
+  assertBigInt,
+  fromString as fromStringToBigInt,
+  isInRange as isBigIntInRange,
+} from "./bigint_type.ts";
+import { FromStringOptions, ToStringOptions } from "./integer_type.ts";
 
 export function isSafeInteger(test: unknown): test is number {
   return Number.isSafeInteger(test);
@@ -97,4 +102,9 @@ export function fromBigInt(value: bigint): number {
 export function toBigInt(self: number): bigint {
   assertSafeInteger(self, "self");
   return BigInt(self);
+}
+
+export function fromString(value: string, options?: FromStringOptions): number {
+  const valueAsBigInt = fromStringToBigInt(value, options);
+  return fromBigInt(valueAsBigInt);
 }

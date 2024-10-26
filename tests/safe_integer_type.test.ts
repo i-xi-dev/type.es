@@ -777,3 +777,255 @@ Deno.test("SafeIntegerType.toBigInt()", () => {
   assertStrictEquals(SafeIntegerType.toBigInt(1), 1n);
   assertStrictEquals(SafeIntegerType.toBigInt(MAX), BigInt(MAX));
 });
+
+Deno.test("SafeIntegerType.fromString()", () => {
+  // const rfe1 = "`value` must be a `string`.";
+  const rfe2 = "`value` must be a decimal representation of an integer.";
+
+  assertThrows(
+    () => {
+      SafeIntegerType.fromString(undefined as unknown as string);
+    },
+    TypeError,
+    rfe2,
+  );
+
+  assertThrows(
+    () => {
+      SafeIntegerType.fromString(0 as unknown as string);
+    },
+    TypeError,
+    rfe2,
+  );
+
+  assertThrows(
+    () => {
+      SafeIntegerType.fromString(0n as unknown as string);
+    },
+    TypeError,
+    rfe2,
+  );
+
+  assertThrows(
+    () => {
+      SafeIntegerType.fromString("");
+    },
+    TypeError,
+    rfe2,
+  );
+
+  assertThrows(
+    () => {
+      SafeIntegerType.fromString("a");
+    },
+    TypeError,
+    rfe2,
+  );
+
+  assertStrictEquals(SafeIntegerType.fromString("-1"), -1);
+  assertStrictEquals(SafeIntegerType.fromString("-0"), 0);
+  assertStrictEquals(Object.is(SafeIntegerType.fromString("-0"), 0), true);
+  assertStrictEquals(SafeIntegerType.fromString("0"), 0);
+  assertStrictEquals(SafeIntegerType.fromString("1"), 1);
+  assertStrictEquals(SafeIntegerType.fromString("1111"), 1111);
+
+  assertStrictEquals(SafeIntegerType.fromString("+0"), 0);
+  assertStrictEquals(SafeIntegerType.fromString("+1"), 1);
+
+  assertStrictEquals(SafeIntegerType.fromString("00"), 0);
+  assertStrictEquals(SafeIntegerType.fromString("01"), 1);
+
+  assertStrictEquals(
+    SafeIntegerType.fromString("9007199254740991"),
+    9007199254740991,
+  );
+  assertStrictEquals(
+    SafeIntegerType.fromString("-9007199254740991"),
+    -9007199254740991,
+  );
+
+  const op2 = { radix: 2 } as const;
+  assertStrictEquals(SafeIntegerType.fromString("11", op2), 3);
+
+  const op8 = { radix: 8 } as const;
+  assertStrictEquals(SafeIntegerType.fromString("11", op8), 9);
+
+  const op16 = { radix: 16 } as const;
+  assertStrictEquals(SafeIntegerType.fromString("1f", op16), 31);
+  assertStrictEquals(SafeIntegerType.fromString("1F", op16), 31);
+
+  const eo = "`value` must be within the range of safe integer.";
+  assertThrows(
+    () => {
+      SafeIntegerType.fromString("9007199254740992");
+    },
+    RangeError,
+    eo,
+  );
+  assertThrows(
+    () => {
+      SafeIntegerType.fromString("-9007199254740992");
+    },
+    RangeError,
+    eo,
+  );
+});
+
+Deno.test("SafeIntegerType.fromString() - radix:2", () => {
+  const op = { radix: 2 } as const;
+
+  const rfe2 = "`value` must be a binary representation of an integer.";
+
+  assertThrows(
+    () => {
+      SafeIntegerType.fromString("2", op);
+    },
+    TypeError,
+    rfe2,
+  );
+
+  assertStrictEquals(SafeIntegerType.fromString("-1", op), -1);
+  assertStrictEquals(SafeIntegerType.fromString("-0", op), 0);
+  assertStrictEquals(SafeIntegerType.fromString("0", op), 0);
+  assertStrictEquals(SafeIntegerType.fromString("1", op), 1);
+  assertStrictEquals(SafeIntegerType.fromString("1111", op), 15);
+
+  assertStrictEquals(SafeIntegerType.fromString("+0", op), 0);
+  assertStrictEquals(SafeIntegerType.fromString("+1", op), 1);
+
+  assertStrictEquals(SafeIntegerType.fromString("00", op), 0);
+  assertStrictEquals(SafeIntegerType.fromString("01", op), 1);
+});
+
+Deno.test("SafeIntegerType.fromString() - radix:8", () => {
+  const op = { radix: 8 } as const;
+
+  const rfe2 = "`value` must be an octal representation of an integer.";
+
+  assertThrows(
+    () => {
+      SafeIntegerType.fromString("8", op);
+    },
+    TypeError,
+    rfe2,
+  );
+
+  assertThrows(
+    () => {
+      SafeIntegerType.fromString("9", op);
+    },
+    TypeError,
+    rfe2,
+  );
+
+  assertStrictEquals(SafeIntegerType.fromString("-1", op), -1);
+  assertStrictEquals(SafeIntegerType.fromString("-0", op), 0);
+  assertStrictEquals(SafeIntegerType.fromString("0", op), 0);
+  assertStrictEquals(SafeIntegerType.fromString("1", op), 1);
+  assertStrictEquals(SafeIntegerType.fromString("1111", op), 585);
+
+  assertStrictEquals(SafeIntegerType.fromString("2", op), 2);
+  assertStrictEquals(SafeIntegerType.fromString("3", op), 3);
+  assertStrictEquals(SafeIntegerType.fromString("4", op), 4);
+  assertStrictEquals(SafeIntegerType.fromString("5", op), 5);
+  assertStrictEquals(SafeIntegerType.fromString("6", op), 6);
+  assertStrictEquals(SafeIntegerType.fromString("7", op), 7);
+
+  assertStrictEquals(SafeIntegerType.fromString("+0", op), 0);
+  assertStrictEquals(SafeIntegerType.fromString("+1", op), 1);
+
+  assertStrictEquals(SafeIntegerType.fromString("00", op), 0);
+  assertStrictEquals(SafeIntegerType.fromString("01", op), 1);
+});
+
+Deno.test("SafeIntegerType.fromString() - radix:10", () => {
+  const op = { radix: 10 } as const;
+
+  assertStrictEquals(SafeIntegerType.fromString("-1", op), -1);
+  assertStrictEquals(SafeIntegerType.fromString("-0", op), 0);
+  assertStrictEquals(SafeIntegerType.fromString("0", op), 0);
+  assertStrictEquals(SafeIntegerType.fromString("1", op), 1);
+  assertStrictEquals(SafeIntegerType.fromString("1111", op), 1111);
+
+  assertStrictEquals(SafeIntegerType.fromString("2", op), 2);
+  assertStrictEquals(SafeIntegerType.fromString("3", op), 3);
+  assertStrictEquals(SafeIntegerType.fromString("4", op), 4);
+  assertStrictEquals(SafeIntegerType.fromString("5", op), 5);
+  assertStrictEquals(SafeIntegerType.fromString("6", op), 6);
+  assertStrictEquals(SafeIntegerType.fromString("7", op), 7);
+  assertStrictEquals(SafeIntegerType.fromString("8", op), 8);
+  assertStrictEquals(SafeIntegerType.fromString("9", op), 9);
+
+  assertStrictEquals(SafeIntegerType.fromString("+0", op), 0);
+  assertStrictEquals(SafeIntegerType.fromString("+1", op), 1);
+
+  assertStrictEquals(SafeIntegerType.fromString("00", op), 0);
+  assertStrictEquals(SafeIntegerType.fromString("01", op), 1);
+});
+
+Deno.test("SafeIntegerType.fromString() - radix:16", () => {
+  const op = { radix: 16 } as const;
+
+  const rfe2 = "`value` must be a hexadecimal representation of an integer.";
+
+  assertThrows(
+    () => {
+      SafeIntegerType.fromString("g", op);
+    },
+    TypeError,
+    rfe2,
+  );
+
+  assertStrictEquals(SafeIntegerType.fromString("-1", op), -1);
+  assertStrictEquals(SafeIntegerType.fromString("-0", op), 0);
+  assertStrictEquals(SafeIntegerType.fromString("0", op), 0);
+  assertStrictEquals(SafeIntegerType.fromString("1", op), 1);
+  assertStrictEquals(SafeIntegerType.fromString("1111", op), 4369);
+
+  assertStrictEquals(SafeIntegerType.fromString("2", op), 2);
+  assertStrictEquals(SafeIntegerType.fromString("3", op), 3);
+  assertStrictEquals(SafeIntegerType.fromString("4", op), 4);
+  assertStrictEquals(SafeIntegerType.fromString("5", op), 5);
+  assertStrictEquals(SafeIntegerType.fromString("6", op), 6);
+  assertStrictEquals(SafeIntegerType.fromString("7", op), 7);
+  assertStrictEquals(SafeIntegerType.fromString("8", op), 8);
+  assertStrictEquals(SafeIntegerType.fromString("9", op), 9);
+  assertStrictEquals(SafeIntegerType.fromString("a", op), 10);
+  assertStrictEquals(SafeIntegerType.fromString("B", op), 11);
+  assertStrictEquals(SafeIntegerType.fromString("c", op), 12);
+  assertStrictEquals(SafeIntegerType.fromString("0d", op), 13);
+  assertStrictEquals(SafeIntegerType.fromString("E", op), 14);
+  assertStrictEquals(SafeIntegerType.fromString("f", op), 15);
+
+  assertStrictEquals(SafeIntegerType.fromString("+0", op), 0);
+  assertStrictEquals(SafeIntegerType.fromString("+1", op), 1);
+
+  assertStrictEquals(SafeIntegerType.fromString("00", op), 0);
+  assertStrictEquals(SafeIntegerType.fromString("01", op), 1);
+});
+
+Deno.test("SafeIntegerType.fromString() - radix:unknown", () => {
+  // radix:10 として処理する
+  const op = { radix: 3 as 2 } as const;
+
+  assertStrictEquals(SafeIntegerType.fromString("-1", op), -1);
+  assertStrictEquals(SafeIntegerType.fromString("-0", op), 0);
+  assertStrictEquals(SafeIntegerType.fromString("0", op), 0);
+  assertStrictEquals(SafeIntegerType.fromString("1", op), 1);
+  assertStrictEquals(SafeIntegerType.fromString("1111", op), 1111);
+
+  assertStrictEquals(SafeIntegerType.fromString("2", op), 2);
+  assertStrictEquals(SafeIntegerType.fromString("3", op), 3);
+  assertStrictEquals(SafeIntegerType.fromString("4", op), 4);
+  assertStrictEquals(SafeIntegerType.fromString("5", op), 5);
+  assertStrictEquals(SafeIntegerType.fromString("6", op), 6);
+  assertStrictEquals(SafeIntegerType.fromString("7", op), 7);
+  assertStrictEquals(SafeIntegerType.fromString("8", op), 8);
+  assertStrictEquals(SafeIntegerType.fromString("9", op), 9);
+
+  assertStrictEquals(SafeIntegerType.fromString("+0", op), 0);
+  assertStrictEquals(SafeIntegerType.fromString("+1", op), 1);
+
+  assertStrictEquals(SafeIntegerType.fromString("00", op), 0);
+  assertStrictEquals(SafeIntegerType.fromString("01", op), 1);
+});
