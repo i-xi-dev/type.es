@@ -14,30 +14,35 @@ export type Radix = typeof Radix[keyof typeof Radix];
 type RadixProperties = {
   digitsRegex: RegExp;
   label: string;
+  prefix: string;
   radix: Radix;
 };
 
 const _binaryRadixProperties: RadixProperties = {
   digitsRegex: /^[-+]?[01]+$/,
   label: "a binary",
+  prefix: "0b",
   radix: Radix.BINARY,
 } as const;
 
 const _decimalRadixProperties: RadixProperties = {
   digitsRegex: /^[-+]?[0-9]+$/,
   label: "a decimal",
+  prefix: "",
   radix: Radix.DECIMAL,
 } as const;
 
 const _hexadecimalRadixProperties: RadixProperties = {
   digitsRegex: /^[-+]?[0-9a-fA-F]+$/,
   label: "a hexadecimal",
+  prefix: "0x",
   radix: Radix.HEXADECIMAL,
 } as const;
 
 const _octalRadixProperties: RadixProperties = {
   digitsRegex: /^[-+]?[0-7]+$/,
   label: "an octal",
+  prefix: "0o",
   radix: Radix.OCTAL,
 } as const;
 
