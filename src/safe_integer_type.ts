@@ -7,6 +7,7 @@ import { FromStringOptions, ToStringOptions } from "./integer_type.ts";
 import {
   clamp as clampNumber,
   isPositive as isPositiveNumber,
+  normalize as normalizeNumber,
 } from "./number_type.ts";
 import { radixPropertiesOf } from "./numeric_type.ts";
 
@@ -94,6 +95,18 @@ export function clamp<T extends number>(value: number, min: T, max: T): T {
   assertSafeInteger(max, "max");
 
   return clampNumber(value, min, max);
+}
+
+export function clampToPositive<T extends number>(value: T, max?: T): T {
+  assertSafeInteger(value, "value");
+  const min = 1 as T;
+  if (isSafeInteger(max)) {
+    if (max < min) {
+      throw new RangeError("`max` must be greater than or equal to `1`.");
+    }
+    return clampNumber(value, min, max);
+  }
+  return normalizeNumber(Math.max(value, 1) as T);
 }
 
 export function fromBigInt(value: bigint): number {
