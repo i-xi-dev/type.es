@@ -1,5 +1,6 @@
 import { assertStringified as assertStringifiedInteger } from "./integer_type.ts";
-import { Radix, radixPropertiesOf } from "./numeric_type.ts";
+import { FromStringOptions } from "./integer_type.ts";
+import { radixPropertiesOf } from "./numeric_type.ts";
 
 export function isBigInt(test: unknown): test is bigint {
   return (typeof test === "bigint");
@@ -110,13 +111,13 @@ export function toClamped<T extends bigint>(
   return minOf(maxOf(value, min), max) as T;
 }
 
-export function fromString(value: string, radix?: Radix): bigint {
-  assertStringifiedInteger(value, "value", radix);
+export function fromString(value: string, options?: FromStringOptions): bigint {
+  assertStringifiedInteger(value, "value", options?.radix);
 
   const negative = value.startsWith("-");
   let adjustedValue = value;
   adjustedValue = adjustedValue.replace(/^[-+]?/, "");
-  adjustedValue = radixPropertiesOf(radix).prefix + adjustedValue;
+  adjustedValue = radixPropertiesOf(options?.radix).prefix + adjustedValue;
   let valueAsBigInt = BigInt(adjustedValue);
   if (negative === true) {
     valueAsBigInt *= -1n;

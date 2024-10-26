@@ -561,35 +561,37 @@ Deno.test("BigIntType.fromString()", () => {
 });
 
 Deno.test("BigIntType.fromString() - 2", () => {
-  assertStrictEquals(BigIntType.fromString("0", 2), 0n);
-  assertStrictEquals(BigIntType.fromString("-0", 2), 0n);
-  assertStrictEquals(BigIntType.fromString("+0", 2), 0n);
-  assertStrictEquals(BigIntType.fromString("1", 2), 1n);
-  assertStrictEquals(BigIntType.fromString("-1", 2), -1n);
-  assertStrictEquals(BigIntType.fromString("+1", 2), 1n);
-  assertStrictEquals(BigIntType.fromString("10", 2), 2n);
-  assertStrictEquals(BigIntType.fromString("-10", 2), -2n);
+  const op2 = { radix: 2 } as const;
 
-  assertStrictEquals(BigIntType.fromString("+111", 2), 7n);
+  assertStrictEquals(BigIntType.fromString("0", op2), 0n);
+  assertStrictEquals(BigIntType.fromString("-0", op2), 0n);
+  assertStrictEquals(BigIntType.fromString("+0", op2), 0n);
+  assertStrictEquals(BigIntType.fromString("1", op2), 1n);
+  assertStrictEquals(BigIntType.fromString("-1", op2), -1n);
+  assertStrictEquals(BigIntType.fromString("+1", op2), 1n);
+  assertStrictEquals(BigIntType.fromString("10", op2), 2n);
+  assertStrictEquals(BigIntType.fromString("-10", op2), -2n);
+
+  assertStrictEquals(BigIntType.fromString("+111", op2), 7n);
 
   const e1 = "`value` must be a binary representation of an integer.";
   assertThrows(
     () => {
-      BigIntType.fromString(undefined as unknown as string, 2);
+      BigIntType.fromString(undefined as unknown as string, op2);
     },
     TypeError,
     e1,
   );
   assertThrows(
     () => {
-      BigIntType.fromString("" as unknown as string, 2);
+      BigIntType.fromString("" as unknown as string, op2);
     },
     TypeError,
     e1,
   );
   assertThrows(
     () => {
-      BigIntType.fromString("2" as unknown as string, 2);
+      BigIntType.fromString("2" as unknown as string, op2);
     },
     TypeError,
     e1,
@@ -597,47 +599,49 @@ Deno.test("BigIntType.fromString() - 2", () => {
 });
 
 Deno.test("BigIntType.fromString() - 8", () => {
-  assertStrictEquals(BigIntType.fromString("0", 8), 0n);
-  assertStrictEquals(BigIntType.fromString("-0", 8), 0n);
-  assertStrictEquals(BigIntType.fromString("+0", 8), 0n);
-  assertStrictEquals(BigIntType.fromString("1", 8), 1n);
-  assertStrictEquals(BigIntType.fromString("-1", 8), -1n);
-  assertStrictEquals(BigIntType.fromString("+1", 8), 1n);
-  assertStrictEquals(BigIntType.fromString("2", 8), 2n);
-  assertStrictEquals(BigIntType.fromString("-2", 8), -2n);
-  assertStrictEquals(BigIntType.fromString("3", 8), 3n);
-  assertStrictEquals(BigIntType.fromString("-3", 8), -3n);
-  assertStrictEquals(BigIntType.fromString("4", 8), 4n);
-  assertStrictEquals(BigIntType.fromString("-4", 8), -4n);
-  assertStrictEquals(BigIntType.fromString("5", 8), 5n);
-  assertStrictEquals(BigIntType.fromString("-5", 8), -5n);
-  assertStrictEquals(BigIntType.fromString("6", 8), 6n);
-  assertStrictEquals(BigIntType.fromString("-6", 8), -6n);
-  assertStrictEquals(BigIntType.fromString("7", 8), 7n);
-  assertStrictEquals(BigIntType.fromString("-7", 8), -7n);
-  assertStrictEquals(BigIntType.fromString("10", 8), 8n);
-  assertStrictEquals(BigIntType.fromString("-10", 8), -8n);
+  const op8 = { radix: 8 } as const;
 
-  assertStrictEquals(BigIntType.fromString("+111", 8), 73n);
+  assertStrictEquals(BigIntType.fromString("0", op8), 0n);
+  assertStrictEquals(BigIntType.fromString("-0", op8), 0n);
+  assertStrictEquals(BigIntType.fromString("+0", op8), 0n);
+  assertStrictEquals(BigIntType.fromString("1", op8), 1n);
+  assertStrictEquals(BigIntType.fromString("-1", op8), -1n);
+  assertStrictEquals(BigIntType.fromString("+1", op8), 1n);
+  assertStrictEquals(BigIntType.fromString("2", op8), 2n);
+  assertStrictEquals(BigIntType.fromString("-2", op8), -2n);
+  assertStrictEquals(BigIntType.fromString("3", op8), 3n);
+  assertStrictEquals(BigIntType.fromString("-3", op8), -3n);
+  assertStrictEquals(BigIntType.fromString("4", op8), 4n);
+  assertStrictEquals(BigIntType.fromString("-4", op8), -4n);
+  assertStrictEquals(BigIntType.fromString("5", op8), 5n);
+  assertStrictEquals(BigIntType.fromString("-5", op8), -5n);
+  assertStrictEquals(BigIntType.fromString("6", op8), 6n);
+  assertStrictEquals(BigIntType.fromString("-6", op8), -6n);
+  assertStrictEquals(BigIntType.fromString("7", op8), 7n);
+  assertStrictEquals(BigIntType.fromString("-7", op8), -7n);
+  assertStrictEquals(BigIntType.fromString("10", op8), 8n);
+  assertStrictEquals(BigIntType.fromString("-10", op8), -8n);
+
+  assertStrictEquals(BigIntType.fromString("+111", op8), 73n);
 
   const e1 = "`value` must be an octal representation of an integer.";
   assertThrows(
     () => {
-      BigIntType.fromString(undefined as unknown as string, 8);
+      BigIntType.fromString(undefined as unknown as string, op8);
     },
     TypeError,
     e1,
   );
   assertThrows(
     () => {
-      BigIntType.fromString("" as unknown as string, 8);
+      BigIntType.fromString("" as unknown as string, op8);
     },
     TypeError,
     e1,
   );
   assertThrows(
     () => {
-      BigIntType.fromString("8" as unknown as string, 8);
+      BigIntType.fromString("8" as unknown as string, op8);
     },
     TypeError,
     e1,
@@ -645,51 +649,53 @@ Deno.test("BigIntType.fromString() - 8", () => {
 });
 
 Deno.test("BigIntType.fromString() - 10", () => {
-  assertStrictEquals(BigIntType.fromString("0", 10), 0n);
-  assertStrictEquals(BigIntType.fromString("-0", 10), 0n);
-  assertStrictEquals(BigIntType.fromString("+0", 10), 0n);
-  assertStrictEquals(BigIntType.fromString("1", 10), 1n);
-  assertStrictEquals(BigIntType.fromString("-1", 10), -1n);
-  assertStrictEquals(BigIntType.fromString("+1", 10), 1n);
-  assertStrictEquals(BigIntType.fromString("2", 10), 2n);
-  assertStrictEquals(BigIntType.fromString("-2", 10), -2n);
-  assertStrictEquals(BigIntType.fromString("3", 10), 3n);
-  assertStrictEquals(BigIntType.fromString("-3", 10), -3n);
-  assertStrictEquals(BigIntType.fromString("4", 10), 4n);
-  assertStrictEquals(BigIntType.fromString("-4", 10), -4n);
-  assertStrictEquals(BigIntType.fromString("5", 10), 5n);
-  assertStrictEquals(BigIntType.fromString("-5", 10), -5n);
-  assertStrictEquals(BigIntType.fromString("6", 10), 6n);
-  assertStrictEquals(BigIntType.fromString("-6", 10), -6n);
-  assertStrictEquals(BigIntType.fromString("7", 10), 7n);
-  assertStrictEquals(BigIntType.fromString("-7", 10), -7n);
-  assertStrictEquals(BigIntType.fromString("8", 10), 8n);
-  assertStrictEquals(BigIntType.fromString("-8", 10), -8n);
-  assertStrictEquals(BigIntType.fromString("9", 10), 9n);
-  assertStrictEquals(BigIntType.fromString("-9", 10), -9n);
-  assertStrictEquals(BigIntType.fromString("10", 10), 10n);
-  assertStrictEquals(BigIntType.fromString("-10", 10), -10n);
+  const op10 = { radix: 10 } as const;
 
-  assertStrictEquals(BigIntType.fromString("+111", 10), 111n);
+  assertStrictEquals(BigIntType.fromString("0", op10), 0n);
+  assertStrictEquals(BigIntType.fromString("-0", op10), 0n);
+  assertStrictEquals(BigIntType.fromString("+0", op10), 0n);
+  assertStrictEquals(BigIntType.fromString("1", op10), 1n);
+  assertStrictEquals(BigIntType.fromString("-1", op10), -1n);
+  assertStrictEquals(BigIntType.fromString("+1", op10), 1n);
+  assertStrictEquals(BigIntType.fromString("2", op10), 2n);
+  assertStrictEquals(BigIntType.fromString("-2", op10), -2n);
+  assertStrictEquals(BigIntType.fromString("3", op10), 3n);
+  assertStrictEquals(BigIntType.fromString("-3", op10), -3n);
+  assertStrictEquals(BigIntType.fromString("4", op10), 4n);
+  assertStrictEquals(BigIntType.fromString("-4", op10), -4n);
+  assertStrictEquals(BigIntType.fromString("5", op10), 5n);
+  assertStrictEquals(BigIntType.fromString("-5", op10), -5n);
+  assertStrictEquals(BigIntType.fromString("6", op10), 6n);
+  assertStrictEquals(BigIntType.fromString("-6", op10), -6n);
+  assertStrictEquals(BigIntType.fromString("7", op10), 7n);
+  assertStrictEquals(BigIntType.fromString("-7", op10), -7n);
+  assertStrictEquals(BigIntType.fromString("8", op10), 8n);
+  assertStrictEquals(BigIntType.fromString("-8", op10), -8n);
+  assertStrictEquals(BigIntType.fromString("9", op10), 9n);
+  assertStrictEquals(BigIntType.fromString("-9", op10), -9n);
+  assertStrictEquals(BigIntType.fromString("10", op10), 10n);
+  assertStrictEquals(BigIntType.fromString("-10", op10), -10n);
+
+  assertStrictEquals(BigIntType.fromString("+111", op10), 111n);
 
   const e1 = "`value` must be a decimal representation of an integer.";
   assertThrows(
     () => {
-      BigIntType.fromString(undefined as unknown as string, 10);
+      BigIntType.fromString(undefined as unknown as string, op10);
     },
     TypeError,
     e1,
   );
   assertThrows(
     () => {
-      BigIntType.fromString("" as unknown as string, 10);
+      BigIntType.fromString("" as unknown as string, op10);
     },
     TypeError,
     e1,
   );
   assertThrows(
     () => {
-      BigIntType.fromString("A" as unknown as string, 10);
+      BigIntType.fromString("A" as unknown as string, op10);
     },
     TypeError,
     e1,
@@ -697,63 +703,65 @@ Deno.test("BigIntType.fromString() - 10", () => {
 });
 
 Deno.test("BigIntType.fromString() - 16", () => {
-  assertStrictEquals(BigIntType.fromString("0", 16), 0n);
-  assertStrictEquals(BigIntType.fromString("-0", 16), 0n);
-  assertStrictEquals(BigIntType.fromString("+0", 16), 0n);
-  assertStrictEquals(BigIntType.fromString("1", 16), 1n);
-  assertStrictEquals(BigIntType.fromString("-1", 16), -1n);
-  assertStrictEquals(BigIntType.fromString("+1", 16), 1n);
-  assertStrictEquals(BigIntType.fromString("2", 16), 2n);
-  assertStrictEquals(BigIntType.fromString("-2", 16), -2n);
-  assertStrictEquals(BigIntType.fromString("3", 16), 3n);
-  assertStrictEquals(BigIntType.fromString("-3", 16), -3n);
-  assertStrictEquals(BigIntType.fromString("4", 16), 4n);
-  assertStrictEquals(BigIntType.fromString("-4", 16), -4n);
-  assertStrictEquals(BigIntType.fromString("5", 16), 5n);
-  assertStrictEquals(BigIntType.fromString("-5", 16), -5n);
-  assertStrictEquals(BigIntType.fromString("6", 16), 6n);
-  assertStrictEquals(BigIntType.fromString("-6", 16), -6n);
-  assertStrictEquals(BigIntType.fromString("7", 16), 7n);
-  assertStrictEquals(BigIntType.fromString("-7", 16), -7n);
-  assertStrictEquals(BigIntType.fromString("8", 16), 8n);
-  assertStrictEquals(BigIntType.fromString("-8", 16), -8n);
-  assertStrictEquals(BigIntType.fromString("9", 16), 9n);
-  assertStrictEquals(BigIntType.fromString("-9", 16), -9n);
-  assertStrictEquals(BigIntType.fromString("A", 16), 10n);
-  assertStrictEquals(BigIntType.fromString("-a", 16), -10n);
-  assertStrictEquals(BigIntType.fromString("b", 16), 11n);
-  assertStrictEquals(BigIntType.fromString("-B", 16), -11n);
-  assertStrictEquals(BigIntType.fromString("C", 16), 12n);
-  assertStrictEquals(BigIntType.fromString("-c", 16), -12n);
-  assertStrictEquals(BigIntType.fromString("d", 16), 13n);
-  assertStrictEquals(BigIntType.fromString("-D", 16), -13n);
-  assertStrictEquals(BigIntType.fromString("E", 16), 14n);
-  assertStrictEquals(BigIntType.fromString("-e", 16), -14n);
-  assertStrictEquals(BigIntType.fromString("f", 16), 15n);
-  assertStrictEquals(BigIntType.fromString("-F", 16), -15n);
-  assertStrictEquals(BigIntType.fromString("10", 16), 16n);
-  assertStrictEquals(BigIntType.fromString("-10", 16), -16n);
+  const op16 = { radix: 16 } as const;
 
-  assertStrictEquals(BigIntType.fromString("+111", 16), 273n);
+  assertStrictEquals(BigIntType.fromString("0", op16), 0n);
+  assertStrictEquals(BigIntType.fromString("-0", op16), 0n);
+  assertStrictEquals(BigIntType.fromString("+0", op16), 0n);
+  assertStrictEquals(BigIntType.fromString("1", op16), 1n);
+  assertStrictEquals(BigIntType.fromString("-1", op16), -1n);
+  assertStrictEquals(BigIntType.fromString("+1", op16), 1n);
+  assertStrictEquals(BigIntType.fromString("2", op16), 2n);
+  assertStrictEquals(BigIntType.fromString("-2", op16), -2n);
+  assertStrictEquals(BigIntType.fromString("3", op16), 3n);
+  assertStrictEquals(BigIntType.fromString("-3", op16), -3n);
+  assertStrictEquals(BigIntType.fromString("4", op16), 4n);
+  assertStrictEquals(BigIntType.fromString("-4", op16), -4n);
+  assertStrictEquals(BigIntType.fromString("5", op16), 5n);
+  assertStrictEquals(BigIntType.fromString("-5", op16), -5n);
+  assertStrictEquals(BigIntType.fromString("6", op16), 6n);
+  assertStrictEquals(BigIntType.fromString("-6", op16), -6n);
+  assertStrictEquals(BigIntType.fromString("7", op16), 7n);
+  assertStrictEquals(BigIntType.fromString("-7", op16), -7n);
+  assertStrictEquals(BigIntType.fromString("8", op16), 8n);
+  assertStrictEquals(BigIntType.fromString("-8", op16), -8n);
+  assertStrictEquals(BigIntType.fromString("9", op16), 9n);
+  assertStrictEquals(BigIntType.fromString("-9", op16), -9n);
+  assertStrictEquals(BigIntType.fromString("A", op16), 10n);
+  assertStrictEquals(BigIntType.fromString("-a", op16), -10n);
+  assertStrictEquals(BigIntType.fromString("b", op16), 11n);
+  assertStrictEquals(BigIntType.fromString("-B", op16), -11n);
+  assertStrictEquals(BigIntType.fromString("C", op16), 12n);
+  assertStrictEquals(BigIntType.fromString("-c", op16), -12n);
+  assertStrictEquals(BigIntType.fromString("d", op16), 13n);
+  assertStrictEquals(BigIntType.fromString("-D", op16), -13n);
+  assertStrictEquals(BigIntType.fromString("E", op16), 14n);
+  assertStrictEquals(BigIntType.fromString("-e", op16), -14n);
+  assertStrictEquals(BigIntType.fromString("f", op16), 15n);
+  assertStrictEquals(BigIntType.fromString("-F", op16), -15n);
+  assertStrictEquals(BigIntType.fromString("10", op16), 16n);
+  assertStrictEquals(BigIntType.fromString("-10", op16), -16n);
+
+  assertStrictEquals(BigIntType.fromString("+111", op16), 273n);
 
   const e1 = "`value` must be a hexadecimal representation of an integer.";
   assertThrows(
     () => {
-      BigIntType.fromString(undefined as unknown as string, 16);
+      BigIntType.fromString(undefined as unknown as string, op16);
     },
     TypeError,
     e1,
   );
   assertThrows(
     () => {
-      BigIntType.fromString("" as unknown as string, 16);
+      BigIntType.fromString("" as unknown as string, op16);
     },
     TypeError,
     e1,
   );
   assertThrows(
     () => {
-      BigIntType.fromString("G" as unknown as string, 16);
+      BigIntType.fromString("G" as unknown as string, op16);
     },
     TypeError,
     e1,
