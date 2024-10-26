@@ -79,22 +79,32 @@ export function assertEven(test: unknown, label: string): void {
 }
 
 export function minOf<T extends bigint>(value0: T, ...values: T[]): T {
+  assertBigInt(value0, `value0`);
+
   let provMin = value0;
-  for (const i of values) {
-    //TODO isBigInt(i)
-    if (i < provMin) {
-      provMin = i;
+  let value: T;
+  for (let i = 0; i < values.length; i++) {
+    value = values[i];
+    assertBigInt(value, `values[${i}]`);
+
+    if (value < provMin) {
+      provMin = value;
     }
   }
   return provMin;
 }
 
 export function maxOf<T extends bigint>(value0: T, ...values: T[]): T {
+  assertBigInt(value0, `value0`);
+
   let provMax = value0;
-  for (const i of values) {
-    //TODO isBigInt(i)
-    if (i > provMax) {
-      provMax = i;
+  let value: T;
+  for (let i = 0; i < values.length; i++) {
+    value = values[i];
+    assertBigInt(value, `values[${i}]`);
+
+    if (value > provMax) {
+      provMax = value;
     }
   }
   return provMax;
@@ -110,11 +120,7 @@ export function isInRange<T extends bigint>(
   return isBigInt(test) && (min <= test) && (max >= test);
 }
 
-export function clamp<T extends bigint>(
-  value: bigint,
-  min: T,
-  max: T,
-): T {
+export function clamp<T extends bigint>(value: bigint, min: T, max: T): T {
   assertBigInt(value, "value");
   assertBigInt(min, "min");
   assertBigInt(max, "max");

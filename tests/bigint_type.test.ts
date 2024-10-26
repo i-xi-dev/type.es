@@ -391,6 +391,24 @@ Deno.test("BigIntType.minOf()", () => {
   assertStrictEquals(BigIntType.minOf(0n, -1n, -2n), -2n);
   assertStrictEquals(BigIntType.minOf(1n, -2n, 0n), -2n);
   assertStrictEquals(BigIntType.minOf(-1n, -2n, 0n), -2n);
+
+  const ex1 = "`value0` must be a `bigint`.";
+  assertThrows(
+    () => {
+      BigIntType.minOf(undefined as unknown as bigint, 0n, 0n);
+    },
+    TypeError,
+    ex1,
+  );
+
+  const ex2 = "`values[1]` must be a `bigint`.";
+  assertThrows(
+    () => {
+      BigIntType.minOf(0n, 0n, undefined as unknown as bigint);
+    },
+    TypeError,
+    ex2,
+  );
 });
 
 Deno.test("BigIntType.maxOf()", () => {
@@ -414,6 +432,24 @@ Deno.test("BigIntType.maxOf()", () => {
   assertStrictEquals(BigIntType.maxOf(0n, -1n, -2n), 0n);
   assertStrictEquals(BigIntType.maxOf(1n, -2n, 0n), 1n);
   assertStrictEquals(BigIntType.maxOf(-1n, -2n, 0n), 0n);
+
+  const ex1 = "`value0` must be a `bigint`.";
+  assertThrows(
+    () => {
+      BigIntType.maxOf(undefined as unknown as bigint, 0n, 0n);
+    },
+    TypeError,
+    ex1,
+  );
+
+  const ex2 = "`values[1]` must be a `bigint`.";
+  assertThrows(
+    () => {
+      BigIntType.maxOf(0n, 0n, undefined as unknown as bigint);
+    },
+    TypeError,
+    ex2,
+  );
 });
 
 Deno.test("BigIntType.isInRange()", () => {
