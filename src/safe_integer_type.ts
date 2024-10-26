@@ -4,6 +4,8 @@ import {
   isInRange as isBigIntInRange,
 } from "./bigint_type.ts";
 import { FromStringOptions, ToStringOptions } from "./integer_type.ts";
+import { isPositive as isPositiveNumber } from "./number_type.ts";
+import { radixPropertiesOf } from "./numeric_type.ts";
 
 export function isSafeInteger(test: unknown): test is number {
   return Number.isSafeInteger(test);
@@ -107,4 +109,22 @@ export function toBigInt(self: number): bigint {
 export function fromString(value: string, options?: FromStringOptions): number {
   const valueAsBigInt = fromStringToBigInt(value, options);
   return fromBigInt(valueAsBigInt);
+}
+
+export function toString(self: number, options?: ToStringOptions): string {
+  assertSafeInteger(self, "self");
+
+  const radix = radixPropertiesOf(options?.radix).radix;
+  let result = self.toString(radix);
+
+  if (options?.lowerCase !== true) {
+    result = result.toUpperCase();
+  }
+
+  const minIntegralDigits = options?.minIntegralDigits;
+  if (isPositiveNumber(minIntegralDigits)) {
+    result = result.padStart(minIntegralDigits, "0");
+  }
+
+  return result;
 }
