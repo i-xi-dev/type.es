@@ -754,6 +754,65 @@ Deno.test("SafeIntegerType.clampToPositive()", () => {
   assertStrictEquals(SafeIntegerType.clampToPositive(3, 2), 2);
 });
 
+Deno.test("SafeIntegerType.clampToNonNegative()", () => {
+  assertStrictEquals(SafeIntegerType.clampToNonNegative(MIN), 0);
+  assertStrictEquals(SafeIntegerType.clampToNonNegative(-2), 0);
+  assertStrictEquals(SafeIntegerType.clampToNonNegative(-1), 0);
+  assertStrictEquals(
+    Object.is(SafeIntegerType.clampToNonNegative(-0), 0),
+    true,
+  );
+  assertStrictEquals(SafeIntegerType.clampToNonNegative(0), 0);
+  assertStrictEquals(SafeIntegerType.clampToNonNegative(1), 1);
+  assertStrictEquals(SafeIntegerType.clampToNonNegative(2), 2);
+  assertStrictEquals(SafeIntegerType.clampToNonNegative(MAX), MAX);
+
+  const e1 = "`value` must be a safe integer.";
+  assertThrows(
+    () => {
+      SafeIntegerType.clampToNonNegative(undefined as unknown as number);
+    },
+    TypeError,
+    e1,
+  );
+
+  const e2 = "`max` must be greater than or equal to `0`.";
+  assertThrows(
+    () => {
+      SafeIntegerType.clampToNonNegative(0, -1);
+    },
+    RangeError,
+    e2,
+  );
+
+  assertStrictEquals(SafeIntegerType.clampToNonNegative(-3, 0), 0);
+  assertStrictEquals(SafeIntegerType.clampToNonNegative(-2, 0), 0);
+  assertStrictEquals(SafeIntegerType.clampToNonNegative(-1, 0), 0);
+  assertStrictEquals(SafeIntegerType.clampToNonNegative(-0, 0), 0);
+  assertStrictEquals(SafeIntegerType.clampToNonNegative(0, 0), 0);
+  assertStrictEquals(SafeIntegerType.clampToNonNegative(1, 0), 0);
+  assertStrictEquals(SafeIntegerType.clampToNonNegative(2, 0), 0);
+  assertStrictEquals(SafeIntegerType.clampToNonNegative(3, 0), 0);
+
+  assertStrictEquals(SafeIntegerType.clampToNonNegative(-3, 1), 0);
+  assertStrictEquals(SafeIntegerType.clampToNonNegative(-2, 1), 0);
+  assertStrictEquals(SafeIntegerType.clampToNonNegative(-1, 1), 0);
+  assertStrictEquals(SafeIntegerType.clampToNonNegative(-0, 1), 0);
+  assertStrictEquals(SafeIntegerType.clampToNonNegative(0, 1), 0);
+  assertStrictEquals(SafeIntegerType.clampToNonNegative(1, 1), 1);
+  assertStrictEquals(SafeIntegerType.clampToNonNegative(2, 1), 1);
+  assertStrictEquals(SafeIntegerType.clampToNonNegative(3, 1), 1);
+
+  assertStrictEquals(SafeIntegerType.clampToNonNegative(-3, 2), 0);
+  assertStrictEquals(SafeIntegerType.clampToNonNegative(-2, 2), 0);
+  assertStrictEquals(SafeIntegerType.clampToNonNegative(-1, 2), 0);
+  assertStrictEquals(SafeIntegerType.clampToNonNegative(-0, 2), 0);
+  assertStrictEquals(SafeIntegerType.clampToNonNegative(0, 2), 0);
+  assertStrictEquals(SafeIntegerType.clampToNonNegative(1, 2), 1);
+  assertStrictEquals(SafeIntegerType.clampToNonNegative(2, 2), 2);
+  assertStrictEquals(SafeIntegerType.clampToNonNegative(3, 2), 2);
+});
+
 Deno.test("SafeIntegerType.fromBigInt()", () => {
   const rfe1 = "`value` must be a `bigint`.";
   const rfe2 = "`value` must be within the range of safe integer.";

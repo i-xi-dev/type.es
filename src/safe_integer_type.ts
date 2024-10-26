@@ -106,7 +106,19 @@ export function clampToPositive<T extends number>(value: T, max?: T): T {
     }
     return clampNumber(value, min, max);
   }
-  return normalizeNumber(Math.max(value, 1) as T);
+  return normalizeNumber(Math.max(value, min) as T);
+}
+
+export function clampToNonNegative<T extends number>(value: T, max?: T): T {
+  assertSafeInteger(value, "value");
+  const min = 0 as T;
+  if (isSafeInteger(max)) {
+    if (max < min) {
+      throw new RangeError("`max` must be greater than or equal to `0`.");
+    }
+    return clampNumber(value, min, max);
+  }
+  return normalizeNumber(Math.max(value, min) as T);
 }
 
 export function fromBigInt(value: bigint): number {
