@@ -62,7 +62,7 @@ export function isInRange<T extends number>(
 }
 
 export function normalize<T extends number>(value: T): T {
-  //TODO isNumber(value)
+  assertNumber(value, "value");
   return ((value === 0) ? (value + 0) : value) as T; // -0を0
 }
 

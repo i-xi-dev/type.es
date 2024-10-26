@@ -508,6 +508,15 @@ Deno.test("NumberType.normalize()", () => {
     NumberType.normalize(Number.MAX_SAFE_INTEGER),
     Number.MAX_SAFE_INTEGER,
   );
+
+  const e1 = "`value` must be a `number`.";
+  assertThrows(
+    () => {
+      NumberType.normalize(0n as unknown as number);
+    },
+    TypeError,
+    e1,
+  );
 });
 
 Deno.test("NumberType.clamp()", () => {

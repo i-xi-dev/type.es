@@ -35,5 +35,5 @@ export function isAsyncIterable<T = any>(
 //     return false;
 //   }
 
-//   //TODO 循環参照検出
+//   //XXX 循環参照検出
 // }
