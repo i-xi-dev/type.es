@@ -97,52 +97,24 @@ export function clamp<T extends number>(value: number, min: T, max: T): T {
   return clampNumber(value, min, max);
 }
 
-export function clampToPositive<T extends number>(value: T, max?: T): T {
+export function clampToPositive<T extends number>(value: T): T {
   assertSafeInteger(value, "value");
-  const min = 1 as T;
-  if (isSafeInteger(max)) {
-    if (max < min) {
-      throw new RangeError("`max` must be greater than or equal to `1`.");
-    }
-    return clampNumber(value, min, max);
-  }
-  return normalizeNumber(Math.max(value, min) as T);
+  return normalizeNumber(Math.max(value, 1) as T);
 }
 
-export function clampToNonNegative<T extends number>(value: T, max?: T): T {
+export function clampToNonNegative<T extends number>(value: T): T {
   assertSafeInteger(value, "value");
-  const min = 0 as T;
-  if (isSafeInteger(max)) {
-    if (max < min) {
-      throw new RangeError("`max` must be greater than or equal to `0`.");
-    }
-    return clampNumber(value, min, max);
-  }
-  return normalizeNumber(Math.max(value, min) as T);
+  return normalizeNumber(Math.max(value, 0) as T);
 }
 
-export function clampToNonPositive<T extends number>(value: T, min?: T): T {
+export function clampToNonPositive<T extends number>(value: T): T {
   assertSafeInteger(value, "value");
-  const max = 0 as T;
-  if (isSafeInteger(min)) {
-    if (max < min) {
-      throw new RangeError("`min` must be less than or equal to `0`.");
-    }
-    return clampNumber(value, min, max);
-  }
-  return normalizeNumber(Math.min(value, max) as T);
+  return normalizeNumber(Math.min(value, 0) as T);
 }
 
-export function clampToNegative<T extends number>(value: T, min?: T): T {
+export function clampToNegative<T extends number>(value: T): T {
   assertSafeInteger(value, "value");
-  const max = -1 as T;
-  if (isSafeInteger(min)) {
-    if (max < min) {
-      throw new RangeError("`min` must be less than or equal to `-1`.");
-    }
-    return clampNumber(value, min, max);
-  }
-  return normalizeNumber(Math.min(value, max) as T);
+  return normalizeNumber(Math.min(value, -1) as T);
 }
 
 export function fromBigInt(value: bigint): number {

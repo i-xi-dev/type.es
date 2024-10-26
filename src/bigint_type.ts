@@ -1,6 +1,11 @@
 import { assertStringified as assertStringifiedInteger } from "./integer_type.ts";
-import { FromStringOptions, ToStringOptions } from "./integer_type.ts";
+import {
+  FromNumberOptions,
+  FromStringOptions,
+  ToStringOptions,
+} from "./integer_type.ts";
 import { isPositive as isPositiveSafeInteger } from "./safe_integer_type.ts";
+import { assertNumber, round as roundNumber } from "./number_type.ts";
 import { radixPropertiesOf } from "./numeric_type.ts";
 
 export function isBigInt(test: unknown): test is bigint {
@@ -120,52 +125,24 @@ export function clamp<T extends bigint>(
   return minOf(maxOf(value, min), max) as T;
 }
 
-export function clampToPositive<T extends bigint>(value: T, max?: T): T {
+export function clampToPositive<T extends bigint>(value: T): T {
   assertBigInt(value, "value");
-  const min = 1n as T;
-  if (isBigInt(max)) {
-    if (max < min) {
-      throw new RangeError("`max` must be greater than or equal to `1n`.");
-    }
-    return clamp(value, min, max);
-  }
-  return maxOf(value, min);
+  return maxOf(value, 1n as T);
 }
 
-export function clampToNonNegative<T extends bigint>(value: T, max?: T): T {
+export function clampToNonNegative<T extends bigint>(value: T): T {
   assertBigInt(value, "value");
-  const min = 0n as T;
-  if (isBigInt(max)) {
-    if (max < min) {
-      throw new RangeError("`max` must be greater than or equal to `0n`.");
-    }
-    return clamp(value, min, max);
-  }
-  return maxOf(value, min);
+  return maxOf(value, 0n as T);
 }
 
-export function clampToNonPositive<T extends bigint>(value: T, min?: T): T {
+export function clampToNonPositive<T extends bigint>(value: T): T {
   assertBigInt(value, "value");
-  const max = 0n as T;
-  if (isBigInt(min)) {
-    if (max < min) {
-      throw new RangeError("`min` must be less than or equal to `0n`.");
-    }
-    return clamp(value, min, max);
-  }
-  return minOf(value, max);
+  return minOf(value, 0n as T);
 }
 
-export function clampToNegative<T extends bigint>(value: T, min?: T): T {
+export function clampToNegative<T extends bigint>(value: T): T {
   assertBigInt(value, "value");
-  const max = -1n as T;
-  if (isBigInt(min)) {
-    if (max < min) {
-      throw new RangeError("`min` must be less than or equal to `-1n`.");
-    }
-    return clamp(value, min, max);
-  }
-  return minOf(value, max);
+  return minOf(value, -1n as T);
 }
 
 export function fromString(value: string, options?: FromStringOptions): bigint {
@@ -199,4 +176,34 @@ export function toString(self: bigint, options?: ToStringOptions): string {
   }
 
   return result;
+}
+
+export function fromNumber(
+  value: number,
+  options?: FromNumberOptions,
+): bigint {
+  assertNumber(value, "value");
+  //TODO Finiteでなければエラーで良いのでは
+
+  if (Number.isNaN(value)) {
+    throw new TypeError("`value` must not be `NaN`.");
+  }
+
+  let adjustedValue: number;
+  if (value > Number.MAX_SAFE_INTEGER) {
+    adjustedValue = Number.MAX_SAFE_INTEGER;
+  } else if (value < Number.MIN_SAFE_INTEGER) {
+    adjustedValue = Number.MIN_SAFE_INTEGER;
+  } else {
+    adjustedValue = value;
+  }
+
+  let valueAsInt: number;
+  if (Number.isSafeInteger(adjustedValue)) {
+    valueAsInt = adjustedValue;
+  } else {
+    valueAsInt = roundNumber(adjustedValue, options?.roundingMode);
+  }
+
+  return BigInt(valueAsInt);
 }

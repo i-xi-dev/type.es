@@ -1,5 +1,5 @@
 import { isString } from "./string_type.ts";
-import { Radix, radixPropertiesOf } from "./numeric_type.ts";
+import { Radix, radixPropertiesOf, RoundingMode } from "./numeric_type.ts";
 
 export function isStringified(
   test: unknown,
@@ -31,4 +31,8 @@ export type ToStringOptions = {
   lowerCase?: boolean;
   minIntegralDigits?: number;
   radix?: Radix;
+};
+
+export type FromNumberOptions = {
+  roundingMode?: RoundingMode;
 };
