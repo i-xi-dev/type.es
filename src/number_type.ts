@@ -1,5 +1,5 @@
 import { isEven as isEvenSafeInteger } from "./safe_integer_type.ts";
-import { RoundingMode } from "./numeric_type.ts";
+import { RoundingMode } from "./numerics.ts";
 
 export function isNumber(test: unknown): test is number {
   return (typeof test === "number");

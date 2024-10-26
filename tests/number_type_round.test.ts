@@ -1,5 +1,5 @@
 import { assertStrictEquals, assertThrows } from "./deps.ts";
-import { NumberType, NumericType } from "../mod.ts";
+import { NumberType, Numerics } from "../mod.ts";
 
 const MIN = Number.MIN_SAFE_INTEGER;
 const MAX = Number.MAX_SAFE_INTEGER;
@@ -120,7 +120,7 @@ Deno.test("NumberType.round()", () => {
 });
 
 Deno.test("NumberType.round() - roundingMode:UP", () => {
-  const op = NumericType.RoundingMode.UP;
+  const op = Numerics.RoundingMode.UP;
 
   assertStrictEquals(NumberType.round(-1, op), -1);
   assertStrictEquals(NumberType.round(-0, op), 0);
@@ -194,7 +194,7 @@ Deno.test("NumberType.round() - roundingMode:UP", () => {
 });
 
 Deno.test("NumberType.round() - roundingMode:CEILING", () => {
-  const op = NumericType.RoundingMode.CEILING;
+  const op = Numerics.RoundingMode.CEILING;
 
   assertStrictEquals(NumberType.round(-1, op), -1);
   assertStrictEquals(NumberType.round(-0, op), 0);
@@ -268,7 +268,7 @@ Deno.test("NumberType.round() - roundingMode:CEILING", () => {
 });
 
 Deno.test("NumberType.round() - roundingMode:DOWN", () => {
-  const op = NumericType.RoundingMode.DOWN;
+  const op = Numerics.RoundingMode.DOWN;
 
   assertStrictEquals(NumberType.round(-1, op), -1);
   assertStrictEquals(NumberType.round(-0, op), 0);
@@ -342,7 +342,7 @@ Deno.test("NumberType.round() - roundingMode:DOWN", () => {
 });
 
 Deno.test("NumberType.round() - roundingMode:FLOOR", () => {
-  const op = NumericType.RoundingMode.FLOOR;
+  const op = Numerics.RoundingMode.FLOOR;
 
   assertStrictEquals(NumberType.round(-1, op), -1);
   assertStrictEquals(NumberType.round(-0, op), 0);
@@ -416,7 +416,7 @@ Deno.test("NumberType.round() - roundingMode:FLOOR", () => {
 });
 
 Deno.test("NumberType.round() - roundingMode:TOWARD_ZERO", () => {
-  const op = NumericType.RoundingMode.TOWARD_ZERO;
+  const op = Numerics.RoundingMode.TOWARD_ZERO;
 
   assertStrictEquals(NumberType.round(-1, op), -1);
   assertStrictEquals(NumberType.round(-0, op), 0);
@@ -490,7 +490,7 @@ Deno.test("NumberType.round() - roundingMode:TOWARD_ZERO", () => {
 });
 
 Deno.test("NumberType.round() - roundingMode:TRUNCATE", () => {
-  const op = NumericType.RoundingMode.TRUNCATE;
+  const op = Numerics.RoundingMode.TRUNCATE;
 
   assertStrictEquals(NumberType.round(-1, op), -1);
   assertStrictEquals(NumberType.round(-0, op), 0);
@@ -564,7 +564,7 @@ Deno.test("NumberType.round() - roundingMode:TRUNCATE", () => {
 });
 
 Deno.test("NumberType.round() - roundingMode:AWAY_FROM_ZERO", () => {
-  const op = NumericType.RoundingMode.AWAY_FROM_ZERO;
+  const op = Numerics.RoundingMode.AWAY_FROM_ZERO;
 
   assertStrictEquals(NumberType.round(-1, op), -1);
   assertStrictEquals(NumberType.round(-0, op), 0);
@@ -638,7 +638,7 @@ Deno.test("NumberType.round() - roundingMode:AWAY_FROM_ZERO", () => {
 });
 
 Deno.test("NumberType.round() - roundingMode:HALF_UP", () => {
-  const op = NumericType.RoundingMode.HALF_UP;
+  const op = Numerics.RoundingMode.HALF_UP;
 
   assertStrictEquals(NumberType.round(-1, op), -1);
   assertStrictEquals(NumberType.round(-0, op), 0);
@@ -712,7 +712,7 @@ Deno.test("NumberType.round() - roundingMode:HALF_UP", () => {
 });
 
 Deno.test("NumberType.round() - roundingMode:HALF_DOWN", () => {
-  const op = NumericType.RoundingMode.HALF_DOWN;
+  const op = Numerics.RoundingMode.HALF_DOWN;
 
   assertStrictEquals(NumberType.round(-1, op), -1);
   assertStrictEquals(NumberType.round(-0, op), 0);
@@ -786,7 +786,7 @@ Deno.test("NumberType.round() - roundingMode:HALF_DOWN", () => {
 });
 
 Deno.test("NumberType.round() - roundingMode:HALF_TOWARD_ZERO", () => {
-  const op = NumericType.RoundingMode.HALF_TOWARD_ZERO;
+  const op = Numerics.RoundingMode.HALF_TOWARD_ZERO;
 
   assertStrictEquals(NumberType.round(-1, op), -1);
   assertStrictEquals(NumberType.round(-0, op), 0);
@@ -860,7 +860,7 @@ Deno.test("NumberType.round() - roundingMode:HALF_TOWARD_ZERO", () => {
 });
 
 Deno.test("NumberType.round() - roundingMode:HALF_AWAY_FROM_ZERO", () => {
-  const op = NumericType.RoundingMode.HALF_AWAY_FROM_ZERO;
+  const op = Numerics.RoundingMode.HALF_AWAY_FROM_ZERO;
 
   assertStrictEquals(NumberType.round(-1, op), -1);
   assertStrictEquals(NumberType.round(-0, op), 0);
@@ -934,7 +934,7 @@ Deno.test("NumberType.round() - roundingMode:HALF_AWAY_FROM_ZERO", () => {
 });
 
 Deno.test("NumberType.round() - roundingMode:ROUND", () => {
-  const op = NumericType.RoundingMode.ROUND;
+  const op = Numerics.RoundingMode.ROUND;
 
   assertStrictEquals(NumberType.round(-1, op), -1);
   assertStrictEquals(NumberType.round(-0, op), 0);
@@ -1008,7 +1008,7 @@ Deno.test("NumberType.round() - roundingMode:ROUND", () => {
 });
 
 Deno.test("NumberType.round() - roundingMode:HALF_TO_EVEN", () => {
-  const op = NumericType.RoundingMode.HALF_TO_EVEN;
+  const op = Numerics.RoundingMode.HALF_TO_EVEN;
 
   assertStrictEquals(NumberType.round(-1, op), -1);
   assertStrictEquals(NumberType.round(-0, op), 0);
@@ -1082,7 +1082,7 @@ Deno.test("NumberType.round() - roundingMode:HALF_TO_EVEN", () => {
 });
 
 Deno.test("NumberType.round() - roundingMode:CONVERGENT", () => {
-  const op = NumericType.RoundingMode.CONVERGENT;
+  const op = Numerics.RoundingMode.CONVERGENT;
 
   assertStrictEquals(NumberType.round(-1, op), -1);
   assertStrictEquals(NumberType.round(-0, op), 0);
