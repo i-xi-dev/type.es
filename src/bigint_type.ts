@@ -76,6 +76,7 @@ export function assertEven(test: unknown, label: string): void {
 export function minOf<T extends bigint>(value0: T, ...values: T[]): T {
   let provMin = value0;
   for (const i of values) {
+    //TODO isBigInt(i)
     if (i < provMin) {
       provMin = i;
     }
@@ -86,6 +87,7 @@ export function minOf<T extends bigint>(value0: T, ...values: T[]): T {
 export function maxOf<T extends bigint>(value0: T, ...values: T[]): T {
   let provMax = value0;
   for (const i of values) {
+    //TODO isBigInt(i)
     if (i > provMax) {
       provMax = i;
     }
@@ -116,6 +118,54 @@ export function clamp<T extends bigint>(
     throw new RangeError("`max` must be greater than or equal to `min`.");
   }
   return minOf(maxOf(value, min), max) as T;
+}
+
+export function clampToPositive<T extends bigint>(value: T, max?: T): T {
+  assertBigInt(value, "value");
+  const min = 1n as T;
+  if (isBigInt(max)) {
+    if (max < min) {
+      throw new RangeError("`max` must be greater than or equal to `1n`.");
+    }
+    return clamp(value, min, max);
+  }
+  return maxOf(value, min);
+}
+
+export function clampToNonNegative<T extends bigint>(value: T, max?: T): T {
+  assertBigInt(value, "value");
+  const min = 0n as T;
+  if (isBigInt(max)) {
+    if (max < min) {
+      throw new RangeError("`max` must be greater than or equal to `0n`.");
+    }
+    return clamp(value, min, max);
+  }
+  return maxOf(value, min);
+}
+
+export function clampToNonPositive<T extends bigint>(value: T, min?: T): T {
+  assertBigInt(value, "value");
+  const max = 0n as T;
+  if (isBigInt(min)) {
+    if (max < min) {
+      throw new RangeError("`min` must be less than or equal to `0n`.");
+    }
+    return clamp(value, min, max);
+  }
+  return minOf(value, max);
+}
+
+export function clampToNegative<T extends bigint>(value: T, min?: T): T {
+  assertBigInt(value, "value");
+  const max = -1n as T;
+  if (isBigInt(min)) {
+    if (max < min) {
+      throw new RangeError("`min` must be less than or equal to `-1n`.");
+    }
+    return clamp(value, min, max);
+  }
+  return minOf(value, max);
 }
 
 export function fromString(value: string, options?: FromStringOptions): bigint {

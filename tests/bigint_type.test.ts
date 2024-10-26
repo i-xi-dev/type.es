@@ -535,6 +535,236 @@ Deno.test("BigIntType.clamp()", () => {
   );
 });
 
+Deno.test("BigIntType.clampToPositive()", () => {
+  assertStrictEquals(
+    BigIntType.clampToPositive(BigInt(Number.MIN_SAFE_INTEGER)),
+    1n,
+  );
+  assertStrictEquals(BigIntType.clampToPositive(-2n), 1n);
+  assertStrictEquals(BigIntType.clampToPositive(-1n), 1n);
+  assertStrictEquals(BigIntType.clampToPositive(-0n), 1n);
+  assertStrictEquals(BigIntType.clampToPositive(0n), 1n);
+  assertStrictEquals(BigIntType.clampToPositive(1n), 1n);
+  assertStrictEquals(BigIntType.clampToPositive(2n), 2n);
+  assertStrictEquals(
+    BigIntType.clampToPositive(BigInt(Number.MAX_SAFE_INTEGER)),
+    BigInt(Number.MAX_SAFE_INTEGER),
+  );
+
+  const e1 = "`value` must be a `bigint`.";
+  assertThrows(
+    () => {
+      BigIntType.clampToPositive(undefined as unknown as bigint);
+    },
+    TypeError,
+    e1,
+  );
+
+  const e2 = "`max` must be greater than or equal to `1n`.";
+  assertThrows(
+    () => {
+      BigIntType.clampToPositive(0n, 0n);
+    },
+    RangeError,
+    e2,
+  );
+
+  assertStrictEquals(BigIntType.clampToPositive(-3n, 1n), 1n);
+  assertStrictEquals(BigIntType.clampToPositive(-2n, 1n), 1n);
+  assertStrictEquals(BigIntType.clampToPositive(-1n, 1n), 1n);
+  assertStrictEquals(BigIntType.clampToPositive(-0n, 1n), 1n);
+  assertStrictEquals(BigIntType.clampToPositive(0n, 1n), 1n);
+  assertStrictEquals(BigIntType.clampToPositive(1n, 1n), 1n);
+  assertStrictEquals(BigIntType.clampToPositive(2n, 1n), 1n);
+  assertStrictEquals(BigIntType.clampToPositive(3n, 1n), 1n);
+
+  assertStrictEquals(BigIntType.clampToPositive(-3n, 2n), 1n);
+  assertStrictEquals(BigIntType.clampToPositive(-2n, 2n), 1n);
+  assertStrictEquals(BigIntType.clampToPositive(-1n, 2n), 1n);
+  assertStrictEquals(BigIntType.clampToPositive(-0n, 2n), 1n);
+  assertStrictEquals(BigIntType.clampToPositive(0n, 2n), 1n);
+  assertStrictEquals(BigIntType.clampToPositive(1n, 2n), 1n);
+  assertStrictEquals(BigIntType.clampToPositive(2n, 2n), 2n);
+  assertStrictEquals(BigIntType.clampToPositive(3n, 2n), 2n);
+});
+
+Deno.test("BigIntType.clampToNonNegative()", () => {
+  assertStrictEquals(
+    BigIntType.clampToNonNegative(BigInt(Number.MIN_SAFE_INTEGER)),
+    0n,
+  );
+  assertStrictEquals(BigIntType.clampToNonNegative(-2n), 0n);
+  assertStrictEquals(BigIntType.clampToNonNegative(-1n), 0n);
+  assertStrictEquals(BigIntType.clampToNonNegative(-0n), 0n);
+  assertStrictEquals(BigIntType.clampToNonNegative(0n), 0n);
+  assertStrictEquals(BigIntType.clampToNonNegative(1n), 1n);
+  assertStrictEquals(BigIntType.clampToNonNegative(2n), 2n);
+  assertStrictEquals(
+    BigIntType.clampToNonNegative(BigInt(Number.MAX_SAFE_INTEGER)),
+    BigInt(Number.MAX_SAFE_INTEGER),
+  );
+
+  const e1 = "`value` must be a `bigint`.";
+  assertThrows(
+    () => {
+      BigIntType.clampToNonNegative(undefined as unknown as bigint);
+    },
+    TypeError,
+    e1,
+  );
+
+  const e2 = "`max` must be greater than or equal to `0n`.";
+  assertThrows(
+    () => {
+      BigIntType.clampToNonNegative(0n, -1n);
+    },
+    RangeError,
+    e2,
+  );
+
+  assertStrictEquals(BigIntType.clampToNonNegative(-3n, 0n), 0n);
+  assertStrictEquals(BigIntType.clampToNonNegative(-2n, 0n), 0n);
+  assertStrictEquals(BigIntType.clampToNonNegative(-1n, 0n), 0n);
+  assertStrictEquals(BigIntType.clampToNonNegative(-0n, 0n), 0n);
+  assertStrictEquals(BigIntType.clampToNonNegative(0n, 0n), 0n);
+  assertStrictEquals(BigIntType.clampToNonNegative(1n, 0n), 0n);
+  assertStrictEquals(BigIntType.clampToNonNegative(2n, 0n), 0n);
+  assertStrictEquals(BigIntType.clampToNonNegative(3n, 0n), 0n);
+
+  assertStrictEquals(BigIntType.clampToNonNegative(-3n, 1n), 0n);
+  assertStrictEquals(BigIntType.clampToNonNegative(-2n, 1n), 0n);
+  assertStrictEquals(BigIntType.clampToNonNegative(-1n, 1n), 0n);
+  assertStrictEquals(BigIntType.clampToNonNegative(-0n, 1n), 0n);
+  assertStrictEquals(BigIntType.clampToNonNegative(0n, 1n), 0n);
+  assertStrictEquals(BigIntType.clampToNonNegative(1n, 1n), 1n);
+  assertStrictEquals(BigIntType.clampToNonNegative(2n, 1n), 1n);
+  assertStrictEquals(BigIntType.clampToNonNegative(3n, 1n), 1n);
+
+  assertStrictEquals(BigIntType.clampToNonNegative(-3n, 2n), 0n);
+  assertStrictEquals(BigIntType.clampToNonNegative(-2n, 2n), 0n);
+  assertStrictEquals(BigIntType.clampToNonNegative(-1n, 2n), 0n);
+  assertStrictEquals(BigIntType.clampToNonNegative(-0n, 2n), 0n);
+  assertStrictEquals(BigIntType.clampToNonNegative(0n, 2n), 0n);
+  assertStrictEquals(BigIntType.clampToNonNegative(1n, 2n), 1n);
+  assertStrictEquals(BigIntType.clampToNonNegative(2n, 2n), 2n);
+  assertStrictEquals(BigIntType.clampToNonNegative(3n, 2n), 2n);
+});
+
+Deno.test("BigIntType.clampToNonPositive()", () => {
+  assertStrictEquals(
+    BigIntType.clampToNonPositive(BigInt(Number.MIN_SAFE_INTEGER)),
+    BigInt(Number.MIN_SAFE_INTEGER),
+  );
+  assertStrictEquals(BigIntType.clampToNonPositive(-2n), -2n);
+  assertStrictEquals(BigIntType.clampToNonPositive(-1n), -1n);
+  assertStrictEquals(BigIntType.clampToNonPositive(-0n), 0n);
+  assertStrictEquals(BigIntType.clampToNonPositive(0n), 0n);
+  assertStrictEquals(BigIntType.clampToNonPositive(1n), 0n);
+  assertStrictEquals(BigIntType.clampToNonPositive(2n), 0n);
+  assertStrictEquals(
+    BigIntType.clampToNonPositive(BigInt(Number.MAX_SAFE_INTEGER)),
+    0n,
+  );
+
+  const e1 = "`value` must be a `bigint`.";
+  assertThrows(
+    () => {
+      BigIntType.clampToNonPositive(undefined as unknown as bigint);
+    },
+    TypeError,
+    e1,
+  );
+
+  const e2 = "`min` must be less than or equal to `0n`.";
+  assertThrows(
+    () => {
+      BigIntType.clampToNonPositive(0n, 1n);
+    },
+    RangeError,
+    e2,
+  );
+
+  assertStrictEquals(BigIntType.clampToNonPositive(-3n, 0n), 0n);
+  assertStrictEquals(BigIntType.clampToNonPositive(-2n, 0n), 0n);
+  assertStrictEquals(BigIntType.clampToNonPositive(-1n, 0n), 0n);
+  assertStrictEquals(BigIntType.clampToNonPositive(-0n, 0n), 0n);
+  assertStrictEquals(BigIntType.clampToNonPositive(0n, 0n), 0n);
+  assertStrictEquals(BigIntType.clampToNonPositive(1n, 0n), 0n);
+  assertStrictEquals(BigIntType.clampToNonPositive(2n, 0n), 0n);
+  assertStrictEquals(BigIntType.clampToNonPositive(3n, 0n), 0n);
+
+  assertStrictEquals(BigIntType.clampToNonPositive(-3n, -1n), -1n);
+  assertStrictEquals(BigIntType.clampToNonPositive(-2n, -1n), -1n);
+  assertStrictEquals(BigIntType.clampToNonPositive(-1n, -1n), -1n);
+  assertStrictEquals(BigIntType.clampToNonPositive(-0n, -1n), 0n);
+  assertStrictEquals(BigIntType.clampToNonPositive(0n, -1n), 0n);
+  assertStrictEquals(BigIntType.clampToNonPositive(1n, -1n), 0n);
+  assertStrictEquals(BigIntType.clampToNonPositive(2n, -1n), 0n);
+  assertStrictEquals(BigIntType.clampToNonPositive(3n, -1n), 0n);
+
+  assertStrictEquals(BigIntType.clampToNonPositive(-3n, -2n), -2n);
+  assertStrictEquals(BigIntType.clampToNonPositive(-2n, -2n), -2n);
+  assertStrictEquals(BigIntType.clampToNonPositive(-1n, -2n), -1n);
+  assertStrictEquals(BigIntType.clampToNonPositive(-0n, -2n), 0n);
+  assertStrictEquals(BigIntType.clampToNonPositive(0n, -2n), 0n);
+  assertStrictEquals(BigIntType.clampToNonPositive(1n, -2n), 0n);
+  assertStrictEquals(BigIntType.clampToNonPositive(2n, -2n), 0n);
+  assertStrictEquals(BigIntType.clampToNonPositive(3n, -2n), 0n);
+});
+
+Deno.test("BigIntType.clampToNegative()", () => {
+  assertStrictEquals(
+    BigIntType.clampToNegative(BigInt(Number.MIN_SAFE_INTEGER)),
+    BigInt(Number.MIN_SAFE_INTEGER),
+  );
+  assertStrictEquals(BigIntType.clampToNegative(-2n), -2n);
+  assertStrictEquals(BigIntType.clampToNegative(-1n), -1n);
+  assertStrictEquals(BigIntType.clampToNegative(-0n), -1n);
+  assertStrictEquals(BigIntType.clampToNegative(0n), -1n);
+  assertStrictEquals(BigIntType.clampToNegative(1n), -1n);
+  assertStrictEquals(BigIntType.clampToNegative(2n), -1n);
+  assertStrictEquals(
+    BigIntType.clampToNegative(BigInt(Number.MAX_SAFE_INTEGER)),
+    -1n,
+  );
+
+  const e1 = "`value` must be a `bigint`.";
+  assertThrows(
+    () => {
+      BigIntType.clampToNegative(undefined as unknown as bigint);
+    },
+    TypeError,
+    e1,
+  );
+
+  const e2 = "`min` must be less than or equal to `-1n`.";
+  assertThrows(
+    () => {
+      BigIntType.clampToNegative(0n, 0n);
+    },
+    RangeError,
+    e2,
+  );
+
+  assertStrictEquals(BigIntType.clampToNegative(-3n, -1n), -1n);
+  assertStrictEquals(BigIntType.clampToNegative(-2n, -1n), -1n);
+  assertStrictEquals(BigIntType.clampToNegative(-1n, -1n), -1n);
+  assertStrictEquals(BigIntType.clampToNegative(-0n, -1n), -1n);
+  assertStrictEquals(BigIntType.clampToNegative(0n, -1n), -1n);
+  assertStrictEquals(BigIntType.clampToNegative(1n, -1n), -1n);
+  assertStrictEquals(BigIntType.clampToNegative(2n, -1n), -1n);
+  assertStrictEquals(BigIntType.clampToNegative(3n, -1n), -1n);
+
+  assertStrictEquals(BigIntType.clampToNegative(-3n, -2n), -2n);
+  assertStrictEquals(BigIntType.clampToNegative(-2n, -2n), -2n);
+  assertStrictEquals(BigIntType.clampToNegative(-1n, -2n), -1n);
+  assertStrictEquals(BigIntType.clampToNegative(-0n, -2n), -1n);
+  assertStrictEquals(BigIntType.clampToNegative(0n, -2n), -1n);
+  assertStrictEquals(BigIntType.clampToNegative(1n, -2n), -1n);
+  assertStrictEquals(BigIntType.clampToNegative(2n, -2n), -1n);
+  assertStrictEquals(BigIntType.clampToNegative(3n, -2n), -1n);
+});
+
 Deno.test("BigIntType.fromString()", () => {
   assertStrictEquals(BigIntType.fromString("0"), 0n);
   assertStrictEquals(BigIntType.fromString("-0"), 0n);
