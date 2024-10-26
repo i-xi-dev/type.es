@@ -1,5 +1,6 @@
 import { assertStringified as assertStringifiedInteger } from "./integer_type.ts";
-import { FromStringOptions } from "./integer_type.ts";
+import { FromStringOptions, ToStringOptions } from "./integer_type.ts";
+import { isPositive as isPositiveSafeInteger } from "./safe_integer_type.ts";
 import { radixPropertiesOf } from "./numeric_type.ts";
 
 export function isBigInt(test: unknown): test is bigint {
@@ -124,4 +125,22 @@ export function fromString(value: string, options?: FromStringOptions): bigint {
   }
 
   return valueAsBigInt;
+}
+
+export function toString(self: bigint, options?: ToStringOptions): string {
+  assertBigInt(self, "self");
+
+  const radix = radixPropertiesOf(options?.radix).radix;
+  let result = self.toString(radix);
+
+  if (options?.lowerCase !== true) {
+    result = result.toUpperCase();
+  }
+
+  const minIntegralDigits = options?.minIntegralDigits;
+  if (isPositiveSafeInteger(minIntegralDigits)) {
+    result = result.padStart(minIntegralDigits, "0");
+  }
+
+  return result;
 }

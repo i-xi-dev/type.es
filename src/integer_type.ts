@@ -26,3 +26,9 @@ export function assertStringified(
 export type FromStringOptions = {
   radix?: Radix;
 };
+
+export type ToStringOptions = {
+  lowerCase?: boolean;
+  minIntegralDigits?: number;
+  radix?: Radix;
+};
