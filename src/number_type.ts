@@ -56,10 +56,13 @@ export function isInRange<T extends number>(
   min: T,
   max: T,
 ): test is T {
+  //TODO isNumber(min)
+  //TODO isNumber(max)
   return isNumber(test) && (min <= test) && (max >= test);
 }
 
 export function normalize<T extends number>(value: T): T {
+  //TODO isNumber(value)
   return ((value === 0) ? (value + 0) : value) as T; // -0を0
 }
 
@@ -68,6 +71,9 @@ export function clamp<T extends number>(
   min: T,
   max: T,
 ): T {
+  //TODO isNumber(value)
+  //TODO isNumber(min)
+  //TODO isNumber(max)
   if (min > max) {
     throw new RangeError("`max` must be greater than or equal to `min`.");
   }

@@ -442,6 +442,33 @@ Deno.test("BigIntType.isInRange()", () => {
 });
 
 Deno.test("BigIntType.clamp()", () => {
+  const ex1 = "`value` must be a `bigint`.";
+  assertThrows(
+    () => {
+      BigIntType.clamp(undefined as unknown as bigint, 0n, 0n);
+    },
+    TypeError,
+    ex1,
+  );
+
+  const ex2 = "`min` must be a `bigint`.";
+  assertThrows(
+    () => {
+      BigIntType.clamp(0n, undefined as unknown as bigint, 0n);
+    },
+    TypeError,
+    ex2,
+  );
+
+  const ex3 = "`max` must be a `bigint`.";
+  assertThrows(
+    () => {
+      BigIntType.clamp(0n, 0n, undefined as unknown as bigint);
+    },
+    TypeError,
+    ex3,
+  );
+
   const e1 = "`max` must be greater than or equal to `min`.";
 
   assertStrictEquals(BigIntType.clamp(0n, 0n, 0n), 0n);

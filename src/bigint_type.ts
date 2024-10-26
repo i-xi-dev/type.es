@@ -98,6 +98,8 @@ export function isInRange<T extends bigint>(
   min: T,
   max: T,
 ): test is T {
+  //TODO isBigInt(min)
+  //TODO isBigInt(max)
   return isBigInt(test) && (min <= test) && (max >= test);
 }
 
@@ -106,6 +108,10 @@ export function clamp<T extends bigint>(
   min: T,
   max: T,
 ): T {
+  assertBigInt(value, "value");
+  assertBigInt(min, "min");
+  assertBigInt(max, "max");
+
   if (min > max) {
     throw new RangeError("`max` must be greater than or equal to `min`.");
   }
