@@ -101,7 +101,7 @@ export function isInRange<T extends bigint>(
   return isBigInt(test) && (min <= test) && (max >= test);
 }
 
-export function toClamped<T extends bigint>(
+export function clamp<T extends bigint>(
   value: bigint,
   min: T,
   max: T,

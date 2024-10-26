@@ -1,3 +1,6 @@
+import { isEven as isEvenSafeInteger } from "./safe_integer_type.ts";
+import { RoundingMode } from "./numeric_type.ts";
+
 export function isNumber(test: unknown): test is number {
   return (typeof test === "number");
 }
@@ -56,11 +59,11 @@ export function isInRange<T extends number>(
   return isNumber(test) && (min <= test) && (max >= test);
 }
 
-export function toNormalized<T extends number>(value: T): T {
+export function normalize<T extends number>(value: T): T {
   return ((value === 0) ? (value + 0) : value) as T; // -0を0
 }
 
-export function toClamped<T extends number>(
+export function clamp<T extends number>(
   value: number,
   min: T,
   max: T,
@@ -68,5 +71,79 @@ export function toClamped<T extends number>(
   if (min > max) {
     throw new RangeError("`max` must be greater than or equal to `min`.");
   }
-  return toNormalized(Math.min(Math.max(value, min), max)) as T;
+  return normalize(Math.min(Math.max(value, min), max)) as T;
+}
+
+export function round(input: number, roundingMode?: RoundingMode): number {
+  if (Number.isFinite(input) !== true) {
+    throw new TypeError("`input` must be a finite number.");
+  }
+
+  const integralPart = normalize(Math.trunc(input));
+  const integralPartIsEven = isEvenSafeInteger(integralPart);
+
+  const resolvedRoundingMode =
+    Object.values(RoundingMode).includes(roundingMode as RoundingMode)
+      ? roundingMode
+      : RoundingMode.TRUNCATE;
+
+  if (Number.isInteger(input)) {
+    return normalize(input);
+  }
+
+  const nearestP = normalize(Math.ceil(input));
+  const nearestN = normalize(Math.floor(input));
+  const sourceIsNegative = input < 0;
+  const nearestPH = nearestP - 0.5;
+  const nearestNH = nearestN + 0.5;
+
+  const halfUp = (): number => {
+    return (input >= nearestPH) ? nearestP : nearestN;
+  };
+
+  const halfDown = (): number => {
+    return (input <= nearestNH) ? nearestN : nearestP;
+  };
+
+  switch (resolvedRoundingMode) {
+    case RoundingMode.UP:
+      return nearestP;
+
+    case RoundingMode.DOWN:
+      return nearestN;
+
+    case RoundingMode.TOWARD_ZERO:
+      return integralPart;
+
+    case RoundingMode.AWAY_FROM_ZERO:
+      return sourceIsNegative ? nearestN : nearestP;
+
+    case RoundingMode.HALF_UP:
+      return halfUp();
+
+    case RoundingMode.HALF_DOWN:
+      return halfDown();
+
+    case RoundingMode.HALF_TOWARD_ZERO:
+      return sourceIsNegative ? halfUp() : halfDown();
+
+    case RoundingMode.HALF_AWAY_FROM_ZERO:
+      return sourceIsNegative ? halfDown() : halfUp();
+
+    case RoundingMode.HALF_TO_EVEN:
+      if (sourceIsNegative) {
+        if (input === nearestPH) {
+          return integralPartIsEven ? integralPart : nearestN;
+        }
+        return halfDown();
+      }
+
+      if (input === nearestNH) {
+        return integralPartIsEven ? integralPart : nearestP;
+      }
+      return halfUp();
+
+    default:
+      return 0 as never;
+  }
 }

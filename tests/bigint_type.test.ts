@@ -441,67 +441,67 @@ Deno.test("BigIntType.isInRange()", () => {
   assertStrictEquals(BigIntType.isInRange(0, 0n, 0n), false);
 });
 
-Deno.test("BigIntType.toClamped()", () => {
+Deno.test("BigIntType.clamp()", () => {
   const e1 = "`max` must be greater than or equal to `min`.";
 
-  assertStrictEquals(BigIntType.toClamped(0n, 0n, 0n), 0n);
-  assertStrictEquals(BigIntType.toClamped(0n, 0n, 1n), 0n);
-  assertStrictEquals(BigIntType.toClamped(0n, -1n, 0n), 0n);
-  assertStrictEquals(BigIntType.toClamped(0n, 1n, 1n), 1n);
-  assertStrictEquals(BigIntType.toClamped(0n, -1n, -1n), -1n);
+  assertStrictEquals(BigIntType.clamp(0n, 0n, 0n), 0n);
+  assertStrictEquals(BigIntType.clamp(0n, 0n, 1n), 0n);
+  assertStrictEquals(BigIntType.clamp(0n, -1n, 0n), 0n);
+  assertStrictEquals(BigIntType.clamp(0n, 1n, 1n), 1n);
+  assertStrictEquals(BigIntType.clamp(0n, -1n, -1n), -1n);
 
   assertThrows(
     () => {
-      BigIntType.toClamped(0n, 1n, 0n); // 負のrange
+      BigIntType.clamp(0n, 1n, 0n); // 負のrange
     },
     RangeError,
     e1,
   );
   assertThrows(
     () => {
-      BigIntType.toClamped(0n, 0n, -1n); // 負のrange
+      BigIntType.clamp(0n, 0n, -1n); // 負のrange
     },
     RangeError,
     e1,
   );
 
-  assertStrictEquals(BigIntType.toClamped(1n, 0n, 0n), 0n);
-  assertStrictEquals(BigIntType.toClamped(1n, 0n, 1n), 1n);
-  assertStrictEquals(BigIntType.toClamped(1n, -1n, 0n), 0n);
-  assertStrictEquals(BigIntType.toClamped(1n, 1n, 1n), 1n);
-  assertStrictEquals(BigIntType.toClamped(1n, -1n, -1n), -1n);
+  assertStrictEquals(BigIntType.clamp(1n, 0n, 0n), 0n);
+  assertStrictEquals(BigIntType.clamp(1n, 0n, 1n), 1n);
+  assertStrictEquals(BigIntType.clamp(1n, -1n, 0n), 0n);
+  assertStrictEquals(BigIntType.clamp(1n, 1n, 1n), 1n);
+  assertStrictEquals(BigIntType.clamp(1n, -1n, -1n), -1n);
 
   assertThrows(
     () => {
-      BigIntType.toClamped(1n, 1n, 0n); // 負のrange
-    },
-    RangeError,
-    e1,
-  );
-  assertThrows(
-    () => {
-      BigIntType.toClamped(1n, 0n, -1n); // 負のrange
-    },
-    RangeError,
-    e1,
-  );
-
-  assertStrictEquals(BigIntType.toClamped(-1n, 0n, 0n), 0n);
-  assertStrictEquals(BigIntType.toClamped(-1n, 0n, 1n), 0n);
-  assertStrictEquals(BigIntType.toClamped(-1n, -1n, 0n), -1n);
-  assertStrictEquals(BigIntType.toClamped(-1n, 1n, 1n), 1n);
-  assertStrictEquals(BigIntType.toClamped(-1n, -1n, -1n), -1n);
-
-  assertThrows(
-    () => {
-      BigIntType.toClamped(-1n, 1n, 0n); // 負のrange
+      BigIntType.clamp(1n, 1n, 0n); // 負のrange
     },
     RangeError,
     e1,
   );
   assertThrows(
     () => {
-      BigIntType.toClamped(-1n, 0n, -1n); // 負のrange
+      BigIntType.clamp(1n, 0n, -1n); // 負のrange
+    },
+    RangeError,
+    e1,
+  );
+
+  assertStrictEquals(BigIntType.clamp(-1n, 0n, 0n), 0n);
+  assertStrictEquals(BigIntType.clamp(-1n, 0n, 1n), 0n);
+  assertStrictEquals(BigIntType.clamp(-1n, -1n, 0n), -1n);
+  assertStrictEquals(BigIntType.clamp(-1n, 1n, 1n), 1n);
+  assertStrictEquals(BigIntType.clamp(-1n, -1n, -1n), -1n);
+
+  assertThrows(
+    () => {
+      BigIntType.clamp(-1n, 1n, 0n); // 負のrange
+    },
+    RangeError,
+    e1,
+  );
+  assertThrows(
+    () => {
+      BigIntType.clamp(-1n, 0n, -1n); // 負のrange
     },
     RangeError,
     e1,

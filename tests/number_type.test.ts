@@ -486,103 +486,103 @@ Deno.test("NumberType.isInRange()", () => {
   assertStrictEquals(NumberType.isInRange(0, Number.NaN, -1), false);
 });
 
-Deno.test("NumberType.toNormalized()", () => {
-  assertStrictEquals(Object.is(NumberType.toNormalized(0), 0), true);
-  assertStrictEquals(Object.is(NumberType.toNormalized(-0), 0), true);
-  assertStrictEquals(Object.is(NumberType.toNormalized(-0), -0), false);
+Deno.test("NumberType.normalize()", () => {
+  assertStrictEquals(Object.is(NumberType.normalize(0), 0), true);
+  assertStrictEquals(Object.is(NumberType.normalize(-0), 0), true);
+  assertStrictEquals(Object.is(NumberType.normalize(-0), -0), false);
 
   assertStrictEquals(
-    NumberType.toNormalized(Number.POSITIVE_INFINITY),
+    NumberType.normalize(Number.POSITIVE_INFINITY),
     Number.POSITIVE_INFINITY,
   );
   assertStrictEquals(
-    NumberType.toNormalized(Number.NEGATIVE_INFINITY),
+    NumberType.normalize(Number.NEGATIVE_INFINITY),
     Number.NEGATIVE_INFINITY,
   );
-  assertStrictEquals(NumberType.toNormalized(Number.NaN), Number.NaN);
+  assertStrictEquals(NumberType.normalize(Number.NaN), Number.NaN);
   assertStrictEquals(
-    NumberType.toNormalized(Number.MIN_SAFE_INTEGER),
+    NumberType.normalize(Number.MIN_SAFE_INTEGER),
     Number.MIN_SAFE_INTEGER,
   );
   assertStrictEquals(
-    NumberType.toNormalized(Number.MAX_SAFE_INTEGER),
+    NumberType.normalize(Number.MAX_SAFE_INTEGER),
     Number.MAX_SAFE_INTEGER,
   );
 });
 
-Deno.test("NumberType.toClamped()", () => {
+Deno.test("NumberType.clamp()", () => {
   const e1 = "`max` must be greater than or equal to `min`.";
 
-  assertStrictEquals(NumberType.toClamped(0, 0, 0), 0);
-  assertStrictEquals(NumberType.toClamped(0, 0, 1), 0);
-  assertStrictEquals(NumberType.toClamped(0, -1, 0), 0);
-  assertStrictEquals(NumberType.toClamped(0, 1, 1), 1);
-  assertStrictEquals(NumberType.toClamped(0, -1, -1), -1);
+  assertStrictEquals(NumberType.clamp(0, 0, 0), 0);
+  assertStrictEquals(NumberType.clamp(0, 0, 1), 0);
+  assertStrictEquals(NumberType.clamp(0, -1, 0), 0);
+  assertStrictEquals(NumberType.clamp(0, 1, 1), 1);
+  assertStrictEquals(NumberType.clamp(0, -1, -1), -1);
 
   assertThrows(
     () => {
-      NumberType.toClamped(0, 1, 0); // 負のrange
+      NumberType.clamp(0, 1, 0); // 負のrange
     },
     RangeError,
     e1,
   );
   assertThrows(
     () => {
-      NumberType.toClamped(0, 0, -1); // 負のrange
+      NumberType.clamp(0, 0, -1); // 負のrange
     },
     RangeError,
     e1,
   );
 
-  assertStrictEquals(NumberType.toClamped(0.5, 0, 0), 0);
-  assertStrictEquals(NumberType.toClamped(0.5, 0, 1), 0.5);
-  assertStrictEquals(NumberType.toClamped(0.5, -1, 0), 0);
-  assertStrictEquals(NumberType.toClamped(0.5, 1, 1), 1);
-  assertStrictEquals(NumberType.toClamped(0.5, -1, -1), -1);
+  assertStrictEquals(NumberType.clamp(0.5, 0, 0), 0);
+  assertStrictEquals(NumberType.clamp(0.5, 0, 1), 0.5);
+  assertStrictEquals(NumberType.clamp(0.5, -1, 0), 0);
+  assertStrictEquals(NumberType.clamp(0.5, 1, 1), 1);
+  assertStrictEquals(NumberType.clamp(0.5, -1, -1), -1);
 
-  assertStrictEquals(NumberType.toClamped(1, 0, 0), 0);
-  assertStrictEquals(NumberType.toClamped(1, 0, 1), 1);
-  assertStrictEquals(NumberType.toClamped(1, -1, 0), 0);
-  assertStrictEquals(NumberType.toClamped(1, 1, 1), 1);
-  assertStrictEquals(NumberType.toClamped(1, -1, -1), -1);
-
-  assertThrows(
-    () => {
-      NumberType.toClamped(1, 1, 0); // 負のrange
-    },
-    RangeError,
-    e1,
-  );
-  assertThrows(
-    () => {
-      NumberType.toClamped(1, 0, -1); // 負のrange
-    },
-    RangeError,
-    e1,
-  );
-
-  assertStrictEquals(NumberType.toClamped(-0.5, 0, 0), 0);
-  assertStrictEquals(NumberType.toClamped(-0.5, 0, 1), 0);
-  assertStrictEquals(NumberType.toClamped(-0.5, -1, 0), -0.5);
-  assertStrictEquals(NumberType.toClamped(-0.5, 1, 1), 1);
-  assertStrictEquals(NumberType.toClamped(-0.5, -1, -1), -1);
-
-  assertStrictEquals(NumberType.toClamped(-1, 0, 0), 0);
-  assertStrictEquals(NumberType.toClamped(-1, 0, 1), 0);
-  assertStrictEquals(NumberType.toClamped(-1, -1, 0), -1);
-  assertStrictEquals(NumberType.toClamped(-1, 1, 1), 1);
-  assertStrictEquals(NumberType.toClamped(-1, -1, -1), -1);
+  assertStrictEquals(NumberType.clamp(1, 0, 0), 0);
+  assertStrictEquals(NumberType.clamp(1, 0, 1), 1);
+  assertStrictEquals(NumberType.clamp(1, -1, 0), 0);
+  assertStrictEquals(NumberType.clamp(1, 1, 1), 1);
+  assertStrictEquals(NumberType.clamp(1, -1, -1), -1);
 
   assertThrows(
     () => {
-      NumberType.toClamped(-1, 1, 0); // 負のrange
+      NumberType.clamp(1, 1, 0); // 負のrange
     },
     RangeError,
     e1,
   );
   assertThrows(
     () => {
-      NumberType.toClamped(-1, 0, -1); // 負のrange
+      NumberType.clamp(1, 0, -1); // 負のrange
+    },
+    RangeError,
+    e1,
+  );
+
+  assertStrictEquals(NumberType.clamp(-0.5, 0, 0), 0);
+  assertStrictEquals(NumberType.clamp(-0.5, 0, 1), 0);
+  assertStrictEquals(NumberType.clamp(-0.5, -1, 0), -0.5);
+  assertStrictEquals(NumberType.clamp(-0.5, 1, 1), 1);
+  assertStrictEquals(NumberType.clamp(-0.5, -1, -1), -1);
+
+  assertStrictEquals(NumberType.clamp(-1, 0, 0), 0);
+  assertStrictEquals(NumberType.clamp(-1, 0, 1), 0);
+  assertStrictEquals(NumberType.clamp(-1, -1, 0), -1);
+  assertStrictEquals(NumberType.clamp(-1, 1, 1), 1);
+  assertStrictEquals(NumberType.clamp(-1, -1, -1), -1);
+
+  assertThrows(
+    () => {
+      NumberType.clamp(-1, 1, 0); // 負のrange
+    },
+    RangeError,
+    e1,
+  );
+  assertThrows(
+    () => {
+      NumberType.clamp(-1, 0, -1); // 負のrange
     },
     RangeError,
     e1,
