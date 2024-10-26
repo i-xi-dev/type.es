@@ -838,7 +838,7 @@ Deno.test("SafeIntegerType.fromBigInt()", () => {
 });
 
 Deno.test("SafeIntegerType.toBigInt()", () => {
-  const rfe1 = "`self` must be a safe integer.";
+  const rfe1 = "`value` must be a safe integer.";
 
   assertThrows(
     () => {
@@ -1133,7 +1133,7 @@ Deno.test("SafeIntegerType.fromString() - radix:unknown", () => {
 });
 
 Deno.test("SafeIntegerType.toString()", () => {
-  const rfe1 = "`self` must be a safe integer.";
+  const rfe1 = "`value` must be a safe integer.";
 
   assertThrows(
     () => {

@@ -160,11 +160,11 @@ export function fromString(value: string, options?: FromStringOptions): bigint {
   return valueAsBigInt;
 }
 
-export function toString(self: bigint, options?: ToStringOptions): string {
-  assertBigInt(self, "self");
+export function toString(value: bigint, options?: ToStringOptions): string {
+  assertBigInt(value, "value");
 
   const radix = radixPropertiesOf(options?.radix).radix;
-  let result = self.toString(radix);
+  let result = value.toString(radix);
 
   if (options?.lowerCase !== true) {
     result = result.toUpperCase();
@@ -206,4 +206,20 @@ export function fromNumber(
   }
 
   return BigInt(valueAsInt);
+}
+
+export function toNumber(value: bigint): number {
+  assertBigInt(value, "value");
+
+  if (
+    isInRange(
+      value,
+      BigInt(Number.MIN_SAFE_INTEGER),
+      BigInt(Number.MAX_SAFE_INTEGER),
+    ) !== true
+  ) {
+    throw new RangeError("`value` must be within the range of safe integer.");
+  }
+
+  return Number(value);
 }

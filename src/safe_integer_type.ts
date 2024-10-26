@@ -1,7 +1,6 @@
 import {
-  assertBigInt,
   fromString as fromStringToBigInt,
-  isInRange as isBigIntInRange,
+  toNumber as fromBigIntToNumber,
 } from "./bigint_type.ts";
 import { FromStringOptions, ToStringOptions } from "./integer_type.ts";
 import {
@@ -118,36 +117,24 @@ export function clampToNegative<T extends number>(value: T): T {
 }
 
 export function fromBigInt(value: bigint): number {
-  assertBigInt(value, "value");
-
-  if (
-    isBigIntInRange(
-      value,
-      BigInt(Number.MIN_SAFE_INTEGER),
-      BigInt(Number.MAX_SAFE_INTEGER),
-    ) !== true
-  ) {
-    throw new RangeError("`value` must be within the range of safe integer.");
-  }
-
-  return Number(value);
+  return fromBigIntToNumber(value);
 }
 
-export function toBigInt(self: number): bigint {
-  assertSafeInteger(self, "self");
-  return BigInt(self);
+export function toBigInt(value: number): bigint {
+  assertSafeInteger(value, "value");
+  return BigInt(value);
 }
 
 export function fromString(value: string, options?: FromStringOptions): number {
   const valueAsBigInt = fromStringToBigInt(value, options);
-  return fromBigInt(valueAsBigInt);
+  return fromBigIntToNumber(valueAsBigInt);
 }
 
-export function toString(self: number, options?: ToStringOptions): string {
-  assertSafeInteger(self, "self");
+export function toString(value: number, options?: ToStringOptions): string {
+  assertSafeInteger(value, "value");
 
   const radix = radixPropertiesOf(options?.radix).radix;
-  let result = self.toString(radix);
+  let result = value.toString(radix);
 
   if (options?.lowerCase !== true) {
     result = result.toUpperCase();

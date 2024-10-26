@@ -885,7 +885,7 @@ Deno.test("BigIntType.fromString() - 16", () => {
 });
 
 Deno.test("BigIntType.toString()", () => {
-  const rfe1 = "`self` must be a `bigint`.";
+  const rfe1 = "`value` must be a `bigint`.";
 
   assertThrows(
     () => {
