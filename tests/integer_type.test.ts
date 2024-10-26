@@ -1,6 +1,274 @@
 import { assertStrictEquals, fail, unreachable } from "./deps.ts";
 import { IntegerType } from "../mod.ts";
 
+Deno.test("IntegerType.isPositive()", () => {
+  assertStrictEquals(IntegerType.isPositive(0), false);
+  assertStrictEquals(IntegerType.isPositive(-0), false);
+  assertStrictEquals(IntegerType.isPositive(1), true);
+  assertStrictEquals(IntegerType.isPositive(-1), false);
+
+  assertStrictEquals(IntegerType.isPositive(-10.1), false);
+  assertStrictEquals(IntegerType.isPositive(-9.9), false);
+  assertStrictEquals(IntegerType.isPositive(9.9), false);
+  assertStrictEquals(IntegerType.isPositive(10.1), false);
+
+  assertStrictEquals(IntegerType.isPositive(0n), false);
+  assertStrictEquals(IntegerType.isPositive(-0n), false);
+  assertStrictEquals(IntegerType.isPositive(1n), true);
+  assertStrictEquals(IntegerType.isPositive(-1n), false);
+
+  assertStrictEquals(IntegerType.isPositive(Number.NaN), false);
+  assertStrictEquals(IntegerType.isPositive(Number.POSITIVE_INFINITY), false);
+  assertStrictEquals(
+    IntegerType.isPositive(Number.MAX_SAFE_INTEGER + 1),
+    false,
+  );
+  assertStrictEquals(IntegerType.isPositive(Number.MAX_SAFE_INTEGER), true);
+  assertStrictEquals(IntegerType.isPositive(Number.MIN_SAFE_INTEGER), false);
+  assertStrictEquals(
+    IntegerType.isPositive(Number.MIN_SAFE_INTEGER - 1),
+    false,
+  );
+  assertStrictEquals(IntegerType.isPositive(Number.NEGATIVE_INFINITY), false);
+
+  assertStrictEquals(
+    IntegerType.isPositive(BigInt(Number.MAX_SAFE_INTEGER) + 1n),
+    true,
+  );
+  assertStrictEquals(
+    IntegerType.isPositive(BigInt(Number.MAX_SAFE_INTEGER)),
+    true,
+  );
+  assertStrictEquals(
+    IntegerType.isPositive(BigInt(Number.MIN_SAFE_INTEGER)),
+    false,
+  );
+  assertStrictEquals(
+    IntegerType.isPositive(BigInt(Number.MIN_SAFE_INTEGER) - 1n),
+    false,
+  );
+
+  assertStrictEquals(
+    IntegerType.isPositive(undefined as unknown as number),
+    false,
+  );
+  assertStrictEquals(IntegerType.isPositive(null as unknown as number), false);
+  assertStrictEquals(IntegerType.isPositive(true as unknown as number), false);
+  assertStrictEquals(IntegerType.isPositive(false as unknown as number), false);
+  assertStrictEquals(IntegerType.isPositive("" as unknown as number), false);
+  assertStrictEquals(IntegerType.isPositive("0" as unknown as number), false);
+});
+
+Deno.test("IntegerType.isNonNegative()", () => {
+  assertStrictEquals(IntegerType.isNonNegative(0), true);
+  assertStrictEquals(IntegerType.isNonNegative(-0), true);
+  assertStrictEquals(IntegerType.isNonNegative(1), true);
+  assertStrictEquals(IntegerType.isNonNegative(-1), false);
+
+  assertStrictEquals(IntegerType.isNonNegative(-10.1), false);
+  assertStrictEquals(IntegerType.isNonNegative(-9.9), false);
+  assertStrictEquals(IntegerType.isNonNegative(9.9), false);
+  assertStrictEquals(IntegerType.isNonNegative(10.1), false);
+
+  assertStrictEquals(IntegerType.isNonNegative(0n), true);
+  assertStrictEquals(IntegerType.isNonNegative(-0n), true);
+  assertStrictEquals(IntegerType.isNonNegative(1n), true);
+  assertStrictEquals(IntegerType.isNonNegative(-1n), false);
+
+  assertStrictEquals(IntegerType.isNonNegative(Number.NaN), false);
+  assertStrictEquals(
+    IntegerType.isNonNegative(Number.POSITIVE_INFINITY),
+    false,
+  );
+  assertStrictEquals(
+    IntegerType.isNonNegative(Number.MAX_SAFE_INTEGER + 1),
+    false,
+  );
+  assertStrictEquals(IntegerType.isNonNegative(Number.MAX_SAFE_INTEGER), true);
+  assertStrictEquals(IntegerType.isNonNegative(Number.MIN_SAFE_INTEGER), false);
+  assertStrictEquals(
+    IntegerType.isNonNegative(Number.MIN_SAFE_INTEGER - 1),
+    false,
+  );
+  assertStrictEquals(
+    IntegerType.isNonNegative(Number.NEGATIVE_INFINITY),
+    false,
+  );
+
+  assertStrictEquals(
+    IntegerType.isNonNegative(BigInt(Number.MAX_SAFE_INTEGER) + 1n),
+    true,
+  );
+  assertStrictEquals(
+    IntegerType.isNonNegative(BigInt(Number.MAX_SAFE_INTEGER)),
+    true,
+  );
+  assertStrictEquals(
+    IntegerType.isNonNegative(BigInt(Number.MIN_SAFE_INTEGER)),
+    false,
+  );
+  assertStrictEquals(
+    IntegerType.isNonNegative(BigInt(Number.MIN_SAFE_INTEGER) - 1n),
+    false,
+  );
+
+  assertStrictEquals(
+    IntegerType.isNonNegative(undefined as unknown as number),
+    false,
+  );
+  assertStrictEquals(
+    IntegerType.isNonNegative(null as unknown as number),
+    false,
+  );
+  assertStrictEquals(
+    IntegerType.isNonNegative(true as unknown as number),
+    false,
+  );
+  assertStrictEquals(
+    IntegerType.isNonNegative(false as unknown as number),
+    false,
+  );
+  assertStrictEquals(IntegerType.isNonNegative("" as unknown as number), false);
+  assertStrictEquals(
+    IntegerType.isNonNegative("0" as unknown as number),
+    false,
+  );
+});
+
+Deno.test("IntegerType.isNonPositive()", () => {
+  assertStrictEquals(IntegerType.isNonPositive(0), true);
+  assertStrictEquals(IntegerType.isNonPositive(-0), true);
+  assertStrictEquals(IntegerType.isNonPositive(1), false);
+  assertStrictEquals(IntegerType.isNonPositive(-1), true);
+
+  assertStrictEquals(IntegerType.isNonPositive(-10.1), false);
+  assertStrictEquals(IntegerType.isNonPositive(-9.9), false);
+  assertStrictEquals(IntegerType.isNonPositive(9.9), false);
+  assertStrictEquals(IntegerType.isNonPositive(10.1), false);
+
+  assertStrictEquals(IntegerType.isNonPositive(0n), true);
+  assertStrictEquals(IntegerType.isNonPositive(-0n), true);
+  assertStrictEquals(IntegerType.isNonPositive(1n), false);
+  assertStrictEquals(IntegerType.isNonPositive(-1n), true);
+
+  assertStrictEquals(IntegerType.isNonPositive(Number.NaN), false);
+  assertStrictEquals(
+    IntegerType.isNonPositive(Number.POSITIVE_INFINITY),
+    false,
+  );
+  assertStrictEquals(
+    IntegerType.isNonPositive(Number.MAX_SAFE_INTEGER + 1),
+    false,
+  );
+  assertStrictEquals(IntegerType.isNonPositive(Number.MAX_SAFE_INTEGER), false);
+  assertStrictEquals(IntegerType.isNonPositive(Number.MIN_SAFE_INTEGER), true);
+  assertStrictEquals(
+    IntegerType.isNonPositive(Number.MIN_SAFE_INTEGER - 1),
+    false,
+  );
+  assertStrictEquals(
+    IntegerType.isNonPositive(Number.NEGATIVE_INFINITY),
+    false,
+  );
+
+  assertStrictEquals(
+    IntegerType.isNonPositive(BigInt(Number.MAX_SAFE_INTEGER) + 1n),
+    false,
+  );
+  assertStrictEquals(
+    IntegerType.isNonPositive(BigInt(Number.MAX_SAFE_INTEGER)),
+    false,
+  );
+  assertStrictEquals(
+    IntegerType.isNonPositive(BigInt(Number.MIN_SAFE_INTEGER)),
+    true,
+  );
+  assertStrictEquals(
+    IntegerType.isNonPositive(BigInt(Number.MIN_SAFE_INTEGER) - 1n),
+    true,
+  );
+
+  assertStrictEquals(
+    IntegerType.isNonPositive(undefined as unknown as number),
+    false,
+  );
+  assertStrictEquals(
+    IntegerType.isNonPositive(null as unknown as number),
+    false,
+  );
+  assertStrictEquals(
+    IntegerType.isNonPositive(true as unknown as number),
+    false,
+  );
+  assertStrictEquals(
+    IntegerType.isNonPositive(false as unknown as number),
+    false,
+  );
+  assertStrictEquals(IntegerType.isNonPositive("" as unknown as number), false);
+  assertStrictEquals(
+    IntegerType.isNonPositive("0" as unknown as number),
+    false,
+  );
+});
+
+Deno.test("IntegerType.isNegative()", () => {
+  assertStrictEquals(IntegerType.isNegative(0), false);
+  assertStrictEquals(IntegerType.isNegative(-0), false);
+  assertStrictEquals(IntegerType.isNegative(1), false);
+  assertStrictEquals(IntegerType.isNegative(-1), true);
+
+  assertStrictEquals(IntegerType.isNegative(-10.1), false);
+  assertStrictEquals(IntegerType.isNegative(-9.9), false);
+  assertStrictEquals(IntegerType.isNegative(9.9), false);
+  assertStrictEquals(IntegerType.isNegative(10.1), false);
+
+  assertStrictEquals(IntegerType.isNegative(0n), false);
+  assertStrictEquals(IntegerType.isNegative(-0n), false);
+  assertStrictEquals(IntegerType.isNegative(1n), false);
+  assertStrictEquals(IntegerType.isNegative(-1n), true);
+
+  assertStrictEquals(IntegerType.isNegative(Number.NaN), false);
+  assertStrictEquals(IntegerType.isNegative(Number.POSITIVE_INFINITY), false);
+  assertStrictEquals(
+    IntegerType.isNegative(Number.MAX_SAFE_INTEGER + 1),
+    false,
+  );
+  assertStrictEquals(IntegerType.isNegative(Number.MAX_SAFE_INTEGER), false);
+  assertStrictEquals(IntegerType.isNegative(Number.MIN_SAFE_INTEGER), true);
+  assertStrictEquals(
+    IntegerType.isNegative(Number.MIN_SAFE_INTEGER - 1),
+    false,
+  );
+  assertStrictEquals(IntegerType.isNegative(Number.NEGATIVE_INFINITY), false);
+
+  assertStrictEquals(
+    IntegerType.isNegative(BigInt(Number.MAX_SAFE_INTEGER) + 1n),
+    false,
+  );
+  assertStrictEquals(
+    IntegerType.isNegative(BigInt(Number.MAX_SAFE_INTEGER)),
+    false,
+  );
+  assertStrictEquals(
+    IntegerType.isNegative(BigInt(Number.MIN_SAFE_INTEGER)),
+    true,
+  );
+  assertStrictEquals(
+    IntegerType.isNegative(BigInt(Number.MIN_SAFE_INTEGER) - 1n),
+    true,
+  );
+
+  assertStrictEquals(
+    IntegerType.isNegative(undefined as unknown as number),
+    false,
+  );
+  assertStrictEquals(IntegerType.isNegative(null as unknown as number), false);
+  assertStrictEquals(IntegerType.isNegative(true as unknown as number), false);
+  assertStrictEquals(IntegerType.isNegative(false as unknown as number), false);
+  assertStrictEquals(IntegerType.isNegative("" as unknown as number), false);
+  assertStrictEquals(IntegerType.isNegative("0" as unknown as number), false);
+});
+
 Deno.test("IntegerType.isStringified()", () => {
   assertStrictEquals(IntegerType.isStringified("0"), true);
   assertStrictEquals(IntegerType.isStringified("-0"), true);
