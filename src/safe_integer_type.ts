@@ -4,7 +4,10 @@ import {
   isInRange as isBigIntInRange,
 } from "./bigint_type.ts";
 import { FromStringOptions, ToStringOptions } from "./integer_type.ts";
-import { isPositive as isPositiveNumber } from "./number_type.ts";
+import {
+  clamp as clampNumber,
+  isPositive as isPositiveNumber,
+} from "./number_type.ts";
 import { radixPropertiesOf } from "./numeric_type.ts";
 
 export function isSafeInteger(test: unknown): test is number {
@@ -83,6 +86,14 @@ export function isInRange<T extends number>(
   max: T,
 ): test is T {
   return isSafeInteger(test) && (min <= test) && (max >= test);
+}
+
+export function clamp<T extends number>(value: number, min: T, max: T): T {
+  assertSafeInteger(value, "value");
+  assertSafeInteger(min, "min");
+  assertSafeInteger(max, "max");
+
+  return clampNumber(value, min, max);
 }
 
 export function fromBigInt(value: bigint): number {

@@ -1,6 +1,9 @@
 import { assertStrictEquals, assertThrows, fail, unreachable } from "./deps.ts";
 import { SafeIntegerType } from "../mod.ts";
 
+const MIN = Number.MIN_SAFE_INTEGER;
+const MAX = Number.MAX_SAFE_INTEGER;
+
 Deno.test("SafeIntegerType.isSafeInteger()", () => {
   assertStrictEquals(SafeIntegerType.isSafeInteger(0), true);
   assertStrictEquals(SafeIntegerType.isSafeInteger(-0), true);
@@ -22,14 +25,8 @@ Deno.test("SafeIntegerType.isSafeInteger()", () => {
     SafeIntegerType.isSafeInteger(Number.POSITIVE_INFINITY),
     false,
   );
-  assertStrictEquals(
-    SafeIntegerType.isSafeInteger(Number.MAX_SAFE_INTEGER),
-    true,
-  );
-  assertStrictEquals(
-    SafeIntegerType.isSafeInteger(Number.MIN_SAFE_INTEGER),
-    true,
-  );
+  assertStrictEquals(SafeIntegerType.isSafeInteger(MAX), true);
+  assertStrictEquals(SafeIntegerType.isSafeInteger(MIN), true);
   assertStrictEquals(
     SafeIntegerType.isSafeInteger(Number.NEGATIVE_INFINITY),
     false,
@@ -64,11 +61,8 @@ Deno.test("SafeIntegerType.isPositive()", () => {
     SafeIntegerType.isPositive(Number.POSITIVE_INFINITY),
     false,
   );
-  assertStrictEquals(SafeIntegerType.isPositive(Number.MAX_SAFE_INTEGER), true);
-  assertStrictEquals(
-    SafeIntegerType.isPositive(Number.MIN_SAFE_INTEGER),
-    false,
-  );
+  assertStrictEquals(SafeIntegerType.isPositive(MAX), true);
+  assertStrictEquals(SafeIntegerType.isPositive(MIN), false);
   assertStrictEquals(
     SafeIntegerType.isPositive(Number.NEGATIVE_INFINITY),
     false,
@@ -103,14 +97,8 @@ Deno.test("SafeIntegerType.isNonNegative()", () => {
     SafeIntegerType.isNonNegative(Number.POSITIVE_INFINITY),
     false,
   );
-  assertStrictEquals(
-    SafeIntegerType.isNonNegative(Number.MAX_SAFE_INTEGER),
-    true,
-  );
-  assertStrictEquals(
-    SafeIntegerType.isNonNegative(Number.MIN_SAFE_INTEGER),
-    false,
-  );
+  assertStrictEquals(SafeIntegerType.isNonNegative(MAX), true);
+  assertStrictEquals(SafeIntegerType.isNonNegative(MIN), false);
   assertStrictEquals(
     SafeIntegerType.isNonNegative(Number.NEGATIVE_INFINITY),
     false,
@@ -145,14 +133,8 @@ Deno.test("SafeIntegerType.isNonPositive()", () => {
     SafeIntegerType.isNonPositive(Number.POSITIVE_INFINITY),
     false,
   );
-  assertStrictEquals(
-    SafeIntegerType.isNonPositive(Number.MAX_SAFE_INTEGER),
-    false,
-  );
-  assertStrictEquals(
-    SafeIntegerType.isNonPositive(Number.MIN_SAFE_INTEGER),
-    true,
-  );
+  assertStrictEquals(SafeIntegerType.isNonPositive(MAX), false);
+  assertStrictEquals(SafeIntegerType.isNonPositive(MIN), true);
   assertStrictEquals(
     SafeIntegerType.isNonPositive(Number.NEGATIVE_INFINITY),
     false,
@@ -187,11 +169,8 @@ Deno.test("SafeIntegerType.isNegative()", () => {
     SafeIntegerType.isNegative(Number.POSITIVE_INFINITY),
     false,
   );
-  assertStrictEquals(
-    SafeIntegerType.isNegative(Number.MAX_SAFE_INTEGER),
-    false,
-  );
-  assertStrictEquals(SafeIntegerType.isNegative(Number.MIN_SAFE_INTEGER), true);
+  assertStrictEquals(SafeIntegerType.isNegative(MAX), false);
+  assertStrictEquals(SafeIntegerType.isNegative(MIN), true);
   assertStrictEquals(
     SafeIntegerType.isNegative(Number.NEGATIVE_INFINITY),
     false,
@@ -234,8 +213,8 @@ Deno.test("SafeIntegerType.isEven()", () => {
 Deno.test("SafeIntegerType.assertSafeInteger()", () => {
   try {
     SafeIntegerType.assertSafeInteger(0, "test-1");
-    SafeIntegerType.assertSafeInteger(Number.MAX_SAFE_INTEGER, "test-1");
-    SafeIntegerType.assertSafeInteger(Number.MIN_SAFE_INTEGER, "test-1");
+    SafeIntegerType.assertSafeInteger(MAX, "test-1");
+    SafeIntegerType.assertSafeInteger(MIN, "test-1");
   } catch (exception) {
     fail((exception as Error).toString());
   }
@@ -293,7 +272,7 @@ Deno.test("SafeIntegerType.assertSafeInteger()", () => {
 Deno.test("SafeIntegerType.assertPositive()", () => {
   try {
     SafeIntegerType.assertPositive(1, "test-1");
-    SafeIntegerType.assertPositive(Number.MAX_SAFE_INTEGER, "test-1");
+    SafeIntegerType.assertPositive(MAX, "test-1");
   } catch (exception) {
     fail((exception as Error).toString());
   }
@@ -359,7 +338,7 @@ Deno.test("SafeIntegerType.assertNonNegative()", () => {
   try {
     SafeIntegerType.assertNonNegative(0, "test-1");
     SafeIntegerType.assertNonNegative(1, "test-1");
-    SafeIntegerType.assertNonNegative(Number.MAX_SAFE_INTEGER, "test-1");
+    SafeIntegerType.assertNonNegative(MAX, "test-1");
   } catch (exception) {
     fail((exception as Error).toString());
   }
@@ -425,7 +404,7 @@ Deno.test("SafeIntegerType.assertNonPositive()", () => {
   try {
     SafeIntegerType.assertNonPositive(0, "test-1");
     SafeIntegerType.assertNonPositive(-1, "test-1");
-    SafeIntegerType.assertNonPositive(Number.MIN_SAFE_INTEGER, "test-1");
+    SafeIntegerType.assertNonPositive(MIN, "test-1");
   } catch (exception) {
     fail((exception as Error).toString());
   }
@@ -490,7 +469,7 @@ Deno.test("SafeIntegerType.assertNonPositive()", () => {
 Deno.test("SafeIntegerType.assertNegative()", () => {
   try {
     SafeIntegerType.assertNegative(-1, "test-1");
-    SafeIntegerType.assertNegative(Number.MIN_SAFE_INTEGER, "test-1");
+    SafeIntegerType.assertNegative(MIN, "test-1");
   } catch (exception) {
     fail((exception as Error).toString());
   }
@@ -630,57 +609,39 @@ Deno.test("SafeIntegerType.isInRange()", () => {
   assertStrictEquals(SafeIntegerType.isInRange(0n, 0, 0), false);
   assertStrictEquals(SafeIntegerType.isInRange(0.5, -1, 1), false);
 
-  assertStrictEquals(
-    SafeIntegerType.isInRange(0, 0, Number.MAX_SAFE_INTEGER),
-    true,
-  );
+  assertStrictEquals(SafeIntegerType.isInRange(0, 0, MAX), true);
   assertStrictEquals(
     SafeIntegerType.isInRange(0, 0, Number.POSITIVE_INFINITY),
     true,
   );
   assertStrictEquals(SafeIntegerType.isInRange(0, 0, Number.NaN), false);
-  assertStrictEquals(
-    SafeIntegerType.isInRange(0, Number.MIN_SAFE_INTEGER, 0),
-    true,
-  );
+  assertStrictEquals(SafeIntegerType.isInRange(0, MIN, 0), true);
   assertStrictEquals(
     SafeIntegerType.isInRange(0, Number.NEGATIVE_INFINITY, 0),
     true,
   );
   assertStrictEquals(SafeIntegerType.isInRange(0, Number.NaN, 0), false);
 
-  assertStrictEquals(
-    SafeIntegerType.isInRange(0, 1, Number.MAX_SAFE_INTEGER),
-    false,
-  );
+  assertStrictEquals(SafeIntegerType.isInRange(0, 1, MAX), false);
   assertStrictEquals(
     SafeIntegerType.isInRange(0, 1, Number.POSITIVE_INFINITY),
     false,
   );
   assertStrictEquals(SafeIntegerType.isInRange(0, 1, Number.NaN), false);
-  assertStrictEquals(
-    SafeIntegerType.isInRange(0, Number.MIN_SAFE_INTEGER, 1),
-    true,
-  );
+  assertStrictEquals(SafeIntegerType.isInRange(0, MIN, 1), true);
   assertStrictEquals(
     SafeIntegerType.isInRange(0, Number.NEGATIVE_INFINITY, 1),
     true,
   );
   assertStrictEquals(SafeIntegerType.isInRange(0, Number.NaN, 1), false);
 
-  assertStrictEquals(
-    SafeIntegerType.isInRange(0, -1, Number.MAX_SAFE_INTEGER),
-    true,
-  );
+  assertStrictEquals(SafeIntegerType.isInRange(0, -1, MAX), true);
   assertStrictEquals(
     SafeIntegerType.isInRange(0, -1, Number.POSITIVE_INFINITY),
     true,
   );
   assertStrictEquals(SafeIntegerType.isInRange(0, -1, Number.NaN), false);
-  assertStrictEquals(
-    SafeIntegerType.isInRange(0, Number.MIN_SAFE_INTEGER, -1),
-    false,
-  );
+  assertStrictEquals(SafeIntegerType.isInRange(0, MIN, -1), false);
   assertStrictEquals(
     SafeIntegerType.isInRange(0, Number.NEGATIVE_INFINITY, -1),
     false,
@@ -688,8 +649,63 @@ Deno.test("SafeIntegerType.isInRange()", () => {
   assertStrictEquals(SafeIntegerType.isInRange(0, Number.NaN, -1), false);
 });
 
-const MIN = Number.MIN_SAFE_INTEGER;
-const MAX = Number.MAX_SAFE_INTEGER;
+Deno.test("SafeIntegerType.clamp()", () => {
+  const e1 = "`value` must be a safe integer.";
+  assertThrows(
+    () => {
+      SafeIntegerType.clamp(undefined as unknown as number, 0, 0);
+    },
+    TypeError,
+    e1,
+  );
+
+  const e2 = "`min` must be a safe integer.";
+  assertThrows(
+    () => {
+      SafeIntegerType.clamp(0, undefined as unknown as number, 0);
+    },
+    TypeError,
+    e2,
+  );
+
+  const e3 = "`max` must be a safe integer.";
+  assertThrows(
+    () => {
+      SafeIntegerType.clamp(0, 0, undefined as unknown as number);
+    },
+    TypeError,
+    e3,
+  );
+
+  const e4 = "`min` must be less than or equal to `max`.";
+  assertThrows(
+    () => {
+      SafeIntegerType.clamp(0, 1, 0);
+    },
+    RangeError,
+    e4,
+  );
+
+  assertStrictEquals(SafeIntegerType.clamp(-2, -1, 0), -1);
+  assertStrictEquals(SafeIntegerType.clamp(-1, -1, 0), -1);
+  assertStrictEquals(SafeIntegerType.clamp(0, -1, 0), 0);
+  assertStrictEquals(SafeIntegerType.clamp(1, -1, 0), 0);
+
+  assertStrictEquals(SafeIntegerType.clamp(-1, 0, 0), 0);
+  assertStrictEquals(SafeIntegerType.clamp(0, 0, 0), 0);
+  assertStrictEquals(SafeIntegerType.clamp(1, 0, 0), 0);
+
+  assertStrictEquals(SafeIntegerType.clamp(-1, 0, 1), 0);
+  assertStrictEquals(SafeIntegerType.clamp(0, 0, 1), 0);
+  assertStrictEquals(SafeIntegerType.clamp(1, 0, 1), 1);
+  assertStrictEquals(SafeIntegerType.clamp(2, 0, 1), 1);
+
+  assertStrictEquals(SafeIntegerType.clamp(-1, 0, 2), 0);
+  assertStrictEquals(SafeIntegerType.clamp(0, 0, 2), 0);
+  assertStrictEquals(SafeIntegerType.clamp(1, 0, 2), 1);
+  assertStrictEquals(SafeIntegerType.clamp(2, 0, 2), 2);
+  assertStrictEquals(SafeIntegerType.clamp(3, 0, 2), 2);
+});
 
 Deno.test("SafeIntegerType.fromBigInt()", () => {
   const rfe1 = "`value` must be a `bigint`.";
