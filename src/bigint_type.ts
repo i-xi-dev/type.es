@@ -132,22 +132,18 @@ export function clamp<T extends bigint>(value: bigint, min: T, max: T): T {
 }
 
 export function clampToPositive<T extends bigint>(value: T): T {
-  assertBigInt(value, "value");
   return maxOf(value, 1n as T);
 }
 
 export function clampToNonNegative<T extends bigint>(value: T): T {
-  assertBigInt(value, "value");
   return maxOf(value, 0n as T);
 }
 
 export function clampToNonPositive<T extends bigint>(value: T): T {
-  assertBigInt(value, "value");
   return minOf(value, 0n as T);
 }
 
 export function clampToNegative<T extends bigint>(value: T): T {
-  assertBigInt(value, "value");
   return minOf(value, -1n as T);
 }
 

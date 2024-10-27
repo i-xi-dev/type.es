@@ -584,7 +584,7 @@ Deno.test("BigIntType.clampToPositive()", () => {
   assertStrictEquals(BigIntType.clampToPositive(2n), 2n);
   assertStrictEquals(BigIntType.clampToPositive(BigInt(SIMAX)), BigInt(SIMAX));
 
-  const e1 = "`value` must be a `bigint`.";
+  const e1 = "`value0` must be a `bigint`.";
   assertThrows(
     () => {
       BigIntType.clampToPositive(undefined as unknown as bigint);
@@ -607,7 +607,7 @@ Deno.test("BigIntType.clampToNonNegative()", () => {
     BigInt(SIMAX),
   );
 
-  const e1 = "`value` must be a `bigint`.";
+  const e1 = "`value0` must be a `bigint`.";
   assertThrows(
     () => {
       BigIntType.clampToNonNegative(undefined as unknown as bigint);
@@ -630,7 +630,7 @@ Deno.test("BigIntType.clampToNonPositive()", () => {
   assertStrictEquals(BigIntType.clampToNonPositive(2n), 0n);
   assertStrictEquals(BigIntType.clampToNonPositive(BigInt(SIMAX)), 0n);
 
-  const e1 = "`value` must be a `bigint`.";
+  const e1 = "`value0` must be a `bigint`.";
   assertThrows(
     () => {
       BigIntType.clampToNonPositive(undefined as unknown as bigint);
@@ -650,7 +650,7 @@ Deno.test("BigIntType.clampToNegative()", () => {
   assertStrictEquals(BigIntType.clampToNegative(2n), -1n);
   assertStrictEquals(BigIntType.clampToNegative(BigInt(SIMAX)), -1n);
 
-  const e1 = "`value` must be a `bigint`.";
+  const e1 = "`value0` must be a `bigint`.";
   assertThrows(
     () => {
       BigIntType.clampToNegative(undefined as unknown as bigint);
