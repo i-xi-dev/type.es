@@ -97,6 +97,14 @@ export const RoundingMode = {
 
 export type RoundingMode = typeof RoundingMode[keyof typeof RoundingMode];
 
+export const OverflowMode = {
+  EXCEPTION: "exception",
+  TRUNCATE: "truncate",
+  SATURATE: "saturate",
+} as const;
+
+export type OverflowMode = typeof OverflowMode[keyof typeof OverflowMode];
+
 export type FromStringOptions = {
   radix?: Radix;
 };

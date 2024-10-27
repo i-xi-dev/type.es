@@ -269,6 +269,86 @@ Deno.test("IntegerType.isNegative()", () => {
   assertStrictEquals(IntegerType.isNegative("0" as unknown as number), false);
 });
 
+Deno.test("IntegerType.isOdd()", () => {
+  assertStrictEquals(IntegerType.isOdd(0), false);
+  assertStrictEquals(IntegerType.isOdd(-0), false);
+  assertStrictEquals(IntegerType.isOdd(1), true);
+  assertStrictEquals(IntegerType.isOdd(-1), true);
+  assertStrictEquals(IntegerType.isOdd(2), false);
+  assertStrictEquals(IntegerType.isOdd(-2), false);
+  assertStrictEquals(IntegerType.isOdd(3), true);
+  assertStrictEquals(IntegerType.isOdd(-3), true);
+
+  assertStrictEquals(IntegerType.isOdd(-10.1), false);
+  assertStrictEquals(IntegerType.isOdd(-9.9), false);
+  assertStrictEquals(IntegerType.isOdd(9.9), false);
+  assertStrictEquals(IntegerType.isOdd(10.1), false);
+
+  assertStrictEquals(IntegerType.isOdd(0n), false);
+  assertStrictEquals(IntegerType.isOdd(-0n), false);
+  assertStrictEquals(IntegerType.isOdd(1n), true);
+  assertStrictEquals(IntegerType.isOdd(-1n), true);
+  assertStrictEquals(IntegerType.isOdd(2n), false);
+  assertStrictEquals(IntegerType.isOdd(-2n), false);
+  assertStrictEquals(IntegerType.isOdd(3n), true);
+  assertStrictEquals(IntegerType.isOdd(-3n), true);
+
+  assertStrictEquals(IntegerType.isOdd(Number.MAX_SAFE_INTEGER), true);
+  assertStrictEquals(IntegerType.isOdd(1.1), false);
+  assertStrictEquals(IntegerType.isOdd(-1.1), false);
+  assertStrictEquals(IntegerType.isOdd(Number.NaN), false);
+  assertStrictEquals(IntegerType.isOdd(Number.POSITIVE_INFINITY), false);
+  assertStrictEquals(IntegerType.isOdd(Number.NEGATIVE_INFINITY), false);
+  assertStrictEquals(IntegerType.isOdd(Number.MIN_SAFE_INTEGER), true);
+
+  assertStrictEquals(IntegerType.isOdd(undefined as unknown as number), false);
+  assertStrictEquals(IntegerType.isOdd(null as unknown as number), false);
+  assertStrictEquals(IntegerType.isOdd(true as unknown as number), false);
+  assertStrictEquals(IntegerType.isOdd(false as unknown as number), false);
+  assertStrictEquals(IntegerType.isOdd("" as unknown as number), false);
+  assertStrictEquals(IntegerType.isOdd("0" as unknown as number), false);
+});
+
+Deno.test("IntegerType.isEven()", () => {
+  assertStrictEquals(IntegerType.isEven(0), true);
+  assertStrictEquals(IntegerType.isEven(-0), true);
+  assertStrictEquals(IntegerType.isEven(1), false);
+  assertStrictEquals(IntegerType.isEven(-1), false);
+  assertStrictEquals(IntegerType.isEven(2), true);
+  assertStrictEquals(IntegerType.isEven(-2), true);
+  assertStrictEquals(IntegerType.isEven(3), false);
+  assertStrictEquals(IntegerType.isEven(-3), false);
+
+  assertStrictEquals(IntegerType.isEven(-10.1), false);
+  assertStrictEquals(IntegerType.isEven(-9.9), false);
+  assertStrictEquals(IntegerType.isEven(9.9), false);
+  assertStrictEquals(IntegerType.isEven(10.1), false);
+
+  assertStrictEquals(IntegerType.isEven(0n), true);
+  assertStrictEquals(IntegerType.isEven(-0n), true);
+  assertStrictEquals(IntegerType.isEven(1n), false);
+  assertStrictEquals(IntegerType.isEven(-1n), false);
+  assertStrictEquals(IntegerType.isEven(2n), true);
+  assertStrictEquals(IntegerType.isEven(-2n), true);
+  assertStrictEquals(IntegerType.isEven(3n), false);
+  assertStrictEquals(IntegerType.isEven(-3n), false);
+
+  assertStrictEquals(IntegerType.isEven(Number.MAX_SAFE_INTEGER), false);
+  assertStrictEquals(IntegerType.isEven(1.1), false);
+  assertStrictEquals(IntegerType.isEven(-1.1), false);
+  assertStrictEquals(IntegerType.isEven(Number.NaN), false);
+  assertStrictEquals(IntegerType.isEven(Number.POSITIVE_INFINITY), false);
+  assertStrictEquals(IntegerType.isEven(Number.NEGATIVE_INFINITY), false);
+  assertStrictEquals(IntegerType.isEven(Number.MIN_SAFE_INTEGER), false);
+
+  assertStrictEquals(IntegerType.isEven(undefined as unknown as number), false);
+  assertStrictEquals(IntegerType.isEven(null as unknown as number), false);
+  assertStrictEquals(IntegerType.isEven(true as unknown as number), false);
+  assertStrictEquals(IntegerType.isEven(false as unknown as number), false);
+  assertStrictEquals(IntegerType.isEven("" as unknown as number), false);
+  assertStrictEquals(IntegerType.isEven("0" as unknown as number), false);
+});
+
 Deno.test("IntegerType.isStringified()", () => {
   assertStrictEquals(IntegerType.isStringified("0"), true);
   assertStrictEquals(IntegerType.isStringified("-0"), true);
