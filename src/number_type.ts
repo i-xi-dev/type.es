@@ -71,9 +71,10 @@ export function clamp<T extends number>(
   min: T,
   max: T,
 ): T {
-  //TODO isNumber(value)
-  //TODO isNumber(min)
-  //TODO isNumber(max)
+  assertNumber(value, "value");
+  assertNumber(min, "min");
+  assertNumber(max, "max");
+
   if (min > max) {
     throw new RangeError("`max` must be greater than or equal to `min`.");
   }

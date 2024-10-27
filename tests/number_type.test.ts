@@ -520,6 +520,33 @@ Deno.test("NumberType.normalize()", () => {
 });
 
 Deno.test("NumberType.clamp()", () => {
+  const ex1 = "`value` must be a `number`.";
+  assertThrows(
+    () => {
+      NumberType.clamp(undefined as unknown as number, 0, 0);
+    },
+    TypeError,
+    ex1,
+  );
+
+  const ex2 = "`min` must be a `number`.";
+  assertThrows(
+    () => {
+      NumberType.clamp(0, undefined as unknown as number, 0);
+    },
+    TypeError,
+    ex2,
+  );
+
+  const ex3 = "`max` must be a `number`.";
+  assertThrows(
+    () => {
+      NumberType.clamp(0, 0, undefined as unknown as number);
+    },
+    TypeError,
+    ex3,
+  );
+
   const e1 = "`max` must be greater than or equal to `min`.";
 
   assertStrictEquals(NumberType.clamp(0, 0, 0), 0);

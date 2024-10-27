@@ -45,7 +45,7 @@ export function isEven(test: unknown): test is int {
   return isEvenSafeInteger(test) || isEvenBigInt(test);
 }
 
-//
+//TODO
 
 export function isStringified(
   test: unknown,

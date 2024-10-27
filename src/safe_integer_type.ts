@@ -3,7 +3,6 @@ import {
   toNumber as fromBigIntToNumber,
 } from "./bigint_type.ts";
 import {
-  clamp as clampNumber,
   isPositive as isPositiveNumber,
   normalize as normalizeNumber,
 } from "./number_type.ts";
@@ -96,7 +95,10 @@ export function clamp<T extends number>(value: number, min: T, max: T): T {
   assertSafeInteger(min, "min");
   assertSafeInteger(max, "max");
 
-  return clampNumber(value, min, max);
+  if (min > max) {
+    throw new RangeError("`max` must be greater than or equal to `min`.");
+  }
+  return normalizeNumber(Math.min(Math.max(value, min), max)) as T;
 }
 
 export function clampToPositive<T extends number>(value: T): T {
