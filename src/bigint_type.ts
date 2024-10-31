@@ -115,8 +115,9 @@ export function isInRange<T extends bigint>(
   min: T,
   max: T,
 ): test is T {
-  //TODO isBigInt(min)
-  //TODO isBigInt(max)
+  assertBigInt(min, "min");
+  assertBigInt(max, "max");
+
   return isBigInt(test) && (min <= test) && (max >= test);
 }
 
