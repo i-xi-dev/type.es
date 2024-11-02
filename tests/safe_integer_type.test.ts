@@ -610,43 +610,59 @@ Deno.test("SafeIntegerType.isInRange()", () => {
   assertStrictEquals(SafeIntegerType.isInRange(0.5, -1, 1), false);
 
   assertStrictEquals(SafeIntegerType.isInRange(0, 0, MAX), true);
-  assertStrictEquals(
-    SafeIntegerType.isInRange(0, 0, Number.POSITIVE_INFINITY),
-    true,
-  );
-  assertStrictEquals(SafeIntegerType.isInRange(0, 0, Number.NaN), false);
   assertStrictEquals(SafeIntegerType.isInRange(0, MIN, 0), true);
-  assertStrictEquals(
-    SafeIntegerType.isInRange(0, Number.NEGATIVE_INFINITY, 0),
-    true,
-  );
-  assertStrictEquals(SafeIntegerType.isInRange(0, Number.NaN, 0), false);
 
   assertStrictEquals(SafeIntegerType.isInRange(0, 1, MAX), false);
-  assertStrictEquals(
-    SafeIntegerType.isInRange(0, 1, Number.POSITIVE_INFINITY),
-    false,
-  );
-  assertStrictEquals(SafeIntegerType.isInRange(0, 1, Number.NaN), false);
   assertStrictEquals(SafeIntegerType.isInRange(0, MIN, 1), true);
-  assertStrictEquals(
-    SafeIntegerType.isInRange(0, Number.NEGATIVE_INFINITY, 1),
-    true,
-  );
-  assertStrictEquals(SafeIntegerType.isInRange(0, Number.NaN, 1), false);
 
   assertStrictEquals(SafeIntegerType.isInRange(0, -1, MAX), true);
-  assertStrictEquals(
-    SafeIntegerType.isInRange(0, -1, Number.POSITIVE_INFINITY),
-    true,
-  );
-  assertStrictEquals(SafeIntegerType.isInRange(0, -1, Number.NaN), false);
   assertStrictEquals(SafeIntegerType.isInRange(0, MIN, -1), false);
-  assertStrictEquals(
-    SafeIntegerType.isInRange(0, Number.NEGATIVE_INFINITY, -1),
-    false,
+
+  const e1 = "`min` must be a safe integer.";
+  assertThrows(
+    () => {
+      SafeIntegerType.isInRange(0, Number.NEGATIVE_INFINITY, 0);
+    },
+    TypeError,
+    e1,
   );
-  assertStrictEquals(SafeIntegerType.isInRange(0, Number.NaN, -1), false);
+  assertThrows(
+    () => {
+      SafeIntegerType.isInRange(0, Number.NaN, 0);
+    },
+    TypeError,
+    e1,
+  );
+  assertThrows(
+    () => {
+      SafeIntegerType.isInRange(0, undefined as unknown as number, 0);
+    },
+    TypeError,
+    e1,
+  );
+
+  const e2 = "`max` must be a safe integer.";
+  assertThrows(
+    () => {
+      SafeIntegerType.isInRange(0, 0, Number.POSITIVE_INFINITY);
+    },
+    TypeError,
+    e2,
+  );
+  assertThrows(
+    () => {
+      SafeIntegerType.isInRange(0, 0, Number.NaN);
+    },
+    TypeError,
+    e2,
+  );
+  assertThrows(
+    () => {
+      SafeIntegerType.isInRange(0, 0, "0" as unknown as number);
+    },
+    TypeError,
+    e2,
+  );
 });
 
 Deno.test("SafeIntegerType.clamp()", () => {

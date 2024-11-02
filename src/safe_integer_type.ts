@@ -87,6 +87,9 @@ export function isInRange<T extends number>(
   min: T,
   max: T,
 ): test is T {
+  assertSafeInteger(min, "min");
+  assertSafeInteger(max, "max");
+
   return isSafeInteger(test) && (min <= test) && (max >= test);
 }
 
