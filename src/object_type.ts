@@ -2,8 +2,20 @@ export function isObject(test: unknown): test is object {
   return (typeof test === "object");
 }
 
+export function assertObject(test: unknown, label: string): void {
+  if (isObject(test) !== true) {
+    throw new TypeError(`\`${label}\` must be an \`Object\`.`);
+  }
+}
+
 export function isNonNull(test: unknown): test is NonNullable<object> {
   return (isObject(test) && (test !== null));
+}
+
+export function assertNonNull(test: unknown, label: string): void {
+  if (isNonNull(test) !== true) {
+    throw new TypeError(`\`${label}\` must be an \`Object\` except \`null\`.`);
+  }
 }
 
 // deno-lint-ignore no-explicit-any
@@ -12,10 +24,29 @@ export function isIterable<T = any>(test: unknown): test is Iterable<T> {
 }
 
 // deno-lint-ignore no-explicit-any
+export function assertIterable<T = any>(test: unknown, label: string): void {
+  if (isIterable<T>(test) !== true) {
+    throw new TypeError(`\`${label}\` must implement \`Symbol.iterator\`.`);
+  }
+}
+
+// deno-lint-ignore no-explicit-any
 export function isAsyncIterable<T = any>(
   test: unknown,
 ): test is AsyncIterable<T> {
   return isNonNull(test) && (Symbol.asyncIterator in test);
+}
+
+// deno-lint-ignore no-explicit-any
+export function assertAsyncIterable<T = any>(
+  test: unknown,
+  label: string,
+): void {
+  if (isAsyncIterable<T>(test) !== true) {
+    throw new TypeError(
+      `\`${label}\` must implement \`Symbol.asyncIterator\`.`,
+    );
+  }
 }
 
 // // deno-lint-ignore no-explicit-any
