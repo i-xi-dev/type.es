@@ -8,3 +8,4 @@ export * as ObjectType from "./src/object_type.ts";
 export * as RuneType from "./src/rune_type.ts";
 export * as SafeIntegerType from "./src/safe_integer_type.ts";
 export * as StringType from "./src/string_type.ts";
+export * as UsvStringType from "./src/usv_string_type.ts";

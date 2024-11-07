@@ -13,6 +13,8 @@ Deno.test("StringType.assertString()", () => {
       "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
       "test-1",
     );
+    StringType.assertString("\uD800\uDC00", "test-1");
+    StringType.assertString("\uDC00\uD800", "test-1");
   } catch (exception) {
     fail((exception as Error).toString());
   }
@@ -86,6 +88,9 @@ Deno.test("StringType.assertNonEmpty()", () => {
   try {
     StringType.assertNonEmpty("0", "test-1");
     StringType.assertNonEmpty("00", "test-1");
+
+    StringType.assertNonEmpty("\uD800\uDC00", "test-1");
+    StringType.assertNonEmpty("\uDC00\uD800", "test-1");
   } catch (exception) {
     fail((exception as Error).toString());
   }
@@ -134,6 +139,9 @@ Deno.test("StringType.isString()", () => {
   assertStrictEquals(StringType.isString(false), false);
   assertStrictEquals(StringType.isString(""), true);
   assertStrictEquals(StringType.isString("0"), true);
+
+  assertStrictEquals(StringType.isString("\uD800\uDC00"), true);
+  assertStrictEquals(StringType.isString("\uDC00\uD800"), true);
 });
 
 Deno.test("StringType.isEmpty()", () => {
@@ -170,4 +178,7 @@ Deno.test("StringType.isNonEmpty()", () => {
   assertStrictEquals(StringType.isNonEmpty(""), false);
   assertStrictEquals(StringType.isNonEmpty("0"), true);
   assertStrictEquals(StringType.isNonEmpty("00"), true);
+
+  assertStrictEquals(StringType.isNonEmpty("\uD800\uDC00"), true);
+  assertStrictEquals(StringType.isNonEmpty("\uDC00\uD800"), true);
 });
