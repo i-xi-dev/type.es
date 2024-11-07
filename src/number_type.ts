@@ -1,3 +1,4 @@
+import { int } from "./_.ts";
 import { isEven as isEvenSafeInteger } from "./safe_integer_type.ts";
 import { RoundingMode } from "./numerics.ts";
 
@@ -88,7 +89,7 @@ export function clamp<T extends number>(
   return normalize(Math.min(Math.max(value, min), max)) as T;
 }
 
-export function round(value: number, roundingMode?: RoundingMode): number {
+export function round(value: number, roundingMode?: RoundingMode): int {
   if (Number.isFinite(value) !== true) {
     throw new TypeError("`value` must be a finite number.");
   }
@@ -111,11 +112,11 @@ export function round(value: number, roundingMode?: RoundingMode): number {
   const nearestPH = nearestP - 0.5;
   const nearestNH = nearestN + 0.5;
 
-  const halfUp = (): number => {
+  const halfUp = (): int => {
     return (value >= nearestPH) ? nearestP : nearestN;
   };
 
-  const halfDown = (): number => {
+  const halfDown = (): int => {
     return (value <= nearestNH) ? nearestN : nearestP;
   };
 

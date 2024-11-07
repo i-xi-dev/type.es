@@ -1,4 +1,5 @@
 import { assertStringified as assertStringifiedInteger } from "./integer_type.ts";
+import { int } from "./_.ts";
 import { isPositive as isPositiveSafeInteger } from "./safe_integer_type.ts";
 import { assertNumber, round as roundNumber } from "./number_type.ts";
 import {
@@ -201,7 +202,7 @@ export function fromNumber(
     adjustedValue = value;
   }
 
-  let valueAsInt: number;
+  let valueAsInt: int;
   if (Number.isSafeInteger(adjustedValue)) {
     valueAsInt = adjustedValue;
   } else {
@@ -211,7 +212,7 @@ export function fromNumber(
   return BigInt(valueAsInt);
 }
 
-export function toNumber(value: bigint): number {
+export function toNumber(value: bigint): int {
   assertBigInt(value, "value");
 
   if (

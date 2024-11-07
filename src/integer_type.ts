@@ -1,3 +1,4 @@
+import { intorginint } from "./_.ts";
 import {
   isEven as isEvenBigInt,
   isNegative as isNegativeBigInt,
@@ -19,29 +20,27 @@ import { Radix, radixPropertiesOf } from "./numerics.ts";
 
 // ここでは、safe integerではないnumber型は「整数」とみなさない
 
-type int = number | bigint;
-
-export function isPositive(test: unknown): test is int {
+export function isPositive(test: unknown): test is intorginint {
   return isPositiveSafeInteger(test) || isPositiveBigInt(test);
 }
 
-export function isNonNegative(test: unknown): test is int {
+export function isNonNegative(test: unknown): test is intorginint {
   return isNonNegativeSafeInteger(test) || isNonNegativeBigInt(test);
 }
 
-export function isNonPositive(test: unknown): test is int {
+export function isNonPositive(test: unknown): test is intorginint {
   return isNonPositiveSafeInteger(test) || isNonPositiveBigInt(test);
 }
 
-export function isNegative(test: unknown): test is int {
+export function isNegative(test: unknown): test is intorginint {
   return isNegativeSafeInteger(test) || isNegativeBigInt(test);
 }
 
-export function isOdd(test: unknown): test is int {
+export function isOdd(test: unknown): test is intorginint {
   return isOddSafeInteger(test) || isOddBigInt(test);
 }
 
-export function isEven(test: unknown): test is int {
+export function isEven(test: unknown): test is intorginint {
   return isEvenSafeInteger(test) || isEvenBigInt(test);
 }
 

@@ -10,8 +10,7 @@ import {
   isNonPositive as isNonPositiveNumber,
   isPositive as isPositiveNumber,
 } from "./number_type.ts";
-
-type numeric = number | bigint;
+import { numeric } from "./_.ts";
 
 export function isPositive(test: unknown): test is numeric {
   return isPositiveNumber(test) || isPositiveBigInt(test);
