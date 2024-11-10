@@ -10,6 +10,9 @@ export type char = string;
  */
 export type rune = string;
 
+/** A grapheme cluster. */
+export type grapheme = string;
+
 export type usvstring = string;
 
 export type int = number;

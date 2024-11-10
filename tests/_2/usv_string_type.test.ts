@@ -271,8 +271,14 @@ Deno.test("UsvStringType.fromCodePoints()", () => {
 Deno.test("UsvStringType.toCodePoints()", () => {
   assertStrictEquals(_iToS(UsvStringType.toCodePoints("")), `[]`);
   assertStrictEquals(_iToS(UsvStringType.toCodePoints("012")), `[48,49,50]`);
-  assertStrictEquals(_iToS(UsvStringType.toCodePoints("あい")), `[12354,12356]`);
-  assertStrictEquals(_iToS(UsvStringType.toCodePoints("\u{2000B}")), `[131083]`); // JSONの仕様ではサロゲートペアをエスケープするだったような
+  assertStrictEquals(
+    _iToS(UsvStringType.toCodePoints("あい")),
+    `[12354,12356]`,
+  );
+  assertStrictEquals(
+    _iToS(UsvStringType.toCodePoints("\u{2000B}")),
+    `[131083]`,
+  ); // JSONの仕様ではサロゲートペアをエスケープするだったような
 
   assertStrictEquals(
     _iToS(UsvStringType.toCodePoints("012\u{2000B}あい")),
@@ -293,5 +299,100 @@ Deno.test("UsvStringType.toCodePoints()", () => {
     },
     TypeError,
     e1,
+  );
+});
+
+Deno.test("UsvStringType.toGraphemes()", () => {
+  assertStrictEquals(_iToS(UsvStringType.toGraphemes("")), `[]`);
+  assertStrictEquals(_iToS(UsvStringType.toGraphemes("012")), `["0","1","2"]`);
+  assertStrictEquals(_iToS(UsvStringType.toGraphemes("あい")), `["あ","い"]`);
+  assertStrictEquals(
+    _iToS(UsvStringType.toGraphemes("\u{2000B}")),
+    `["\u{2000B}"]`,
+  );
+
+  const e1 = "`value` must be a `USVString`.";
+  assertThrows(
+    () => {
+      [...UsvStringType.toGraphemes(undefined as unknown as string)];
+    },
+    TypeError,
+    e1,
+  );
+  assertThrows(
+    () => {
+      [...UsvStringType.toGraphemes("\u{dc0b}\u{d840}")];
+    },
+    TypeError,
+    e1,
+  );
+
+  assertStrictEquals(
+    _iToS(UsvStringType.toGraphemes("0", { locale: "en" })),
+    `["0"]`,
+  );
+  assertStrictEquals(
+    _iToS(UsvStringType.toGraphemes("0", { locale: "en-US" })),
+    `["0"]`,
+  );
+  // assertStrictEquals(_iToS(UsvStringType.toGraphemes("0", {locale:"en-Latn-US"})), `["0"]`,);
+
+  assertStrictEquals(
+    _iToS(UsvStringType.toGraphemes("0", { locale: "ja" })),
+    `["0"]`,
+  );
+  // assertStrictEquals(_iToS(UsvStringType.toGraphemes("0", {locale:"ja-Jpan"})), `["0"]`);
+  assertStrictEquals(
+    _iToS(UsvStringType.toGraphemes("0", { locale: "ja-JP" })),
+    `["0"]`,
+  );
+  // assertStrictEquals(_iToS(UsvStringType.toGraphemes("0", {locale:"ja-Jpan-JP"})), `["0"]`);
+
+  assertStrictEquals(
+    _iToS(UsvStringType.toGraphemes("g̈", { locale: "en" })),
+    `["\u0067\u0308"]`,
+  );
+  assertStrictEquals(_iToS(UsvStringType.toGraphemes("각")), `["\uAC01"]`);
+  assertStrictEquals(
+    _iToS(UsvStringType.toGraphemes("각")),
+    `["\u1100\u1161\u11A8"]`,
+  );
+  assertStrictEquals(_iToS(UsvStringType.toGraphemes("ก")), `["\u0E01"]`);
+
+  assertStrictEquals(
+    _iToS(UsvStringType.toGraphemes("நி")),
+    `["\u0BA8\u0BBF"]`,
+  );
+  assertStrictEquals(_iToS(UsvStringType.toGraphemes("เ")), `["\u0E40"]`);
+  assertStrictEquals(
+    _iToS(UsvStringType.toGraphemes("กำ")),
+    `["\u0E01\u0E33"]`,
+  );
+  assertStrictEquals(
+    _iToS(UsvStringType.toGraphemes("षि")),
+    `["\u0937\u093F"]`,
+  );
+  assertStrictEquals(
+    _iToS(UsvStringType.toGraphemes("क्षि")),
+    `["\u0915\u094D\u0937\u093F"]`,
+  );
+
+  assertStrictEquals(_iToS(UsvStringType.toGraphemes("ำ")), `["\u0E33"]`);
+  assertStrictEquals(_iToS(UsvStringType.toGraphemes("ष")), `["\u0937"]`);
+  assertStrictEquals(_iToS(UsvStringType.toGraphemes("ि")), `["\u093F"]`);
+
+  // assertStrictEquals(_iToS(UsvStringType.toGraphemes("ch")), `["\u0063","\u0068"]`);
+  // assertStrictEquals(_iToS(UsvStringType.toGraphemes("ch", {locale:"sk"})), `["\u0063\u0068"]`);
+  // assertStrictEquals(_iToS(UsvStringType.toGraphemes("kʷ")), `["\u006B","\u02B7"]`);
+
+  assertStrictEquals(_iToS(UsvStringType.toGraphemes("Ą́")), `["\u0104\u0301"]`);
+
+  assertStrictEquals(
+    _iToS(UsvStringType.toGraphemes("𩸽が塚󠄁")),
+    `["\u{29E3D}","\u304b\u3099","\u585A\u{E0101}"]`,
+  );
+  assertStrictEquals(
+    _iToS(UsvStringType.toGraphemes("𩸽が塚󠄁".normalize("NFC"))),
+    `["\u{29E3D}","\u304C","\u585A\u{E0101}"]`,
   );
 });
