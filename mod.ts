@@ -12,4 +12,4 @@ export * from "./src/_1/safe_integer_range.ts";
 export * as SafeIntegerType from "./src/_0/safe_integer_type.ts";
 export * as StringType from "./src/_0/string_type.ts";
 export * from "./src/_2/uint_type.ts";
-export * as UsvStringType from "./src/_0/usv_string_type.ts";
+export * as UsvStringType from "./src/_2/usv_string_type.ts";

@@ -228,3 +228,70 @@ Deno.test("UsvStringType.toRunes()", () => {
     e1,
   );
 });
+
+Deno.test("UsvStringType.fromCodePoints()", () => {
+  assertStrictEquals(UsvStringType.fromCodePoints([]), "");
+  assertStrictEquals(UsvStringType.fromCodePoints([48, 49, 50]), "012");
+  assertStrictEquals(UsvStringType.fromCodePoints([12354, 12356]), "あい");
+  assertStrictEquals(UsvStringType.fromCodePoints([131083]), "\u{2000B}");
+
+  assertStrictEquals(
+    UsvStringType.fromCodePoints([48, 49, 50, 131083, 12354, 12356]),
+    "012\u{2000B}あい",
+  );
+
+  const e1 = "`value` must implement `Symbol.iterator`.";
+  assertThrows(
+    () => {
+      [...UsvStringType.fromCodePoints(1 as unknown as number[])];
+    },
+    TypeError,
+    e1,
+  );
+
+  const e2 = "`value[1]` must be a code point.";
+  assertThrows(
+    () => {
+      [...UsvStringType.fromCodePoints([48, -1])];
+    },
+    TypeError,
+    e2,
+  );
+
+  const e3 = "`value` must not contain lone surrogate code points.";
+  assertThrows(
+    () => {
+      [...UsvStringType.fromCodePoints([48, 0xDC00, 0xD800])];
+    },
+    RangeError,
+    e3,
+  );
+});
+
+Deno.test("UsvStringType.toCodePoints()", () => {
+  assertStrictEquals(_iToS(UsvStringType.toCodePoints("")), `[]`);
+  assertStrictEquals(_iToS(UsvStringType.toCodePoints("012")), `[48,49,50]`);
+  assertStrictEquals(_iToS(UsvStringType.toCodePoints("あい")), `[12354,12356]`);
+  assertStrictEquals(_iToS(UsvStringType.toCodePoints("\u{2000B}")), `[131083]`); // JSONの仕様ではサロゲートペアをエスケープするだったような
+
+  assertStrictEquals(
+    _iToS(UsvStringType.toCodePoints("012\u{2000B}あい")),
+    `[48,49,50,131083,12354,12356]`,
+  );
+
+  const e1 = "`value` must be a `USVString`.";
+  assertThrows(
+    () => {
+      [...UsvStringType.toCodePoints(undefined as unknown as string)];
+    },
+    TypeError,
+    e1,
+  );
+  assertThrows(
+    () => {
+      [...UsvStringType.toCodePoints("\u{dc0b}\u{d840}")];
+    },
+    TypeError,
+    e1,
+  );
+});

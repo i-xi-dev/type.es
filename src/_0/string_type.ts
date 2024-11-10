@@ -1,5 +1,7 @@
 import { char, int, rune } from "../_.ts";
 
+export const EMPTY = "";
+
 export function isString(test: unknown): test is string {
   return (typeof test === "string");
 }
