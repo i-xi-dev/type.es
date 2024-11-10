@@ -1,5 +1,10 @@
-import { assertStrictEquals, assertThrows, fail, unreachable } from "./deps.ts";
-import { CodePointType } from "../mod.ts";
+import {
+  assertStrictEquals,
+  assertThrows,
+  fail,
+  unreachable,
+} from "../deps.ts";
+import { CodePointType } from "../../mod.ts";
 
 Deno.test("CodePointType.isCodePoint()", () => {
   assertStrictEquals(CodePointType.isCodePoint(-1), false);
@@ -284,4 +289,103 @@ Deno.test("CodePointType.isVariationSelector()", () => {
   assertStrictEquals(CodePointType.isVariationSelector(0x180B), true);
   assertStrictEquals(CodePointType.isVariationSelector(0x180F), true);
   assertStrictEquals(CodePointType.isVariationSelector(0x1810), false);
+});
+
+Deno.test("CodePointType.isInRanges()", () => {
+  const blocks0: Array<[number] | [number, number]> = [];
+
+  assertStrictEquals(CodePointType.isInRanges(0x0, blocks0), false);
+  assertStrictEquals(CodePointType.isInRanges(0x7F, blocks0), false);
+  assertStrictEquals(CodePointType.isInRanges(0x80, blocks0), false);
+  assertStrictEquals(CodePointType.isInRanges(0xFF, blocks0), false);
+  assertStrictEquals(CodePointType.isInRanges(0x100, blocks0), false);
+
+  const blocks1 = [
+    [0x0, 0x7F],
+    [0x80, 0xFF],
+  ] as [number, number][];
+
+  assertStrictEquals(CodePointType.isInRanges(0x0, blocks1), true);
+  assertStrictEquals(CodePointType.isInRanges(0x7F, blocks1), true);
+  assertStrictEquals(CodePointType.isInRanges(0x80, blocks1), true);
+  assertStrictEquals(CodePointType.isInRanges(0xFF, blocks1), true);
+  assertStrictEquals(CodePointType.isInRanges(0x100, blocks1), false);
+
+  const blocks2 = [
+    [0x80, 0xFF],
+    [0x0, 0x7F],
+  ] as [number, number][];
+
+  assertStrictEquals(CodePointType.isInRanges(0x0, blocks2), true);
+  assertStrictEquals(CodePointType.isInRanges(0x7F, blocks2), true);
+  assertStrictEquals(CodePointType.isInRanges(0x80, blocks2), true);
+  assertStrictEquals(CodePointType.isInRanges(0xFF, blocks2), true);
+  assertStrictEquals(CodePointType.isInRanges(0x100, blocks2), false);
+
+  assertStrictEquals(CodePointType.isInRanges(-1, blocks1), false);
+  assertStrictEquals(CodePointType.isInRanges(0x110000, blocks1), false);
+
+  const ea = "`ranges` must be an `Array`.";
+  assertThrows(
+    () => {
+      CodePointType.isInRanges(0, undefined as unknown as []);
+    },
+    TypeError,
+    ea,
+  );
+
+  assertThrows(
+    () => {
+      CodePointType.isInRanges(0, 0 as unknown as []);
+    },
+    TypeError,
+    ea,
+  );
+
+  const eai = "`ranges[0]` must be a `SafeIntegerRange.Like`.";
+  assertThrows(
+    () => {
+      CodePointType.isInRanges(0, [0 as unknown as [0]]);
+    },
+    TypeError,
+    eai,
+  );
+
+  const eai1 = "`ranges[1]` must be a `SafeIntegerRange.Like`.";
+  assertThrows(
+    () => {
+      CodePointType.isInRanges(0, [
+        [0x1, 0x7F],
+        0 as unknown as [0],
+      ]);
+    },
+    TypeError,
+    eai1,
+  );
+
+  // assertThrows(
+  //   () => {
+  //     CodePointType.isInRanges(0, [
+  //       [0x0, 0x7F],
+  //       0 as unknown as [0],
+  //     ]);
+  //   },
+  //   TypeError,
+  //   eai,
+  // );
+  assertStrictEquals(
+    CodePointType.isInRanges(0, [[0x0, 0x7F], 0 as unknown as [0]]),
+    true,
+  );
+
+  assertThrows(
+    () => {
+      CodePointType.isInRanges(0, [
+        0 as unknown as [0],
+        [0x0, 0x7F],
+      ]);
+    },
+    TypeError,
+    eai,
+  );
 });

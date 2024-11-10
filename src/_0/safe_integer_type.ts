@@ -2,7 +2,7 @@ import {
   fromString as fromStringToBigInt,
   toNumber as fromBigIntToNumber,
 } from "./bigint_type.ts";
-import { int } from "./_.ts";
+import { int } from "../_.ts";
 import {
   isPositive as isPositiveNumber,
   normalize as normalizeNumber,
@@ -11,7 +11,7 @@ import {
   FromStringOptions,
   radixPropertiesOf,
   ToStringOptions,
-} from "./numerics.ts";
+} from "../numerics.ts";
 
 export function isSafeInteger(test: unknown): test is int {
   return Number.isSafeInteger(test);

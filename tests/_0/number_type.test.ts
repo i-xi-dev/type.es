@@ -1,5 +1,10 @@
-import { assertStrictEquals, assertThrows, fail, unreachable } from "./deps.ts";
-import { NumberType } from "../mod.ts";
+import {
+  assertStrictEquals,
+  assertThrows,
+  fail,
+  unreachable,
+} from "../deps.ts";
+import { NumberType } from "../../mod.ts";
 
 Deno.test("NumberType.assertNumber()", () => {
   try {

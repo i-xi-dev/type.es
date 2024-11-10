@@ -1,5 +1,5 @@
 import { assertStringified as assertStringifiedInteger } from "./integer_type.ts";
-import { int } from "./_.ts";
+import { int } from "../_.ts";
 import { isPositive as isPositiveSafeInteger } from "./safe_integer_type.ts";
 import { assertNumber, round as roundNumber } from "./number_type.ts";
 import {
@@ -7,7 +7,7 @@ import {
   FromStringOptions,
   radixPropertiesOf,
   ToStringOptions,
-} from "./numerics.ts";
+} from "../numerics.ts";
 
 export function isBigInt(test: unknown): test is bigint {
   return (typeof test === "bigint");

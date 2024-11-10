@@ -1,5 +1,10 @@
-import { assertStrictEquals, assertThrows, fail, unreachable } from "./deps.ts";
-import { StringType } from "../mod.ts";
+import {
+  assertStrictEquals,
+  assertThrows,
+  fail,
+  unreachable,
+} from "../deps.ts";
+import { StringType } from "../../mod.ts";
 
 Deno.test("StringType.assertString()", () => {
   try {

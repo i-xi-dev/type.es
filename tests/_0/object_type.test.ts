@@ -1,5 +1,5 @@
-import { assertStrictEquals, fail, unreachable } from "./deps.ts";
-import { ObjectType } from "../mod.ts";
+import { assertStrictEquals, fail, unreachable } from "../deps.ts";
+import { ObjectType } from "../../mod.ts";
 
 Deno.test("ObjectType.isObject()", () => {
   assertStrictEquals(ObjectType.isObject({}), true);

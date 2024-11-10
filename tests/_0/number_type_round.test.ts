@@ -1,5 +1,5 @@
-import { assertStrictEquals, assertThrows } from "./deps.ts";
-import { NumberType, Numerics } from "../mod.ts";
+import { assertStrictEquals, assertThrows } from "../deps.ts";
+import { NumberType, Numerics } from "../../mod.ts";
 
 const MIN = Number.MIN_SAFE_INTEGER;
 const MAX = Number.MAX_SAFE_INTEGER;

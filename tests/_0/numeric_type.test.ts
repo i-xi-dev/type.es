@@ -1,5 +1,5 @@
-import { assertStrictEquals } from "./deps.ts";
-import { NumericType } from "../mod.ts";
+import { assertStrictEquals } from "../deps.ts";
+import { NumericType } from "../../mod.ts";
 
 Deno.test("NumericType.isPositive()", () => {
   assertStrictEquals(NumericType.isPositive(0), false);

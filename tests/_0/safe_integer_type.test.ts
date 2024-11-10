@@ -1,5 +1,10 @@
-import { assertStrictEquals, assertThrows, fail, unreachable } from "./deps.ts";
-import { SafeIntegerType } from "../mod.ts";
+import {
+  assertStrictEquals,
+  assertThrows,
+  fail,
+  unreachable,
+} from "../deps.ts";
+import { SafeIntegerType } from "../../mod.ts";
 
 const MIN = Number.MIN_SAFE_INTEGER;
 const MAX = Number.MAX_SAFE_INTEGER;

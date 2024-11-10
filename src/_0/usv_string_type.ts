@@ -1,4 +1,4 @@
-import { int, rune, usvstring } from "./_.ts";
+import { int, rune, usvstring } from "../_.ts";
 import { isString } from "./string_type.ts";
 
 export function isUsvString(test: unknown): test is usvstring {

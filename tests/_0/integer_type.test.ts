@@ -1,5 +1,5 @@
-import { assertStrictEquals, fail, unreachable } from "./deps.ts";
-import { IntegerType } from "../mod.ts";
+import { assertStrictEquals, fail, unreachable } from "../deps.ts";
+import { IntegerType } from "../../mod.ts";
 
 Deno.test("IntegerType.isPositive()", () => {
   assertStrictEquals(IntegerType.isPositive(0), false);

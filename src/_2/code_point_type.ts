@@ -1,9 +1,11 @@
-import { codepoint, plane } from "./_.ts";
+import { codepoint, plane } from "../_.ts";
+import { IntegerRange } from "../_1/integer_range.ts";
 import {
   isInRange as isSafeIntegerInRange,
   toString as safeIntegerToString,
-} from "./safe_integer_type.ts";
-import { Radix, ToStringOptions } from "./numerics.ts";
+} from "../_0/safe_integer_type.ts";
+import { Radix, ToStringOptions } from "../numerics.ts";
+import { SafeIntegerRange } from "../_1/safe_integer_range.ts";
 
 export const MIN_VALUE = 0x0;
 
@@ -103,4 +105,37 @@ export function isVariationSelector(
   return isSafeIntegerInRange(codePoint, _MIN_VS, _MAX_VS) ||
     isSafeIntegerInRange(codePoint, _MIN_VSS, _MAX_VSS) ||
     isSafeIntegerInRange(codePoint, _MIN_MONGOLIAN_VS, _MAX_MONGOLIAN_VS);
+}
+
+export function isInRanges(
+  test: unknown,
+  ranges: SafeIntegerRange.Like<codepoint>[],
+): test is codepoint {
+  if (isCodePoint(test) !== true) {
+    return false;
+  }
+
+  if (Array.isArray(ranges) !== true) {
+    throw new TypeError("`ranges` must be an `Array`.");
+  }
+
+  let range: SafeIntegerRange.Struct<codepoint>;
+  //for (const rangeSource of ranges) {
+  for (let i = 0; i < ranges.length; i++) {
+    try {
+      range = IntegerRange.Struct.fromRangeLike(ranges[i]);
+    } catch {
+      throw new TypeError(
+        `\`ranges[${i}]\` must be a \`SafeIntegerRange.Like\`.`,
+      );
+    }
+
+    assertCodePoint(range.min, `ranges[${i}].min`);
+    assertCodePoint(range.max, `ranges[${i}].max`);
+    if ((test >= range.min) && (test <= range.max)) {
+      return true;
+    }
+  }
+
+  return false;
 }

@@ -1,5 +1,10 @@
-import { assertStrictEquals, assertThrows, fail, unreachable } from "./deps.ts";
-import { BigIntType } from "../mod.ts";
+import {
+  assertStrictEquals,
+  assertThrows,
+  fail,
+  unreachable,
+} from "../deps.ts";
+import { BigIntType } from "../../mod.ts";
 
 const SIMIN = Number.MIN_SAFE_INTEGER;
 const SIMAX = Number.MAX_SAFE_INTEGER;

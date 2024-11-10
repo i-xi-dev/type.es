@@ -1,5 +1,10 @@
-import { assertStrictEquals, assertThrows, fail, unreachable } from "./deps.ts";
-import { UsvStringType } from "../mod.ts";
+import {
+  assertStrictEquals,
+  assertThrows,
+  fail,
+  unreachable,
+} from "../deps.ts";
+import { UsvStringType } from "../../mod.ts";
 
 Deno.test("UsvStringType.isUsvString()", () => {
   assertStrictEquals(UsvStringType.isUsvString(0), false);

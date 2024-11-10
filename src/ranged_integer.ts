@@ -1,0 +1,46 @@
+import { int, xint } from "./_.ts";
+import { OverflowMode, Radix, RoundingMode } from "./numerics.ts";
+
+export type FromNumberOptions = {
+  overflowMode?: OverflowMode;
+  roundingMode?: RoundingMode;
+}; // Numerics.FromNumberOptions & { overflowMode }
+
+export type FromBigIntOptions = {
+  overflowMode?: OverflowMode;
+};
+
+export type FromStringOptions = {
+  overflowMode?: OverflowMode;
+  radix?: Radix;
+}; // Numerics.FromStringOptions & { overflowMode }
+
+export type ToStringOptions = {
+  lowerCase?: boolean;
+  minIntegralDigits?: int;
+  radix?: Radix;
+}; // Numerics.ToStringOptions;
+
+export interface UintNOperations<T extends xint> {
+  bitLength: int;
+  inRange(value: unknown): value is T;
+  bitwiseAnd(self: T, other: T): T;
+  bitwiseOr(self: T, other: T): T;
+  bitwiseXOr(self: T, other: T): T;
+  //XXX bitwiseNot(self: T): T;
+  rotateLeft(self: T, offset: int): T;
+  //XXX rotateRight(self: T, offset: int): T;
+  fromNumber(value: number, options?: FromNumberOptions): T;
+  toNumber(self: T): int;
+  fromBigInt(value: bigint, options?: FromBigIntOptions): T;
+  toBigInt(self: T): bigint;
+  fromString(value: string, options?: FromStringOptions): T;
+  toString(self: T, options?: ToStringOptions): string;
+}
+
+export const BITS_PER_BYTE = 8;
+
+export interface Uint8xOperations<T extends xint> extends UintNOperations<T> {
+  byteLength: int;
+  toBytes(self: T, littleEndian: boolean): Uint8Array;
+}
