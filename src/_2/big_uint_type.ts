@@ -7,6 +7,7 @@ import {
 } from "../_0/bigint_type.ts";
 import { assertSafeInteger } from "../_0/safe_integer_type.ts";
 import { BigIntRange } from "../_1/bigint_range.ts";
+import { biguint64, int } from "../_.ts";
 import {
   BITS_PER_BYTE,
   FromBigIntOptions,
@@ -16,7 +17,6 @@ import {
   Uint8xOperations,
   UintNOperations,
 } from "../ranged_integer.ts";
-import { int } from "../_.ts";
 import { OverflowMode } from "../numerics.ts";
 
 class _UinNOperations<T extends bigint> implements UintNOperations<T> {
@@ -214,5 +214,5 @@ class _Uint8xOperations<T extends bigint> extends _UinNOperations<T>
   }
 }
 
-export const BigUint64 = new _Uint8xOperations<bigint>(64);
+export const BigUint64 = new _Uint8xOperations<biguint64>(64);
 // export const BigUint128 = new _Uint8xOperations<bigint>(128);

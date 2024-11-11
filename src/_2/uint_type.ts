@@ -19,7 +19,7 @@ import {
   UintNOperations,
 } from "../ranged_integer.ts";
 import { fromString as bigIntFromString } from "../_0/bigint_type.ts";
-import { int, uint6, uint7, uint8 } from "../_.ts";
+import { int, uint16, uint24, uint32, uint6, uint7, uint8 } from "../_.ts";
 import { OverflowMode } from "../numerics.ts";
 import { SafeIntegerRange } from "../_1/safe_integer_range.ts";
 
@@ -302,6 +302,6 @@ class _Uint8xOperations<T extends int> extends _UinNOperations<T>
 export const Uint6 = new _UinNOperations<uint6>(6);
 export const Uint7 = new _UinNOperations<uint7>(7);
 export const Uint8 = new _Uint8xOperations<uint8>(8);
-export const Uint16 = new _Uint8xOperations<number>(16);
-export const Uint24 = new _Uint8xOperations<number>(24);
-export const Uint32 = new _Uint8xOperations<number>(32);
+export const Uint16 = new _Uint8xOperations<uint16>(16);
+export const Uint24 = new _Uint8xOperations<uint24>(24);
+export const Uint32 = new _Uint8xOperations<uint32>(32);

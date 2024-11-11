@@ -346,3 +346,11 @@ export type uint8 =
   | 0xFD
   | 0xFE
   | 0xFF;
+
+export type uint16 = number;
+
+export type uint24 = number;
+
+export type uint32 = number;
+
+export type biguint64 = bigint;
