@@ -1,15 +1,15 @@
-export function isObject(test: unknown): test is object {
+export function is(test: unknown): test is object {
   return (typeof test === "object");
 }
 
-export function assertObject(test: unknown, label: string): void {
-  if (isObject(test) !== true) {
+export function assert(test: unknown, label: string): void {
+  if (is(test) !== true) {
     throw new TypeError(`\`${label}\` must be an \`Object\`.`);
   }
 }
 
 export function isNonNull(test: unknown): test is NonNullable<object> {
-  return (isObject(test) && (test !== null));
+  return (is(test) && (test !== null));
 }
 
 export function assertNonNull(test: unknown, label: string): void {

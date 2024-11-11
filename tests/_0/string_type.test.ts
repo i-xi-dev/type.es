@@ -6,40 +6,40 @@ import {
 } from "../deps.ts";
 import { StringType } from "../../mod.ts";
 
-Deno.test("StringType.assertString()", () => {
+Deno.test("StringType.assert()", () => {
   try {
-    StringType.assertString("", "test-1");
-    StringType.assertString(" ", "test-1");
-    StringType.assertString("0", "test-1");
-    StringType.assertString("\u0000", "test-1");
-    StringType.assertString("\uFFFF", "test-1");
-    StringType.assertString("\u{10FFFF}", "test-1");
-    StringType.assertString(
+    StringType.assert("", "test-1");
+    StringType.assert(" ", "test-1");
+    StringType.assert("0", "test-1");
+    StringType.assert("\u0000", "test-1");
+    StringType.assert("\uFFFF", "test-1");
+    StringType.assert("\u{10FFFF}", "test-1");
+    StringType.assert(
       "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
       "test-1",
     );
-    StringType.assertString("\uD800\uDC00", "test-1");
-    StringType.assertString("\uDC00\uD800", "test-1");
+    StringType.assert("\uD800\uDC00", "test-1");
+    StringType.assert("\uDC00\uD800", "test-1");
   } catch (exception) {
     fail((exception as Error).toString());
   }
 
   try {
-    StringType.assertString(undefined, "test-1");
+    StringType.assert(undefined, "test-1");
     unreachable();
   } catch {
     //
   }
 
   try {
-    StringType.assertString(0, "test-1");
+    StringType.assert(0, "test-1");
     unreachable();
   } catch {
     //
   }
 
   try {
-    StringType.assertString(new String("0"), "test-1");
+    StringType.assert(new String("0"), "test-1");
     unreachable();
   } catch {
     //
@@ -129,24 +129,24 @@ Deno.test("StringType.assertNonEmpty()", () => {
   }
 });
 
-Deno.test("StringType.isString()", () => {
-  assertStrictEquals(StringType.isString(0), false);
-  assertStrictEquals(StringType.isString(0n), false);
-  assertStrictEquals(StringType.isString(Number.NaN), false);
-  assertStrictEquals(StringType.isString(Number.POSITIVE_INFINITY), false);
-  assertStrictEquals(StringType.isString(Number.MAX_SAFE_INTEGER), false);
-  assertStrictEquals(StringType.isString(Number.MIN_SAFE_INTEGER), false);
-  assertStrictEquals(StringType.isString(Number.NEGATIVE_INFINITY), false);
+Deno.test("StringType.is()", () => {
+  assertStrictEquals(StringType.is(0), false);
+  assertStrictEquals(StringType.is(0n), false);
+  assertStrictEquals(StringType.is(Number.NaN), false);
+  assertStrictEquals(StringType.is(Number.POSITIVE_INFINITY), false);
+  assertStrictEquals(StringType.is(Number.MAX_SAFE_INTEGER), false);
+  assertStrictEquals(StringType.is(Number.MIN_SAFE_INTEGER), false);
+  assertStrictEquals(StringType.is(Number.NEGATIVE_INFINITY), false);
 
-  assertStrictEquals(StringType.isString(undefined), false);
-  assertStrictEquals(StringType.isString(null), false);
-  assertStrictEquals(StringType.isString(true), false);
-  assertStrictEquals(StringType.isString(false), false);
-  assertStrictEquals(StringType.isString(""), true);
-  assertStrictEquals(StringType.isString("0"), true);
+  assertStrictEquals(StringType.is(undefined), false);
+  assertStrictEquals(StringType.is(null), false);
+  assertStrictEquals(StringType.is(true), false);
+  assertStrictEquals(StringType.is(false), false);
+  assertStrictEquals(StringType.is(""), true);
+  assertStrictEquals(StringType.is("0"), true);
 
-  assertStrictEquals(StringType.isString("\uD800\uDC00"), true);
-  assertStrictEquals(StringType.isString("\uDC00\uD800"), true);
+  assertStrictEquals(StringType.is("\uD800\uDC00"), true);
+  assertStrictEquals(StringType.is("\uDC00\uD800"), true);
 });
 
 Deno.test("StringType.isEmpty()", () => {

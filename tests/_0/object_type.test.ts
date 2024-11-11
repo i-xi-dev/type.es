@@ -1,30 +1,30 @@
 import { assertStrictEquals, fail, unreachable } from "../deps.ts";
 import { ObjectType } from "../../mod.ts";
 
-Deno.test("ObjectType.isObject()", () => {
-  assertStrictEquals(ObjectType.isObject({}), true);
-  assertStrictEquals(ObjectType.isObject(null), true);
-  assertStrictEquals(ObjectType.isObject(undefined), false);
-  assertStrictEquals(ObjectType.isObject([]), true);
-  assertStrictEquals(ObjectType.isObject(new Error()), true);
-  assertStrictEquals(ObjectType.isObject(""), false);
-  assertStrictEquals(ObjectType.isObject(1), false);
-  assertStrictEquals(ObjectType.isObject(true), false);
-  assertStrictEquals(ObjectType.isObject(false), false);
+Deno.test("ObjectType.is()", () => {
+  assertStrictEquals(ObjectType.is({}), true);
+  assertStrictEquals(ObjectType.is(null), true);
+  assertStrictEquals(ObjectType.is(undefined), false);
+  assertStrictEquals(ObjectType.is([]), true);
+  assertStrictEquals(ObjectType.is(new Error()), true);
+  assertStrictEquals(ObjectType.is(""), false);
+  assertStrictEquals(ObjectType.is(1), false);
+  assertStrictEquals(ObjectType.is(true), false);
+  assertStrictEquals(ObjectType.is(false), false);
 });
 
-Deno.test("ObjectType.assertObject()", () => {
+Deno.test("ObjectType.assert()", () => {
   try {
-    ObjectType.assertObject({}, "test-1");
-    ObjectType.assertObject(null, "test-1");
-    ObjectType.assertObject([], "test-1");
-    ObjectType.assertObject(new Error(), "test-1");
+    ObjectType.assert({}, "test-1");
+    ObjectType.assert(null, "test-1");
+    ObjectType.assert([], "test-1");
+    ObjectType.assert(new Error(), "test-1");
   } catch (exception) {
     fail((exception as Error).toString());
   }
 
   try {
-    ObjectType.assertObject(undefined, "test-1");
+    ObjectType.assert(undefined, "test-1");
     unreachable();
   } catch {
     //

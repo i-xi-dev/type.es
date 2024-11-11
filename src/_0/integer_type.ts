@@ -15,7 +15,7 @@ import {
   isOdd as isOddSafeInteger,
   isPositive as isPositiveSafeInteger,
 } from "./safe_integer_type.ts";
-import { isString } from "./string_type.ts";
+import { is as isString } from "./string_type.ts";
 import { Radix, radixPropertiesOf } from "../numerics.ts";
 
 // ここでは、safe integerではないnumber型は「整数」とみなさない

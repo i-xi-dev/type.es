@@ -6,72 +6,72 @@ import {
 } from "../deps.ts";
 import { UsvStringType } from "../../mod.ts";
 
-Deno.test("UsvStringType.isUsvString()", () => {
-  assertStrictEquals(UsvStringType.isUsvString(0), false);
-  assertStrictEquals(UsvStringType.isUsvString(0n), false);
-  assertStrictEquals(UsvStringType.isUsvString(Number.NaN), false);
+Deno.test("UsvStringType.is()", () => {
+  assertStrictEquals(UsvStringType.is(0), false);
+  assertStrictEquals(UsvStringType.is(0n), false);
+  assertStrictEquals(UsvStringType.is(Number.NaN), false);
   assertStrictEquals(
-    UsvStringType.isUsvString(Number.POSITIVE_INFINITY),
+    UsvStringType.is(Number.POSITIVE_INFINITY),
     false,
   );
-  assertStrictEquals(UsvStringType.isUsvString(Number.MAX_SAFE_INTEGER), false);
-  assertStrictEquals(UsvStringType.isUsvString(Number.MIN_SAFE_INTEGER), false);
+  assertStrictEquals(UsvStringType.is(Number.MAX_SAFE_INTEGER), false);
+  assertStrictEquals(UsvStringType.is(Number.MIN_SAFE_INTEGER), false);
   assertStrictEquals(
-    UsvStringType.isUsvString(Number.NEGATIVE_INFINITY),
+    UsvStringType.is(Number.NEGATIVE_INFINITY),
     false,
   );
 
-  assertStrictEquals(UsvStringType.isUsvString(undefined), false);
-  assertStrictEquals(UsvStringType.isUsvString(null), false);
-  assertStrictEquals(UsvStringType.isUsvString(true), false);
-  assertStrictEquals(UsvStringType.isUsvString(false), false);
-  assertStrictEquals(UsvStringType.isUsvString(""), true);
-  assertStrictEquals(UsvStringType.isUsvString("0"), true);
+  assertStrictEquals(UsvStringType.is(undefined), false);
+  assertStrictEquals(UsvStringType.is(null), false);
+  assertStrictEquals(UsvStringType.is(true), false);
+  assertStrictEquals(UsvStringType.is(false), false);
+  assertStrictEquals(UsvStringType.is(""), true);
+  assertStrictEquals(UsvStringType.is("0"), true);
 
-  assertStrictEquals(UsvStringType.isUsvString("\uD800\uDC00"), true);
-  assertStrictEquals(UsvStringType.isUsvString("\uDC00\uD800"), false);
+  assertStrictEquals(UsvStringType.is("\uD800\uDC00"), true);
+  assertStrictEquals(UsvStringType.is("\uDC00\uD800"), false);
 });
 
-Deno.test("UsvStringType.assertUsvString()", () => {
+Deno.test("UsvStringType.assert()", () => {
   try {
-    UsvStringType.assertUsvString("", "test-1");
-    UsvStringType.assertUsvString(" ", "test-1");
-    UsvStringType.assertUsvString("0", "test-1");
-    UsvStringType.assertUsvString("\u0000", "test-1");
-    UsvStringType.assertUsvString("\uFFFF", "test-1");
-    UsvStringType.assertUsvString("\u{10FFFF}", "test-1");
-    UsvStringType.assertUsvString(
+    UsvStringType.assert("", "test-1");
+    UsvStringType.assert(" ", "test-1");
+    UsvStringType.assert("0", "test-1");
+    UsvStringType.assert("\u0000", "test-1");
+    UsvStringType.assert("\uFFFF", "test-1");
+    UsvStringType.assert("\u{10FFFF}", "test-1");
+    UsvStringType.assert(
       "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
       "test-1",
     );
-    UsvStringType.assertUsvString("\uD800\uDC00", "test-1");
+    UsvStringType.assert("\uD800\uDC00", "test-1");
   } catch (exception) {
     fail((exception as Error).toString());
   }
 
   try {
-    UsvStringType.assertUsvString("\uDC00\uD800", "test-1");
+    UsvStringType.assert("\uDC00\uD800", "test-1");
     unreachable();
   } catch {
     //
   }
 
   try {
-    UsvStringType.assertUsvString(undefined, "test-1");
+    UsvStringType.assert(undefined, "test-1");
     unreachable();
   } catch {
     //
   }
 
   try {
-    UsvStringType.assertUsvString(0, "test-1");
+    UsvStringType.assert(0, "test-1");
     unreachable();
   } catch {
     //
   }
 
   try {
-    UsvStringType.assertUsvString(new String("0"), "test-1");
+    UsvStringType.assert(new String("0"), "test-1");
     unreachable();
   } catch {
     //

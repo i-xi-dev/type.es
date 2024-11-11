@@ -1,19 +1,19 @@
-import { assertCodePoint } from "./code_point_type.ts";
+import { assert as assertCodePoint } from "./code_point_type.ts";
 import { assertIterable as assertIterableObject } from "../_0/object_type.ts";
 import { codepoint, grapheme, int, rune, usvstring } from "../_.ts";
-import { EMPTY, isString } from "../_0/string_type.ts";
+import { EMPTY, is as isString } from "../_0/string_type.ts";
 import { getGraphemeSegmenter } from "../_1/i18n.ts";
 
-export function isUsvString(test: unknown): test is usvstring {
+export function is(test: unknown): test is usvstring {
   return isString(test) && test.isWellFormed();
 }
 
 export function isNonEmpty(test: unknown): test is usvstring {
-  return isUsvString(test) && (test.length > 0);
+  return is(test) && (test.length > 0);
 }
 
-export function assertUsvString(test: unknown, label: string): void {
-  if (isUsvString(test) !== true) {
+export function assert(test: unknown, label: string): void {
+  if (is(test) !== true) {
     throw new TypeError(`\`${label}\` must be a \`USVString\`.`);
   }
 }
@@ -30,7 +30,7 @@ export type AllowMalformedOptions = {
 
 //TODO allowMalformed
 export function runeCountOf(value: usvstring): int {
-  assertUsvString(value, "value");
+  assert(value, "value");
   return [...value].length;
 }
 
@@ -42,7 +42,7 @@ export function runeCountOf(value: usvstring): int {
 
 //TODO allowMalformed
 export function toRunes(value: usvstring): IterableIterator<rune, void, void> {
-  assertUsvString(value, "value");
+  assert(value, "value");
 
   return (function* (s) {
     for (const rune of [...s]) {
@@ -79,7 +79,7 @@ export function fromCodePoints(value: Iterable<codepoint>): string {
 export function toCodePoints(
   value: string,
 ): IterableIterator<codepoint, void, void> {
-  assertUsvString(value, "value");
+  assert(value, "value");
 
   return (function* (s) {
     for (const rune of [...s]) {
@@ -98,7 +98,7 @@ export function toGraphemes(
   value: string,
   options?: ToGraphemesOptions,
 ): IterableIterator<grapheme, void, void> {
-  assertUsvString(value, "value");
+  assert(value, "value");
 
   const segmenter = getGraphemeSegmenter(options?.locale);
 

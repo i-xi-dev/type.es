@@ -23,7 +23,7 @@ export type ToStringOptions = {
 
 export interface UintNOperations<T extends xint> {
   bitLength: int;
-  inRange(value: unknown): value is T;
+  is(value: unknown): value is T;
   bitwiseAnd(self: T, other: T): T;
   bitwiseOr(self: T, other: T): T;
   bitwiseXOr(self: T, other: T): T;

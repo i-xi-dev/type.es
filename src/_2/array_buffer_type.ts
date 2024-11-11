@@ -7,7 +7,7 @@ export function fromUint8Iterable(
   assertIterableObject(value, "value");
 
   return Uint8Array.from(value, (i) => {
-    if (Uint8.inRange(i)) {
+    if (Uint8.is(i)) {
       return i;
     }
     throw new RangeError("value[*]");

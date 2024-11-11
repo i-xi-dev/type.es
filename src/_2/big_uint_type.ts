@@ -1,11 +1,11 @@
 import {
-  assertBigInt,
+  assert as assertBigInt,
   fromNumber as bigIntFromNumber,
   fromString as bigIntFromString,
   isInRange as isBigIntInRange,
   toString as bigIntToString,
 } from "../_0/bigint_type.ts";
-import { assertSafeInteger } from "../_0/safe_integer_type.ts";
+import { assert as assertSafeInteger } from "../_0/safe_integer_type.ts";
 import { BigIntRange } from "../_1/bigint_range.ts";
 import { biguint64, int } from "../_.ts";
 import {
@@ -39,12 +39,12 @@ class _UinNOperations<T extends bigint> implements UintNOperations<T> {
     return this.#bitLength;
   }
 
-  inRange(value: bigint): value is T {
+  is(value: bigint): value is T {
     return this.#range.includes(value);
   }
 
   protected _assertInRange(test: T, label: string): void {
-    if (this.inRange(test) !== true) {
+    if (this.is(test) !== true) {
       throw new TypeError(
         `The type of \`${label}\` does not match the type of \`uint${this.#bitLength}\`.`,
       ); // 型が期待値でない場合も含むのでRangeErrorでなくTypeErrorとした
@@ -96,7 +96,7 @@ class _UinNOperations<T extends bigint> implements UintNOperations<T> {
   fromNumber(value: number, options?: FromNumberOptions): T {
     const valueAsBigInt = bigIntFromNumber(value, options);
 
-    if (this.inRange(valueAsBigInt)) {
+    if (this.is(valueAsBigInt)) {
       return valueAsBigInt;
     }
 
@@ -146,7 +146,7 @@ class _UinNOperations<T extends bigint> implements UintNOperations<T> {
   fromBigInt(value: bigint, options?: FromBigIntOptions): T {
     assertBigInt(value, "value");
 
-    if (this.inRange(value)) {
+    if (this.is(value)) {
       return value;
     }
 

@@ -2,29 +2,29 @@ import { char, int, rune } from "../_.ts";
 
 export const EMPTY = "";
 
-export function isString(test: unknown): test is string {
+export function is(test: unknown): test is string {
   return (typeof test === "string");
 }
 
 export function isEmpty(test: unknown): test is string {
-  return isString(test) && (test.length === 0);
+  return is(test) && (test.length === 0);
 }
 
 export function isNonEmpty(test: unknown): test is string {
-  return isString(test) && (test.length > 0);
+  return is(test) && (test.length > 0);
 }
 
 export function isChar(test: unknown): test is char {
-  return isString(test) && (test.length === 1);
+  return is(test) && (test.length === 1);
 }
 
 export function isRune(test: unknown): test is rune {
-  return isString(test) && (test.length <= 2) && ([...test].length === 1) &&
+  return is(test) && (test.length <= 2) && ([...test].length === 1) &&
     test.isWellFormed();
 }
 
-export function assertString(test: unknown, label: string): void {
-  if (isString(test) !== true) {
+export function assert(test: unknown, label: string): void {
+  if (is(test) !== true) {
     throw new TypeError(`\`${label}\` must be a \`string\`.`);
   }
 }
@@ -54,7 +54,7 @@ export function assertRune(test: unknown, label: string): void {
 }
 
 export function charCountOf(value: string): int {
-  assertString(value, "value");
+  assert(value, "value");
   return value.length;
 }
 
@@ -65,7 +65,7 @@ export function charCountOf(value: string): int {
 //XXX fromCharsAsync
 
 export function toChars(value: string): IterableIterator<char, void, void> {
-  assertString(value, "value");
+  assert(value, "value");
 
   return (function* (s) {
     for (let i = 0; i < s.length; i++) {
@@ -114,7 +114,7 @@ export function isomorphicDecode(input: BufferSource): string {
  * @returns A byte sequence of isomorphic encoded `input`.
  */
 export function isomorphicEncode(input: string): Uint8Array {
-  assertString(input, "input");
+  assert(input, "input");
 
   // deno-lint-ignore no-control-regex
   if (/^[\u{0}-\u{FF}]*$/u.test(input) !== true) {

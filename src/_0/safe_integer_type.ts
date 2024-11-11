@@ -13,35 +13,35 @@ import {
   ToStringOptions,
 } from "../numerics.ts";
 
-export function isSafeInteger(test: unknown): test is int {
+export function is(test: unknown): test is int {
   return Number.isSafeInteger(test);
 }
 
 export function isPositive(test: unknown): test is int {
-  return isSafeInteger(test) && (test > 0);
+  return is(test) && (test > 0);
 }
 
 export function isNonNegative(test: unknown): test is int {
-  return isSafeInteger(test) && (test >= 0);
+  return is(test) && (test >= 0);
 }
 
 export function isNonPositive(test: unknown): test is int {
-  return isSafeInteger(test) && (test <= 0);
+  return is(test) && (test <= 0);
 }
 
 export function isNegative(test: unknown): test is int {
-  return isSafeInteger(test) && (test < 0);
+  return is(test) && (test < 0);
 }
 
 export function isOdd(test: unknown): test is int {
-  return isSafeInteger(test) && ((test % 2) !== 0);
+  return is(test) && ((test % 2) !== 0);
 }
 
 export function isEven(test: unknown): test is int {
-  return isSafeInteger(test) && ((test % 2) === 0);
+  return is(test) && ((test % 2) === 0);
 }
 
-export function assertSafeInteger(test: unknown, label: string): void {
+export function assert(test: unknown, label: string): void {
   if (Number.isSafeInteger(test) !== true) {
     throw new TypeError(`\`${label}\` must be a safe integer.`);
   }
@@ -88,16 +88,16 @@ export function isInRange<T extends int>(
   min: T,
   max: T,
 ): test is T {
-  assertSafeInteger(min, "min");
-  assertSafeInteger(max, "max");
+  assert(min, "min");
+  assert(max, "max");
 
-  return isSafeInteger(test) && (min <= test) && (max >= test);
+  return is(test) && (min <= test) && (max >= test);
 }
 
 export function clamp<T extends int>(value: int, min: T, max: T): T {
-  assertSafeInteger(value, "value");
-  assertSafeInteger(min, "min");
-  assertSafeInteger(max, "max");
+  assert(value, "value");
+  assert(min, "min");
+  assert(max, "max");
 
   if (min > max) {
     throw new RangeError("`max` must be greater than or equal to `min`.");
@@ -106,22 +106,22 @@ export function clamp<T extends int>(value: int, min: T, max: T): T {
 }
 
 export function clampToPositive<T extends int>(value: T): T {
-  assertSafeInteger(value, "value");
+  assert(value, "value");
   return normalizeNumber(Math.max(value, 1) as T);
 }
 
 export function clampToNonNegative<T extends int>(value: T): T {
-  assertSafeInteger(value, "value");
+  assert(value, "value");
   return normalizeNumber(Math.max(value, 0) as T);
 }
 
 export function clampToNonPositive<T extends int>(value: T): T {
-  assertSafeInteger(value, "value");
+  assert(value, "value");
   return normalizeNumber(Math.min(value, 0) as T);
 }
 
 export function clampToNegative<T extends int>(value: T): T {
-  assertSafeInteger(value, "value");
+  assert(value, "value");
   return normalizeNumber(Math.min(value, -1) as T);
 }
 
@@ -130,7 +130,7 @@ export function fromBigInt(value: bigint): int {
 }
 
 export function toBigInt(value: int): bigint {
-  assertSafeInteger(value, "value");
+  assert(value, "value");
   return BigInt(value);
 }
 
@@ -140,7 +140,7 @@ export function fromString(value: string, options?: FromStringOptions): int {
 }
 
 export function toString(value: int, options?: ToStringOptions): string {
-  assertSafeInteger(value, "value");
+  assert(value, "value");
 
   const radix = radixPropertiesOf(options?.radix).radix;
   let result = value.toString(radix);

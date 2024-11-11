@@ -9,22 +9,22 @@ import { BigIntType } from "../../mod.ts";
 const SIMIN = Number.MIN_SAFE_INTEGER;
 const SIMAX = Number.MAX_SAFE_INTEGER;
 
-Deno.test("BigIntType.assertBigInt()", () => {
+Deno.test("BigIntType.assert()", () => {
   try {
-    BigIntType.assertBigInt(0n, "test-1");
+    BigIntType.assert(0n, "test-1");
   } catch (exception) {
     fail((exception as Error).toString());
   }
 
   try {
-    BigIntType.assertBigInt(undefined, "test-1");
+    BigIntType.assert(undefined, "test-1");
     unreachable();
   } catch {
     //
   }
 
   try {
-    BigIntType.assertBigInt(0, "test-1");
+    BigIntType.assert(0, "test-1");
     unreachable();
   } catch {
     //

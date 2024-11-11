@@ -5,30 +5,30 @@ Deno.test("Uint16.bitLength", () => {
   assertStrictEquals(Uint16.bitLength, 16);
 });
 
-Deno.test("Uint16.inRange()", () => {
-  assertStrictEquals(Uint16.inRange(-1), false);
-  assertStrictEquals(Uint16.inRange(-0), true);
-  assertStrictEquals(Uint16.inRange(0), true);
-  assertStrictEquals(Uint16.inRange(63), true);
-  assertStrictEquals(Uint16.inRange(64), true);
-  assertStrictEquals(Uint16.inRange(127), true);
-  assertStrictEquals(Uint16.inRange(128), true);
-  assertStrictEquals(Uint16.inRange(255), true);
-  assertStrictEquals(Uint16.inRange(256), true);
-  assertStrictEquals(Uint16.inRange(65535), true);
-  assertStrictEquals(Uint16.inRange(65536), false);
-  assertStrictEquals(Uint16.inRange(0xFFFFFFFF), false);
-  assertStrictEquals(Uint16.inRange(0x100000000), false);
+Deno.test("Uint16.is()", () => {
+  assertStrictEquals(Uint16.is(-1), false);
+  assertStrictEquals(Uint16.is(-0), true);
+  assertStrictEquals(Uint16.is(0), true);
+  assertStrictEquals(Uint16.is(63), true);
+  assertStrictEquals(Uint16.is(64), true);
+  assertStrictEquals(Uint16.is(127), true);
+  assertStrictEquals(Uint16.is(128), true);
+  assertStrictEquals(Uint16.is(255), true);
+  assertStrictEquals(Uint16.is(256), true);
+  assertStrictEquals(Uint16.is(65535), true);
+  assertStrictEquals(Uint16.is(65536), false);
+  assertStrictEquals(Uint16.is(0xFFFFFFFF), false);
+  assertStrictEquals(Uint16.is(0x100000000), false);
 
-  assertStrictEquals(Uint16.inRange(0.1), false);
-  assertStrictEquals(Uint16.inRange(0.5), false);
-  assertStrictEquals(Uint16.inRange("0" as unknown as number), false);
-  assertStrictEquals(Uint16.inRange(false as unknown as number), false);
-  assertStrictEquals(Uint16.inRange({} as unknown as number), false);
-  assertStrictEquals(Uint16.inRange([] as unknown as number), false);
-  assertStrictEquals(Uint16.inRange([0] as unknown as number), false);
-  assertStrictEquals(Uint16.inRange(undefined as unknown as number), false);
-  assertStrictEquals(Uint16.inRange(null as unknown as number), false);
+  assertStrictEquals(Uint16.is(0.1), false);
+  assertStrictEquals(Uint16.is(0.5), false);
+  assertStrictEquals(Uint16.is("0" as unknown as number), false);
+  assertStrictEquals(Uint16.is(false as unknown as number), false);
+  assertStrictEquals(Uint16.is({} as unknown as number), false);
+  assertStrictEquals(Uint16.is([] as unknown as number), false);
+  assertStrictEquals(Uint16.is([0] as unknown as number), false);
+  assertStrictEquals(Uint16.is(undefined as unknown as number), false);
+  assertStrictEquals(Uint16.is(null as unknown as number), false);
 });
 
 Deno.test("Uint16.bitwiseAnd()", () => {

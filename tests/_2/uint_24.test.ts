@@ -5,32 +5,32 @@ Deno.test("Uint24.bitLength", () => {
   assertStrictEquals(Uint24.bitLength, 24);
 });
 
-Deno.test("Uint24.inRange()", () => {
-  assertStrictEquals(Uint24.inRange(-1), false);
-  assertStrictEquals(Uint24.inRange(-0), true);
-  assertStrictEquals(Uint24.inRange(0), true);
-  assertStrictEquals(Uint24.inRange(63), true);
-  assertStrictEquals(Uint24.inRange(64), true);
-  assertStrictEquals(Uint24.inRange(127), true);
-  assertStrictEquals(Uint24.inRange(128), true);
-  assertStrictEquals(Uint24.inRange(255), true);
-  assertStrictEquals(Uint24.inRange(256), true);
-  assertStrictEquals(Uint24.inRange(65535), true);
-  assertStrictEquals(Uint24.inRange(65536), true);
-  assertStrictEquals(Uint24.inRange(0xFFFFFF), true);
-  assertStrictEquals(Uint24.inRange(0x1000000), false);
-  assertStrictEquals(Uint24.inRange(0xFFFFFFFF), false);
-  assertStrictEquals(Uint24.inRange(0x100000000), false);
+Deno.test("Uint24.is()", () => {
+  assertStrictEquals(Uint24.is(-1), false);
+  assertStrictEquals(Uint24.is(-0), true);
+  assertStrictEquals(Uint24.is(0), true);
+  assertStrictEquals(Uint24.is(63), true);
+  assertStrictEquals(Uint24.is(64), true);
+  assertStrictEquals(Uint24.is(127), true);
+  assertStrictEquals(Uint24.is(128), true);
+  assertStrictEquals(Uint24.is(255), true);
+  assertStrictEquals(Uint24.is(256), true);
+  assertStrictEquals(Uint24.is(65535), true);
+  assertStrictEquals(Uint24.is(65536), true);
+  assertStrictEquals(Uint24.is(0xFFFFFF), true);
+  assertStrictEquals(Uint24.is(0x1000000), false);
+  assertStrictEquals(Uint24.is(0xFFFFFFFF), false);
+  assertStrictEquals(Uint24.is(0x100000000), false);
 
-  assertStrictEquals(Uint24.inRange(0.1), false);
-  assertStrictEquals(Uint24.inRange(0.5), false);
-  assertStrictEquals(Uint24.inRange("0" as unknown as number), false);
-  assertStrictEquals(Uint24.inRange(false as unknown as number), false);
-  assertStrictEquals(Uint24.inRange({} as unknown as number), false);
-  assertStrictEquals(Uint24.inRange([] as unknown as number), false);
-  assertStrictEquals(Uint24.inRange([0] as unknown as number), false);
-  assertStrictEquals(Uint24.inRange(undefined as unknown as number), false);
-  assertStrictEquals(Uint24.inRange(null as unknown as number), false);
+  assertStrictEquals(Uint24.is(0.1), false);
+  assertStrictEquals(Uint24.is(0.5), false);
+  assertStrictEquals(Uint24.is("0" as unknown as number), false);
+  assertStrictEquals(Uint24.is(false as unknown as number), false);
+  assertStrictEquals(Uint24.is({} as unknown as number), false);
+  assertStrictEquals(Uint24.is([] as unknown as number), false);
+  assertStrictEquals(Uint24.is([0] as unknown as number), false);
+  assertStrictEquals(Uint24.is(undefined as unknown as number), false);
+  assertStrictEquals(Uint24.is(null as unknown as number), false);
 });
 
 Deno.test("Uint24.bitwiseAnd()", () => {

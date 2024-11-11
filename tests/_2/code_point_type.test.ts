@@ -6,57 +6,57 @@ import {
 } from "../deps.ts";
 import { CodePointType } from "../../mod.ts";
 
-Deno.test("CodePointType.isCodePoint()", () => {
-  assertStrictEquals(CodePointType.isCodePoint(-1), false);
-  assertStrictEquals(CodePointType.isCodePoint(-0), true);
-  assertStrictEquals(CodePointType.isCodePoint(0), true);
-  assertStrictEquals(CodePointType.isCodePoint(63), true);
-  assertStrictEquals(CodePointType.isCodePoint(64), true);
-  assertStrictEquals(CodePointType.isCodePoint(127), true);
-  assertStrictEquals(CodePointType.isCodePoint(128), true);
-  assertStrictEquals(CodePointType.isCodePoint(255), true);
-  assertStrictEquals(CodePointType.isCodePoint(256), true);
-  assertStrictEquals(CodePointType.isCodePoint(65535), true);
-  assertStrictEquals(CodePointType.isCodePoint(65536), true);
-  assertStrictEquals(CodePointType.isCodePoint(0x10FFFF), true);
-  assertStrictEquals(CodePointType.isCodePoint(0x110000), false);
-  assertStrictEquals(CodePointType.isCodePoint(0xFFFFFFFF), false);
-  assertStrictEquals(CodePointType.isCodePoint(0x100000000), false);
-  assertStrictEquals(CodePointType.isCodePoint(0.1), false);
+Deno.test("CodePointType.is()", () => {
+  assertStrictEquals(CodePointType.is(-1), false);
+  assertStrictEquals(CodePointType.is(-0), true);
+  assertStrictEquals(CodePointType.is(0), true);
+  assertStrictEquals(CodePointType.is(63), true);
+  assertStrictEquals(CodePointType.is(64), true);
+  assertStrictEquals(CodePointType.is(127), true);
+  assertStrictEquals(CodePointType.is(128), true);
+  assertStrictEquals(CodePointType.is(255), true);
+  assertStrictEquals(CodePointType.is(256), true);
+  assertStrictEquals(CodePointType.is(65535), true);
+  assertStrictEquals(CodePointType.is(65536), true);
+  assertStrictEquals(CodePointType.is(0x10FFFF), true);
+  assertStrictEquals(CodePointType.is(0x110000), false);
+  assertStrictEquals(CodePointType.is(0xFFFFFFFF), false);
+  assertStrictEquals(CodePointType.is(0x100000000), false);
+  assertStrictEquals(CodePointType.is(0.1), false);
 
-  assertStrictEquals(CodePointType.isCodePoint("0"), false);
-  assertStrictEquals(CodePointType.isCodePoint("255"), false);
-  assertStrictEquals(CodePointType.isCodePoint(true), false);
-  assertStrictEquals(CodePointType.isCodePoint({}), false);
-  assertStrictEquals(CodePointType.isCodePoint([]), false);
-  assertStrictEquals(CodePointType.isCodePoint([0]), false);
-  assertStrictEquals(CodePointType.isCodePoint(undefined), false);
-  assertStrictEquals(CodePointType.isCodePoint(null), false);
+  assertStrictEquals(CodePointType.is("0"), false);
+  assertStrictEquals(CodePointType.is("255"), false);
+  assertStrictEquals(CodePointType.is(true), false);
+  assertStrictEquals(CodePointType.is({}), false);
+  assertStrictEquals(CodePointType.is([]), false);
+  assertStrictEquals(CodePointType.is([0]), false);
+  assertStrictEquals(CodePointType.is(undefined), false);
+  assertStrictEquals(CodePointType.is(null), false);
 });
 
-Deno.test("CodePointType.assertCodePoint()", () => {
+Deno.test("CodePointType.assert()", () => {
   try {
-    CodePointType.assertCodePoint(-0, "test-1");
-    CodePointType.assertCodePoint(0, "test-1");
-    CodePointType.assertCodePoint(0x10FFFF, "test-1");
+    CodePointType.assert(-0, "test-1");
+    CodePointType.assert(0, "test-1");
+    CodePointType.assert(0x10FFFF, "test-1");
   } catch (exception) {
     fail((exception as Error).toString());
   }
 
   try {
-    CodePointType.assertCodePoint(-1, "test-1");
+    CodePointType.assert(-1, "test-1");
     unreachable();
   } catch {
     //
   }
   try {
-    CodePointType.assertCodePoint(0x110000, "test-1");
+    CodePointType.assert(0x110000, "test-1");
     unreachable();
   } catch {
     //
   }
   try {
-    CodePointType.assertCodePoint(undefined, "test-1");
+    CodePointType.assert(undefined, "test-1");
     unreachable();
   } catch {
     //

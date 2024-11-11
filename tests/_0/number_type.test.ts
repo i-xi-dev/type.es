@@ -6,33 +6,33 @@ import {
 } from "../deps.ts";
 import { NumberType } from "../../mod.ts";
 
-Deno.test("NumberType.assertNumber()", () => {
+Deno.test("NumberType.assert()", () => {
   try {
-    NumberType.assertNumber(0, "test-1");
-    NumberType.assertNumber(0.5, "test-1");
-    NumberType.assertNumber(Number.NaN, "test-1");
-    NumberType.assertNumber(Number.POSITIVE_INFINITY, "test-1");
-    NumberType.assertNumber(Number.NEGATIVE_INFINITY, "test-1");
+    NumberType.assert(0, "test-1");
+    NumberType.assert(0.5, "test-1");
+    NumberType.assert(Number.NaN, "test-1");
+    NumberType.assert(Number.POSITIVE_INFINITY, "test-1");
+    NumberType.assert(Number.NEGATIVE_INFINITY, "test-1");
   } catch (exception) {
     fail((exception as Error).toString());
   }
 
   try {
-    NumberType.assertNumber(undefined, "test-1");
+    NumberType.assert(undefined, "test-1");
     unreachable();
   } catch {
     //
   }
 
   try {
-    NumberType.assertNumber(0n, "test-1");
+    NumberType.assert(0n, "test-1");
     unreachable();
   } catch {
     //
   }
 
   try {
-    NumberType.assertNumber(new Number(0), "test-1");
+    NumberType.assert(new Number(0), "test-1");
     unreachable();
   } catch {
     //
@@ -248,34 +248,34 @@ Deno.test("NumberType.assertNegative()", () => {
   }
 });
 
-Deno.test("NumberType.isNumber()", () => {
-  assertStrictEquals(NumberType.isNumber(0), true);
-  assertStrictEquals(NumberType.isNumber(-0), true);
-  assertStrictEquals(NumberType.isNumber(1), true);
-  assertStrictEquals(NumberType.isNumber(-1), true);
+Deno.test("NumberType.is()", () => {
+  assertStrictEquals(NumberType.is(0), true);
+  assertStrictEquals(NumberType.is(-0), true);
+  assertStrictEquals(NumberType.is(1), true);
+  assertStrictEquals(NumberType.is(-1), true);
 
-  assertStrictEquals(NumberType.isNumber(-10.1), true);
-  assertStrictEquals(NumberType.isNumber(-9.9), true);
-  assertStrictEquals(NumberType.isNumber(9.9), true);
-  assertStrictEquals(NumberType.isNumber(10.1), true);
+  assertStrictEquals(NumberType.is(-10.1), true);
+  assertStrictEquals(NumberType.is(-9.9), true);
+  assertStrictEquals(NumberType.is(9.9), true);
+  assertStrictEquals(NumberType.is(10.1), true);
 
-  assertStrictEquals(NumberType.isNumber(0n), false);
-  assertStrictEquals(NumberType.isNumber(-0n), false);
-  assertStrictEquals(NumberType.isNumber(1n), false);
-  assertStrictEquals(NumberType.isNumber(-1n), false);
+  assertStrictEquals(NumberType.is(0n), false);
+  assertStrictEquals(NumberType.is(-0n), false);
+  assertStrictEquals(NumberType.is(1n), false);
+  assertStrictEquals(NumberType.is(-1n), false);
 
-  assertStrictEquals(NumberType.isNumber(Number.NaN), true);
-  assertStrictEquals(NumberType.isNumber(Number.POSITIVE_INFINITY), true);
-  assertStrictEquals(NumberType.isNumber(Number.MAX_SAFE_INTEGER), true);
-  assertStrictEquals(NumberType.isNumber(Number.MIN_SAFE_INTEGER), true);
-  assertStrictEquals(NumberType.isNumber(Number.NEGATIVE_INFINITY), true);
+  assertStrictEquals(NumberType.is(Number.NaN), true);
+  assertStrictEquals(NumberType.is(Number.POSITIVE_INFINITY), true);
+  assertStrictEquals(NumberType.is(Number.MAX_SAFE_INTEGER), true);
+  assertStrictEquals(NumberType.is(Number.MIN_SAFE_INTEGER), true);
+  assertStrictEquals(NumberType.is(Number.NEGATIVE_INFINITY), true);
 
-  assertStrictEquals(NumberType.isNumber(undefined), false);
-  assertStrictEquals(NumberType.isNumber(null), false);
-  assertStrictEquals(NumberType.isNumber(true), false);
-  assertStrictEquals(NumberType.isNumber(false), false);
-  assertStrictEquals(NumberType.isNumber(""), false);
-  assertStrictEquals(NumberType.isNumber("0"), false);
+  assertStrictEquals(NumberType.is(undefined), false);
+  assertStrictEquals(NumberType.is(null), false);
+  assertStrictEquals(NumberType.is(true), false);
+  assertStrictEquals(NumberType.is(false), false);
+  assertStrictEquals(NumberType.is(""), false);
+  assertStrictEquals(NumberType.is("0"), false);
 });
 
 Deno.test("NumberType.isPositive()", () => {

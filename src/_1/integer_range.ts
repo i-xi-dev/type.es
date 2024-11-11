@@ -1,6 +1,6 @@
 import { int, xint } from "../_.ts";
 import { is as isBigInt } from "../_0/bigint_type.ts";
-import { isSafeInteger } from "../_0/safe_integer_type.ts";
+import { is as isSafeInteger } from "../_0/safe_integer_type.ts";
 
 export interface IntegerRange<T extends xint> {
   get min(): T;

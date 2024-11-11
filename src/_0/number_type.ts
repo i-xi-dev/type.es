@@ -2,28 +2,28 @@ import { int } from "../_.ts";
 import { isEven as isEvenSafeInteger } from "./safe_integer_type.ts";
 import { RoundingMode } from "../numerics.ts";
 
-export function isNumber(test: unknown): test is number {
+export function is(test: unknown): test is number {
   return (typeof test === "number");
 }
 
 export function isPositive(test: unknown): test is number {
-  return isNumber(test) && (test > 0);
+  return is(test) && (test > 0);
 }
 
 export function isNonNegative(test: unknown): test is number {
-  return isNumber(test) && (test >= 0);
+  return is(test) && (test >= 0);
 }
 
 export function isNonPositive(test: unknown): test is number {
-  return isNumber(test) && (test <= 0);
+  return is(test) && (test <= 0);
 }
 
 export function isNegative(test: unknown): test is number {
-  return isNumber(test) && (test < 0);
+  return is(test) && (test < 0);
 }
 
-export function assertNumber(test: unknown, label: string): void {
-  if (isNumber(test) !== true) {
+export function assert(test: unknown, label: string): void {
+  if (is(test) !== true) {
     throw new TypeError(`\`${label}\` must be a \`number\`.`);
   }
 }
@@ -57,8 +57,8 @@ export function isInRange<T extends number>(
   min: T,
   max: T,
 ): test is T {
-  assertNumber(min, "min");
-  assertNumber(max, "max");
+  assert(min, "min");
+  assert(max, "max");
   if (Number.isNaN(min)) {
     throw new TypeError("`min` must not be `NaN`.");
   }
@@ -66,11 +66,11 @@ export function isInRange<T extends number>(
     throw new TypeError("`max` must not be `NaN`.");
   }
 
-  return isNumber(test) && (min <= test) && (max >= test);
+  return is(test) && (min <= test) && (max >= test);
 }
 
 export function normalize<T extends number>(value: T): T {
-  assertNumber(value, "value");
+  assert(value, "value");
   return ((value === 0) ? (value + 0) : value) as T; // -0を0
 }
 
@@ -79,9 +79,9 @@ export function clamp<T extends number>(
   min: T,
   max: T,
 ): T {
-  assertNumber(value, "value");
-  assertNumber(min, "min");
-  assertNumber(max, "max");
+  assert(value, "value");
+  assert(min, "min");
+  assert(max, "max");
 
   if (min > max) {
     throw new RangeError("`max` must be greater than or equal to `min`.");

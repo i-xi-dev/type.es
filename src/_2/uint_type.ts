@@ -1,10 +1,10 @@
 import {
-  assertNumber,
+  assert as assertNumber,
   normalize as normalizeNumber,
   round as roundNumber,
 } from "../_0/number_type.ts";
 import {
-  assertSafeInteger,
+  assert as assertSafeInteger,
   fromBigInt as safeIntegerFromBigInt,
   isNonPositive as isNonPositiveSafeInteger,
   toString as safeIntegerToString,
@@ -48,12 +48,12 @@ class _UinNOperations<T extends int> implements UintNOperations<T> {
     return this.#bitLength;
   }
 
-  inRange(value: int): value is T {
+  is(value: int): value is T {
     return this.#range.includes(value);
   }
 
   protected _assertInRange(test: T, label: string): void {
-    if (this.inRange(test) !== true) {
+    if (this.is(test) !== true) {
       throw new TypeError(
         `The type of \`${label}\` does not match the type of \`uint${this.#bitLength}\`.`,
       ); // 型が期待値でない場合も含むのでRangeErrorでなくTypeErrorとした
@@ -167,7 +167,7 @@ class _UinNOperations<T extends int> implements UintNOperations<T> {
       valueAsInt = roundNumber(adjustedValue, options?.roundingMode);
     }
 
-    if (this.inRange(valueAsInt)) {
+    if (this.is(valueAsInt)) {
       return normalizeNumber(valueAsInt);
     }
 
@@ -219,7 +219,7 @@ class _UinNOperations<T extends int> implements UintNOperations<T> {
   fromBigInt(value: bigint, options?: FromBigIntOptions): T {
     const valueAsNumber = safeIntegerFromBigInt(value);
 
-    if (this.inRange(valueAsNumber)) {
+    if (this.is(valueAsNumber)) {
       return valueAsNumber;
     }
 

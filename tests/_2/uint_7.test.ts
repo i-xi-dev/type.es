@@ -6,30 +6,30 @@ Deno.test("Uint7.bitLength", () => {
   assertStrictEquals(Uint7.bitLength, 7);
 });
 
-Deno.test("Uint7.inRange()", () => {
-  assertStrictEquals(Uint7.inRange(-1), false);
-  assertStrictEquals(Uint7.inRange(-0), true);
-  assertStrictEquals(Uint7.inRange(0), true);
-  assertStrictEquals(Uint7.inRange(63), true);
-  assertStrictEquals(Uint7.inRange(64), true);
-  assertStrictEquals(Uint7.inRange(127), true);
-  assertStrictEquals(Uint7.inRange(128), false);
-  assertStrictEquals(Uint7.inRange(255), false);
-  assertStrictEquals(Uint7.inRange(256), false);
-  assertStrictEquals(Uint7.inRange(65535), false);
-  assertStrictEquals(Uint7.inRange(65536), false);
-  assertStrictEquals(Uint7.inRange(0xFFFFFFFF), false);
-  assertStrictEquals(Uint7.inRange(0x100000000), false);
+Deno.test("Uint7.is()", () => {
+  assertStrictEquals(Uint7.is(-1), false);
+  assertStrictEquals(Uint7.is(-0), true);
+  assertStrictEquals(Uint7.is(0), true);
+  assertStrictEquals(Uint7.is(63), true);
+  assertStrictEquals(Uint7.is(64), true);
+  assertStrictEquals(Uint7.is(127), true);
+  assertStrictEquals(Uint7.is(128), false);
+  assertStrictEquals(Uint7.is(255), false);
+  assertStrictEquals(Uint7.is(256), false);
+  assertStrictEquals(Uint7.is(65535), false);
+  assertStrictEquals(Uint7.is(65536), false);
+  assertStrictEquals(Uint7.is(0xFFFFFFFF), false);
+  assertStrictEquals(Uint7.is(0x100000000), false);
 
-  assertStrictEquals(Uint7.inRange(0.1), false);
-  assertStrictEquals(Uint7.inRange(0.5), false);
-  assertStrictEquals(Uint7.inRange("0" as unknown as number), false);
-  assertStrictEquals(Uint7.inRange(false as unknown as number), false);
-  assertStrictEquals(Uint7.inRange({} as unknown as number), false);
-  assertStrictEquals(Uint7.inRange([] as unknown as number), false);
-  assertStrictEquals(Uint7.inRange([0] as unknown as number), false);
-  assertStrictEquals(Uint7.inRange(undefined as unknown as number), false);
-  assertStrictEquals(Uint7.inRange(null as unknown as number), false);
+  assertStrictEquals(Uint7.is(0.1), false);
+  assertStrictEquals(Uint7.is(0.5), false);
+  assertStrictEquals(Uint7.is("0" as unknown as number), false);
+  assertStrictEquals(Uint7.is(false as unknown as number), false);
+  assertStrictEquals(Uint7.is({} as unknown as number), false);
+  assertStrictEquals(Uint7.is([] as unknown as number), false);
+  assertStrictEquals(Uint7.is([0] as unknown as number), false);
+  assertStrictEquals(Uint7.is(undefined as unknown as number), false);
+  assertStrictEquals(Uint7.is(null as unknown as number), false);
 });
 
 Deno.test("Uint7.bitwiseAnd()", () => {

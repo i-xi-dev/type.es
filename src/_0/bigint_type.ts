@@ -1,7 +1,7 @@
 import { assertStringified as assertStringifiedInteger } from "./integer_type.ts";
 import { int } from "../_.ts";
 import { isPositive as isPositiveSafeInteger } from "./safe_integer_type.ts";
-import { assertNumber, round as roundNumber } from "./number_type.ts";
+import { assert as assertNumber, round as roundNumber } from "./number_type.ts";
 import {
   FromNumberOptions,
   FromStringOptions,
@@ -37,7 +37,7 @@ export function isEven(test: unknown): test is bigint {
   return is(test) && ((test % 2n) === 0n);
 }
 
-export function assertBigInt(test: unknown, label: string): void {
+export function assert(test: unknown, label: string): void {
   if (is(test) !== true) {
     throw new TypeError(`\`${label}\` must be a \`bigint\`.`);
   }
@@ -80,13 +80,13 @@ export function assertEven(test: unknown, label: string): void {
 }
 
 export function minOf<T extends bigint>(value0: T, ...values: T[]): T {
-  assertBigInt(value0, `value0`);
+  assert(value0, `value0`);
 
   let provMin = value0;
   let value: T;
   for (let i = 0; i < values.length; i++) {
     value = values[i];
-    assertBigInt(value, `values[${i}]`);
+    assert(value, `values[${i}]`);
 
     if (value < provMin) {
       provMin = value;
@@ -96,13 +96,13 @@ export function minOf<T extends bigint>(value0: T, ...values: T[]): T {
 }
 
 export function maxOf<T extends bigint>(value0: T, ...values: T[]): T {
-  assertBigInt(value0, `value0`);
+  assert(value0, `value0`);
 
   let provMax = value0;
   let value: T;
   for (let i = 0; i < values.length; i++) {
     value = values[i];
-    assertBigInt(value, `values[${i}]`);
+    assert(value, `values[${i}]`);
 
     if (value > provMax) {
       provMax = value;
@@ -116,16 +116,16 @@ export function isInRange<T extends bigint>(
   min: T,
   max: T,
 ): test is T {
-  assertBigInt(min, "min");
-  assertBigInt(max, "max");
+  assert(min, "min");
+  assert(max, "max");
 
   return is(test) && (min <= test) && (max >= test);
 }
 
 export function clamp<T extends bigint>(value: bigint, min: T, max: T): T {
-  assertBigInt(value, "value");
-  assertBigInt(min, "min");
-  assertBigInt(max, "max");
+  assert(value, "value");
+  assert(min, "min");
+  assert(max, "max");
 
   if (min > max) {
     throw new RangeError("`max` must be greater than or equal to `min`.");
@@ -165,7 +165,7 @@ export function fromString(value: string, options?: FromStringOptions): bigint {
 }
 
 export function toString(value: bigint, options?: ToStringOptions): string {
-  assertBigInt(value, "value");
+  assert(value, "value");
 
   const radix = radixPropertiesOf(options?.radix).radix;
   let result = value.toString(radix);
@@ -213,7 +213,7 @@ export function fromNumber(
 }
 
 export function toNumber(value: bigint): int {
-  assertBigInt(value, "value");
+  assert(value, "value");
 
   if (
     isInRange(

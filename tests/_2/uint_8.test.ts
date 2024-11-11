@@ -6,30 +6,30 @@ Deno.test("Uint8.bitLength", () => {
   assertStrictEquals(Uint8.bitLength, 8);
 });
 
-Deno.test("Uint8.inRange()", () => {
-  assertStrictEquals(Uint8.inRange(-1), false);
-  assertStrictEquals(Uint8.inRange(-0), true);
-  assertStrictEquals(Uint8.inRange(0), true);
-  assertStrictEquals(Uint8.inRange(63), true);
-  assertStrictEquals(Uint8.inRange(64), true);
-  assertStrictEquals(Uint8.inRange(127), true);
-  assertStrictEquals(Uint8.inRange(128), true);
-  assertStrictEquals(Uint8.inRange(255), true);
-  assertStrictEquals(Uint8.inRange(256), false);
-  assertStrictEquals(Uint8.inRange(65535), false);
-  assertStrictEquals(Uint8.inRange(65536), false);
-  assertStrictEquals(Uint8.inRange(0xFFFFFFFF), false);
-  assertStrictEquals(Uint8.inRange(0x100000000), false);
+Deno.test("Uint8.is()", () => {
+  assertStrictEquals(Uint8.is(-1), false);
+  assertStrictEquals(Uint8.is(-0), true);
+  assertStrictEquals(Uint8.is(0), true);
+  assertStrictEquals(Uint8.is(63), true);
+  assertStrictEquals(Uint8.is(64), true);
+  assertStrictEquals(Uint8.is(127), true);
+  assertStrictEquals(Uint8.is(128), true);
+  assertStrictEquals(Uint8.is(255), true);
+  assertStrictEquals(Uint8.is(256), false);
+  assertStrictEquals(Uint8.is(65535), false);
+  assertStrictEquals(Uint8.is(65536), false);
+  assertStrictEquals(Uint8.is(0xFFFFFFFF), false);
+  assertStrictEquals(Uint8.is(0x100000000), false);
 
-  assertStrictEquals(Uint8.inRange(0.1), false);
-  assertStrictEquals(Uint8.inRange(0.5), false);
-  assertStrictEquals(Uint8.inRange("0" as unknown as number), false);
-  assertStrictEquals(Uint8.inRange(false as unknown as number), false);
-  assertStrictEquals(Uint8.inRange({} as unknown as number), false);
-  assertStrictEquals(Uint8.inRange([] as unknown as number), false);
-  assertStrictEquals(Uint8.inRange([0] as unknown as number), false);
-  assertStrictEquals(Uint8.inRange(undefined as unknown as number), false);
-  assertStrictEquals(Uint8.inRange(null as unknown as number), false);
+  assertStrictEquals(Uint8.is(0.1), false);
+  assertStrictEquals(Uint8.is(0.5), false);
+  assertStrictEquals(Uint8.is("0" as unknown as number), false);
+  assertStrictEquals(Uint8.is(false as unknown as number), false);
+  assertStrictEquals(Uint8.is({} as unknown as number), false);
+  assertStrictEquals(Uint8.is([] as unknown as number), false);
+  assertStrictEquals(Uint8.is([0] as unknown as number), false);
+  assertStrictEquals(Uint8.is(undefined as unknown as number), false);
+  assertStrictEquals(Uint8.is(null as unknown as number), false);
 });
 
 Deno.test("Uint8.bitwiseAnd()", () => {

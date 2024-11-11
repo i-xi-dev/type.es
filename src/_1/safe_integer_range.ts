@@ -1,4 +1,4 @@
-import { assertSafeInteger } from "../_0/safe_integer_type.ts";
+import { assert as assertSafeInteger } from "../_0/safe_integer_type.ts";
 import { IntegerRange } from "./integer_range.ts";
 import { normalize as normalizeNumber } from "../_0/number_type.ts";
 
