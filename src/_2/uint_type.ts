@@ -48,11 +48,11 @@ class _UinNOperations<T extends int> implements UintNOperations<T> {
     return this.#bitLength;
   }
 
-  is(value: int): value is T {
-    return this.#range.includes(value);
+  is(value: unknown): value is T {
+    return this.#range.includes(value as int);
   }
 
-  protected _assertInRange(test: T, label: string): void {
+  assert(test: unknown, label: string): void {
     if (this.is(test) !== true) {
       throw new TypeError(
         `The type of \`${label}\` does not match the type of \`uint${this.#bitLength}\`.`,
@@ -61,8 +61,8 @@ class _UinNOperations<T extends int> implements UintNOperations<T> {
   }
 
   bitwiseAnd(self: T, other: T): T {
-    this._assertInRange(self, "self");
-    this._assertInRange(other, "other");
+    this.assert(self, "self");
+    this.assert(other, "other");
 
     if (this.#bitLength === 32) {
       // ビット演算子はInt32で演算されるので符号を除くと31ビットまでしか演算できない
@@ -80,8 +80,8 @@ class _UinNOperations<T extends int> implements UintNOperations<T> {
   }
 
   bitwiseOr(self: T, other: T): T {
-    this._assertInRange(self, "self");
-    this._assertInRange(other, "other");
+    this.assert(self, "self");
+    this.assert(other, "other");
 
     if (this.#bitLength === 32) {
       // ビット演算子はInt32で演算されるので符号を除くと31ビットまでしか演算できない
@@ -99,8 +99,8 @@ class _UinNOperations<T extends int> implements UintNOperations<T> {
   }
 
   bitwiseXOr(self: T, other: T): T {
-    this._assertInRange(self, "self");
-    this._assertInRange(other, "other");
+    this.assert(self, "self");
+    this.assert(other, "other");
 
     if (this.#bitLength === 32) {
       // ビット演算子はInt32で演算されるので符号を除くと31ビットまでしか演算できない
@@ -118,7 +118,7 @@ class _UinNOperations<T extends int> implements UintNOperations<T> {
   }
 
   rotateLeft(self: T, offset: int): T {
-    this._assertInRange(self, "self");
+    this.assert(self, "self");
     assertSafeInteger(offset, "offset");
 
     let normalizedOffset = offset % this.#bitLength;
@@ -211,7 +211,7 @@ class _UinNOperations<T extends int> implements UintNOperations<T> {
   }
 
   toNumber(self: T): int {
-    this._assertInRange(self, "self");
+    this.assert(self, "self");
 
     return normalizeNumber(self);
   }
@@ -239,7 +239,7 @@ class _UinNOperations<T extends int> implements UintNOperations<T> {
   }
 
   toBigInt(self: T): bigint {
-    this._assertInRange(self, "self");
+    this.assert(self, "self");
     return BigInt(self);
   }
 
@@ -250,7 +250,7 @@ class _UinNOperations<T extends int> implements UintNOperations<T> {
   }
 
   toString(self: T, options?: ToStringOptions): string {
-    this._assertInRange(self, "self");
+    this.assert(self, "self");
     return safeIntegerToString(self, options);
   }
 }
@@ -273,7 +273,7 @@ class _Uint8xOperations<T extends int> extends _UinNOperations<T>
   }
 
   toBytes(self: T, littleEndian: boolean = false): Uint8Array {
-    this._assertInRange(self, "self");
+    this.assert(self, "self");
 
     if (this.bitLength === 8) {
       return Uint8Array.of(self);

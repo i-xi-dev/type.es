@@ -39,11 +39,11 @@ class _UinNOperations<T extends bigint> implements UintNOperations<T> {
     return this.#bitLength;
   }
 
-  is(value: bigint): value is T {
-    return this.#range.includes(value);
+  is(value: unknown): value is T {
+    return this.#range.includes(value as bigint);
   }
 
-  protected _assertInRange(test: T, label: string): void {
+  assert(test: unknown, label: string): void {
     if (this.is(test) !== true) {
       throw new TypeError(
         `The type of \`${label}\` does not match the type of \`uint${this.#bitLength}\`.`,
@@ -52,31 +52,31 @@ class _UinNOperations<T extends bigint> implements UintNOperations<T> {
   }
 
   bitwiseAnd(self: T, other: T): T {
-    this._assertInRange(self, "self");
-    this._assertInRange(other, "other");
+    this.assert(self, "self");
+    this.assert(other, "other");
 
     const aAndB = (self as bigint) & (other as bigint); //XXX 何故かtypescriptにbigintでなくnumberだと言われる
     return (aAndB & this.#range.max) as T;
   }
 
   bitwiseOr(self: T, other: T): T {
-    this._assertInRange(self, "self");
-    this._assertInRange(other, "other");
+    this.assert(self, "self");
+    this.assert(other, "other");
 
     const aOrB = (self as bigint) | (other as bigint); //XXX 何故かtypescriptにbigintでなくnumberだと言われる
     return (aOrB & this.#range.max) as T;
   }
 
   bitwiseXOr(self: T, other: T): T {
-    this._assertInRange(self, "self");
-    this._assertInRange(other, "other");
+    this.assert(self, "self");
+    this.assert(other, "other");
 
     const aXOrB = (self as bigint) ^ (other as bigint); //XXX 何故かtypescriptにbigintでなくnumberだと言われる
     return (aXOrB & this.#range.max) as T;
   }
 
   rotateLeft(self: T, offset: int): T {
-    this._assertInRange(self, "self");
+    this.assert(self, "self");
     assertSafeInteger(offset, "offset");
 
     let normalizedOffset = offset % this.#bitLength;
@@ -129,7 +129,7 @@ class _UinNOperations<T extends bigint> implements UintNOperations<T> {
   }
 
   toNumber(self: T): int {
-    this._assertInRange(self, "self");
+    this.assert(self, "self");
 
     if (
       isBigIntInRange(
@@ -166,7 +166,7 @@ class _UinNOperations<T extends bigint> implements UintNOperations<T> {
   }
 
   toBigInt(self: T): bigint {
-    this._assertInRange(self, "self");
+    this.assert(self, "self");
     return self;
   }
 
@@ -176,7 +176,7 @@ class _UinNOperations<T extends bigint> implements UintNOperations<T> {
   }
 
   toString(self: T, options?: ToStringOptions): string {
-    this._assertInRange(self, "self");
+    this.assert(self, "self");
     return bigIntToString(self, options);
   }
 }
@@ -207,7 +207,7 @@ class _Uint8xOperations<T extends bigint> extends _UinNOperations<T>
   }
 
   toBytes(self: T, littleEndian: boolean = false): Uint8Array {
-    this._assertInRange(self, "self");
+    this.assert(self, "self");
 
     this.#bufferView.setBigUint64(0, self, littleEndian);
     return Uint8Array.from(this.#bufferUint8View);

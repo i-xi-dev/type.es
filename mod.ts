@@ -1,3 +1,4 @@
+export * as ArrayBufferType from "./src/_2/array_buffer_type.ts";
 export * from "./src/_2/big_uint_type.ts";
 export * from "./src/_1/bigint_range.ts";
 export * as BigIntType from "./src/_0/bigint_type.ts";

@@ -6,10 +6,8 @@ export function fromUint8Iterable(
 ): ArrayBuffer {
   assertIterableObject(value, "value");
 
-  return Uint8Array.from(value, (i) => {
-    if (Uint8.is(i)) {
-      return i;
-    }
-    throw new RangeError("value[*]");
+  return Uint8Array.from(value, (i, index) => {
+    Uint8.assert(i, `value[${index}]`);
+    return i;
   }).buffer;
 }
