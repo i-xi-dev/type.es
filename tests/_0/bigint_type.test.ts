@@ -149,34 +149,34 @@ Deno.test("BigIntType.assertNegative()", () => {
   }
 });
 
-Deno.test("BigIntType.isBigInt()", () => {
-  assertStrictEquals(BigIntType.isBigInt(0), false);
-  assertStrictEquals(BigIntType.isBigInt(-0), false);
-  assertStrictEquals(BigIntType.isBigInt(1), false);
-  assertStrictEquals(BigIntType.isBigInt(-1), false);
+Deno.test("BigIntType.is()", () => {
+  assertStrictEquals(BigIntType.is(0), false);
+  assertStrictEquals(BigIntType.is(-0), false);
+  assertStrictEquals(BigIntType.is(1), false);
+  assertStrictEquals(BigIntType.is(-1), false);
 
-  assertStrictEquals(BigIntType.isBigInt(-10.1), false);
-  assertStrictEquals(BigIntType.isBigInt(-9.9), false);
-  assertStrictEquals(BigIntType.isBigInt(9.9), false);
-  assertStrictEquals(BigIntType.isBigInt(10.1), false);
+  assertStrictEquals(BigIntType.is(-10.1), false);
+  assertStrictEquals(BigIntType.is(-9.9), false);
+  assertStrictEquals(BigIntType.is(9.9), false);
+  assertStrictEquals(BigIntType.is(10.1), false);
 
-  assertStrictEquals(BigIntType.isBigInt(0n), true);
-  assertStrictEquals(BigIntType.isBigInt(-0n), true);
-  assertStrictEquals(BigIntType.isBigInt(1n), true);
-  assertStrictEquals(BigIntType.isBigInt(-1n), true);
+  assertStrictEquals(BigIntType.is(0n), true);
+  assertStrictEquals(BigIntType.is(-0n), true);
+  assertStrictEquals(BigIntType.is(1n), true);
+  assertStrictEquals(BigIntType.is(-1n), true);
 
-  assertStrictEquals(BigIntType.isBigInt(Number.NaN), false);
-  assertStrictEquals(BigIntType.isBigInt(Number.POSITIVE_INFINITY), false);
-  assertStrictEquals(BigIntType.isBigInt(SIMAX), false);
-  assertStrictEquals(BigIntType.isBigInt(SIMIN), false);
-  assertStrictEquals(BigIntType.isBigInt(Number.NEGATIVE_INFINITY), false);
+  assertStrictEquals(BigIntType.is(Number.NaN), false);
+  assertStrictEquals(BigIntType.is(Number.POSITIVE_INFINITY), false);
+  assertStrictEquals(BigIntType.is(SIMAX), false);
+  assertStrictEquals(BigIntType.is(SIMIN), false);
+  assertStrictEquals(BigIntType.is(Number.NEGATIVE_INFINITY), false);
 
-  assertStrictEquals(BigIntType.isBigInt(undefined), false);
-  assertStrictEquals(BigIntType.isBigInt(null), false);
-  assertStrictEquals(BigIntType.isBigInt(true), false);
-  assertStrictEquals(BigIntType.isBigInt(false), false);
-  assertStrictEquals(BigIntType.isBigInt(""), false);
-  assertStrictEquals(BigIntType.isBigInt("0"), false);
+  assertStrictEquals(BigIntType.is(undefined), false);
+  assertStrictEquals(BigIntType.is(null), false);
+  assertStrictEquals(BigIntType.is(true), false);
+  assertStrictEquals(BigIntType.is(false), false);
+  assertStrictEquals(BigIntType.is(""), false);
+  assertStrictEquals(BigIntType.is("0"), false);
 });
 
 Deno.test("BigIntType.isPositive()", () => {

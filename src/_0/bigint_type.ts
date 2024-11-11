@@ -9,36 +9,36 @@ import {
   ToStringOptions,
 } from "../numerics.ts";
 
-export function isBigInt(test: unknown): test is bigint {
+export function is(test: unknown): test is bigint {
   return (typeof test === "bigint");
 }
 
 export function isPositive(test: unknown): test is bigint {
-  return isBigInt(test) && (test > 0n);
+  return is(test) && (test > 0n);
 }
 
 export function isNonNegative(test: unknown): test is bigint {
-  return isBigInt(test) && (test >= 0n);
+  return is(test) && (test >= 0n);
 }
 
 export function isNonPositive(test: unknown): test is bigint {
-  return isBigInt(test) && (test <= 0n);
+  return is(test) && (test <= 0n);
 }
 
 export function isNegative(test: unknown): test is bigint {
-  return isBigInt(test) && (test < 0n);
+  return is(test) && (test < 0n);
 }
 
 export function isOdd(test: unknown): test is bigint {
-  return isBigInt(test) && ((test % 2n) !== 0n);
+  return is(test) && ((test % 2n) !== 0n);
 }
 
 export function isEven(test: unknown): test is bigint {
-  return isBigInt(test) && ((test % 2n) === 0n);
+  return is(test) && ((test % 2n) === 0n);
 }
 
 export function assertBigInt(test: unknown, label: string): void {
-  if (isBigInt(test) !== true) {
+  if (is(test) !== true) {
     throw new TypeError(`\`${label}\` must be a \`bigint\`.`);
   }
 }
@@ -119,7 +119,7 @@ export function isInRange<T extends bigint>(
   assertBigInt(min, "min");
   assertBigInt(max, "max");
 
-  return isBigInt(test) && (min <= test) && (max >= test);
+  return is(test) && (min <= test) && (max >= test);
 }
 
 export function clamp<T extends bigint>(value: bigint, min: T, max: T): T {
