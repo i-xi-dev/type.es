@@ -6,6 +6,16 @@ import { GrowableBuffer } from "./growable_buffer.ts";
 import { int, uint8 } from "../_.ts";
 import { Uint8 } from "./uint_type.ts";
 
+export function is(test: unknown): test is ArrayBuffer {
+  return (test instanceof ArrayBuffer);
+}
+
+export function assert(test: unknown, label: string): void {
+  if (is(test) !== true) {
+    throw new TypeError(`\`${label}\` must be an \`ArrayBuffer\`.`);
+  }
+}
+
 // const _DEFAULT_BYTE_LENGTH = 1_024;
 // const _DEFAULT_MAX_BYTE_LENGTH = 1_048_576;
 
@@ -41,4 +51,9 @@ export async function fromUint8AsyncIterable(
     index++;
   }
   return gb.slice().buffer;
+}
+
+export function toUint8Iterable(bytes: ArrayBuffer): Iterable<uint8> {
+  assert(bytes, "bytes");
+  return (new Uint8Array(bytes))[Symbol.iterator]() as Iterable<uint8>;
 }
