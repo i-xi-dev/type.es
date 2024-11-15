@@ -132,3 +132,166 @@ Deno.test("ArrayBufferType.fromUint32Iterable(Array<uint32>)", () => {
     assertStrictEquals(a1x[11], 255);
   }
 });
+
+Deno.test("ArrayBufferType.fromUint32Iterable(Uint32Array)", () => {
+  assertStrictEquals(
+    ArrayBufferType.fromUint32Iterable(Uint32Array.of()).byteLength,
+    0,
+  );
+
+  const a1be = new Uint8Array(ArrayBufferType.fromUint32Iterable(
+    Uint32Array.of(0, 1, 0xFFFFFFFF),
+    { byteOrder: "big-endian" },
+  ));
+  assertStrictEquals(a1be.length, 12);
+  assertStrictEquals(a1be[0], 0);
+  assertStrictEquals(a1be[1], 0);
+  assertStrictEquals(a1be[2], 0);
+  assertStrictEquals(a1be[3], 0);
+  assertStrictEquals(a1be[4], 0);
+  assertStrictEquals(a1be[5], 0);
+  assertStrictEquals(a1be[6], 0);
+  assertStrictEquals(a1be[7], 1);
+  assertStrictEquals(a1be[8], 255);
+  assertStrictEquals(a1be[9], 255);
+  assertStrictEquals(a1be[10], 255);
+  assertStrictEquals(a1be[11], 255);
+
+  const a1le = new Uint8Array(ArrayBufferType.fromUint32Iterable(
+    Uint32Array.of(0, 1, 0xFFFFFFFF),
+    { byteOrder: "little-endian" },
+  ));
+  assertStrictEquals(a1le.length, 12);
+  assertStrictEquals(a1le[0], 0);
+  assertStrictEquals(a1le[1], 0);
+  assertStrictEquals(a1le[2], 0);
+  assertStrictEquals(a1le[3], 0);
+  assertStrictEquals(a1le[4], 1);
+  assertStrictEquals(a1le[5], 0);
+  assertStrictEquals(a1le[6], 0);
+  assertStrictEquals(a1le[7], 0);
+  assertStrictEquals(a1le[8], 255);
+  assertStrictEquals(a1le[9], 255);
+  assertStrictEquals(a1le[10], 255);
+  assertStrictEquals(a1le[11], 255);
+
+  const a1x = new Uint8Array(ArrayBufferType.fromUint32Iterable(
+    Uint32Array.of(0, 1, 0xFFFFFFFF),
+  ));
+  assertStrictEquals(a1x.length, 12);
+  if (BYTE_ORDER === "big-endian") {
+    assertStrictEquals(a1x[0], 0);
+    assertStrictEquals(a1x[1], 0);
+    assertStrictEquals(a1x[2], 0);
+    assertStrictEquals(a1x[3], 0);
+    assertStrictEquals(a1x[4], 0);
+    assertStrictEquals(a1x[5], 0);
+    assertStrictEquals(a1x[6], 0);
+    assertStrictEquals(a1x[7], 1);
+    assertStrictEquals(a1x[8], 255);
+    assertStrictEquals(a1x[9], 255);
+    assertStrictEquals(a1x[10], 255);
+    assertStrictEquals(a1x[11], 255);
+  } else {
+    assertStrictEquals(a1x[0], 0);
+    assertStrictEquals(a1x[1], 0);
+    assertStrictEquals(a1x[2], 0);
+    assertStrictEquals(a1x[3], 0);
+    assertStrictEquals(a1x[4], 1);
+    assertStrictEquals(a1x[5], 0);
+    assertStrictEquals(a1x[6], 0);
+    assertStrictEquals(a1x[7], 0);
+    assertStrictEquals(a1x[8], 255);
+    assertStrictEquals(a1x[9], 255);
+    assertStrictEquals(a1x[10], 255);
+    assertStrictEquals(a1x[11], 255);
+  }
+});
+
+Deno.test("ArrayBufferType.fromUint32Iterable(Generator<Uint32>)", () => {
+  const g0 = (function* () {
+  })();
+  assertStrictEquals(ArrayBufferType.fromUint32Iterable(g0).byteLength, 0);
+
+  const g1 = (function* () {
+    yield 0;
+    yield 1;
+    yield 0xFFFFFFFF;
+  })();
+
+  const a1be = new Uint8Array(
+    ArrayBufferType.fromUint32Iterable(g1, { byteOrder: "big-endian" }),
+  );
+  assertStrictEquals(a1be.length, 12);
+  assertStrictEquals(a1be[0], 0);
+  assertStrictEquals(a1be[1], 0);
+  assertStrictEquals(a1be[2], 0);
+  assertStrictEquals(a1be[3], 0);
+  assertStrictEquals(a1be[4], 0);
+  assertStrictEquals(a1be[5], 0);
+  assertStrictEquals(a1be[6], 0);
+  assertStrictEquals(a1be[7], 1);
+  assertStrictEquals(a1be[8], 255);
+  assertStrictEquals(a1be[9], 255);
+  assertStrictEquals(a1be[10], 255);
+  assertStrictEquals(a1be[11], 255);
+
+  const g2 = (function* () {
+    yield 0;
+    yield 1;
+    yield 0xFFFFFFFF;
+  })();
+
+  const a1le = new Uint8Array(
+    ArrayBufferType.fromUint32Iterable(g2, { byteOrder: "little-endian" }),
+  );
+  assertStrictEquals(a1le.length, 12);
+  assertStrictEquals(a1le[0], 0);
+  assertStrictEquals(a1le[1], 0);
+  assertStrictEquals(a1le[2], 0);
+  assertStrictEquals(a1le[3], 0);
+  assertStrictEquals(a1le[4], 1);
+  assertStrictEquals(a1le[5], 0);
+  assertStrictEquals(a1le[6], 0);
+  assertStrictEquals(a1le[7], 0);
+  assertStrictEquals(a1le[8], 255);
+  assertStrictEquals(a1le[9], 255);
+  assertStrictEquals(a1le[10], 255);
+  assertStrictEquals(a1le[11], 255);
+
+  const g3 = (function* () {
+    yield 0;
+    yield 1;
+    yield 0xFFFFFFFF;
+  })();
+
+  const a1x = new Uint8Array(ArrayBufferType.fromUint32Iterable(g3));
+  assertStrictEquals(a1x.length, 12);
+  if (BYTE_ORDER === "big-endian") {
+    assertStrictEquals(a1x[0], 0);
+    assertStrictEquals(a1x[1], 0);
+    assertStrictEquals(a1x[2], 0);
+    assertStrictEquals(a1x[3], 0);
+    assertStrictEquals(a1x[4], 0);
+    assertStrictEquals(a1x[5], 0);
+    assertStrictEquals(a1x[6], 0);
+    assertStrictEquals(a1x[7], 1);
+    assertStrictEquals(a1x[8], 255);
+    assertStrictEquals(a1x[9], 255);
+    assertStrictEquals(a1x[10], 255);
+    assertStrictEquals(a1x[11], 255);
+  } else {
+    assertStrictEquals(a1x[0], 0);
+    assertStrictEquals(a1x[1], 0);
+    assertStrictEquals(a1x[2], 0);
+    assertStrictEquals(a1x[3], 0);
+    assertStrictEquals(a1x[4], 1);
+    assertStrictEquals(a1x[5], 0);
+    assertStrictEquals(a1x[6], 0);
+    assertStrictEquals(a1x[7], 0);
+    assertStrictEquals(a1x[8], 255);
+    assertStrictEquals(a1x[9], 255);
+    assertStrictEquals(a1x[10], 255);
+    assertStrictEquals(a1x[11], 255);
+  }
+});
