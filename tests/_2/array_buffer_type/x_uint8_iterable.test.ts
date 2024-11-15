@@ -229,7 +229,7 @@ Deno.test("ArrayBufferType.toUint8Iterable(Uint8Array)", () => {
       ArrayBufferType.toUint8Iterable(0 as unknown as ArrayBuffer);
     },
     TypeError,
-    "`bytes` must be an `ArrayBuffer`.",
+    "`value` must be an `ArrayBuffer`.",
   );
 
   assertThrows(
@@ -237,7 +237,7 @@ Deno.test("ArrayBufferType.toUint8Iterable(Uint8Array)", () => {
       ArrayBufferType.toUint8Iterable(1 as unknown as ArrayBuffer);
     },
     TypeError,
-    "`bytes` must be an `ArrayBuffer`.",
+    "`value` must be an `ArrayBuffer`.",
   );
 
   assertStrictEquals(

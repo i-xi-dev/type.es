@@ -55,9 +55,9 @@ export async function fromUint8AsyncIterable(
   return gb.slice().buffer;
 }
 
-export function toUint8Iterable(bytes: ArrayBuffer): Iterable<uint8> {
-  assert(bytes, "bytes");
-  return (new Uint8Array(bytes))[Symbol.iterator]() as Iterable<uint8>;
+export function toUint8Iterable(value: ArrayBuffer): Iterable<uint8> {
+  assert(value, "value");
+  return (new Uint8Array(value))[Symbol.iterator]() as Iterable<uint8>;
 }
 
 type _Uint8xArrayCtor =
@@ -122,6 +122,44 @@ async function _fromUint8xAsyncIterable<T extends xint>(
   return gb.slice().buffer;
 }
 
+type _Getter<T extends xint> = (
+  dataView: DataView,
+  pos: int,
+  isLittleEndian: boolean,
+) => T;
+
+function _toUint8xIterable<T extends xint>(
+  value: ArrayBuffer,
+  uint8xArrayCtor: _Uint8xArrayCtor,
+  viewGetter: _Getter<T>,
+  byteOrder: ByteOrder,
+): Iterable<T> {
+  assert(value, "value");
+
+  const bytesPerElement = uint8xArrayCtor.BYTES_PER_ELEMENT;
+  if ((value.byteLength % bytesPerElement) !== 0) {
+    throw new RangeError(
+      `The byte length of \`value\` must be divisible by ${bytesPerElement}.`,
+    );
+  }
+
+  if (byteOrder !== env.BYTE_ORDER) {
+    const clone = value.slice(0);
+    const reader = new DataView(clone);
+    const isLittleEndian = byteOrder === ByteOrder.LITTLE_ENDIAN;
+
+    return (function* () {
+      for (let i = 0; i < (clone.byteLength / bytesPerElement); i++) {
+        yield viewGetter(reader, i * bytesPerElement, isLittleEndian);
+      }
+    })() as Iterable<T>;
+  } else {
+    // 実行環境のバイトオーダー
+
+    return (new uint8xArrayCtor(value))[Symbol.iterator]() as Iterable<T>;
+  }
+}
+
 export type FromUint16IterableOptions = {
   byteOrder?: ByteOrder;
   // maxByteLength?: int;
@@ -184,4 +222,18 @@ export async function fromUint16AsyncIterable(
     }
     return gb.slice().buffer;
   }
+}
+
+export type ToUint16IterableOptions = {
+  byteOrder?: ByteOrder;
+};
+
+export function toUint16Iterable(
+  value: ArrayBuffer,
+  options?: ToUint16IterableOptions,
+): Iterable<uint16> {
+  const byteOrder = _resolveByteOrder(options?.byteOrder);
+  return _toUint8xIterable<uint16>(value, Uint16Array, (v, o, e) => {
+    return v.getUint16(o, e);
+  }, byteOrder);
 }
