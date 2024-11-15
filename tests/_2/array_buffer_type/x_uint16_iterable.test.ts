@@ -219,3 +219,129 @@ Deno.test("ArrayBufferType.fromUint16Iterable(Generator<uint16>)", () => {
     assertStrictEquals(a1x[5], 255);
   }
 });
+
+Deno.test("ArrayBufferType.fromUint16AsyncIterable(Array<uint16>)", () => {
+  assertRejects(
+    async () => {
+      await ArrayBufferType.fromUint16AsyncIterable(
+        0 as unknown as AsyncIterable<uint16>,
+      );
+    },
+    TypeError,
+    "`value` must implement `Symbol.asyncIterator`.",
+  );
+
+  assertRejects(
+    async () => {
+      await ArrayBufferType.fromUint16AsyncIterable(
+        1 as unknown as AsyncIterable<uint16>,
+      );
+    },
+    TypeError,
+    "`value` must implement `Symbol.asyncIterator`.",
+  );
+
+  assertRejects(
+    async () => {
+      await ArrayBufferType.fromUint16AsyncIterable(
+        [-1] as unknown as AsyncIterable<uint16>,
+      );
+    },
+    TypeError,
+    "`value` must implement `Symbol.asyncIterator`.",
+  );
+  assertRejects(
+    async () => {
+      await ArrayBufferType.fromUint16AsyncIterable(
+        ["0"] as unknown as AsyncIterable<uint16>,
+      );
+    },
+    TypeError,
+    "`value` must implement `Symbol.asyncIterator`.",
+  );
+  assertRejects(
+    async () => {
+      await ArrayBufferType.fromUint16AsyncIterable(
+        [256] as unknown as AsyncIterable<uint16>,
+      );
+    },
+    TypeError,
+    "`value` must implement `Symbol.asyncIterator`.",
+  );
+  assertRejects(
+    async () => {
+      await ArrayBufferType.fromUint16AsyncIterable(
+        [0, 256] as unknown as AsyncIterable<uint16>,
+      );
+    },
+    TypeError,
+    "`value` must implement `Symbol.asyncIterator`.",
+  );
+});
+
+Deno.test("ArrayBufferType.fromUint16AsyncIterable(AsyncGenerator<Uint16>)", async () => {
+  const g0 = (async function* () {
+  })();
+  assertStrictEquals(
+    (await ArrayBufferType.fromUint16AsyncIterable(g0)).byteLength,
+    0,
+  );
+
+  const g1 = (async function* () {
+    yield 0;
+    yield 1;
+    yield 0xFFFF;
+  })();
+
+  const a1 = new Uint16Array(await ArrayBufferType.fromUint16AsyncIterable(g1));
+  assertStrictEquals(a1.length, 3);
+  assertStrictEquals(a1[0], 0);
+  assertStrictEquals(a1[1], 1);
+  assertStrictEquals(a1[2], 0xFFFF);
+});
+
+Deno.test("ArrayBufferType.fromUint16AsyncIterable(AsyncGenerator<any>)", () => {
+  const g1 = (async function* () {
+    yield 0;
+    yield 1;
+    yield "a";
+  })();
+
+  assertRejects(
+    async () => {
+      await ArrayBufferType.fromUint16AsyncIterable(
+        g1 as unknown as AsyncGenerator<uint16>,
+      );
+    },
+    TypeError,
+    "The type of `value[2]` does not match the type of `uint16`.",
+  );
+
+  const g2 = (async function* () {
+    yield 0;
+    yield 1;
+    yield 0x10000;
+  })();
+
+  assertRejects(
+    async () => {
+      await ArrayBufferType.fromUint16AsyncIterable(g2);
+    },
+    TypeError,
+    "The type of `value[2]` does not match the type of `uint16`.",
+  );
+
+  const g3 = (async function* () {
+    yield 0;
+    yield 1;
+    yield -1;
+  })();
+
+  assertRejects(
+    async () => {
+      await ArrayBufferType.fromUint16AsyncIterable(g3);
+    },
+    TypeError,
+    "The type of `value[2]` does not match the type of `uint16`.",
+  );
+});

@@ -100,6 +100,28 @@ function _fromUint8xIterable<T extends xint>(
   return gb.slice().buffer;
 }
 
+async function _fromUint8xAsyncIterable<T extends xint>(
+  value: AsyncIterable<T>,
+  uint8xArrayCtor: _Uint8xArrayCtor,
+  assertElement: (i: unknown, label: string) => void,
+  viewSetter: _Setter<T>,
+  byteOrder: ByteOrder,
+): Promise<ArrayBuffer> {
+  const gb = new GrowableBuffer();
+  const isLittleEndian = byteOrder === ByteOrder.LITTLE_ENDIAN;
+  const tmp = new ArrayBuffer(uint8xArrayCtor.BYTES_PER_ELEMENT);
+  const tmpView = new DataView(tmp);
+
+  let index = 0;
+  for await (const i of value) {
+    assertElement(i, `value[${index}]`);
+    viewSetter(tmpView, i, isLittleEndian);
+    gb.putRange(tmpView);
+    index++;
+  }
+  return gb.slice().buffer;
+}
+
 export type FromUint16IterableOptions = {
   byteOrder?: ByteOrder;
   // maxByteLength?: int;
@@ -128,5 +150,38 @@ export function fromUint16Iterable(
       Uint16.assert(i, `value[${index}]`);
       return i;
     }).buffer;
+  }
+}
+
+export async function fromUint16AsyncIterable(
+  value: AsyncIterable<uint16>,
+  options?: FromUint16IterableOptions,
+): Promise<ArrayBuffer> {
+  assertAsyncIterableObject(value, "value");
+
+  const byteOrder = _resolveByteOrder(options?.byteOrder);
+
+  if (byteOrder !== env.BYTE_ORDER) {
+    return _fromUint8xAsyncIterable<uint16>(
+      value,
+      Uint16Array,
+      (t, l) => Uint16.assert(t, l),
+      (v, i, e) => v.setUint16(0, i, e),
+      byteOrder,
+    );
+  } else {
+    // 実行環境のバイトオーダー
+
+    //TODO resizable ArrayBufferが広く実装されたらそちらに変更する
+    const gb = new GrowableBuffer();
+    const tmpView = new Uint16Array(1);
+    let index = 0;
+    for await (const i of value) {
+      Uint16.assert(i, `value[${index}]`);
+      tmpView[0] = i;
+      gb.putRange(tmpView);
+      index++;
+    }
+    return gb.slice().buffer;
   }
 }
