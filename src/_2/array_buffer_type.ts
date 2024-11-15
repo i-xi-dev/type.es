@@ -263,3 +263,35 @@ export function fromUint32Iterable(
     }).buffer;
   }
 }
+
+export async function fromUint32AsyncIterable(
+  value: AsyncIterable<uint32>,
+  options?: FromUint8xIterableOptions,
+): Promise<ArrayBuffer> {
+  assertAsyncIterableObject(value, "value");
+
+  const byteOrder = _resolveByteOrder(options?.byteOrder);
+
+  if (byteOrder !== env.BYTE_ORDER) {
+    return _fromUint8xAsyncIterable<uint32>(
+      value,
+      Uint32Array,
+      (t, l) => Uint32.assert(t, l),
+      (v, i, e) => v.setUint32(0, i, e),
+      byteOrder,
+    );
+  } else {
+    // 実行環境のバイトオーダー
+
+    const gb = new GrowableBuffer();
+    const tmpView = new Uint32Array(1);
+    let index = 0;
+    for await (const i of value) {
+      Uint32.assert(i, `value[${index}]`);
+      tmpView[0] = i;
+      gb.putRange(tmpView);
+      index++;
+    }
+    return gb.slice().buffer;
+  }
+}
