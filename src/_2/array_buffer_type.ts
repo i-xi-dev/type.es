@@ -5,8 +5,8 @@ import {
 import { ByteOrder } from "../byte_order.ts";
 import * as env from "../env.ts";
 import { GrowableBuffer } from "./growable_buffer.ts";
-import { int, uint16, uint8, xint } from "../_.ts";
-import { Uint16, Uint8 } from "./uint_type.ts";
+import { int, uint16, uint32, uint8, xint } from "../_.ts";
+import { Uint16, Uint32, Uint8 } from "./uint_type.ts";
 
 export function is(test: unknown): test is ArrayBuffer {
   return (test instanceof ArrayBuffer);
@@ -160,14 +160,14 @@ function _toUint8xIterable<T extends xint>(
   }
 }
 
-export type FromUint16IterableOptions = {
+export type FromUint8xIterableOptions = {
   byteOrder?: ByteOrder;
   // maxByteLength?: int;
 };
 
 export function fromUint16Iterable(
   value: Iterable<uint16>,
-  options?: FromUint16IterableOptions,
+  options?: FromUint8xIterableOptions,
 ): ArrayBuffer {
   assertIterableObject(value, "value");
 
@@ -193,7 +193,7 @@ export function fromUint16Iterable(
 
 export async function fromUint16AsyncIterable(
   value: AsyncIterable<uint16>,
-  options?: FromUint16IterableOptions,
+  options?: FromUint8xIterableOptions,
 ): Promise<ArrayBuffer> {
   assertAsyncIterableObject(value, "value");
 
@@ -236,4 +236,30 @@ export function toUint16Iterable(
   return _toUint8xIterable<uint16>(value, Uint16Array, (v, o, e) => {
     return v.getUint16(o, e);
   }, byteOrder);
+}
+
+export function fromUint32Iterable(
+  value: Iterable<uint32>,
+  options?: FromUint8xIterableOptions,
+): ArrayBuffer {
+  assertIterableObject(value, "value");
+
+  const byteOrder = _resolveByteOrder(options?.byteOrder);
+
+  if (byteOrder !== env.BYTE_ORDER) {
+    return _fromUint8xIterable<uint32>(
+      value,
+      Uint32Array,
+      (t, l) => Uint32.assert(t, l),
+      (v, i, e) => v.setUint32(0, i, e),
+      byteOrder,
+    );
+  } else {
+    // 実行環境のバイトオーダー
+
+    return Uint32Array.from(value, (i, index) => {
+      Uint32.assert(i, `value[${index}]`);
+      return i;
+    }).buffer;
+  }
 }
