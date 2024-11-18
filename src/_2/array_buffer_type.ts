@@ -5,7 +5,8 @@ import {
 import { ByteOrder } from "../byte_order.ts";
 import * as env from "../env.ts";
 import { GrowableBuffer } from "./growable_buffer.ts";
-import { int, uint16, uint32, uint8, xint } from "../_.ts";
+import { biguint64, int, uint16, uint32, uint8, xint } from "../_.ts";
+import { BigUint64 } from "./big_uint_type.ts";
 import { Uint16, Uint32, Uint8 } from "./uint_type.ts";
 
 export function is(test: unknown): test is ArrayBuffer {
@@ -304,4 +305,34 @@ export function toUint32Iterable(
   return _toUint8xIterable<uint32>(value, Uint32Array, (v, o, e) => {
     return v.getUint32(o, e);
   }, byteOrder);
+}
+
+export function fromBigUint64Iterable(
+  value: Iterable<biguint64>,
+  options?: FromUint8xIterableOptions,
+): ArrayBuffer {
+  assertIterableObject(value, "value");
+
+  const byteOrder = _resolveByteOrder(options?.byteOrder);
+
+  if (byteOrder !== env.BYTE_ORDER) {
+    return _fromUint8xIterable<biguint64>(
+      value,
+      BigUint64Array,
+      (t, l) => BigUint64.assert(t, l),
+      (v, i, e) => v.setBigUint64(0, i, e),
+      byteOrder,
+    );
+  } else {
+    // 実行環境のバイトオーダー
+
+    //XXX ArrayLikeでないとビルドできない、仕様はIterableでは？？
+    return BigUint64Array.from(
+      value as unknown as ArrayLike<bigint>,
+      (i, index) => {
+        BigUint64.assert(i, `value[${index}]`);
+        return i;
+      },
+    ).buffer;
+  }
 }
