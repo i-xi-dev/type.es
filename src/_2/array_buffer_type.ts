@@ -224,13 +224,13 @@ export async function fromUint16AsyncIterable(
   }
 }
 
-export type ToUint16IterableOptions = {
+export type ToUint8xIterableOptions = {
   byteOrder?: ByteOrder;
 };
 
 export function toUint16Iterable(
   value: ArrayBuffer,
-  options?: ToUint16IterableOptions,
+  options?: ToUint8xIterableOptions,
 ): Iterable<uint16> {
   const byteOrder = _resolveByteOrder(options?.byteOrder);
   return _toUint8xIterable<uint16>(value, Uint16Array, (v, o, e) => {
@@ -294,4 +294,14 @@ export async function fromUint32AsyncIterable(
     }
     return gb.slice().buffer;
   }
+}
+
+export function toUint32Iterable(
+  value: ArrayBuffer,
+  options?: ToUint8xIterableOptions,
+): Iterable<uint32> {
+  const byteOrder = _resolveByteOrder(options?.byteOrder);
+  return _toUint8xIterable<uint32>(value, Uint32Array, (v, o, e) => {
+    return v.getUint32(o, e);
+  }, byteOrder);
 }
