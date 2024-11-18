@@ -336,3 +336,35 @@ export function fromBigUint64Iterable(
     ).buffer;
   }
 }
+
+export async function fromBigUint64AsyncIterable(
+  value: AsyncIterable<biguint64>,
+  options?: FromUint8xIterableOptions,
+): Promise<ArrayBuffer> {
+  assertAsyncIterableObject(value, "value");
+
+  const byteOrder = _resolveByteOrder(options?.byteOrder);
+
+  if (byteOrder !== env.BYTE_ORDER) {
+    return _fromUint8xAsyncIterable<biguint64>(
+      value,
+      BigUint64Array,
+      (t, l) => BigUint64.assert(t, l),
+      (v, i, e) => v.setBigUint64(0, i, e),
+      byteOrder,
+    );
+  } else {
+    // 実行環境のバイトオーダー
+
+    const gb = new GrowableBuffer();
+    const tmpView = new BigUint64Array(1);
+    let index = 0;
+    for await (const i of value) {
+      BigUint64.assert(i, `value[${index}]`);
+      tmpView[0] = i;
+      gb.putRange(tmpView);
+      index++;
+    }
+    return gb.slice().buffer;
+  }
+}
