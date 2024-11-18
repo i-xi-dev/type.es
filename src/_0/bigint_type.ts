@@ -187,7 +187,7 @@ export function fromNumber(
   options?: FromNumberOptions,
 ): bigint {
   assertNumber(value, "value");
-  //TODO Finiteでなければエラーで良いのでは
+  //XXX Finiteでなければエラーで良いのでは
 
   if (Number.isNaN(value)) {
     throw new TypeError("`value` must not be `NaN`.");

@@ -22,7 +22,7 @@ export function assert(test: unknown, label: string): void {
 // const _DEFAULT_BYTE_LENGTH = 1_024;
 // const _DEFAULT_MAX_BYTE_LENGTH = 1_048_576;
 
-//TODO
+//XXX
 // export type FromUint8IterableOptions = {
 //   maxByteLength?: int;
 // };
@@ -45,7 +45,7 @@ export async function fromUint8AsyncIterable(
 ): Promise<ArrayBuffer> {
   assertAsyncIterableObject(value, "value");
 
-  //TODO resizable ArrayBufferが広く実装されたらそちらに変更する
+  //XXX resizable ArrayBufferが広く実装されたらそちらに変更する
   const gb = new GrowableBuffer();
   let index = 0;
   for await (const byte of value) {
@@ -211,7 +211,7 @@ export async function fromUint16AsyncIterable(
   } else {
     // 実行環境のバイトオーダー
 
-    //TODO resizable ArrayBufferが広く実装されたらそちらに変更する
+    //XXX resizable ArrayBufferが広く実装されたらそちらに変更する
     const gb = new GrowableBuffer();
     const tmpView = new Uint16Array(1);
     let index = 0;
@@ -368,3 +368,34 @@ export async function fromBigUint64AsyncIterable(
     return gb.slice().buffer;
   }
 }
+
+export function toBigUint64Iterable(
+  value: ArrayBuffer,
+  options?: ToUint8xIterableOptions,
+): Iterable<biguint64> {
+  const byteOrder = _resolveByteOrder(options?.byteOrder);
+  return _toUint8xIterable<biguint64>(value, BigUint64Array, (v, o, e) => {
+    return v.getBigUint64(o, e);
+  }, byteOrder);
+}
+
+/*XXX
+fromInt8Iterable
+fromAsyncInt8Iterable
+toInt8Iterable
+fromInt16Iterable
+fromAsyncInt16Iterable
+toInt16Iterable
+fromInt32Iterable
+fromAsyncInt32Iterable
+toInt32Iterable
+fromBigInt64Iterable
+fromAsyncBigInt64Iterable
+toBigInt64Iterable
+fromFloat32Iterable
+fromAsyncFloat32Iterable
+toFloat32Iterable
+fromFloat64Iterable
+fromAsyncFloat64Iterable
+toFloat64Iterable
+*/

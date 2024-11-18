@@ -571,3 +571,171 @@ Deno.test("ArrayBufferType.fromBigUint64AsyncIterable(AsyncGenerator<any>)", () 
     "The type of `value[2]` does not match the type of `uint64`.",
   );
 });
+
+Deno.test("ArrayBufferType.toBigUint64Iterable(Uint8Array)", () => {
+  assertThrows(
+    () => {
+      ArrayBufferType.toBigUint64Iterable(0 as unknown as ArrayBuffer);
+    },
+    TypeError,
+    "`value` must be an `ArrayBuffer`.",
+  );
+  assertThrows(
+    () => {
+      ArrayBufferType.toBigUint64Iterable(1 as unknown as ArrayBuffer);
+    },
+    TypeError,
+    "`value` must be an `ArrayBuffer`.",
+  );
+  assertThrows(
+    () => {
+      ArrayBufferType.toBigUint64Iterable(Uint8Array.of(1).buffer);
+    },
+    RangeError,
+    "The byte length of `value` must be divisible by 8.",
+  );
+  assertThrows(
+    () => {
+      ArrayBufferType.toBigUint64Iterable(Uint8Array.of(1, 2).buffer);
+    },
+    RangeError,
+    "The byte length of `value` must be divisible by 8.",
+  );
+  assertThrows(
+    () => {
+      ArrayBufferType.toBigUint64Iterable(Uint8Array.of(1, 2, 3).buffer);
+    },
+    RangeError,
+    "The byte length of `value` must be divisible by 8.",
+  );
+  assertThrows(
+    () => {
+      ArrayBufferType.toBigUint64Iterable(Uint8Array.of(1, 2, 3, 4).buffer);
+    },
+    RangeError,
+    "The byte length of `value` must be divisible by 8.",
+  );
+  assertThrows(
+    () => {
+      ArrayBufferType.toBigUint64Iterable(Uint8Array.of(1, 2, 3, 4, 5).buffer);
+    },
+    RangeError,
+    "The byte length of `value` must be divisible by 8.",
+  );
+  assertThrows(
+    () => {
+      ArrayBufferType.toBigUint64Iterable(
+        Uint8Array.of(1, 2, 3, 4, 5, 6).buffer,
+      );
+    },
+    RangeError,
+    "The byte length of `value` must be divisible by 8.",
+  );
+  assertThrows(
+    () => {
+      ArrayBufferType.toBigUint64Iterable(
+        Uint8Array.of(1, 2, 3, 4, 5, 6, 7).buffer,
+      );
+    },
+    RangeError,
+    "The byte length of `value` must be divisible by 8.",
+  );
+
+  assertStrictEquals(
+    [
+      ...ArrayBufferType.toBigUint64Iterable(
+        Uint8Array.of().buffer,
+        { byteOrder: "big-endian" },
+      ),
+    ].join(","),
+    "",
+  );
+  assertStrictEquals(
+    [
+      ...ArrayBufferType.toBigUint64Iterable(
+        Uint8Array.of(1, 0, 3, 2, 0, 0, 0, 0).buffer,
+        { byteOrder: "big-endian" },
+      ),
+    ].join(","),
+    "72060901162745856",
+  );
+  assertStrictEquals(
+    [
+      ...ArrayBufferType.toBigUint64Iterable(
+        Uint8Array.of(1, 0, 3, 2, 5, 4, 7, 6, 1, 0, 3, 2, 0, 0, 0, 0).buffer,
+        { byteOrder: "big-endian" },
+      ),
+    ].join(","),
+    "72060901246895878,72060901162745856",
+  );
+
+  assertStrictEquals(
+    [
+      ...ArrayBufferType.toBigUint64Iterable(
+        Uint8Array.of().buffer,
+        { byteOrder: "little-endian" },
+      ),
+    ].join(","),
+    "",
+  );
+  assertStrictEquals(
+    [
+      ...ArrayBufferType.toBigUint64Iterable(
+        Uint8Array.of(1, 0, 3, 2, 0, 0, 0, 0).buffer,
+        { byteOrder: "little-endian" },
+      ),
+    ].join(","),
+    "33751041",
+  );
+  assertStrictEquals(
+    [
+      ...ArrayBufferType.toBigUint64Iterable(
+        Uint8Array.of(1, 0, 3, 2, 5, 4, 7, 6, 1, 0, 3, 2, 0, 0, 0, 0).buffer,
+        { byteOrder: "little-endian" },
+      ),
+    ].join(","),
+    "434320308619640833,33751041",
+  );
+
+  assertStrictEquals(
+    [
+      ...ArrayBufferType.toBigUint64Iterable(Uint8Array.of().buffer),
+    ].join(","),
+    "",
+  );
+  if (BYTE_ORDER === "big-endian") {
+    assertStrictEquals(
+      [
+        ...ArrayBufferType.toBigUint64Iterable(
+          Uint8Array.of(1, 0, 3, 2, 0, 0, 0, 0).buffer,
+        ),
+      ].join(","),
+      "72060901162745856",
+    );
+    assertStrictEquals(
+      [
+        ...ArrayBufferType.toBigUint64Iterable(
+          Uint8Array.of(1, 0, 3, 2, 5, 4, 7, 6, 1, 0, 3, 2, 0, 0, 0, 0).buffer,
+        ),
+      ].join(","),
+      "72060901246895878,72060901162745856",
+    );
+  } else {
+    assertStrictEquals(
+      [
+        ...ArrayBufferType.toBigUint64Iterable(
+          Uint8Array.of(1, 0, 3, 2, 0, 0, 0, 0).buffer,
+        ),
+      ].join(","),
+      "33751041",
+    );
+    assertStrictEquals(
+      [
+        ...ArrayBufferType.toBigUint64Iterable(
+          Uint8Array.of(1, 0, 3, 2, 5, 4, 7, 6, 1, 0, 3, 2, 0, 0, 0, 0).buffer,
+        ),
+      ].join(","),
+      "434320308619640833,33751041",
+    );
+  }
+});
