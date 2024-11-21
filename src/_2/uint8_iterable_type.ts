@@ -2,12 +2,13 @@ import { assertIterable as assertIterableObject } from "../_0/object_type.ts";
 import { int, uint8 } from "../_.ts";
 import { Uint8 } from "./uint_type.ts";
 
-export type Uint8SizedIterable =
+type ArrayLikeOfExpectUint8 =
   | Array<int /* uint8 */>
   | Uint8Array
-  | Uint8ClampedArray;
+  | Uint8ClampedArray; //TODO
 
-type _Uint8SizedIterable =
+// Uint8SizedIterable
+export type ArrayLikeOfUint8 =
   | Array<uint8>
   | Uint8Array
   | Uint8ClampedArray;
@@ -26,25 +27,28 @@ export function assertArrayOfUint8(test: unknown, label: string): void {
   }
 }
 
-function _isUint8SizedIterable(test: unknown): test is _Uint8SizedIterable {
+// isUint8SizedIterable
+export function isArrayLikeOfUint8(
+  test: unknown,
+): test is ArrayLikeOfUint8 {
   return isArrayOfUint8(test) || (test instanceof Uint8Array) ||
     (test instanceof Uint8ClampedArray);
 }
 
-function _assertUint8SizedIterable(test: unknown, label: string): void {
-  if (_isUint8SizedIterable(test) !== true) {
+export function assertArrayLikeOfUint8(test: unknown, label: string): void {
+  if (isArrayLikeOfUint8(test) !== true) {
     throw new TypeError(
       `\`${label}\` must be (\`Array<uint8> | Uint8Array | Uint8ClampedArray\`).`,
     );
   }
 }
 
-export function bytesStartsWith(
+export function elementsStartsWith(
   self: Iterable<int /* uint8 */>,
-  other: Uint8SizedIterable,
+  other: ArrayLikeOfExpectUint8,
 ): boolean {
   assertIterableObject(self, "self");
-  _assertUint8SizedIterable(other, "other");
+  assertArrayLikeOfUint8(other, "other");
 
   if (other.length <= 0) {
     return true;
@@ -71,12 +75,13 @@ export function bytesStartsWith(
   return (i > otherLastIndex);
 }
 
-export function bytesEquals(
+// bytesEquals
+export function elementsEquals(
   self: Iterable<int /* uint8 */>,
-  other: Uint8SizedIterable,
+  other: ArrayLikeOfExpectUint8,
 ): boolean {
   assertIterableObject(self, "self");
-  _assertUint8SizedIterable(other, "other");
+  assertArrayLikeOfUint8(other, "other");
 
   const otherLastIndex = other.length - 1;
   let i = 0;
