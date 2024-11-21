@@ -3,6 +3,7 @@ export * from "./src/_2/big_uint_type.ts";
 export * from "./src/_1/bigint_range.ts";
 export * as BigIntType from "./src/_0/bigint_type.ts";
 export * as BufferSourceType from "./src/_0/buffer_source_type.ts";
+export * as ByteIterable from "./src/_2/byte_iterable.ts";
 export * as CodePointType from "./src/_2/code_point_type.ts";
 export * from "./src/_2/growable_buffer.ts";
 export * from "./src/_1/integer_range.ts";
