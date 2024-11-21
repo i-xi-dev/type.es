@@ -1,6 +1,20 @@
 import { assertStrictEquals, assertThrows } from "../deps.ts";
 import { ByteIterable } from "../../mod.ts";
 
+Deno.test("ByteIterable.isArrayOfUint8(*)", () => {
+  assertStrictEquals(ByteIterable.isArrayOfUint8([]), true);
+  assertStrictEquals(ByteIterable.isArrayOfUint8([0]), true);
+  assertStrictEquals(ByteIterable.isArrayOfUint8([255]), true);
+  assertStrictEquals(ByteIterable.isArrayOfUint8([-0]), true);
+  assertStrictEquals(ByteIterable.isArrayOfUint8([-1]), false);
+  assertStrictEquals(ByteIterable.isArrayOfUint8([256]), false);
+  assertStrictEquals(ByteIterable.isArrayOfUint8(0), false);
+  assertStrictEquals(ByteIterable.isArrayOfUint8(256), false);
+  assertStrictEquals(ByteIterable.isArrayOfUint8([0, 255]), true);
+  assertStrictEquals(ByteIterable.isArrayOfUint8([0, 255, -1]), false);
+  assertStrictEquals(ByteIterable.isArrayOfUint8(["0"]), false);
+});
+
 const a3 = [0, 1, 2];
 const a2 = [0, 1];
 const a1 = [0];

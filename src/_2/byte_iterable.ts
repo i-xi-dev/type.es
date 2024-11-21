@@ -1,9 +1,14 @@
 import { assertIterable as assertIterableObject } from "../_0/object_type.ts";
-import { int } from "../_.ts";
+import { int, uint8 } from "../_.ts";
 import { Uint8 } from "./uint_type.ts";
 
-type _Uint8SizedIterable =
+export type Uint8SizedIterable =
   | Array<int /* uint8 */>
+  | Uint8Array
+  | Uint8ClampedArray;
+
+type _Uint8SizedIterable =
+  | Array<uint8>
   | Uint8Array
   | Uint8ClampedArray;
 
@@ -11,9 +16,19 @@ type _Uint8SizedIterable =
 // function _isUint8Iterable() {
 // }
 
+export function isArrayOfUint8(value: unknown): value is Array<uint8> {
+  return Array.isArray(value) && value.every((i) => Uint8.is(i));
+}
+
+export function assertArrayOfUint8(test: unknown, label: string): void {
+  if (isArrayOfUint8(test) !== true) {
+    throw new TypeError(`\`${label}\` must be \`Array<uint8>\`).`);
+  }
+}
+
 function _isUint8SizedIterable(test: unknown): test is _Uint8SizedIterable {
-  return (Array.isArray(test) && test.every((i) => Uint8.is(i))) ||
-    (test instanceof Uint8Array) || (test instanceof Uint8ClampedArray);
+  return isArrayOfUint8(test) || (test instanceof Uint8Array) ||
+    (test instanceof Uint8ClampedArray);
 }
 
 function _assertUint8SizedIterable(test: unknown, label: string): void {
@@ -26,7 +41,7 @@ function _assertUint8SizedIterable(test: unknown, label: string): void {
 
 export function bytesStartsWith(
   self: Iterable<int /* uint8 */>,
-  other: _Uint8SizedIterable,
+  other: Uint8SizedIterable,
 ): boolean {
   assertIterableObject(self, "self");
   _assertUint8SizedIterable(other, "other");
@@ -58,7 +73,7 @@ export function bytesStartsWith(
 
 export function bytesEquals(
   self: Iterable<int /* uint8 */>,
-  other: _Uint8SizedIterable,
+  other: Uint8SizedIterable,
 ): boolean {
   assertIterableObject(self, "self");
   _assertUint8SizedIterable(other, "other");
@@ -71,6 +86,9 @@ export function bytesEquals(
     }
 
     Uint8.assert(byte, `self[${i}]`);
+
+    // const otherByte = other[i];
+    // Uint8.assert(otherByte, `other[${i}]`); _assertUint8SizedIterableでチェック済
 
     if (byte !== other[i]) {
       return false;
