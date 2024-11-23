@@ -1,6 +1,6 @@
 import { assertIterable as assertIterableObject } from "../_0/object_type.ts";
 import { int, uint8 } from "../_.ts";
-import { Uint8 } from "./uint_type.ts";
+import { Uint8 } from "./uint.ts";
 
 type ArrayLikeOfExpectUint8 =
   | Array<int /* uint8 */>

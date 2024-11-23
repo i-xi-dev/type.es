@@ -6,8 +6,8 @@ import { ByteOrder } from "../byte_order.ts";
 import * as env from "../env.ts";
 import { GrowableBuffer } from "./growable_buffer.ts";
 import { biguint64, int, uint16, uint32, uint8, xint } from "../_.ts";
-import { BigUint64 } from "./big_uint_type.ts";
-import { Uint16, Uint32, Uint8 } from "./uint_type.ts";
+import { BigUint64 } from "./big_uint.ts";
+import { Uint16, Uint32, Uint8 } from "./uint.ts";
 
 export function is(test: unknown): test is ArrayBuffer {
   return (test instanceof ArrayBuffer);

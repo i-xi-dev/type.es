@@ -1,5 +1,5 @@
 export * as ArrayBufferType from "./src/_2/array_buffer_type.ts";
-export * from "./src/_2/big_uint_type.ts";
+export * from "./src/_2/big_uint.ts";
 export * from "./src/_1/bigint_range.ts";
 export * as BigIntType from "./src/_0/bigint_type.ts";
 export * as BufferSourceType from "./src/_0/buffer_source_type.ts";
@@ -15,5 +15,5 @@ export * from "./src/_1/safe_integer_range.ts";
 export * as SafeIntegerType from "./src/_0/safe_integer_type.ts";
 export * as StringType from "./src/_0/string_type.ts";
 export * as Uint8Iterable from "./src/_2/uint8_iterable.ts";
-export * from "./src/_2/uint_type.ts";
+export * from "./src/_2/uint.ts";
 export * as UsvStringType from "./src/_2/usv_string_type.ts";
