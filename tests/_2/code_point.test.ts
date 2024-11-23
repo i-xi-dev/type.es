@@ -6,7 +6,7 @@ import {
 } from "../deps.ts";
 import { CodePoint } from "../../mod.ts";
 
-Deno.test("CodePointType.is()", () => {
+Deno.test("CodePoint.is()", () => {
   assertStrictEquals(CodePoint.is(-1), false);
   assertStrictEquals(CodePoint.is(-0), true);
   assertStrictEquals(CodePoint.is(0), true);
@@ -34,7 +34,7 @@ Deno.test("CodePointType.is()", () => {
   assertStrictEquals(CodePoint.is(null), false);
 });
 
-Deno.test("CodePointType.assert()", () => {
+Deno.test("CodePoint.assert()", () => {
   try {
     CodePoint.assert(-0, "test-1");
     CodePoint.assert(0, "test-1");
@@ -63,7 +63,7 @@ Deno.test("CodePointType.assert()", () => {
   }
 });
 
-Deno.test("CodePointType.toString()", () => {
+Deno.test("CodePoint.toString()", () => {
   assertStrictEquals(CodePoint.toString(-0x0), "U+0000");
   assertStrictEquals(CodePoint.toString(0x0), "U+0000");
   assertStrictEquals(CodePoint.toString(0xFFFF), "U+FFFF");
@@ -95,7 +95,7 @@ Deno.test("CodePointType.toString()", () => {
   );
 });
 
-Deno.test("CodePointType.planeOf()", () => {
+Deno.test("CodePoint.planeOf()", () => {
   assertStrictEquals(CodePoint.planeOf(0x0), 0);
   assertStrictEquals(CodePoint.planeOf(0xFFFF), 0);
   assertStrictEquals(CodePoint.planeOf(0x10000), 1);
@@ -156,7 +156,7 @@ Deno.test("CodePointType.planeOf()", () => {
   );
 });
 
-Deno.test("CodePointType.isBmp()", () => {
+Deno.test("CodePoint.isBmp()", () => {
   assertStrictEquals(CodePoint.isBmp(0x0), true);
   assertStrictEquals(CodePoint.isBmp(0xFFFF), true);
   assertStrictEquals(CodePoint.isBmp(0x10000), false);
@@ -166,7 +166,7 @@ Deno.test("CodePointType.isBmp()", () => {
   assertStrictEquals(CodePoint.isBmp(0x110000), false);
 });
 
-Deno.test("CodePointType.isInPlanes()", () => {
+Deno.test("CodePoint.isInPlanes()", () => {
   assertStrictEquals(CodePoint.isInPlanes(0x0, []), false);
 
   assertStrictEquals(CodePoint.isInPlanes(0x0, [0]), true);
@@ -205,7 +205,7 @@ Deno.test("CodePointType.isInPlanes()", () => {
     "codePoint",
   );
 
-  //assertStrictEquals(CodePointType.isInPlanes(0x0, [1, 16]), false);
+  //assertStrictEquals(CodePoint.isInPlanes(0x0, [1, 16]), false);
   assertThrows(
     () => {
       CodePoint.isInPlanes(0, undefined as unknown as []);
@@ -240,7 +240,7 @@ Deno.test("CodePointType.isInPlanes()", () => {
   );
 });
 
-Deno.test("CodePointType.isHighSurrogate()", () => {
+Deno.test("CodePoint.isHighSurrogate()", () => {
   assertStrictEquals(CodePoint.isHighSurrogate(0xD7FF), false);
   assertStrictEquals(CodePoint.isHighSurrogate(0xD800), true);
   assertStrictEquals(CodePoint.isHighSurrogate(0xDBFF), true);
@@ -252,7 +252,7 @@ Deno.test("CodePointType.isHighSurrogate()", () => {
   assertStrictEquals(CodePoint.isHighSurrogate(0x110000), false);
 });
 
-Deno.test("CodePointType.isLowSurrogate()", () => {
+Deno.test("CodePoint.isLowSurrogate()", () => {
   assertStrictEquals(CodePoint.isLowSurrogate(0xD7FF), false);
   assertStrictEquals(CodePoint.isLowSurrogate(0xD800), false);
   assertStrictEquals(CodePoint.isLowSurrogate(0xDBFF), false);
@@ -264,7 +264,7 @@ Deno.test("CodePointType.isLowSurrogate()", () => {
   assertStrictEquals(CodePoint.isLowSurrogate(0x110000), false);
 });
 
-Deno.test("CodePointType.isSurrogate()", () => {
+Deno.test("CodePoint.isSurrogate()", () => {
   assertStrictEquals(CodePoint.isSurrogate(0xD7FF), false);
   assertStrictEquals(CodePoint.isSurrogate(0xD800), true);
   assertStrictEquals(CodePoint.isSurrogate(0xDBFF), true);
@@ -276,7 +276,7 @@ Deno.test("CodePointType.isSurrogate()", () => {
   assertStrictEquals(CodePoint.isSurrogate(0x110000), false);
 });
 
-Deno.test("CodePointType.isVariationSelector()", () => {
+Deno.test("CodePoint.isVariationSelector()", () => {
   assertStrictEquals(CodePoint.isVariationSelector(0xFDFF), false);
   assertStrictEquals(CodePoint.isVariationSelector(0xFE00), true);
   assertStrictEquals(CodePoint.isVariationSelector(0xFE0F), true);
@@ -291,7 +291,7 @@ Deno.test("CodePointType.isVariationSelector()", () => {
   assertStrictEquals(CodePoint.isVariationSelector(0x1810), false);
 });
 
-Deno.test("CodePointType.isInRanges()", () => {
+Deno.test("CodePoint.isInRanges()", () => {
   const blocks0: Array<[number] | [number, number]> = [];
 
   assertStrictEquals(CodePoint.isInRanges(0x0, blocks0), false);
@@ -365,7 +365,7 @@ Deno.test("CodePointType.isInRanges()", () => {
 
   // assertThrows(
   //   () => {
-  //     CodePointType.isInRanges(0, [
+  //     CodePoint.isInRanges(0, [
   //       [0x0, 0x7F],
   //       0 as unknown as [0],
   //     ]);

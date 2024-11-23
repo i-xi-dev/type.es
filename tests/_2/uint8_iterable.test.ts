@@ -31,7 +31,7 @@ function* g1() {
 function* g0() {
 }
 
-Deno.test("Uint8IterableType.isArrayOfUint8()", () => {
+Deno.test("Uint8Iterable.isArrayOfUint8()", () => {
   assertStrictEquals(Uint8Iterable.isArrayOfUint8(a0), true);
   assertStrictEquals(Uint8Iterable.isArrayOfUint8(a1), true);
   assertStrictEquals(Uint8Iterable.isArrayOfUint8([255]), true);
@@ -51,7 +51,7 @@ Deno.test("Uint8IterableType.isArrayOfUint8()", () => {
   assertStrictEquals(Uint8Iterable.isArrayOfUint8(g1()), false);
 });
 
-Deno.test("Uint8IterableType.assertArrayOfUint8()", () => {
+Deno.test("Uint8Iterable.assertArrayOfUint8()", () => {
   try {
     Uint8Iterable.assertArrayOfUint8(a0, "test-1");
     Uint8Iterable.assertArrayOfUint8(a1, "test-1");
@@ -81,7 +81,7 @@ Deno.test("Uint8IterableType.assertArrayOfUint8()", () => {
   }
 });
 
-Deno.test("Uint8IterableType.isUint8SizedIterable()", () => {
+Deno.test("Uint8Iterable.isUint8SizedIterable()", () => {
   assertStrictEquals(Uint8Iterable.isArrayLikeOfUint8(a0), true);
   assertStrictEquals(Uint8Iterable.isArrayLikeOfUint8(a1), true);
   assertStrictEquals(Uint8Iterable.isArrayLikeOfUint8([255]), true);
@@ -104,7 +104,7 @@ Deno.test("Uint8IterableType.isUint8SizedIterable()", () => {
   assertStrictEquals(Uint8Iterable.isArrayLikeOfUint8(g1()), false);
 });
 
-Deno.test("Uint8IterableType.bytesStartsWith()", () => {
+Deno.test("Uint8Iterable.bytesStartsWith()", () => {
   assertStrictEquals(Uint8Iterable.elementsStartsWith(a3, a3), true);
   assertStrictEquals(Uint8Iterable.elementsStartsWith(a3, a2), true);
   assertStrictEquals(Uint8Iterable.elementsStartsWith(a3, a1), true);
@@ -207,7 +207,7 @@ Deno.test("Uint8IterableType.bytesStartsWith()", () => {
   );
 });
 
-Deno.test("Uint8IterableType.bytesEquals()", () => {
+Deno.test("Uint8Iterable.bytesEquals()", () => {
   assertStrictEquals(Uint8Iterable.elementsEquals(a3, a3), true);
   assertStrictEquals(Uint8Iterable.elementsEquals(a3, a2), false);
   assertStrictEquals(Uint8Iterable.elementsEquals(a3, a1), false);
