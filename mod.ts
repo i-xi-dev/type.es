@@ -4,6 +4,7 @@ export * from "./src/_1/bigint_range.ts";
 export * as BigIntType from "./src/_0/bigint_type.ts";
 export * as BufferSourceType from "./src/_0/buffer_source_type.ts";
 export * as CodePoint from "./src/_2/code_point.ts";
+export * from "./src/exception.ts";
 export * from "./src/_2/growable_buffer.ts";
 export * from "./src/_1/integer_range.ts";
 export * as IntegerType from "./src/_0/integer_type.ts";
