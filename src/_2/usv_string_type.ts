@@ -1,4 +1,4 @@
-import { assert as assertCodePoint } from "./code_point_type.ts";
+import { assert as assertCodePoint } from "./code_point.ts";
 import { assertIterable as assertIterableObject } from "../_0/object_type.ts";
 import { codepoint, grapheme, int, rune, usvstring } from "../_.ts";
 import { EMPTY, is as isString } from "../_0/string_type.ts";
