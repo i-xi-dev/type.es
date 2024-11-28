@@ -1,5 +1,8 @@
 import { char, int, rune } from "../_.ts";
 
+/**
+ * The zero-length string.
+ */
 export const EMPTY = "";
 
 export function is(test: unknown): test is string {
