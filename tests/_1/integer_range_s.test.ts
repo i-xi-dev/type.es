@@ -1,4 +1,4 @@
-import { assertStrictEquals, assertThrows } from "../deps.ts";
+import { assertStrictEquals, assertThrows } from "@std/assert";
 import { IntegerRange } from "../../mod.ts";
 
 const minmax2m = { min: -2, max: -2 };

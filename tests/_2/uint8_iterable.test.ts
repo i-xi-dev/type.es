@@ -3,7 +3,7 @@ import {
   assertThrows,
   fail,
   unreachable,
-} from "../deps.ts";
+} from "@std/assert";
 import { Uint8Iterable } from "../../mod.ts";
 
 const a3 = [0, 1, 2];

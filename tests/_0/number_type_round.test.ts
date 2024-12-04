@@ -1,4 +1,4 @@
-import { assertStrictEquals, assertThrows } from "../deps.ts";
+import { assertStrictEquals, assertThrows } from "@std/assert";
 import { NumberType, Numerics } from "../../mod.ts";
 
 const MIN = Number.MIN_SAFE_INTEGER;

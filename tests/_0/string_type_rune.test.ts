@@ -1,4 +1,4 @@
-import { assertStrictEquals, fail, unreachable } from "../deps.ts";
+import { assertStrictEquals, fail, unreachable } from "@std/assert";
 import { StringType } from "../../mod.ts";
 
 Deno.test("StringType.isRune()", () => {

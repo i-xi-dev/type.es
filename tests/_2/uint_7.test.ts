@@ -1,4 +1,4 @@
-import { assertStrictEquals, assertThrows } from "../deps.ts";
+import { assertStrictEquals, assertThrows } from "@std/assert";
 import { uint7 } from "../../src/_.ts";
 import { Uint7 } from "../../mod.ts";
 

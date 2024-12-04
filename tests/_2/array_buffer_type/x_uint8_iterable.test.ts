@@ -1,4 +1,4 @@
-import { assertRejects, assertStrictEquals, assertThrows } from "../../deps.ts";
+import { assertRejects, assertStrictEquals, assertThrows } from "@std/assert";
 import { ArrayBufferType } from "../../../mod.ts";
 import { uint8 } from "../../../src/_.ts";
 

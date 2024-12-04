@@ -3,7 +3,7 @@ import {
   assertThrows,
   fail,
   unreachable,
-} from "../deps.ts";
+} from "@std/assert";
 import { UsvStringType } from "../../mod.ts";
 
 Deno.test("UsvStringType.is()", () => {

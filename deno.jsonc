@@ -1,4 +1,8 @@
 {
+  "imports": {
+    "@std/assert": "jsr:@std/assert@1.0.8"
+  },
+  "name": "@i-xi-dev/type",
   "lint": {
     "rules": {
       "tags": ["recommended"],

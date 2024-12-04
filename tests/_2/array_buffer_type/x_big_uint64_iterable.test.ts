@@ -1,4 +1,4 @@
-import { assertRejects, assertStrictEquals, assertThrows } from "../../deps.ts";
+import { assertRejects, assertStrictEquals, assertThrows } from "@std/assert";
 import { ArrayBufferType } from "../../../mod.ts";
 import { biguint64 } from "../../../src/_.ts";
 import { BYTE_ORDER } from "../../../src/env.ts";

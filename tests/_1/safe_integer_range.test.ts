@@ -1,4 +1,4 @@
-import { assertStrictEquals, assertThrows } from "../deps.ts";
+import { assertStrictEquals, assertThrows } from "@std/assert";
 import { SafeIntegerRange } from "../../mod.ts";
 
 const range00 = SafeIntegerRange.of(0);

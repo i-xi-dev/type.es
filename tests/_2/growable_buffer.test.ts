@@ -1,4 +1,4 @@
-import { assertNotStrictEquals, assertStrictEquals } from "../deps.ts";
+import { assertNotStrictEquals, assertStrictEquals } from "@std/assert";
 import { GrowableBuffer } from "../../mod.ts";
 
 Deno.test("new GrowableBuffer()/capacity/position/put()", () => {

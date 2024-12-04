@@ -3,7 +3,7 @@ import {
   assertThrows,
   fail,
   unreachable,
-} from "../deps.ts";
+} from "@std/assert";
 import { SafeIntegerType } from "../../mod.ts";
 
 const MIN = Number.MIN_SAFE_INTEGER;

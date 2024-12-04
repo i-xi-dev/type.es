@@ -1,4 +1,4 @@
-import { assertStrictEquals, assertThrows } from "../deps.ts";
+import { assertStrictEquals, assertThrows } from "@std/assert";
 import { Uint16 } from "../../mod.ts";
 
 Deno.test("Uint16.bitLength", () => {

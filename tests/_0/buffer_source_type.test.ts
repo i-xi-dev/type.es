@@ -1,4 +1,4 @@
-import { assertStrictEquals } from "../deps.ts";
+import { assertStrictEquals } from "@std/assert";
 import { BufferSourceType } from "../../mod.ts";
 
 Deno.test("BufferSourceType.isDataViewConstructor(*)", () => {

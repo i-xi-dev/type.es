@@ -3,7 +3,7 @@ import {
   assertThrows,
   fail,
   unreachable,
-} from "../deps.ts";
+} from "@std/assert";
 import { BigIntType } from "../../mod.ts";
 
 const SIMIN = Number.MIN_SAFE_INTEGER;

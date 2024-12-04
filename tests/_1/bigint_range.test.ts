@@ -1,4 +1,4 @@
-import { assertStrictEquals, assertThrows } from "../deps.ts";
+import { assertStrictEquals, assertThrows } from "@std/assert";
 import { BigIntRange } from "../../mod.ts";
 
 const range00 = BigIntRange.of(0n);

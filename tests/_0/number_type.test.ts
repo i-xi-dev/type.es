@@ -3,7 +3,7 @@ import {
   assertThrows,
   fail,
   unreachable,
-} from "../deps.ts";
+} from "@std/assert";
 import { NumberType } from "../../mod.ts";
 
 Deno.test("NumberType.assert()", () => {
