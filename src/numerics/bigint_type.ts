@@ -1,13 +1,11 @@
-import { assertStringified as assertStringifiedInteger } from "./integer_type.ts";
-import { int } from "../_.ts";
-import { isPositive as isPositiveSafeInteger } from "./safe_integer_type.ts";
 import { assert as assertNumber, round as roundNumber } from "./number_type.ts";
-import {
-  FromNumberOptions,
-  FromStringOptions,
-  radixPropertiesOf,
-  ToStringOptions,
-} from "../numerics.ts";
+import { assertStringified as assertStringifiedInteger } from "./integer.ts";
+import { FromNumberOptions } from "./from_number_options.ts";
+import { FromStringOptions } from "./from_string_options.ts";
+import { int } from "../_.ts";
+import { isPositive as isPositiveSafeInteger } from "./safe_integer.ts";
+import { RadixProperties } from "./radix.ts";
+import { ToStringOptions } from "./to_string_options.ts";
 
 export function is(test: unknown): test is bigint {
   return (typeof test === "bigint");
@@ -155,7 +153,7 @@ export function fromString(value: string, options?: FromStringOptions): bigint {
   const negative = value.startsWith("-");
   let adjustedValue = value;
   adjustedValue = adjustedValue.replace(/^[-+]?/, "");
-  adjustedValue = radixPropertiesOf(options?.radix).prefix + adjustedValue;
+  adjustedValue = RadixProperties.of(options?.radix).prefix + adjustedValue;
   let valueAsBigInt = BigInt(adjustedValue);
   if (negative === true) {
     valueAsBigInt *= -1n;
@@ -167,7 +165,7 @@ export function fromString(value: string, options?: FromStringOptions): bigint {
 export function toString(value: bigint, options?: ToStringOptions): string {
   assert(value, "value");
 
-  const radix = radixPropertiesOf(options?.radix).radix;
+  const radix = RadixProperties.of(options?.radix).radix;
   let result = value.toString(radix);
 
   if (options?.lowerCase !== true) {

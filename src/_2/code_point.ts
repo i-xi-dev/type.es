@@ -3,9 +3,10 @@ import { IntegerRange } from "../_1/integer_range.ts";
 import {
   isInRange as isSafeIntegerInRange,
   toString as safeIntegerToString,
-} from "../_0/safe_integer_type.ts";
-import { Radix, ToStringOptions } from "../numerics.ts";
+} from "../numerics/safe_integer.ts";
+import { Radix } from "../numerics/radix.ts";
 import { SafeIntegerRange } from "../_1/safe_integer_range.ts";
+import { ToStringOptions } from "../numerics/to_string_options.ts";
 
 export const MIN_VALUE = 0x0;
 

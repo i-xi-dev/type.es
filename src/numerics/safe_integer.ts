@@ -2,16 +2,14 @@ import {
   fromString as fromStringToBigInt,
   toNumber as fromBigIntToNumber,
 } from "./bigint_type.ts";
+import { FromStringOptions } from "./from_string_options.ts";
 import { int } from "../_.ts";
 import {
   isPositive as isPositiveNumber,
   normalize as normalizeNumber,
 } from "./number_type.ts";
-import {
-  FromStringOptions,
-  radixPropertiesOf,
-  ToStringOptions,
-} from "../numerics.ts";
+import { RadixProperties } from "./radix.ts";
+import { ToStringOptions } from "./to_string_options.ts";
 
 export function is(test: unknown): test is int {
   return Number.isSafeInteger(test);
@@ -142,7 +140,7 @@ export function fromString(value: string, options?: FromStringOptions): int {
 export function toString(value: int, options?: ToStringOptions): string {
   assert(value, "value");
 
-  const radix = radixPropertiesOf(options?.radix).radix;
+  const radix = RadixProperties.of(options?.radix).radix;
   let result = value.toString(radix);
 
   if (options?.lowerCase !== true) {

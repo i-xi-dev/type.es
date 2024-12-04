@@ -1,4 +1,4 @@
-import { xint } from "../_.ts";
+import { is as isString } from "../_0/string_type.ts";
 import {
   isEven as isEvenBigInt,
   isNegative as isNegativeBigInt,
@@ -14,9 +14,9 @@ import {
   isNonPositive as isNonPositiveSafeInteger,
   isOdd as isOddSafeInteger,
   isPositive as isPositiveSafeInteger,
-} from "./safe_integer_type.ts";
-import { is as isString } from "./string_type.ts";
-import { Radix, radixPropertiesOf } from "../numerics.ts";
+} from "./safe_integer.ts";
+import { Radix, RadixProperties } from "./radix.ts";
+import { xint } from "../_.ts";
 
 // ここでは、safe integerではないnumber型は「整数」とみなさない
 
@@ -48,7 +48,7 @@ export function isStringified(
   test: unknown,
   radix?: Radix,
 ): test is string {
-  const integralRegex = radixPropertiesOf(radix).digitsRegex;
+  const integralRegex = RadixProperties.of(radix).digitsRegex;
   return isString(test) && integralRegex.test(test);
 }
 
@@ -60,7 +60,7 @@ export function assertStringified(
   if (isStringified(test, radix) !== true) {
     throw new TypeError(
       `\`${label}\` must be ${
-        radixPropertiesOf(radix).label
+        RadixProperties.of(radix).label
       } representation of an integer.`,
     );
   }

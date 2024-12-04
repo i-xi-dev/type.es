@@ -1,7 +1,7 @@
-import { clampToNonNegative as clampToNonNegativeSafeInteger } from "../../_0/safe_integer_type.ts";
+import { clampToNonNegative as clampToNonNegativeSafeInteger } from "../../numerics/safe_integer.ts";
 import { int } from "../../_.ts";
-import { round as roundNumber } from "../../_0/number_type.ts";
-import { RoundingMode } from "../../numerics.ts";
+import { round as roundNumber } from "../../numerics/number_type.ts";
+import { RoundingMode } from "../../numerics/rounding_mode.ts";
 
 function _initAmount(value?: number): int {
   let adjustedValue = Number.isFinite(value) ? value as number : 0;

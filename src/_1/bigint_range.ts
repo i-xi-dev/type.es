@@ -1,4 +1,7 @@
-import { assert as assertBigInt, is as isBigInt } from "../_0/bigint_type.ts";
+import {
+  assert as assertBigInt,
+  is as isBigInt,
+} from "../numerics/bigint_type.ts";
 import { IntegerRange } from "./integer_range.ts";
 
 export class BigIntRange<T extends bigint> implements IntegerRange<T> {

@@ -2,13 +2,13 @@ import {
   assert as assertNumber,
   normalize as normalizeNumber,
   round as roundNumber,
-} from "../_0/number_type.ts";
+} from "../numerics/number_type.ts";
 import {
   assert as assertSafeInteger,
   fromBigInt as safeIntegerFromBigInt,
   isNonPositive as isNonPositiveSafeInteger,
   toString as safeIntegerToString,
-} from "../_0/safe_integer_type.ts";
+} from "../numerics/safe_integer.ts";
 import {
   BITS_PER_BYTE,
   FromBigIntOptions,
@@ -18,9 +18,9 @@ import {
   Uint8xOperations,
   UintNOperations,
 } from "../ranged_integer.ts";
-import { fromString as bigIntFromString } from "../_0/bigint_type.ts";
+import { fromString as bigIntFromString } from "../numerics/bigint_type.ts";
 import { int, uint16, uint24, uint32, uint6, uint7, uint8 } from "../_.ts";
-import { OverflowMode } from "../numerics.ts";
+import { OverflowMode } from "../numerics/overflow_mode.ts";
 import { SafeIntegerRange } from "../_1/safe_integer_range.ts";
 
 class _UinNOperations<T extends int> implements UintNOperations<T> {

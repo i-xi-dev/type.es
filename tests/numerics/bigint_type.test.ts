@@ -4,7 +4,9 @@ import {
   fail,
   unreachable,
 } from "@std/assert";
-import { BigIntType } from "../../mod.ts";
+import { Numerics } from "../../mod.ts";
+
+const { BigIntType } = Numerics;
 
 const SIMIN = Number.MIN_SAFE_INTEGER;
 const SIMAX = Number.MAX_SAFE_INTEGER;
