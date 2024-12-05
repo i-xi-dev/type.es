@@ -2,7 +2,7 @@ import { assert as assertCodePoint } from "./code_point.ts";
 import { assertIterable as assertIterableObject } from "../basics/object_type.ts";
 import { codepoint, grapheme, int, rune, usvstring } from "../_.ts";
 import { EMPTY, is as isString } from "../basics/string_type.ts";
-import { getGraphemeSegmenter } from "../_1/i18n.ts";
+import { getGraphemeSegmenter } from "../i18n/main.ts";
 
 //TODO grapheme関係は分離する？（languageが絡むので）
 

@@ -3,10 +3,15 @@ import { isNonEmpty as isNonEmptyString } from "../basics/string_type.ts";
 const _FALLBACK_LOCALE = "en";
 
 function _resolveLocale(locale?: string | Intl.Locale): string | Intl.Locale {
-  if (isNonEmptyString(locale)) {
+  if (locale instanceof Intl.Locale) {
     return locale;
-  } else if (locale instanceof Intl.Locale) {
-    return locale;
+  } else if (isNonEmptyString(locale)) {
+    try {
+      void new Intl.Locale(locale);
+      return locale;
+    } catch {
+      //
+    }
   }
   return _FALLBACK_LOCALE;
 }
