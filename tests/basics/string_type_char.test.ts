@@ -1,5 +1,7 @@
 import { assertStrictEquals, fail, unreachable } from "@std/assert";
-import { StringType } from "../../mod.ts";
+import { Basics } from "../../mod.ts";
+
+const { StringType } = Basics;
 
 Deno.test("StringType.isChar()", () => {
   assertStrictEquals(StringType.isChar(0), false);

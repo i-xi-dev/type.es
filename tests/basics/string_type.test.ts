@@ -4,7 +4,9 @@ import {
   fail,
   unreachable,
 } from "@std/assert";
-import { StringType } from "../../mod.ts";
+import { Basics } from "../../mod.ts";
+
+const { StringType } = Basics;
 
 Deno.test("StringType.assert()", () => {
   try {

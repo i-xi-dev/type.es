@@ -1,4 +1,4 @@
-import { isNonEmpty as isNonEmptyString } from "../_0/string_type.ts";
+import { isNonEmpty as isNonEmptyString } from "../basics/string_type.ts";
 
 const _FALLBACK_LOCALE = "en";
 

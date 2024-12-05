@@ -1,4 +1,4 @@
-import { ByteOrder } from "./byte_order.ts";
+import { ByteOrder } from "./basics/byte_order.ts";
 
 export const BYTE_ORDER = (() => {
   return ((new Uint8Array(Uint16Array.of(0xFEFF).buffer))[0] === 0xFE)

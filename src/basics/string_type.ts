@@ -21,6 +21,7 @@ export function isChar(test: unknown): test is char {
   return is(test) && (test.length === 1);
 }
 
+//
 export function isRune(test: unknown): test is rune {
   return is(test) && (test.length <= 2) && ([...test].length === 1) &&
     test.isWellFormed();

@@ -1,4 +1,4 @@
-import { is as isString } from "../_0/string_type.ts";
+import { is as isString } from "../basics/string_type.ts";
 import {
   isEven as isEvenBigInt,
   isNegative as isNegativeBigInt,

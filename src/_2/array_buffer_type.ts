@@ -1,8 +1,8 @@
 import {
   assertAsyncIterable as assertAsyncIterableObject,
   assertIterable as assertIterableObject,
-} from "../_0/object_type.ts";
-import { ByteOrder } from "../byte_order.ts";
+} from "../basics/object_type.ts";
+import { ByteOrder } from "../basics/byte_order.ts";
 import * as env from "../env.ts";
 import { GrowableBuffer } from "./growable_buffer.ts";
 import { biguint64, int, uint16, uint32, uint8, xint } from "../_.ts";
