@@ -4,7 +4,9 @@ import {
   fail,
   unreachable,
 } from "@std/assert";
-import { CodePoint } from "../../mod.ts";
+import { Text } from "../../mod.ts";
+
+const { CodePoint } = Text;
 
 Deno.test("CodePoint.is()", () => {
   assertStrictEquals(CodePoint.is(-1), false);

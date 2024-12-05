@@ -1,4 +1,4 @@
-import { char, int, rune } from "../_.ts";
+import { char, int } from "../_.ts";
 
 /**
  * The zero-length string.
@@ -19,12 +19,6 @@ export function isNonEmpty(test: unknown): test is string {
 
 export function isChar(test: unknown): test is char {
   return is(test) && (test.length === 1);
-}
-
-//
-export function isRune(test: unknown): test is rune {
-  return is(test) && (test.length <= 2) && ([...test].length === 1) &&
-    test.isWellFormed();
 }
 
 export function assert(test: unknown, label: string): void {
@@ -48,12 +42,6 @@ export function assertNonEmpty(test: unknown, label: string): void {
 export function assertChar(test: unknown, label: string): void {
   if (isChar(test) !== true) {
     throw new TypeError(`\`${label}\` must be an UTF-16 code unit.`);
-  }
-}
-
-export function assertRune(test: unknown, label: string): void {
-  if (isRune(test) !== true) {
-    throw new TypeError(`\`${label}\` must be an Unicode scalar value.`);
   }
 }
 

@@ -4,6 +4,8 @@ import { codepoint, grapheme, int, rune, usvstring } from "../_.ts";
 import { EMPTY, is as isString } from "../basics/string_type.ts";
 import { getGraphemeSegmenter } from "../_1/i18n.ts";
 
+//TODO grapheme関係は分離する？（languageが絡むので）
+
 export function is(test: unknown): test is usvstring {
   return isString(test) && test.isWellFormed();
 }
