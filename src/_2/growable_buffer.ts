@@ -1,5 +1,5 @@
 import { int, uint8 } from "../_.ts";
-import { Uint8 } from "./uint.ts";
+import { Uint8 } from "../numerics/uint.ts";
 
 const _DEFAULT_SIZE = 1_048_576;
 

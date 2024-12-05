@@ -1,5 +1,7 @@
 import { assertStrictEquals, assertThrows } from "@std/assert";
-import { Uint32 } from "../../mod.ts";
+import { Numerics } from "../../mod.ts";
+
+const { Uint32 } = Numerics;
 
 const count = 16384;
 

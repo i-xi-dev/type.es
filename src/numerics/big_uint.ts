@@ -4,9 +4,9 @@ import {
   fromString as bigIntFromString,
   isInRange as isBigIntInRange,
   toString as bigIntToString,
-} from "../numerics/bigint_type.ts";
-import { assert as assertSafeInteger } from "../numerics/safe_integer.ts";
-import { BigIntRange } from "../numerics/bigint_range.ts";
+} from "./bigint_type.ts";
+import { assert as assertSafeInteger } from "./safe_integer.ts";
+import { BigIntRange } from "./bigint_range.ts";
 import { biguint64, int } from "../_.ts";
 import {
   BITS_PER_BYTE,
@@ -16,8 +16,8 @@ import {
   ToStringOptions,
   Uint8xOperations,
   UintNOperations,
-} from "../ranged_integer.ts";
-import { OverflowMode } from "../numerics/overflow_mode.ts";
+} from "./ranged_integer.ts";
+import { OverflowMode } from "./overflow_mode.ts";
 
 class _UinNOperations<T extends bigint> implements UintNOperations<T> {
   readonly #bitLength: int;
