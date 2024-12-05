@@ -1,5 +1,7 @@
 import { assertStrictEquals } from "@std/assert";
-import { EventFactory } from "../../mod.ts";
+import { Events } from "../../mod.ts";
+
+const { EventFactory } = Events;
 
 Deno.test("EventFactory.createProgressEvent(string)", () => {
   const event1 = EventFactory.createProgressEvent("progress-x");

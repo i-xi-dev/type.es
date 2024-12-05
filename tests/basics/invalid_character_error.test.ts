@@ -1,5 +1,7 @@
 import { assertStrictEquals } from "@std/assert";
-import { InvalidCharacterError } from "../../mod.ts";
+import { Basics } from "../../mod.ts";
+
+const { InvalidCharacterError } = Basics;
 
 Deno.test("InvalidCharacterError", () => {
   // new InvalidCharacterError()

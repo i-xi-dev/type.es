@@ -1,5 +1,7 @@
 import { assertStrictEquals } from "@std/assert";
-import { InvalidStateError } from "../../mod.ts";
+import { Basics } from "../../mod.ts";
+
+const { InvalidStateError } = Basics;
 
 Deno.test("InvalidStateError", () => {
   // new InvalidStateError()
