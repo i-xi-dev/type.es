@@ -1,5 +1,7 @@
 import { assertStrictEquals, assertThrows } from "@std/assert";
-import { BigIntRange } from "../../mod.ts";
+import { Numerics } from "../../mod.ts";
+
+const { BigIntRange } = Numerics;
 
 const range00 = BigIntRange.of(0n);
 const range01 = BigIntRange.of(0n, 1n);

@@ -1,5 +1,7 @@
 import { assertStrictEquals, assertThrows } from "@std/assert";
-import { IntegerRange } from "../../mod.ts";
+import { Numerics } from "../../mod.ts";
+
+const { IntegerRange } = Numerics;
 
 const minmax2m = { min: -2n, max: -2n };
 const minmax1m = { min: -1n, max: -1n };

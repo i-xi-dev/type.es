@@ -6,7 +6,7 @@ import {
   toString as bigIntToString,
 } from "../numerics/bigint_type.ts";
 import { assert as assertSafeInteger } from "../numerics/safe_integer.ts";
-import { BigIntRange } from "../_1/bigint_range.ts";
+import { BigIntRange } from "../numerics/bigint_range.ts";
 import { biguint64, int } from "../_.ts";
 import {
   BITS_PER_BYTE,

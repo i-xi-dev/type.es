@@ -1,6 +1,6 @@
-import { assert as assertSafeInteger } from "../numerics/safe_integer.ts";
+import { assert as assertSafeInteger } from "./safe_integer.ts";
 import { IntegerRange } from "./integer_range.ts";
-import { normalize as normalizeNumber } from "../numerics/number_type.ts";
+import { normalize as normalizeNumber } from "./number_type.ts";
 
 export class SafeIntegerRange<T extends number> implements IntegerRange<T> {
   readonly #min: T;

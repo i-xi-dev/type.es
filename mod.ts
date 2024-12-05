@@ -1,17 +1,14 @@
 export * from "./src/exception/abort_error.ts";
 export * as ArrayBufferType from "./src/_2/array_buffer_type.ts";
 export * from "./src/_2/big_uint.ts";
-export * from "./src/_1/bigint_range.ts";
 export * as BufferSourceType from "./src/_0/buffer_source_type.ts";
 export * as CodePoint from "./src/_2/code_point.ts";
 export * as EventFactory from "./src/event/event_factory.ts";
 export * from "./src/_2/growable_buffer.ts";
-export * from "./src/_1/integer_range.ts";
 export * from "./src/exception/invalid_character_error.ts";
 export * from "./src/exception/invalid_state_error.ts";
 export * as Numerics from "./src/numerics/mod.ts";
 export * as ObjectType from "./src/_0/object_type.ts";
-export * from "./src/_1/safe_integer_range.ts";
 export * as StringType from "./src/_0/string_type.ts";
 export * from "./src/exception/timeout_error.ts";
 export * as Uint8Iterable from "./src/_2/uint8_iterable.ts";

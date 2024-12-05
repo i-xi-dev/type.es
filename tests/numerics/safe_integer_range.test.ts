@@ -1,5 +1,7 @@
 import { assertStrictEquals, assertThrows } from "@std/assert";
-import { SafeIntegerRange } from "../../mod.ts";
+import { Numerics } from "../../mod.ts";
+
+const { SafeIntegerRange } = Numerics;
 
 const range00 = SafeIntegerRange.of(0);
 const range01 = SafeIntegerRange.of(0, 1);

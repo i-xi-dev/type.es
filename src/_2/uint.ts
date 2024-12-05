@@ -21,7 +21,7 @@ import {
 import { fromString as bigIntFromString } from "../numerics/bigint_type.ts";
 import { int, uint16, uint24, uint32, uint6, uint7, uint8 } from "../_.ts";
 import { OverflowMode } from "../numerics/overflow_mode.ts";
-import { SafeIntegerRange } from "../_1/safe_integer_range.ts";
+import { SafeIntegerRange } from "../numerics/safe_integer_range.ts";
 
 class _UinNOperations<T extends int> implements UintNOperations<T> {
   readonly #bitLength: int;
