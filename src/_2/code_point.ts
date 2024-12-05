@@ -6,7 +6,7 @@ import {
 } from "../numerics/safe_integer.ts";
 import { Radix } from "../numerics/radix.ts";
 import { SafeIntegerRange } from "../numerics/safe_integer_range.ts";
-import { ToStringOptions } from "../numerics/to_string_options.ts";
+import { ToStringOptions } from "../numerics/main.ts";
 
 export const MIN_VALUE = 0x0;
 

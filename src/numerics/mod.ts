@@ -1,6 +1,6 @@
 export * from "./bigint_range.ts";
 export * from "./integer_range.ts";
-export * from "./numeric.ts";
+export * from "./main.ts";
 export * from "./overflow_mode.ts";
 export * from "./radix.ts";
 export * from "./rounding_mode.ts";

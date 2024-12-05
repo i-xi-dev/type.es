@@ -11,6 +11,8 @@ import {
   isPositive as isPositiveNumber,
 } from "./number_type.ts";
 import { numeric } from "../_.ts";
+import { Radix } from "./radix.ts";
+import { RoundingMode } from "./rounding_mode.ts";
 
 export function isPositive(test: unknown): test is numeric {
   return isPositiveNumber(test) || isPositiveBigInt(test);
@@ -27,3 +29,18 @@ export function isNonPositive(test: unknown): test is numeric {
 export function isNegative(test: unknown): test is numeric {
   return isNegativeNumber(test) || isNegativeBigInt(test);
 }
+
+//XXX Integer.FromNumberOptions or IntegerFromNumberOptions
+export type FromNumberOptions = {
+  roundingMode?: RoundingMode;
+};
+
+export type FromStringOptions = {
+  radix?: Radix;
+};
+
+export type ToStringOptions = {
+  lowerCase?: boolean;
+  minIntegralDigits?: number;
+  radix?: Radix;
+};
