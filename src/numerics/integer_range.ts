@@ -86,6 +86,33 @@ export namespace IntegerRange {
     return false;
   }
 
+  export namespace Tuple {
+    export function is<T extends xint>(test: unknown): test is Tuple<T> {
+      if (Array.isArray(test) !== true) {
+        return false;
+      }
+
+      let parsedMin: T | undefined;
+      let parsedMax: T | undefined;
+      if (test.length === 1) {
+        parsedMin = test[0];
+        parsedMax = parsedMin;
+      }
+      else if (test.length === 2) {
+        parsedMin = test[0];
+        parsedMax = test[1];
+      }
+
+      if (isSafeInteger(parsedMin) && isSafeInteger(parsedMax)) {
+        return true;
+      } else if (isBigInt(parsedMin) && isBigInt(parsedMax)) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+  }
+
   export namespace Struct {
     export function fromRangeLike<T extends xint>(
       rangeLike: Like<T>,
@@ -93,6 +120,7 @@ export namespace IntegerRange {
       let parsedMin: T | undefined;
       let parsedMax: T | undefined;
 
+      //XXX Tuple.is()等に分割
       if (Array.isArray(rangeLike)) {
         if (rangeLike.length > 0) {
           parsedMin = rangeLike[0];

@@ -50,9 +50,6 @@ export function charCountOf(value: string): int {
   return value.length;
 }
 
-//XXX fromSubstrings
-//XXX fromSubstringsAsync
-
 //XXX fromChars
 //XXX fromCharsAsync
 
