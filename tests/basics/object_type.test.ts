@@ -68,6 +68,18 @@ Deno.test("ObjectType.assertNonNull()", () => {
   }
 });
 
+Deno.test("ObjectType.isNull()", () => {
+  assertStrictEquals(ObjectType.isNull({}), false);
+  assertStrictEquals(ObjectType.isNull(null), true);
+  assertStrictEquals(ObjectType.isNull(undefined), true);
+  assertStrictEquals(ObjectType.isNull([]), false);
+  assertStrictEquals(ObjectType.isNull(new Error()), false);
+  assertStrictEquals(ObjectType.isNull(""), false);
+  assertStrictEquals(ObjectType.isNull(1), false);
+  assertStrictEquals(ObjectType.isNull(true), false);
+  assertStrictEquals(ObjectType.isNull(false), false);
+});
+
 Deno.test("ObjectType.isIterable()", () => {
   assertStrictEquals(ObjectType.isIterable({}), false);
   assertStrictEquals(ObjectType.isIterable(null), false);

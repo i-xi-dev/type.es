@@ -38,8 +38,8 @@ export function planeOf(codePoint: codepoint): plane {
   return Math.trunc(codePoint / 0x10000) as plane;
 }
 
-export function isBmp(codePoint: codepoint): codePoint is codepoint {
-  return isSafeIntegerInRange(codePoint, MIN_VALUE, 0xFFFF);
+export function isBmp(test: unknown): test is codepoint {
+  return isSafeIntegerInRange(test, MIN_VALUE, 0xFFFF);
 }
 
 const _BMP: plane = 0;
@@ -49,10 +49,11 @@ function _isPlane(test: unknown): test is plane {
   return isSafeIntegerInRange(test, _BMP, _SPUA_B);
 }
 
-export function isInPlanes(
-  codePoint: codepoint,
-  planes: plane[],
-): codePoint is codepoint {
+export function isInPlanes(test: unknown, planes: plane[]): test is codepoint {
+  if (is(test) !== true) {
+    return false;
+  }
+
   if (
     (Array.isArray(planes) &&
       planes.every((plane) => _isPlane(plane))) !== true
@@ -60,15 +61,15 @@ export function isInPlanes(
     throw new TypeError("`planes` must be a array of planes.");
   }
 
-  return planes.includes(planeOf(codePoint));
+  return planes.includes(planeOf(test));
 }
 
 const _MIN_HIGH_SURROGATE: codepoint = 0xD800;
 const _MAX_HIGH_SURROGATE: codepoint = 0xDBFF;
 
-export function isHighSurrogate(codePoint: codepoint): codePoint is codepoint {
+export function isHighSurrogate(test: unknown): test is codepoint {
   return isSafeIntegerInRange(
-    codePoint,
+    test,
     _MIN_HIGH_SURROGATE,
     _MAX_HIGH_SURROGATE,
   );
@@ -77,17 +78,17 @@ export function isHighSurrogate(codePoint: codepoint): codePoint is codepoint {
 const _MIN_LOW_SURROGATE: codepoint = 0xDC00;
 const _MAX_LOW_SURROGATE: codepoint = 0xDFFF;
 
-export function isLowSurrogate(codePoint: codepoint): codePoint is codepoint {
+export function isLowSurrogate(test: unknown): test is codepoint {
   return isSafeIntegerInRange(
-    codePoint,
+    test,
     _MIN_LOW_SURROGATE,
     _MAX_LOW_SURROGATE,
   );
 }
 
-export function isSurrogate(codePoint: codepoint): codePoint is codepoint {
+export function isSurrogate(test: unknown): test is codepoint {
   return isSafeIntegerInRange(
-    codePoint,
+    test,
     _MIN_HIGH_SURROGATE,
     _MAX_LOW_SURROGATE,
   );
@@ -101,11 +102,11 @@ const _MIN_MONGOLIAN_VS: codepoint = 0x180B;
 const _MAX_MONGOLIAN_VS: codepoint = 0x180F;
 
 export function isVariationSelector(
-  codePoint: codepoint,
-): codePoint is codepoint {
-  return isSafeIntegerInRange(codePoint, _MIN_VS, _MAX_VS) ||
-    isSafeIntegerInRange(codePoint, _MIN_VSS, _MAX_VSS) ||
-    isSafeIntegerInRange(codePoint, _MIN_MONGOLIAN_VS, _MAX_MONGOLIAN_VS);
+  test: unknown,
+): test is codepoint {
+  return isSafeIntegerInRange(test, _MIN_VS, _MAX_VS) ||
+    isSafeIntegerInRange(test, _MIN_VSS, _MAX_VSS) ||
+    isSafeIntegerInRange(test, _MIN_MONGOLIAN_VS, _MAX_MONGOLIAN_VS);
 }
 
 export function isInRanges(

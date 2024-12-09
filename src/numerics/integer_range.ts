@@ -97,8 +97,7 @@ export namespace IntegerRange {
       if (test.length === 1) {
         parsedMin = test[0];
         parsedMax = parsedMin;
-      }
-      else if (test.length === 2) {
+      } else if (test.length === 2) {
         parsedMin = test[0];
         parsedMax = test[1];
       }
@@ -109,6 +108,14 @@ export namespace IntegerRange {
         return true;
       } else {
         return false;
+      }
+    }
+
+    export function assert(test: unknown, label: string): void {
+      if (is(test) !== true) {
+        throw new TypeError(
+          `\`${label}\` must be a tuple consisting of one or two integers.`,
+        );
       }
     }
   }

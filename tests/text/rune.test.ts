@@ -85,3 +85,13 @@ Deno.test("Rune.assert()", () => {
     //
   }
 });
+
+Deno.test("Rune.isBmp(string)", () => {
+  assertStrictEquals(Rune.isBmp("\u{0}"), true);
+  assertStrictEquals(Rune.isBmp("\u{FFFF}"), true);
+  assertStrictEquals(Rune.isBmp("\u{10000}"), false);
+  assertStrictEquals(Rune.isBmp("\u{10FFFF}"), false);
+
+  assertStrictEquals(Rune.isBmp(""), false);
+  assertStrictEquals(Rune.isBmp("11"), false);
+});

@@ -183,29 +183,9 @@ Deno.test("CodePoint.isInPlanes()", () => {
   assertStrictEquals(CodePoint.isInPlanes(0x100000, [0, 16]), true);
   assertStrictEquals(CodePoint.isInPlanes(0x10FFFF, [0, 16]), true);
 
-  assertThrows(
-    () => {
-      CodePoint.isInPlanes(-1, []);
-    },
-    TypeError,
-    "codePoint",
-  );
-
-  assertThrows(
-    () => {
-      CodePoint.isInPlanes(0.5, []);
-    },
-    TypeError,
-    "codePoint",
-  );
-
-  assertThrows(
-    () => {
-      CodePoint.isInPlanes(0x110000, []);
-    },
-    TypeError,
-    "codePoint",
-  );
+  assertStrictEquals(CodePoint.isInPlanes(-1, []), false);
+  assertStrictEquals(CodePoint.isInPlanes(0.5, []), false);
+  assertStrictEquals(CodePoint.isInPlanes(0x110000, []), false);
 
   //assertStrictEquals(CodePoint.isInPlanes(0x0, [1, 16]), false);
   assertThrows(

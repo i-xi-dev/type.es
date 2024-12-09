@@ -12,6 +12,10 @@ export function isNonNull(test: unknown): test is NonNullable<object> {
   return (is(test) && (test !== null));
 }
 
+export function isNull(test: unknown): test is null | undefined {
+  return (test === null) || (test === undefined);
+}
+
 export function assertNonNull(test: unknown, label: string): void {
   if (isNonNull(test) !== true) {
     throw new TypeError(`\`${label}\` must be an \`Object\` except \`null\`.`);

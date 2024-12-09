@@ -25,36 +25,36 @@ export type TypedArrayConstructor =
   | BigInt64ArrayConstructor;
 
 /**
- * @param value - The value to be tested
+ * @param test - The value to be tested
  * @returns Whether the passed value is a [`TypedArray`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypedArray) constructor.
  */
 export function isTypedArrayConstructor(
-  value: unknown,
-): value is TypedArrayConstructor {
-  return ((value === Uint8Array) || (value === Uint8ClampedArray) ||
-    (value === Int8Array) || (value === Uint16Array) ||
-    (value === Int16Array) || (value === Uint32Array) ||
-    (value === Int32Array) || (value === Float32Array) ||
-    (value === Float64Array) || (value === BigUint64Array) ||
-    (value === BigInt64Array));
+  test: unknown,
+): test is TypedArrayConstructor {
+  return ((test === Uint8Array) || (test === Uint8ClampedArray) ||
+    (test === Int8Array) || (test === Uint16Array) ||
+    (test === Int16Array) || (test === Uint32Array) ||
+    (test === Int32Array) || (test === Float32Array) ||
+    (test === Float64Array) || (test === BigUint64Array) ||
+    (test === BigInt64Array));
 }
 
 /**
- * @param value - The value to be tested
+ * @param test - The value to be tested
  * @returns Whether the passed value is a [`DataView`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DataView) constructor.
  */
 export function isDataViewConstructor(
-  value: unknown,
-): value is DataViewConstructor {
-  return value === DataView;
+  test: unknown,
+): test is DataViewConstructor {
+  return test === DataView;
 }
 
 /**
- * @param value - The value to be tested
+ * @param test - The value to be tested
  * @returns Whether the passed value is an [`ArrayBufferView`](https://webidl.spec.whatwg.org/#ArrayBufferView) constructor.
  */
 export function isArrayBufferViewConstructor(
-  value: unknown,
-): value is TypedArrayConstructor | DataViewConstructor {
-  return isTypedArrayConstructor(value) ? true : isDataViewConstructor(value);
+  test: unknown,
+): test is TypedArrayConstructor | DataViewConstructor {
+  return isTypedArrayConstructor(test) ? true : isDataViewConstructor(test);
 }
