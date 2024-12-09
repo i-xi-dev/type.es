@@ -2,7 +2,11 @@ import { codepoint, plane, rune, script } from "../_.ts";
 import { IntegerRange } from "../numerics/integer_range.ts";
 import { is as isString } from "../basics/string_type.ts";
 import { isNull } from "../basics/object_type.ts";
-import { isBmp as isBmpCodePoint, isInPlanes, planeOf as planeOfCodePoint } from "./code_point.ts";
+import {
+  isBmp as isBmpCodePoint,
+  isInPlanes,
+  planeOf as planeOfCodePoint,
+} from "./code_point.ts";
 import { RunePattern } from "./rune_pattern.ts";
 import { SafeIntegerRange } from "../numerics/safe_integer_range.ts";
 

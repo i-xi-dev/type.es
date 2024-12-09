@@ -1,5 +1,6 @@
 import { codepoint, plane } from "../_.ts";
 import { IntegerRange } from "../numerics/integer_range.ts";
+import { is as isPlane } from "./plane.ts";
 import {
   isInRange as isSafeIntegerInRange,
   toString as safeIntegerToString,
@@ -42,13 +43,6 @@ export function isBmp(test: unknown): test is codepoint {
   return isSafeIntegerInRange(test, MIN_VALUE, 0xFFFF);
 }
 
-const _BMP: plane = 0;
-const _SPUA_B: plane = 16;
-
-function _isPlane(test: unknown): test is plane {
-  return isSafeIntegerInRange(test, _BMP, _SPUA_B);
-}
-
 export function isInPlanes(test: unknown, planes: plane[]): test is codepoint {
   if (is(test) !== true) {
     return false;
@@ -56,7 +50,7 @@ export function isInPlanes(test: unknown, planes: plane[]): test is codepoint {
 
   if (
     (Array.isArray(planes) &&
-      planes.every((plane) => _isPlane(plane))) !== true
+      planes.every((plane) => isPlane(plane))) !== true
   ) {
     throw new TypeError("`planes` must be a array of planes.");
   }
