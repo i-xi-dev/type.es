@@ -2,7 +2,7 @@ import { codepoint, plane, rune, script } from "../_.ts";
 import { IntegerRange } from "../numerics/integer_range.ts";
 import { is as isString } from "../basics/string_type.ts";
 import { isNull } from "../basics/object_type.ts";
-import { isBmp as isBmpCodePoint, isInPlanes, planeOf } from "./code_point.ts";
+import { isBmp as isBmpCodePoint, isInPlanes, planeOf as planeOfCodePoint } from "./code_point.ts";
 import { RunePattern } from "./rune_pattern.ts";
 import { SafeIntegerRange } from "../numerics/safe_integer_range.ts";
 
@@ -15,6 +15,11 @@ export function assert(test: unknown, label: string): void {
   if (is(test) !== true) {
     throw new TypeError(`\`${label}\` must be an Unicode scalar value.`);
   }
+}
+
+export function planeOf(rune: rune): plane {
+  assert(rune, "rune");
+  return Math.trunc(rune.codePointAt(0)! / 0x10000) as plane;
 }
 
 export function isBmp(test: unknown): test is rune {
