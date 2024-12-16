@@ -193,4 +193,12 @@ Deno.test("Rune.isInGeneralCategory()", () => {
   assertStrictEquals(Rune.isInGeneralCategory("\u{2029}", "Co"), false);
   assertStrictEquals(Rune.isInGeneralCategory("\u{2029}", "Cn"), false);
   assertStrictEquals(Rune.isInGeneralCategory("\u{2029}", "C"), false);
+
+  assertThrows(
+    () => {
+      Rune.isInGeneralCategory("\u{2029}", "" as "C");
+    },
+    TypeError,
+    "`category` must be an Unicode `General_Category` value.",
+  );
 });
