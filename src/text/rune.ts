@@ -10,6 +10,7 @@ import {
 } from "./code_point.ts";
 import { RunePattern, ScriptMatch } from "./rune_pattern.ts";
 import { SafeIntegerRange } from "../numerics/safe_integer_range.ts";
+import { assert as assertScript, is as isScript } from "../i18n/script.ts";
 
 export function is(test: unknown): test is rune {
   return isString(test) && (test.length <= 2) && ([...test].length === 1) &&
@@ -51,11 +52,27 @@ export function isInGeneralCategory(
   return is(test) && (new RegExp(`^\\p{gc=${category}}$`, "v")).test(test);
 }
 
-// export function isBelongTo(
-//   test: unknown,
-//   scripts: ScriptMatch[],
-// ): test is rune {
-// }
+export function isBelongToScript(
+  test: unknown,
+  script: script,
+  excludeScx?: boolean,
+): test is rune {
+  assertScript(script, "script");
+  if (is(test) !== true) {
+    return false;
+  }
+
+  try {
+    return (excludeScx === true)
+      ? (new RegExp(`^\\p{sc=${script}}$`, "v")).test(test)
+      : (new RegExp(`^(?:\\p{sc=${script}}|\\p{scx=${script}})$`, "v")).test(
+        test,
+      );
+  } catch {
+    //
+    throw new RangeError(`\`${script}\` is not supported in Unicode property.`);
+  }
+}
 
 /*
 export function isPatternMatched(

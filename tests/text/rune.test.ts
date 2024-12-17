@@ -202,3 +202,33 @@ Deno.test("Rune.isInGeneralCategory()", () => {
     "`category` must be an Unicode `General_Category` value.",
   );
 });
+
+Deno.test("Rune.isBelongToScript()", () => {
+  assertStrictEquals(Rune.isBelongToScript("ア", "Kana"), true);
+  assertStrictEquals(Rune.isBelongToScript("ア", "Hira"), false);
+  assertStrictEquals(Rune.isBelongToScript("ア", "Kana", true), true);
+  assertStrictEquals(Rune.isBelongToScript("ア", "Hira", true), false);
+
+  assertStrictEquals(Rune.isBelongToScript("あ", "Kana"), false);
+  assertStrictEquals(Rune.isBelongToScript("あ", "Hira"), true);
+  assertStrictEquals(Rune.isBelongToScript("あ", "Kana", true), false);
+  assertStrictEquals(Rune.isBelongToScript("あ", "Hira", true), true);
+
+  assertStrictEquals(Rune.isBelongToScript("ー", "Kana"), true);
+  assertStrictEquals(Rune.isBelongToScript("ー", "Hira"), true);
+  assertStrictEquals(Rune.isBelongToScript("ー", "Kana", true), false);
+  assertStrictEquals(Rune.isBelongToScript("ー", "Hira", true), false);
+
+  assertStrictEquals(Rune.isBelongToScript("", "Latn"), false);
+  assertStrictEquals(Rune.isBelongToScript("a", "Latn"), true);
+  assertStrictEquals(Rune.isBelongToScript("aa", "Latn"), false);
+  assertStrictEquals(Rune.isBelongToScript(null, "Latn"), false);
+
+  assertThrows(
+    () => {
+      Rune.isBelongToScript("a", "Aaaaa");
+    },
+    TypeError,
+    "`script` must be an ISO 15924 script alpha-4 code.",
+  );
+});
