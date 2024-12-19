@@ -1,6 +1,7 @@
 import { assert as assertCodePoint } from "./code_point.ts";
+import { assert as assertScript } from "../i18n/script.ts";
 import { assertIterable as assertIterableObject } from "../basics/object_type.ts";
-import { codepoint, grapheme, int, rune, usvstring } from "../_.ts";
+import { codepoint, grapheme, int, rune, script, usvstring } from "../_.ts";
 import { EMPTY, is as isString } from "../basics/string_type.ts";
 import { getGraphemeSegmenter } from "../i18n/main.ts";
 
@@ -108,4 +109,53 @@ export function toGraphemes(
       yield segment.segment;
     }
   })(segmenter, value);
+}
+
+export type ScriptMatchingOptions = {
+  excludeScx?: boolean;
+  // excludeCommon?: boolean;
+  // excludeInherited?: boolean;
+};
+
+function _matchingPatternFrom(
+  scripts: script[],
+  options?: ScriptMatchingOptions,
+): string {
+  const or = [];
+  for (const script of scripts) {
+    or.push(`\\p{sc=${script}}`);
+
+    if (options?.excludeScx !== true) {
+      or.push(`\\p{scx=${script}}`);
+    }
+
+    // Zyyy, Zinh
+  }
+
+  return or.join("|");
+}
+
+export function isBelongToScripts(
+  test: unknown,
+  scripts: script[],
+  options?: ScriptMatchingOptions,
+): test is usvstring {
+  for (const script of scripts) {
+    assertScript(script, "script");
+  }
+  if (is(test) !== true) {
+    return false;
+  }
+
+  const pattern = _matchingPatternFrom(scripts, options);
+  try {
+    return (new RegExp(`^(?:${pattern})*$`, "v")).test(test);
+  } catch {
+    //
+    throw new RangeError(
+      `At least one of \`[${
+        scripts.join(", ")
+      }]\` is not supported in Unicode property.`,
+    );
+  }
 }

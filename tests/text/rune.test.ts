@@ -203,32 +203,53 @@ Deno.test("Rune.isInGeneralCategory()", () => {
   );
 });
 
-Deno.test("Rune.isBelongToScript()", () => {
-  assertStrictEquals(Rune.isBelongToScript("ア", "Kana"), true);
-  assertStrictEquals(Rune.isBelongToScript("ア", "Hira"), false);
-  assertStrictEquals(Rune.isBelongToScript("ア", "Kana", true), true);
-  assertStrictEquals(Rune.isBelongToScript("ア", "Hira", true), false);
+Deno.test("Rune.isBelongToScripts()", () => {
+  const k = ["Kana"];
+  const h = ["Hira"];
+  const l = ["Latn"];
+  const lc = ["Latn", "Zyyy"];
 
-  assertStrictEquals(Rune.isBelongToScript("あ", "Kana"), false);
-  assertStrictEquals(Rune.isBelongToScript("あ", "Hira"), true);
-  assertStrictEquals(Rune.isBelongToScript("あ", "Kana", true), false);
-  assertStrictEquals(Rune.isBelongToScript("あ", "Hira", true), true);
+  const opEx = { excludeScx: true } as const;
 
-  assertStrictEquals(Rune.isBelongToScript("ー", "Kana"), true);
-  assertStrictEquals(Rune.isBelongToScript("ー", "Hira"), true);
-  assertStrictEquals(Rune.isBelongToScript("ー", "Kana", true), false);
-  assertStrictEquals(Rune.isBelongToScript("ー", "Hira", true), false);
+  assertStrictEquals(Rune.isBelongToScripts("ア", k), true);
+  assertStrictEquals(Rune.isBelongToScripts("ア", h), false);
+  assertStrictEquals(Rune.isBelongToScripts("ア", k, opEx), true);
+  assertStrictEquals(Rune.isBelongToScripts("ア", h, opEx), false);
 
-  assertStrictEquals(Rune.isBelongToScript("", "Latn"), false);
-  assertStrictEquals(Rune.isBelongToScript("a", "Latn"), true);
-  assertStrictEquals(Rune.isBelongToScript("aa", "Latn"), false);
-  assertStrictEquals(Rune.isBelongToScript(null, "Latn"), false);
+  assertStrictEquals(Rune.isBelongToScripts("あ", k), false);
+  assertStrictEquals(Rune.isBelongToScripts("あ", h), true);
+  assertStrictEquals(Rune.isBelongToScripts("あ", k, opEx), false);
+  assertStrictEquals(Rune.isBelongToScripts("あ", h, opEx), true);
+
+  assertStrictEquals(Rune.isBelongToScripts("ー", k), true);
+  assertStrictEquals(Rune.isBelongToScripts("ー", h), true);
+  assertStrictEquals(Rune.isBelongToScripts("ー", k, opEx), false);
+  assertStrictEquals(Rune.isBelongToScripts("ー", h, opEx), false);
+
+  assertStrictEquals(Rune.isBelongToScripts("", l), false);
+  assertStrictEquals(Rune.isBelongToScripts("a", l), true);
+  assertStrictEquals(Rune.isBelongToScripts("aa", l), false);
+  assertStrictEquals(Rune.isBelongToScripts("1", l), false);
+
+  assertStrictEquals(Rune.isBelongToScripts("", lc), false);
+  assertStrictEquals(Rune.isBelongToScripts("a", lc), true);
+  assertStrictEquals(Rune.isBelongToScripts("aa", lc), false);
+  assertStrictEquals(Rune.isBelongToScripts("1", lc), true);
+
+  assertStrictEquals(Rune.isBelongToScripts(null, l), false);
 
   assertThrows(
     () => {
-      Rune.isBelongToScript("a", "Aaaaa");
+      Rune.isBelongToScripts("a", ["Aaaaa"]);
     },
     TypeError,
     "`script` must be an ISO 15924 script alpha-4 code.",
+  );
+  assertThrows(
+    () => {
+      Rune.isBelongToScripts("a", ["Zsym"]);
+    },
+    RangeError,
+    "At least one of `[Zsym]` is not supported in Unicode property.",
   );
 });

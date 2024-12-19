@@ -1,3 +1,4 @@
+import { assert as assertScript } from "../i18n/script.ts";
 import { codepoint, plane, rune, script } from "../_.ts";
 import { GeneralCategory } from "./unicode.ts";
 import { IntegerRange } from "../numerics/integer_range.ts";
@@ -10,7 +11,6 @@ import {
 } from "./code_point.ts";
 import { RunePattern, ScriptMatch } from "./rune_pattern.ts";
 import { SafeIntegerRange } from "../numerics/safe_integer_range.ts";
-import { assert as assertScript, is as isScript } from "../i18n/script.ts";
 
 export function is(test: unknown): test is rune {
   return isString(test) && (test.length <= 2) && ([...test].length === 1) &&
@@ -52,25 +52,48 @@ export function isInGeneralCategory(
   return is(test) && (new RegExp(`^\\p{gc=${category}}$`, "v")).test(test);
 }
 
-export function isBelongToScript(
+export type ScriptMatchingOptions = {
+  excludeScx?: boolean;
+};
+
+function _matchingPatternFrom(
+  scripts: script[],
+  options?: ScriptMatchingOptions,
+): string {
+  const or = [];
+  for (const script of scripts) {
+    or.push(`\\p{sc=${script}}`);
+
+    if (options?.excludeScx !== true) {
+      or.push(`\\p{scx=${script}}`);
+    }
+  }
+
+  return or.join("|");
+}
+
+export function isBelongToScripts(
   test: unknown,
-  script: script,
-  excludeScx?: boolean,
+  scripts: script[],
+  options?: ScriptMatchingOptions,
 ): test is rune {
-  assertScript(script, "script");
+  for (const script of scripts) {
+    assertScript(script, "script");
+  }
   if (is(test) !== true) {
     return false;
   }
 
+  const pattern = _matchingPatternFrom(scripts, options);
   try {
-    return (excludeScx === true)
-      ? (new RegExp(`^\\p{sc=${script}}$`, "v")).test(test)
-      : (new RegExp(`^(?:\\p{sc=${script}}|\\p{scx=${script}})$`, "v")).test(
-        test,
-      );
+    return (new RegExp(`^(?:${pattern})$`, "v")).test(test);
   } catch {
     //
-    throw new RangeError(`\`${script}\` is not supported in Unicode property.`);
+    throw new RangeError(
+      `At least one of \`[${
+        scripts.join(", ")
+      }]\` is not supported in Unicode property.`,
+    );
   }
 }
 
