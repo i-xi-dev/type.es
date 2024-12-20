@@ -26,3 +26,17 @@ Deno.test("Script.assert()", () => {
     //
   }
 });
+
+Deno.test("Script.propertiesOf()", () => {
+  const l = Script.propertiesOf("Latn");
+  assertStrictEquals(l?.code, "Latn");
+  assertStrictEquals(l?.number, 215);
+  assertStrictEquals(l?.name, "Latin");
+  assertStrictEquals(l?.alias, "Latin");
+
+  const s = Script.propertiesOf("Zsym");
+  assertStrictEquals(s?.code, "Zsym");
+  assertStrictEquals(s?.number, 996);
+  assertStrictEquals(s?.name, "Symbols");
+  assertStrictEquals(s?.alias, "");
+});
