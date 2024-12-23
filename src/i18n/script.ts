@@ -16,9 +16,16 @@ export function assert(test: unknown, label: string): void {
 }
 
 export type Properties = {
-  code: string;
+  /** ISO 15924 Alpha-4 code. */
+  alpha4: string;
+
+  /** ISO 15924 Numeric code. */
   number: number;
+
+  /** ISO 15924 English name. */
   name: string;
+
+  /** UCD alias. */
   alias: string;
 };
 
@@ -26,7 +33,7 @@ export function propertiesOf(script: script): Properties | null {
   if (is(script)) {
     const info = scriptMap[script as _script];
     return {
-      code: script,
+      alpha4: script,
       number: info[0] as number,
       name: info[1] as string,
       alias: info[2] as string,

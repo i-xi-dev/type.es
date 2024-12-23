@@ -9,6 +9,9 @@ Deno.test("Script.is()", () => {
   assertStrictEquals(Script.is("Aaaaa"), false);
   assertStrictEquals(Script.is("Aaa"), false);
   assertStrictEquals(Script.is("AAAA"), false);
+  assertStrictEquals(Script.is(""), false);
+
+  assertStrictEquals(Script.is(null), false);
 });
 
 Deno.test("Script.assert()", () => {
@@ -29,13 +32,13 @@ Deno.test("Script.assert()", () => {
 
 Deno.test("Script.propertiesOf()", () => {
   const l = Script.propertiesOf("Latn");
-  assertStrictEquals(l?.code, "Latn");
+  assertStrictEquals(l?.alpha4, "Latn");
   assertStrictEquals(l?.number, 215);
   assertStrictEquals(l?.name, "Latin");
   assertStrictEquals(l?.alias, "Latin");
 
   const s = Script.propertiesOf("Zsym");
-  assertStrictEquals(s?.code, "Zsym");
+  assertStrictEquals(s?.alpha4, "Zsym");
   assertStrictEquals(s?.number, 996);
   assertStrictEquals(s?.name, "Symbols");
   assertStrictEquals(s?.alias, "");
