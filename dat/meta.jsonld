@@ -5,6 +5,10 @@
   "@id": "https://raw.githubusercontent.com/i-xi-dev/type.es/refs/heads/main/dat/meta.jsonld",
   "@graph": [
     {
+      "@id": "https://raw.githubusercontent.com/i-xi-dev/type.es/refs/heads/main/dat/i18n/region_map.json",
+      "prov:generatedAt": "2024-12-24T14:55:00Z"
+    },
+    {
       "@id": "https://raw.githubusercontent.com/i-xi-dev/type.es/refs/heads/main/dat/i18n/script_map.json",
       "prov:generatedAt": "2024-12-13T13:47:00Z"
     }
