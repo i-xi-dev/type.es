@@ -36,4 +36,12 @@ Deno.test("Region.propertiesOf()", () => {
   assertStrictEquals(l?.number, 840);
   assertStrictEquals(l?.alpha3, "USA");
   assertStrictEquals(l?.name, "United States of America (the)");
+  assertStrictEquals(l?.private, false);
+
+  const q = Region.propertiesOf("XX");
+  assertStrictEquals(q?.alpha2, "");
+  assertStrictEquals(q?.number, Number.NaN);
+  assertStrictEquals(q?.alpha3, "");
+  assertStrictEquals(q?.name, "");
+  assertStrictEquals(q?.private, true);
 });

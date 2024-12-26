@@ -27,16 +27,21 @@ export type Properties = {
 
   /** ISO 3166-1 English name. */
   name: string;
+
+  /** User-assigned code */
+  private: boolean;
 };
 
 export function propertiesOf(region: region): Properties | null {
   if (is(region)) {
     const info = regionMap[region as _region];
+    const num = info[0] as number;
     return {
       alpha2: region,
-      number: info[0] as number,
+      number: (num <= 0) ? Number.NaN : num,
       alpha3: info[1] as string,
       name: info[2] as string,
+      private: info[3] as boolean,
     };
   }
 

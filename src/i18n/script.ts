@@ -27,6 +27,9 @@ export type Properties = {
 
   /** UCD alias. */
   alias: string;
+
+  /** Reserved for private use */
+  private: boolean;
 };
 
 export function propertiesOf(script: script): Properties | null {
@@ -37,6 +40,7 @@ export function propertiesOf(script: script): Properties | null {
       number: info[0] as number,
       name: info[1] as string,
       alias: info[2] as string,
+      private: info[3] as boolean,
     };
   }
 

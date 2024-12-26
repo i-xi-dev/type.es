@@ -15,6 +15,9 @@ export type grapheme = string;
 
 export type usvstring = string;
 
+/** `/^[a-z]{2,3}$/` */
+export type lang = string;
+
 /** `/^[A-Z][a-z]{3}$/` */
 export type script = string;
 
