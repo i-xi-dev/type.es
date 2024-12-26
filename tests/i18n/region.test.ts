@@ -39,7 +39,7 @@ Deno.test("Region.propertiesOf()", () => {
   assertStrictEquals(l?.private, false);
 
   const q = Region.propertiesOf("XX");
-  assertStrictEquals(q?.alpha2, "");
+  assertStrictEquals(q?.alpha2, "XX");
   assertStrictEquals(q?.number, Number.NaN);
   assertStrictEquals(q?.alpha3, "");
   assertStrictEquals(q?.name, "");
