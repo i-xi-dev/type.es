@@ -303,7 +303,7 @@ Deno.test("RuneSequence.toCodePoints()", () => {
     e1,
   );
 });
-
+/*
 Deno.test("RuneSequence.toGraphemes()", () => {
   assertStrictEquals(_iToS(RuneSequence.toGraphemes("")), `[]`);
   assertStrictEquals(_iToS(RuneSequence.toGraphemes("012")), `["0","1","2"]`);
@@ -478,3 +478,4 @@ Deno.test("RuneSequence.isBelongToScripts()", () => {
     "`script` must be an ISO 15924 script alpha-4 code.",
   );
 });
+*/

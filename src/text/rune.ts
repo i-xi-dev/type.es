@@ -1,5 +1,4 @@
-import { assert as assertScript } from "../i18n/script.ts";
-import { codepoint, plane, rune, script } from "../_.ts";
+import { codepoint, plane, rune } from "../_.ts";
 import { GeneralCategory } from "./unicode.ts";
 import { IntegerRange } from "../numerics/integer_range.ts";
 import { is as isString } from "../basics/string_type.ts";
@@ -9,7 +8,6 @@ import {
   isInPlanes,
   planeOf as planeOfCodePoint,
 } from "./code_point.ts";
-import { RunePattern, ScriptMatch } from "./rune_pattern.ts";
 import { SafeIntegerRange } from "../numerics/safe_integer_range.ts";
 
 export function is(test: unknown): test is rune {
@@ -32,6 +30,9 @@ export function isBmp(test: unknown): test is rune {
   return is(test) && isBmpCodePoint(test.codePointAt(0)!);
 }
 
+export function isInPlane() {
+}
+
 function _isGeneralCategory(test: unknown): test is GeneralCategory {
   return Object.values(GeneralCategory).includes(test as GeneralCategory);
 }
@@ -52,50 +53,52 @@ export function isInGeneralCategory(
   return is(test) && (new RegExp(`^\\p{gc=${category}}$`, "v")).test(test);
 }
 
+export function isInBlock() {}
+
 export type ScriptMatchingOptions = {
   excludeScx?: boolean;
 };
 
-function _matchingPatternFrom(
-  scripts: script[],
-  options?: ScriptMatchingOptions,
-): string {
-  const or = [];
-  for (const script of scripts) {
-    or.push(`\\p{sc=${script}}`);
+// function _matchingPatternFrom(
+//   scripts: script[],
+//   options?: ScriptMatchingOptions,
+// ): string {
+//   const or = [];
+//   for (const script of scripts) {
+//     or.push(`\\p{sc=${script}}`);
 
-    if (options?.excludeScx !== true) {
-      or.push(`\\p{scx=${script}}`);
-    }
-  }
+//     if (options?.excludeScx !== true) {
+//       or.push(`\\p{scx=${script}}`);
+//     }
+//   }
 
-  return or.join("|");
-}
+//   return or.join("|");
+// }
 
-export function isBelongToScripts(
-  test: unknown,
-  scripts: script[],
-  options?: ScriptMatchingOptions,
-): test is rune {
-  for (const script of scripts) {
-    assertScript(script, "script");
-  }
-  if (is(test) !== true) {
-    return false;
-  }
+// export function isBelongToScripts(
+//   test: unknown,
+//   scripts: script[],
+//   options?: ScriptMatchingOptions,
+// ): test is rune {
+//   for (const script of scripts) {
+//     assertScript(script, "script");
+//   }
+//   if (is(test) !== true) {
+//     return false;
+//   }
 
-  const pattern = _matchingPatternFrom(scripts, options);
-  try {
-    return (new RegExp(`^(?:${pattern})$`, "v")).test(test);
-  } catch {
-    //
-    throw new RangeError(
-      `At least one of \`[${
-        scripts.join(", ")
-      }]\` is not supported in Unicode property.`,
-    );
-  }
-}
+//   const pattern = _matchingPatternFrom(scripts, options);
+//   try {
+//     return (new RegExp(`^(?:${pattern})$`, "v")).test(test);
+//   } catch {
+//     //
+//     throw new RangeError(
+//       `At least one of \`[${
+//         scripts.join(", ")
+//       }]\` is not supported in Unicode property.`,
+//     );
+//   }
+// }
 
 /*
 export function isPatternMatched(

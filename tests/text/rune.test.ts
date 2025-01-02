@@ -202,7 +202,7 @@ Deno.test("Rune.isInGeneralCategory()", () => {
     "`category` must be an Unicode `General_Category` value.",
   );
 });
-
+/*
 Deno.test("Rune.isBelongToScripts()", () => {
   const k = ["Kana"];
   const h = ["Hira"];
@@ -253,3 +253,4 @@ Deno.test("Rune.isBelongToScripts()", () => {
     "At least one of `[Zsym]` is not supported in Unicode property.",
   );
 });
+*/

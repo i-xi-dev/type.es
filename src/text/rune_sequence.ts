@@ -1,9 +1,7 @@
 import { assert as assertCodePoint } from "./code_point.ts";
-import { assert as assertScript } from "../i18n/script.ts";
 import { assertIterable as assertIterableObject } from "../basics/object_type.ts";
-import { codepoint, grapheme, int, rune, script, usvstring } from "../_.ts";
+import { codepoint, grapheme, int, rune, usvstring } from "../_.ts";
 import { EMPTY, is as isString } from "../basics/string_type.ts";
-import { getGraphemeSegmenter } from "../i18n/main.ts";
 
 export function is(test: unknown): test is usvstring {
   return isString(test) && test.isWellFormed();
@@ -93,23 +91,23 @@ export type ToGraphemesOptions = {
   locale?: string | Intl.Locale;
 };
 
-// 分割はIntl.Segmenterに依存する（実行環境によって結果が異なる可能性は排除できない）
-//TODO allowMalformed
-export function toGraphemes(
-  value: string,
-  options?: ToGraphemesOptions,
-): IterableIterator<grapheme, void, void> {
-  assert(value, "value");
+// // 分割はIntl.Segmenterに依存する（実行環境によって結果が異なる可能性は排除できない）
+// //TODO allowMalformed
+// export function toGraphemes(
+//   value: string,
+//   options?: ToGraphemesOptions,
+// ): IterableIterator<grapheme, void, void> {
+//   assert(value, "value");
 
-  const segmenter = getGraphemeSegmenter(options?.locale);
+//   const segmenter = getGraphemeSegmenter(options?.locale);
 
-  return (function* (seg, s) {
-    const segements = seg.segment(s);
-    for (const segment of segements) {
-      yield segment.segment;
-    }
-  })(segmenter, value);
-}
+//   return (function* (seg, s) {
+//     const segements = seg.segment(s);
+//     for (const segment of segements) {
+//       yield segment.segment;
+//     }
+//   })(segmenter, value);
+// }
 
 export type ScriptMatchingOptions = {
   excludeScx?: boolean;
@@ -117,45 +115,45 @@ export type ScriptMatchingOptions = {
   // excludeInherited?: boolean;
 };
 
-function _matchingPatternFrom(
-  scripts: script[],
-  options?: ScriptMatchingOptions,
-): string {
-  const or = [];
-  for (const script of scripts) {
-    or.push(`\\p{sc=${script}}`);
+// function _matchingPatternFrom(
+//   scripts: script[],
+//   options?: ScriptMatchingOptions,
+// ): string {
+//   const or = [];
+//   for (const script of scripts) {
+//     or.push(`\\p{sc=${script}}`);
 
-    if (options?.excludeScx !== true) {
-      or.push(`\\p{scx=${script}}`);
-    }
+//     if (options?.excludeScx !== true) {
+//       or.push(`\\p{scx=${script}}`);
+//     }
 
-    // Zyyy, Zinh
-  }
+//     // Zyyy, Zinh
+//   }
 
-  return or.join("|");
-}
+//   return or.join("|");
+// }
 
-export function isBelongToScripts(
-  test: unknown,
-  scripts: script[],
-  options?: ScriptMatchingOptions,
-): test is usvstring {
-  for (const script of scripts) {
-    assertScript(script, "script");
-  }
-  if (is(test) !== true) {
-    return false;
-  }
+// export function isBelongToScripts(
+//   test: unknown,
+//   scripts: script[],
+//   options?: ScriptMatchingOptions,
+// ): test is usvstring {
+//   for (const script of scripts) {
+//     assertScript(script, "script");
+//   }
+//   if (is(test) !== true) {
+//     return false;
+//   }
 
-  const pattern = _matchingPatternFrom(scripts, options);
-  try {
-    return (new RegExp(`^(?:${pattern})*$`, "v")).test(test);
-  } catch {
-    //
-    throw new RangeError(
-      `At least one of \`[${
-        scripts.join(", ")
-      }]\` is not supported in Unicode property.`,
-    );
-  }
-}
+//   const pattern = _matchingPatternFrom(scripts, options);
+//   try {
+//     return (new RegExp(`^(?:${pattern})*$`, "v")).test(test);
+//   } catch {
+//     //
+//     throw new RangeError(
+//       `At least one of \`[${
+//         scripts.join(", ")
+//       }]\` is not supported in Unicode property.`,
+//     );
+//   }
+// }
