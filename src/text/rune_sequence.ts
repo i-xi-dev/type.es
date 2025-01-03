@@ -1,6 +1,6 @@
 import { assert as assertCodePoint } from "./code_point.ts";
 import { assertIterable as assertIterableObject } from "../basics/object_type.ts";
-import { codepoint, grapheme, int, rune, usvstring } from "../_.ts";
+import { codepoint, int, rune, usvstring } from "../_.ts";
 import { EMPTY, is as isString } from "../basics/string_type.ts";
 
 export function is(test: unknown): test is usvstring {
@@ -86,25 +86,3 @@ export function toCodePoints(
     }
   })(value);
 }
-
-export type ToGraphemesOptions = {
-  locale?: string | Intl.Locale;
-};
-
-// // 分割はIntl.Segmenterに依存する（実行環境によって結果が異なる可能性は排除できない）
-// //TODO allowMalformed
-// export function toGraphemes(
-//   value: string,
-//   options?: ToGraphemesOptions,
-// ): IterableIterator<grapheme, void, void> {
-//   assert(value, "value");
-
-//   const segmenter = getGraphemeSegmenter(options?.locale);
-
-//   return (function* (seg, s) {
-//     const segements = seg.segment(s);
-//     for (const segment of segements) {
-//       yield segment.segment;
-//     }
-//   })(segmenter, value);
-// }
