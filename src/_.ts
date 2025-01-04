@@ -1,3 +1,12 @@
+/** `/^[a-z]{2,3}$/` */
+export type language = string;
+
+/** `/^[A-Z][a-z]{3}$/` */
+export type script = string;
+
+/** `/^[A-Z]{2}$/` */
+export type region = string;
+
 /**
  * String matching regular expression `/^[\u0000-\uFFFF]{1}$/`.
  * including surrogates.
@@ -11,6 +20,9 @@ export type char = string;
 export type rune = string;
 
 export type usvstring = string;
+
+/** A grapheme cluster. */
+export type grapheme = usvstring;
 
 export type int = number;
 
