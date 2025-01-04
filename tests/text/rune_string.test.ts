@@ -237,17 +237,32 @@ Deno.test("RuneString.toRunes()", () => {
   const e1 = "`value` must be a `USVString`.";
   assertThrows(
     () => {
-      [...RuneString.toRunes(undefined as unknown as string)];
+      RuneString.toRunes(undefined as unknown as string);
     },
     TypeError,
     e1,
   );
   assertThrows(
     () => {
-      [...RuneString.toRunes("\u{dc0b}\u{d840}")];
+      RuneString.toRunes("\u{dc0b}\u{d840}");
     },
     TypeError,
     e1,
+  );
+
+  const op = { allowMalformed: true } as const;
+  const e2 = "`value` must be a `string`.";
+  assertThrows(
+    () => {
+      RuneString.toRunes(undefined as unknown as string, op);
+    },
+    TypeError,
+    e2,
+  );
+
+  assertStrictEquals(
+    _iToS(RuneString.toRunes("\u{dc0b}\u{d840}", op)),
+    `["\\udc0b","\\ud840"]`,
   );
 });
 

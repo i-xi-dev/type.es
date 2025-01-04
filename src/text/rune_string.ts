@@ -49,9 +49,15 @@ export function runeCountOf(
 //XXX fromRunes
 //XXX fromRunesAsync
 
-//TODO allowMalformed
-export function toRunes(value: usvstring): IterableIterator<rune, void, void> {
-  assert(value, "value");
+export function toRunes(
+  value: usvstring,
+  options?: AllowMalformedOptions,
+): IterableIterator<rune, void, void> {
+  if (options?.allowMalformed === true) {
+    assertString(value, "value");
+  } else {
+    assert(value, "value");
+  }
 
   return (function* (s) {
     for (const rune of [...s]) {
