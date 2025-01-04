@@ -42,7 +42,9 @@ function _includesRuneString(
   try {
     return (new RegExp(`^(?:${pattern})*$`, "v")).test(runeString);
   } catch {
-    throw new RangeError(`At least one of \`scripts\` is not supported in Unicode property.`);
+    throw new RangeError(
+      `At least one of \`scripts\` is not supported in Unicode property.`,
+    );
   }
 }
 

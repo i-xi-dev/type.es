@@ -1,5 +1,5 @@
 import { codepoint, plane, rune } from "../_.ts";
-import { GeneralCategory } from "./unicode.ts";
+import { assertGeneralCategory, GeneralCategory } from "./unicode.ts";
 import { IntegerRange } from "../numerics/integer_range.ts";
 import { is as isString } from "../basics/string_type.ts";
 import { isNull } from "../basics/object_type.ts";
@@ -30,29 +30,19 @@ export function isBmp(test: unknown): test is rune {
   return is(test) && isBmpCodePoint(test.codePointAt(0)!);
 }
 
+//TODO
 export function isInPlane() {
-}
-
-function _isGeneralCategory(test: unknown): test is GeneralCategory {
-  return Object.values(GeneralCategory).includes(test as GeneralCategory);
-}
-
-function _assertGeneralCategory(test: unknown, label: string): void {
-  if (_isGeneralCategory(test) !== true) {
-    throw new TypeError(
-      `\`${label}\` must be an Unicode \`General_Category\` value.`,
-    );
-  }
 }
 
 export function isInGeneralCategory(
   test: unknown,
   category: GeneralCategory,
 ): test is rune {
-  _assertGeneralCategory(category, "category");
+  assertGeneralCategory(category, "category");
   return is(test) && (new RegExp(`^\\p{gc=${category}}$`, "v")).test(test);
 }
 
+//TODO isInCodePointRange
 export function isInBlock() {}
 
 /*
