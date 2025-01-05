@@ -303,6 +303,12 @@ Deno.test("RuneString.fromCodePoints()", () => {
     RangeError,
     e3,
   );
+
+  const op = { allowMalformed: true } as const;
+  assertStrictEquals(
+    RuneString.fromCodePoints([48, 0xDC00, 0xD800], op),
+    "0\uDC00\uD800",
+  );
 });
 
 Deno.test("RuneString.toCodePoints()", () => {
@@ -325,7 +331,7 @@ Deno.test("RuneString.toCodePoints()", () => {
   const e1 = "`value` must be a `USVString`.";
   assertThrows(
     () => {
-      [...RuneString.toCodePoints(undefined as unknown as string)];
+      RuneString.toCodePoints(undefined as unknown as string);
     },
     TypeError,
     e1,
@@ -336,5 +342,19 @@ Deno.test("RuneString.toCodePoints()", () => {
     },
     TypeError,
     e1,
+  );
+
+  const op = { allowMalformed: true } as const;
+  const e2 = "`value` must be a `string`.";
+  assertThrows(
+    () => {
+      RuneString.toCodePoints(undefined as unknown as string, op);
+    },
+    TypeError,
+    e2,
+  );
+  assertStrictEquals(
+    _iToS(RuneString.toCodePoints("\u{dc0b}\u{d840}", op)),
+    `[56331,55360]`,
   );
 });

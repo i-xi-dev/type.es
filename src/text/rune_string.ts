@@ -66,9 +66,13 @@ export function toRunes(
   })(value);
 }
 
-//TODO allowMalformed
-export function fromCodePoints(value: Iterable<codepoint>): string {
+export function fromCodePoints(
+  value: Iterable<codepoint>,
+  options?: AllowMalformedOptions,
+): string {
   assertIterableObject(value, "value");
+
+  const disallowMalformed = options?.allowMalformed !== true;
 
   let runes = EMPTY;
   let rune: rune;
@@ -76,7 +80,8 @@ export function fromCodePoints(value: Iterable<codepoint>): string {
   for (const codePoint of value) {
     assertCodePoint(codePoint, `value[${i}]`);
     rune = String.fromCodePoint(codePoint);
-    if (rune.isWellFormed() !== true) {
+
+    if (disallowMalformed && (rune.isWellFormed() !== true)) {
       throw new RangeError(
         "`value` must not contain lone surrogate code points.",
       );
@@ -90,11 +95,15 @@ export function fromCodePoints(value: Iterable<codepoint>): string {
 
 //XXX fromCodePointsAsync(value: AsyncIterable<codepoint>): Promise<string>
 
-//TODO allowMalformed
 export function toCodePoints(
   value: string,
+  options?: AllowMalformedOptions,
 ): IterableIterator<codepoint, void, void> {
-  assert(value, "value");
+  if (options?.allowMalformed === true) {
+    assertString(value, "value");
+  } else {
+    assert(value, "value");
+  }
 
   return (function* (s) {
     for (const rune of [...s]) {
