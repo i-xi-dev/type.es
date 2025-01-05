@@ -111,3 +111,70 @@ export function toCodePoints(
     }
   })(value);
 }
+
+//TODO
+// export type ScriptOptions = {
+//   inherited?: script;
+// };
+
+// export function isInScript(
+//   test: unknown,
+//   script: script,
+//   options?: ScriptOptions,
+// ): test is rune {
+//   Script.assert(script, "script");
+//   _assertScriptHasPva(script);
+
+//   if (is(test) !== true) {
+//     return false;
+//   }
+
+//   let tester = new RegExp(`^\\p{sc=${script}}*$`, "v");
+//   if (tester.test(test)) {
+//     // sc一致 → ok
+//     return true;
+//   }
+
+//   tester = new RegExp(`^\\p{sc=Zyyy}*$`, "v");
+//   if (tester.test(test)) {
+//     // scがCommonの場合
+
+//     tester = new RegExp(`^\\p{scx=${script}}*$`, "v");
+//     if (tester.test(test)) {
+//       // scx一致 → ok
+//       return true;
+//     }
+//     //else if () {
+//     //  // testがoptions?.「一致とみなすruneリスト」のいずれかに合致 → ok
+//     //  return false;//TODO
+//     //}
+//     return false;
+//   }
+
+//   tester = new RegExp(`^(?:\\p{sc=Zinh}|\\p{gc=Me}|\\p{gc=Mn})*$`, "v");
+//   if (tester.test(test)) {
+//     // scがInheritの場合 or gcがMe|Mnの場合
+
+//     tester = new RegExp(`^\\p{scx=${script}}*$`, "v");
+//     if (tester.test(test)) {
+//       // scx一致 → ok
+//       return true;
+//     }
+
+//     if (Script.is(options?.inherited)) {
+//       _assertScriptHasPva(options.inherited);
+//       tester = new RegExp(`^\\p{scx=${options.inherited}}*$`, "v");
+//       if (tester.test(test)) {
+//         // scxがoptions.inheritedに一致 → ok
+//         return true;
+//       }
+//     }
+
+//     //else if () {
+//     //  // testがoptions?.「一致とみなすruneリスト」のいずれかに合致 → ok
+//     //  return false;//TODO
+//     //}
+//   }
+
+//   return false;
+// }

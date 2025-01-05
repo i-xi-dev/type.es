@@ -1,7 +1,10 @@
-import { codepoint, plane, rune } from "../_.ts";
+import { codepoint, plane, rune, script } from "../_.ts";
 import { assertGeneralCategory, GeneralCategory } from "./unicode.ts";
 import { IntegerRange } from "../numerics/integer_range.ts";
-import { is as isString } from "../basics/string_type.ts";
+import {
+  is as isString,
+  isNonEmpty as isNonEmptyString,
+} from "../basics/string_type.ts";
 import { isNull } from "../basics/object_type.ts";
 import {
   isBmp as isBmpCodePoint,
@@ -9,6 +12,7 @@ import {
   planeOf as planeOfCodePoint,
 } from "./code_point.ts";
 import { SafeIntegerRange } from "../numerics/safe_integer_range.ts";
+import { Script } from "../i18n/script.ts";
 
 export function is(test: unknown): test is rune {
   return isString(test) && (test.length <= 2) && ([...test].length === 1) &&
@@ -30,11 +34,7 @@ export function isBmp(test: unknown): test is rune {
   return is(test) && isBmpCodePoint(test.codePointAt(0)!);
 }
 
-//TODO
-export function isInPlane() {
-}
-
-export function isInGeneralCategory(
+export function matchesGeneralCategory(
   test: unknown,
   category: GeneralCategory,
 ): test is rune {
@@ -42,8 +42,33 @@ export function isInGeneralCategory(
   return is(test) && (new RegExp(`^\\p{gc=${category}}$`, "v")).test(test);
 }
 
-//TODO isInCodePointRange
-export function isInBlock() {}
+function _assertScriptHasPva(script: script): void {
+  if (isNonEmptyString(Script.of(script)?.pva) !== true) {
+    throw new RangeError(`\`${script}\` is not supported in Unicode property.`);
+  }
+}
+
+export type MatchesScriptOptions = {
+  excludeScx?: boolean;
+};
+
+export function matchesScript(
+  test: unknown,
+  script: script,
+  options?: MatchesScriptOptions,
+): test is rune {
+  Script.assert(script, "script");
+  _assertScriptHasPva(script);
+
+  const or = [];
+  or.push(`\\p{sc=${script}}`);
+  if (options?.excludeScx !== true) {
+    or.push(`\\p{scx=${script}}`);
+  }
+  const pattern = or.join("|");
+
+  return is(test) && (new RegExp(`^(?:${pattern})$`, "v")).test(test);
+}
 
 /*
 export function isPatternMatched(
