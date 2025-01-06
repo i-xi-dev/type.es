@@ -1,11 +1,12 @@
 import { assert as assertCodePoint } from "./code_point.ts";
 import { assertIterable as assertIterableObject } from "../basics/object_type.ts";
-import { codepoint, int, rune, usvstring } from "../_.ts";
 import {
   assert as assertString,
   EMPTY,
   is as isString,
 } from "../basics/string_type.ts";
+import { codepoint, int, rune, script, usvstring } from "../_.ts";
+import { Script } from "../i18n/script.ts";
 
 export function is(test: unknown): test is usvstring {
   return isString(test) && test.isWellFormed();
@@ -113,21 +114,53 @@ export function toCodePoints(
 }
 
 //TODO
-// export type ScriptOptions = {
-//   inherited?: script;
-// };
+export type BelongsToScriptsOptions = {
+  //inherited?: script;
+};
+
+export function belongsToScripts(
+  test: unknown,
+  scripts: script[],
+): test is usvstring {
+  let scriptSet: script[];
+  if (Array.isArray(scripts) && (scripts.length > 0)) {
+    scriptSet = [...new Set(scripts)];
+    for (const script of scriptSet) {
+      Script.assertUnicodePropertyValue(script, script);
+    }
+  } else {
+    throw new TypeError("TODO");
+  }
+
+  if (is(test) !== true) {
+    return false;
+  }
+
+  if (test.length <= 0) {
+    // Array#every等に合わせた
+    return true;
+  }
+
+  for (const rune of [...test]) {
+    //TODO
+    // 1. scriptsのいずれかにsc一致
+    //    then
+    //      curr = 一致したscript
+    //    else
+    //      return false;
+    // 2. scが"Common"
+    //    then
+    //
+  }
+
+  return false;
+}
 
 // export function isInScript(
 //   test: unknown,
 //   script: script,
 //   options?: ScriptOptions,
 // ): test is rune {
-//   Script.assert(script, "script");
-//   _assertScriptHasPva(script);
-
-//   if (is(test) !== true) {
-//     return false;
-//   }
 
 //   let tester = new RegExp(`^\\p{sc=${script}}*$`, "v");
 //   if (tester.test(test)) {
