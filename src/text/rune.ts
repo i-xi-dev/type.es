@@ -42,12 +42,6 @@ export function matchesGeneralCategory(
   return is(test) && (new RegExp(`^\\p{gc=${category}}$`, "v")).test(test);
 }
 
-function _assertScriptHasPva(script: script): void {
-  if (isNonEmptyString(Script.of(script)?.pva) !== true) {
-    throw new RangeError(`\`${script}\` is not supported in Unicode property.`);
-  }
-}
-
 export type MatchesScriptOptions = {
   excludeScx?: boolean;
 };
@@ -57,8 +51,7 @@ export function matchesScript(
   script: script,
   options?: MatchesScriptOptions,
 ): test is rune {
-  Script.assert(script, "script");
-  _assertScriptHasPva(script);
+  Script.assertUnicodePropertyValue(script, script);
 
   const or = [];
   or.push(`\\p{sc=${script}}`);

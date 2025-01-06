@@ -228,14 +228,15 @@ Deno.test("Rune.matchesScript()", () => {
       Rune.matchesScript("a", "Aaaaa");
     },
     TypeError,
-    "`script` must be an ISO 15924 script alpha-4 code.",
+    // "`script` must be an ISO 15924 script alpha-4 code.",
+    "`Aaaaa` is not supported in Unicode property.",
   );
 
   assertThrows(
     () => {
       Rune.matchesScript("a", "Zsym");
     },
-    RangeError,
+    TypeError,
     "`Zsym` is not supported in Unicode property.",
   );
 

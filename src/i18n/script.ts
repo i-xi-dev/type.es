@@ -1,5 +1,6 @@
 import scriptMap from "../../dat/i18n/script_map.json" with { type: "json" };
 import { getScriptName } from "./utils.ts";
+import { isNonEmpty as isNonEmptyString } from "../basics/string_type.ts";
 import { script } from "../_.ts";
 
 type _script = keyof typeof scriptMap;
@@ -31,6 +32,25 @@ export namespace Script {
     if (is(test) !== true) {
       throw new TypeError(
         `\`${label}\` must be an ISO 15924 script alpha-4 code.`,
+      );
+    }
+  }
+
+  export function isUnicodePropertyValue(test: unknown): test is script {
+    if (is(test)) {
+      const info = scriptMap[test as _script];
+      return isNonEmptyString(info[1]);
+    }
+    return false;
+  }
+
+  export function assertUnicodePropertyValue(
+    test: unknown,
+    label: string,
+  ): void {
+    if (isUnicodePropertyValue(test) !== true) {
+      throw new TypeError(
+        `\`${label}\` is not supported in Unicode property.`,
       );
     }
   }
