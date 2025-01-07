@@ -246,3 +246,15 @@ Deno.test("Rune.matchesScript()", () => {
   assertStrictEquals(Rune.matchesScript("a", "Latn"), true);
   assertStrictEquals(Rune.matchesScript("1", "Latn"), false);
 });
+
+Deno.test("Rune.matchesCommonScript()", () => {
+  assertStrictEquals(Rune.matchesCommonScript("ア"), false);
+  assertStrictEquals(Rune.matchesCommonScript("あ"), false);
+  assertStrictEquals(Rune.matchesCommonScript("ー"), true);
+  assertStrictEquals(Rune.matchesCommonScript("\u3099"), false);
+  assertStrictEquals(Rune.matchesCommonScript("a"), false);
+  assertStrictEquals(Rune.matchesCommonScript("1"), true);
+
+  assertStrictEquals(Rune.matchesCommonScript(""), false);
+  assertStrictEquals(Rune.matchesCommonScript("11"), false);
+});

@@ -63,6 +63,17 @@ export function matchesScript(
   return is(test) && (new RegExp(`^(?:${pattern})$`, "v")).test(test);
 }
 
+let _commonSc: WeakRef<RegExp> | null = null;
+
+export function matchesCommonScript(test: unknown): test is rune {
+  let commonSc = _commonSc?.deref();
+  if (!commonSc) {
+    commonSc = new RegExp(`^(?:\\p{sc=Zyyy})$`, "v");
+    _commonSc = new WeakRef(commonSc);
+  }
+  return is(test) && commonSc.test(test);
+}
+
 /*
 export function isPatternMatched(
   test: unknown,
