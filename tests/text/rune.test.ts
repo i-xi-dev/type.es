@@ -258,3 +258,15 @@ Deno.test("Rune.matchesCommonScript()", () => {
   assertStrictEquals(Rune.matchesCommonScript(""), false);
   assertStrictEquals(Rune.matchesCommonScript("11"), false);
 });
+
+Deno.test("Rune.matchesInheritedScript()", () => {
+  assertStrictEquals(Rune.matchesInheritedScript("ア"), false);
+  assertStrictEquals(Rune.matchesInheritedScript("あ"), false);
+  assertStrictEquals(Rune.matchesInheritedScript("ー"), false);
+  assertStrictEquals(Rune.matchesInheritedScript("\u3099"), true);
+  assertStrictEquals(Rune.matchesInheritedScript("a"), false);
+  assertStrictEquals(Rune.matchesInheritedScript("1"), false);
+
+  assertStrictEquals(Rune.matchesInheritedScript(""), false);
+  assertStrictEquals(Rune.matchesInheritedScript("11"), false);
+});

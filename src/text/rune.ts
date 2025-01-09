@@ -68,10 +68,21 @@ let _commonSc: WeakRef<RegExp> | null = null;
 export function matchesCommonScript(test: unknown): test is rune {
   let commonSc = _commonSc?.deref();
   if (!commonSc) {
-    commonSc = new RegExp(`^(?:\\p{sc=Zyyy})$`, "v");
+    commonSc = new RegExp(`^\\p{sc=Zyyy}$`, "v");
     _commonSc = new WeakRef(commonSc);
   }
   return is(test) && commonSc.test(test);
+}
+
+let _inheritedSc: WeakRef<RegExp> | null = null;
+
+export function matchesInheritedScript(test: unknown): test is rune {
+  let inheritedSc = _inheritedSc?.deref();
+  if (!inheritedSc) {
+    inheritedSc = new RegExp(`^(?:\\p{sc=Zinh})$`, "v");
+    _inheritedSc = new WeakRef(inheritedSc);
+  }
+  return is(test) && inheritedSc.test(test);
 }
 
 /*
