@@ -123,12 +123,27 @@ export function isomorphicEncode(input: string): Uint8Array {
 //   noUnicodeSets?: boolean;
 // };
 
-export function patternMatches(test: string, pattern: string): test is string {
+const _flags = "v";
+
+export function matchesPattern(test: string, pattern: string): test is string {
   return is(test) && is(pattern) &&
-    (new RegExp(`^${pattern}$`, "v")).test(test);
+    (new RegExp(`^${pattern}$`, _flags)).test(test);
 }
 
-export function patternContains(test: string, pattern: string): test is string {
+export function containsPattern(test: string, pattern: string): test is string {
   return is(test) && is(pattern) &&
-    (new RegExp(`${pattern}`, "v")).test(test);
+    (new RegExp(`${pattern}`, _flags)).test(test);
+}
+
+export function startsWithPattern(
+  test: string,
+  pattern: string,
+): test is string {
+  return is(test) && is(pattern) &&
+    (new RegExp(`^${pattern}`, _flags)).test(test);
+}
+
+export function endsWithPattern(test: string, pattern: string): test is string {
+  return is(test) && is(pattern) &&
+    (new RegExp(`${pattern}$`, _flags)).test(test);
 }

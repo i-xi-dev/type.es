@@ -5,82 +5,178 @@ const { StringType } = Basics;
 
 const TOS = "[\\u{9}\\u{20}]+";
 
-Deno.test("StringType.patternMatches() - v", () => {
-  assertStrictEquals(StringType.patternMatches("", TOS), false);
-  assertStrictEquals(StringType.patternMatches("\u0008", TOS), false);
-  assertStrictEquals(StringType.patternMatches("\t", TOS), true);
-  assertStrictEquals(StringType.patternMatches("\u000A", TOS), false);
-  assertStrictEquals(StringType.patternMatches("\u001F", TOS), false);
-  assertStrictEquals(StringType.patternMatches(" ", TOS), true);
-  assertStrictEquals(StringType.patternMatches("\u0021", TOS), false);
-  assertStrictEquals(StringType.patternMatches("a", TOS), false);
+Deno.test("StringType.matchesPattern() - v", () => {
+  assertStrictEquals(StringType.matchesPattern("", TOS), false);
+  assertStrictEquals(StringType.matchesPattern("\u0008", TOS), false);
+  assertStrictEquals(StringType.matchesPattern("\t", TOS), true);
+  assertStrictEquals(StringType.matchesPattern("\u000A", TOS), false);
+  assertStrictEquals(StringType.matchesPattern("\u001F", TOS), false);
+  assertStrictEquals(StringType.matchesPattern(" ", TOS), true);
+  assertStrictEquals(StringType.matchesPattern("\u0021", TOS), false);
+  assertStrictEquals(StringType.matchesPattern("a", TOS), false);
   assertStrictEquals(
-    StringType.patternMatches("\t      \t    ", TOS),
+    StringType.matchesPattern("\t      \t    ", TOS),
     true,
   );
   assertStrictEquals(
-    StringType.patternMatches("az", "[\\u{41}\\u{5A}]+"),
+    StringType.matchesPattern("az", "[\\u{41}\\u{5A}]+"),
     false,
   );
   assertStrictEquals(
-    StringType.patternMatches("AZ", "[\\u{41}\\u{5A}]+"),
+    StringType.matchesPattern("AZ", "[\\u{41}\\u{5A}]+"),
     true,
   );
   assertStrictEquals(
-    StringType.patternMatches("azAZ", "[\\u{41}\\u{5A}]+"),
+    StringType.matchesPattern("azAZ", "[\\u{41}\\u{5A}]+"),
     false,
   );
 
   assertStrictEquals(
-    StringType.patternMatches(undefined as unknown as string, TOS),
+    StringType.matchesPattern(undefined as unknown as string, TOS),
     false,
   );
   assertStrictEquals(
-    StringType.patternMatches("", undefined as unknown as string),
+    StringType.matchesPattern("", undefined as unknown as string),
     false,
   );
-  assertStrictEquals(StringType.patternMatches("", ""), true);
-  assertStrictEquals(StringType.patternMatches("0", ""), false);
+  assertStrictEquals(StringType.matchesPattern("", ""), true);
+  assertStrictEquals(StringType.matchesPattern("0", ""), false);
 });
 
-Deno.test("StringType.patternContains() - v", () => {
-  assertStrictEquals(StringType.patternContains("", TOS), false);
-  assertStrictEquals(StringType.patternContains("\u0008", TOS), false);
-  assertStrictEquals(StringType.patternContains("\t", TOS), true);
-  assertStrictEquals(StringType.patternContains("\u000A", TOS), false);
-  assertStrictEquals(StringType.patternContains("\u001F", TOS), false);
-  assertStrictEquals(StringType.patternContains(" ", TOS), true);
-  assertStrictEquals(StringType.patternContains("\u0021", TOS), false);
-  assertStrictEquals(StringType.patternContains("a", TOS), false);
+Deno.test("StringType.containsPattern() - v", () => {
+  assertStrictEquals(StringType.containsPattern("", TOS), false);
+  assertStrictEquals(StringType.containsPattern("\u0008", TOS), false);
+  assertStrictEquals(StringType.containsPattern("\t", TOS), true);
+  assertStrictEquals(StringType.containsPattern("\u000A", TOS), false);
+  assertStrictEquals(StringType.containsPattern("\u001F", TOS), false);
+  assertStrictEquals(StringType.containsPattern(" ", TOS), true);
+  assertStrictEquals(StringType.containsPattern("\u0021", TOS), false);
+  assertStrictEquals(StringType.containsPattern("a", TOS), false);
   assertStrictEquals(
-    StringType.patternContains("\t      \t    ", TOS),
+    StringType.containsPattern("\t      \t    ", TOS),
     true,
   );
   assertStrictEquals(
-    StringType.patternContains("az", "[\\u{41}\\u{5A}]+"),
+    StringType.containsPattern("az", "[\\u{41}\\u{5A}]+"),
     false,
   );
   assertStrictEquals(
-    StringType.patternContains("AZ", "[\\u{41}\\u{5A}]+"),
+    StringType.containsPattern("AZ", "[\\u{41}\\u{5A}]+"),
     true,
   );
   assertStrictEquals(
-    StringType.patternContains("azAZ", "[\\u{41}\\u{5A}]+"),
+    StringType.containsPattern("azAZ", "[\\u{41}\\u{5A}]+"),
     true,
   );
 
-  assertStrictEquals(StringType.patternContains("x x", TOS), true);
-  assertStrictEquals(StringType.patternContains(" x", TOS), true);
-  assertStrictEquals(StringType.patternContains("x ", TOS), true);
+  assertStrictEquals(StringType.containsPattern("x x", TOS), true);
+  assertStrictEquals(StringType.containsPattern(" x", TOS), true);
+  assertStrictEquals(StringType.containsPattern("x ", TOS), true);
 
   assertStrictEquals(
-    StringType.patternContains(undefined as unknown as string, TOS),
+    StringType.containsPattern(undefined as unknown as string, TOS),
     false,
   );
   assertStrictEquals(
-    StringType.patternContains("", undefined as unknown as string),
+    StringType.containsPattern("", undefined as unknown as string),
     false,
   );
-  assertStrictEquals(StringType.patternContains("", ""), true);
-  assertStrictEquals(StringType.patternContains("0", ""), true);
+  assertStrictEquals(StringType.containsPattern("", ""), true);
+  assertStrictEquals(StringType.containsPattern("0", ""), true);
+});
+
+Deno.test("StringType.startsWithPattern()", () => {
+  assertStrictEquals(StringType.startsWithPattern("", TOS), false);
+  assertStrictEquals(
+    StringType.startsWithPattern("\u0008", TOS),
+    false,
+  );
+  assertStrictEquals(StringType.startsWithPattern("\t", TOS), true);
+  assertStrictEquals(
+    StringType.startsWithPattern("\u000A", TOS),
+    false,
+  );
+  assertStrictEquals(
+    StringType.startsWithPattern("\u001F", TOS),
+    false,
+  );
+  assertStrictEquals(StringType.startsWithPattern(" ", TOS), true);
+  assertStrictEquals(
+    StringType.startsWithPattern("\u0021", TOS),
+    false,
+  );
+  assertStrictEquals(StringType.startsWithPattern("a", TOS), false);
+  assertStrictEquals(
+    StringType.startsWithPattern("\t      \t    ", TOS),
+    true,
+  );
+  assertStrictEquals(
+    StringType.startsWithPattern("az", "[\\u{41}\\u{5A}]+"),
+    false,
+  );
+  assertStrictEquals(
+    StringType.startsWithPattern("AZ", "[\\u{41}\\u{5A}]+"),
+    true,
+  );
+  assertStrictEquals(
+    StringType.startsWithPattern("azAZ", "[\\u{41}\\u{5A}]+"),
+    false,
+  );
+
+  assertStrictEquals(StringType.startsWithPattern("x x", TOS), false);
+  assertStrictEquals(StringType.startsWithPattern(" x", TOS), true);
+  assertStrictEquals(StringType.startsWithPattern("x ", TOS), false);
+
+  assertStrictEquals(
+    StringType.startsWithPattern(undefined as unknown as string, TOS),
+    false,
+  );
+  assertStrictEquals(
+    StringType.startsWithPattern("", undefined as unknown as string),
+    false,
+  );
+  assertStrictEquals(StringType.startsWithPattern("", ""), true);
+  assertStrictEquals(StringType.startsWithPattern("0", ""), true);
+});
+
+Deno.test("StringType.endsWithPattern()", () => {
+  assertStrictEquals(StringType.endsWithPattern("", TOS), false);
+  assertStrictEquals(StringType.endsWithPattern("\u0008", TOS), false);
+  assertStrictEquals(StringType.endsWithPattern("\t", TOS), true);
+  assertStrictEquals(StringType.endsWithPattern("\u000A", TOS), false);
+  assertStrictEquals(StringType.endsWithPattern("\u001F", TOS), false);
+  assertStrictEquals(StringType.endsWithPattern(" ", TOS), true);
+  assertStrictEquals(StringType.endsWithPattern("\u0021", TOS), false);
+  assertStrictEquals(StringType.endsWithPattern("a", TOS), false);
+  assertStrictEquals(
+    StringType.endsWithPattern("\t      \t    ", TOS),
+    true,
+  );
+  assertStrictEquals(
+    StringType.endsWithPattern("az", "[\\u{41}\\u{5A}]+"),
+    false,
+  );
+  assertStrictEquals(
+    StringType.endsWithPattern("AZ", "[\\u{41}\\u{5A}]+"),
+    true,
+  );
+  assertStrictEquals(
+    StringType.endsWithPattern("azAZ", "[\\u{41}\\u{5A}]+"),
+    true,
+  );
+
+  assertStrictEquals(StringType.endsWithPattern("x x", TOS), false);
+  assertStrictEquals(StringType.endsWithPattern(" x", TOS), false);
+  assertStrictEquals(StringType.endsWithPattern("x ", TOS), true);
+
+  assertStrictEquals(
+    StringType.endsWithPattern(undefined as unknown as string, TOS),
+    false,
+  );
+  assertStrictEquals(
+    StringType.endsWithPattern("", undefined as unknown as string),
+    false,
+  );
+  assertStrictEquals(StringType.endsWithPattern("", ""), true);
+  assertStrictEquals(StringType.endsWithPattern("0", ""), true);
 });
