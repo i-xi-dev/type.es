@@ -118,3 +118,17 @@ export function isomorphicEncode(input: string): Uint8Array {
   }
   return bytes;
 }
+
+// export type PatternOptions = {
+//   noUnicodeSets?: boolean;
+// };
+
+export function patternMatches(test: string, pattern: string): test is string {
+  return is(test) && is(pattern) &&
+    (new RegExp(`^${pattern}$`, "v")).test(test);
+}
+
+export function patternContains(test: string, pattern: string): test is string {
+  return is(test) && is(pattern) &&
+    (new RegExp(`${pattern}`, "v")).test(test);
+}
