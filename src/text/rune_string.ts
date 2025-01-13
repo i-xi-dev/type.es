@@ -1,11 +1,12 @@
 import { assert as assertCodePoint } from "./code_point.ts";
-import { assertIterable as assertIterableObject } from "../basics/object_type.ts";
 import {
   assert as assertString,
   EMPTY,
   is as isString,
 } from "../basics/string_type.ts";
+import { assertIterable as assertIterableObject } from "../basics/object_type.ts";
 import { codepoint, int, rune, script, usvstring } from "../_.ts";
+import { Rune } from "./mod.ts";
 import { Script } from "../i18n/script.ts";
 
 export function is(test: unknown): test is usvstring {
@@ -114,9 +115,9 @@ export function toCodePoints(
 }
 
 //TODO
-export type BelongsToScriptsOptions = {
-  //inherited?: script;
-};
+// export type BelongsToScriptsOptions = {
+//   //inherited?: script;
+// };
 
 export function belongsToScripts(
   test: unknown,
@@ -141,73 +142,40 @@ export function belongsToScripts(
     return true;
   }
 
+  const orSc = [];
+  for (const script of scriptSet) {
+    orSc.push(`\\p{sc=${script}}`);
+  }
+  const specifiedScRegex = new RegExp(`^(?:${orSc.join("|")})$`, "v");
+  const inheritedScRegex = new RegExp(
+    `^(?:\\p{sc=Zinh}|\\p{gc=Me}|\\p{gc=Mn})$`,
+    "v",
+  );
+
+  let runeCount = 0;
   for (const rune of [...test]) {
-    //TODO
-    // 1. scriptsのいずれかにsc一致
-    //    then
-    //      curr = 一致したscript
-    //    else
-    //      return false;
-    // 2. scが"Common"
-    //    then
-    //
+    runeCount += 1;
+
+    if (specifiedScRegex.test(rune)) {
+      // scがscriptsのいずれかに一致: ok
+      continue;
+    }
+
+    if (Rune.matchesCommonScript(rune)) {
+      // scがCommon: ok
+      //TODO scxもチェックするオプション or okとみなすrune配列オプション
+      continue;
+    }
+
+    if ((runeCount > 1) && inheritedScRegex.test(rune)) {
+      // scがInherited or gcがMe|Mn: ok
+      //TODO scxもチェックするオプション or okとみなすrune配列オプション
+      continue;
+    } else {
+      return false;
+    }
+    //TODO 1つめのruneのscがInheritまたはgcがMe|Mnの場合
   }
 
   return false;
 }
-
-// export function isInScript(
-//   test: unknown,
-//   script: script,
-//   options?: ScriptOptions,
-// ): test is rune {
-
-//   let tester = new RegExp(`^\\p{sc=${script}}*$`, "v");
-//   if (tester.test(test)) {
-//     // sc一致 → ok
-//     return true;
-//   }
-
-//   tester = new RegExp(`^\\p{sc=Zyyy}*$`, "v");
-//   if (tester.test(test)) {
-//     // scがCommonの場合
-
-//     tester = new RegExp(`^\\p{scx=${script}}*$`, "v");
-//     if (tester.test(test)) {
-//       // scx一致 → ok
-//       return true;
-//     }
-//     //else if () {
-//     //  // testがoptions?.「一致とみなすruneリスト」のいずれかに合致 → ok
-//     //  return false;//TODO
-//     //}
-//     return false;
-//   }
-
-//   tester = new RegExp(`^(?:\\p{sc=Zinh}|\\p{gc=Me}|\\p{gc=Mn})*$`, "v");
-//   if (tester.test(test)) {
-//     // scがInheritの場合 or gcがMe|Mnの場合
-
-//     tester = new RegExp(`^\\p{scx=${script}}*$`, "v");
-//     if (tester.test(test)) {
-//       // scx一致 → ok
-//       return true;
-//     }
-
-//     if (Script.is(options?.inherited)) {
-//       _assertScriptHasPva(options.inherited);
-//       tester = new RegExp(`^\\p{scx=${options.inherited}}*$`, "v");
-//       if (tester.test(test)) {
-//         // scxがoptions.inheritedに一致 → ok
-//         return true;
-//       }
-//     }
-
-//     //else if () {
-//     //  // testがoptions?.「一致とみなすruneリスト」のいずれかに合致 → ok
-//     //  return false;//TODO
-//     //}
-//   }
-
-//   return false;
-// }
