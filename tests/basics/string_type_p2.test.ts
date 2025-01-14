@@ -123,3 +123,52 @@ Deno.test("StringType.truncateEnd()", () => {
   assertStrictEquals(StringType.truncateEnd("", ""), "");
   assertStrictEquals(StringType.truncateEnd("0", ""), "0");
 });
+
+Deno.test("StringType.truncateBoth()", () => {
+  assertStrictEquals(StringType.truncateBoth("", TOS), "");
+  assertStrictEquals(StringType.truncateBoth("\u0008", TOS), "\u0008");
+  assertStrictEquals(StringType.truncateBoth("\t", TOS), "");
+  assertStrictEquals(StringType.truncateBoth("\u000A", TOS), "\u000A");
+  assertStrictEquals(StringType.truncateBoth("\u001F", TOS), "\u001F");
+  assertStrictEquals(StringType.truncateBoth(" ", TOS), "");
+  assertStrictEquals(StringType.truncateBoth("\u0021", TOS), "\u0021");
+  assertStrictEquals(StringType.truncateBoth("a", TOS), "a");
+  assertStrictEquals(
+    StringType.truncateBoth("\t      \t    ", TOS),
+    "",
+  );
+  assertStrictEquals(StringType.truncateBoth("az", "[\\u{41}\\u{5A}]+"), "az");
+  assertStrictEquals(StringType.truncateBoth("AZ", "[\\u{41}\\u{5A}]+"), "");
+  assertStrictEquals(
+    StringType.truncateBoth("azAZ", "[\\u{41}\\u{5A}]+"),
+    "az",
+  );
+
+  assertStrictEquals(StringType.truncateBoth("x x", TOS), "x x");
+  assertStrictEquals(StringType.truncateBoth(" x", TOS), "x");
+  assertStrictEquals(StringType.truncateBoth("x ", TOS), "x");
+
+  const e1 = "`value` must be a `string`.";
+  assertThrows(
+    () => {
+      [...StringType.truncateBoth(
+        undefined as unknown as string,
+        TOS,
+      )];
+    },
+    TypeError,
+    e1,
+  );
+
+  const e2 = "`truncatePattern` must be a `string`.";
+  assertThrows(
+    () => {
+      [...StringType.truncateBoth("", undefined as unknown as string)];
+    },
+    TypeError,
+    e2,
+  );
+
+  assertStrictEquals(StringType.truncateBoth("", ""), "");
+  assertStrictEquals(StringType.truncateBoth("0", ""), "0");
+});

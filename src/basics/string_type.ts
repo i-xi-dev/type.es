@@ -172,3 +172,17 @@ export function truncateEnd(value: string, truncatePattern: string): string {
 
   return value.replace(new RegExp(`${truncatePattern}$`, "v"), EMPTY);
 }
+
+export function truncateBoth(value: string, truncatePattern: string): string {
+  assert(value, "value");
+  assert(truncatePattern, "truncatePattern");
+
+  if (isEmpty(truncatePattern)) {
+    return value;
+  }
+
+  return value.replace(
+    new RegExp(`(?:^${truncatePattern}|${truncatePattern}$)`, "v"),
+    EMPTY,
+  );
+}
