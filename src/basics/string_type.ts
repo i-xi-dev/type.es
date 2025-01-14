@@ -148,6 +148,9 @@ export function endsWithPattern(test: string, pattern: string): test is string {
     (new RegExp(`${pattern}$`, _flags)).test(test);
 }
 
+// export type TruncateOptions = {
+// };
+
 export function truncateStart(value: string, truncatePattern: string): string {
   assert(value, "value");
   assert(truncatePattern, "truncatePattern");
@@ -157,4 +160,15 @@ export function truncateStart(value: string, truncatePattern: string): string {
   }
 
   return value.replace(new RegExp(`^${truncatePattern}`, "v"), EMPTY);
+}
+
+export function truncateEnd(value: string, truncatePattern: string): string {
+  assert(value, "value");
+  assert(truncatePattern, "truncatePattern");
+
+  if (isEmpty(truncatePattern)) {
+    return value;
+  }
+
+  return value.replace(new RegExp(`${truncatePattern}$`, "v"), EMPTY);
 }
