@@ -172,3 +172,131 @@ Deno.test("StringType.truncateBoth()", () => {
   assertStrictEquals(StringType.truncateBoth("", ""), "");
   assertStrictEquals(StringType.truncateBoth("0", ""), "0");
 });
+
+Deno.test("StringType.collectStart()", () => {
+  assertStrictEquals(StringType.collectStart("", TOS), "");
+  assertStrictEquals(
+    StringType.collectStart("\u0008", TOS),
+    "",
+  );
+  assertStrictEquals(StringType.collectStart("\t", TOS), "\t");
+  assertStrictEquals(
+    StringType.collectStart("\u000A", TOS),
+    "",
+  );
+  assertStrictEquals(
+    StringType.collectStart("\u001F", TOS),
+    "",
+  );
+  assertStrictEquals(StringType.collectStart(" ", TOS), " ");
+  assertStrictEquals(
+    StringType.collectStart("\u0021", TOS),
+    "",
+  );
+  assertStrictEquals(StringType.collectStart("a", TOS), "");
+  assertStrictEquals(
+    StringType.collectStart("\t      \t    ", TOS),
+    "\t      \t    ",
+  );
+  assertStrictEquals(StringType.collectStart("az", "[\\u{41}\\u{5A}]+"), "");
+  assertStrictEquals(
+    StringType.collectStart("AZ", "[\\u{41}\\u{5A}]+"),
+    "AZ",
+  );
+  assertStrictEquals(
+    StringType.collectStart("azAZ", "[\\u{41}\\u{5A}]+"),
+    "",
+  );
+
+  assertStrictEquals(StringType.collectStart("x x", TOS), "");
+  assertStrictEquals(StringType.collectStart(" x", TOS), " ");
+  assertStrictEquals(StringType.collectStart("x ", TOS), "");
+
+  const e1 = "`value` must be a `string`.";
+  assertThrows(
+    () => {
+      [...StringType.collectStart(
+        undefined as unknown as string,
+        TOS,
+      )];
+    },
+    TypeError,
+    e1,
+  );
+
+  const e2 = "`collectPattern` must be a `string`.";
+  assertThrows(
+    () => {
+      [...StringType.collectStart("", undefined as unknown as string)];
+    },
+    TypeError,
+    e2,
+  );
+
+  assertStrictEquals(StringType.collectStart("", ""), "");
+  assertStrictEquals(StringType.collectStart("0", ""), "");
+});
+
+Deno.test("StringType.collectEnd()", () => {
+  assertStrictEquals(StringType.collectEnd("", TOS), "");
+  assertStrictEquals(
+    StringType.collectEnd("\u0008", TOS),
+    "",
+  );
+  assertStrictEquals(StringType.collectEnd("\t", TOS), "\t");
+  assertStrictEquals(
+    StringType.collectEnd("\u000A", TOS),
+    "",
+  );
+  assertStrictEquals(
+    StringType.collectEnd("\u001F", TOS),
+    "",
+  );
+  assertStrictEquals(StringType.collectEnd(" ", TOS), " ");
+  assertStrictEquals(
+    StringType.collectEnd("\u0021", TOS),
+    "",
+  );
+  assertStrictEquals(StringType.collectEnd("a", TOS), "");
+  assertStrictEquals(
+    StringType.collectEnd("\t      \t    ", TOS),
+    "\t      \t    ",
+  );
+  assertStrictEquals(StringType.collectEnd("az", "[\\u{41}\\u{5A}]+"), "");
+  assertStrictEquals(
+    StringType.collectEnd("AZ", "[\\u{41}\\u{5A}]+"),
+    "AZ",
+  );
+  assertStrictEquals(
+    StringType.collectEnd("azAZ", "[\\u{41}\\u{5A}]+"),
+    "AZ",
+  );
+
+  assertStrictEquals(StringType.collectEnd("x x", TOS), "");
+  assertStrictEquals(StringType.collectEnd(" x", TOS), "");
+  assertStrictEquals(StringType.collectEnd("x ", TOS), " ");
+
+  const e1 = "`value` must be a `string`.";
+  assertThrows(
+    () => {
+      [...StringType.collectEnd(
+        undefined as unknown as string,
+        TOS,
+      )];
+    },
+    TypeError,
+    e1,
+  );
+
+  const e2 = "`collectPattern` must be a `string`.";
+  assertThrows(
+    () => {
+      [...StringType.collectEnd("", undefined as unknown as string)];
+    },
+    TypeError,
+    e2,
+  );
+
+  assertStrictEquals(StringType.collectEnd("", ""), "");
+  assertStrictEquals(StringType.collectEnd("0", ""), "");
+});

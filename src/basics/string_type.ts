@@ -159,7 +159,7 @@ export function truncateStart(value: string, truncatePattern: string): string {
     return value;
   }
 
-  return value.replace(new RegExp(`^${truncatePattern}`, "v"), EMPTY);
+  return value.replace(new RegExp(`^${truncatePattern}`, _flags), EMPTY);
 }
 
 export function truncateEnd(value: string, truncatePattern: string): string {
@@ -170,7 +170,7 @@ export function truncateEnd(value: string, truncatePattern: string): string {
     return value;
   }
 
-  return value.replace(new RegExp(`${truncatePattern}$`, "v"), EMPTY);
+  return value.replace(new RegExp(`${truncatePattern}$`, _flags), EMPTY);
 }
 
 export function truncateBoth(value: string, truncatePattern: string): string {
@@ -182,7 +182,37 @@ export function truncateBoth(value: string, truncatePattern: string): string {
   }
 
   return value.replace(
-    new RegExp(`(?:^${truncatePattern}|${truncatePattern}$)`, "v"),
+    new RegExp(`(?:^${truncatePattern}|${truncatePattern}$)`, _flags),
     EMPTY,
   );
+}
+
+export function collectStart(value: string, collectPattern: string): string {
+  assert(value, "value");
+  assert(collectPattern, "collectPattern");
+
+  if (isEmpty(collectPattern)) {
+    return EMPTY;
+  }
+
+  const results = (new RegExp(`^${collectPattern}`, _flags)).exec(value);
+  if (results === null) {
+    return EMPTY;
+  }
+  return results[0];
+}
+
+export function collectEnd(value: string, collectPattern: string): string {
+  assert(value, "value");
+  assert(collectPattern, "collectPattern");
+
+  if (isEmpty(collectPattern)) {
+    return EMPTY;
+  }
+
+  const results = (new RegExp(`${collectPattern}$`, _flags)).exec(value);
+  if (results === null) {
+    return EMPTY;
+  }
+  return results[0];
 }
