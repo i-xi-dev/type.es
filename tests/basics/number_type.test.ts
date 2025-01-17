@@ -4,9 +4,9 @@ import {
   fail,
   unreachable,
 } from "@std/assert";
-import { Numerics } from "../../mod.ts";
+import { Basics } from "../../mod.ts";
 
-const { NumberType } = Numerics;
+const { NumberType } = Basics;
 
 Deno.test("NumberType.assert()", () => {
   try {

@@ -1,4 +1,4 @@
-import { assert as assertNumber, round as roundNumber } from "./number_type.ts";
+import { assert as assertNumber } from "../basics/number_type.ts";
 import { assertStringified as assertStringifiedInteger } from "./integer.ts";
 import {
   FromNumberOptions,
@@ -6,7 +6,10 @@ import {
   ToStringOptions,
 } from "./main.ts";
 import { int } from "../_.ts";
-import { isPositive as isPositiveSafeInteger } from "./safe_integer.ts";
+import {
+  isPositive as isPositiveSafeInteger,
+  round as roundNumber,
+} from "./safe_integer.ts";
 import { RadixProperties } from "./radix.ts";
 
 export function is(test: unknown): test is bigint {

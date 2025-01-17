@@ -9,7 +9,7 @@ import {
   isNonNegative as isNonNegativeNumber,
   isNonPositive as isNonPositiveNumber,
   isPositive as isPositiveNumber,
-} from "./number_type.ts";
+} from "../basics/number_type.ts";
 import { numeric } from "../_.ts";
 import { Radix } from "./radix.ts";
 import { RoundingMode } from "./rounding_mode.ts";

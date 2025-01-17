@@ -1,6 +1,8 @@
-import { clampToNonNegative as clampToNonNegativeSafeInteger } from "../../numerics/safe_integer.ts";
+import {
+  clampToNonNegative as clampToNonNegativeSafeInteger,
+  round as roundNumber,
+} from "../../numerics/safe_integer.ts";
 import { int } from "../../_.ts";
-import { round as roundNumber } from "../../numerics/number_type.ts";
 import { RoundingMode } from "../../numerics/rounding_mode.ts";
 
 function _initAmount(value?: number): int {

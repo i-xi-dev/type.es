@@ -1,12 +1,12 @@
 import {
   assert as assertNumber,
   normalize as normalizeNumber,
-  round as roundNumber,
-} from "./number_type.ts";
+} from "../basics/number_type.ts";
 import {
   assert as assertSafeInteger,
   fromBigInt as safeIntegerFromBigInt,
   isNonPositive as isNonPositiveSafeInteger,
+  round as roundNumber,
   toString as safeIntegerToString,
 } from "./safe_integer.ts";
 import {
