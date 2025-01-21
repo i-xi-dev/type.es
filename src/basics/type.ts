@@ -15,3 +15,15 @@ export function isNonEmptyString(test: unknown): test is string {
 export function isChar(test: unknown): test is char {
   return isString(test) && (test.length === 1);
 }
+
+export function isNumber(test: unknown): test is number {
+  return (typeof test === "number");
+}
+
+export function isPositiveNumber(test: unknown): test is number {
+  return isNumber(test) && (test > 0);
+}
+
+export function isNonNegativeNumber(test: unknown): test is number {
+  return isNumber(test) && (test >= 0);
+}

@@ -4,10 +4,8 @@ import {
 } from "./bigint_type.ts";
 import { FromStringOptions, ToStringOptions } from "./main.ts";
 import { int } from "../_.ts";
-import {
-  isPositive as isPositiveNumber,
-  normalize as normalizeNumber,
-} from "../basics/number_type.ts";
+import { normalize as normalizeNumber } from "../basics/number_type.ts";
+import { isPositiveNumber } from "../basics/type.ts";
 import { RadixProperties } from "./radix.ts";
 import { RoundingMode } from "./rounding_mode.ts";
 

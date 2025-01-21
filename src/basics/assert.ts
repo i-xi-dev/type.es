@@ -1,4 +1,12 @@
-import { isChar, isEmptyString, isNonEmptyString, isString } from "./type.ts";
+import {
+  isChar,
+  isEmptyString,
+  isNonEmptyString,
+  isNonNegativeNumber,
+  isNumber,
+  isPositiveNumber,
+  isString,
+} from "./type.ts";
 
 export function string(test: unknown, label: string): void {
   if (isString(test) !== true) {
@@ -21,5 +29,23 @@ export function nonEmptyString(test: unknown, label: string): void {
 export function char(test: unknown, label: string): void {
   if (isChar(test) !== true) {
     throw new TypeError(`\`${label}\` must be an UTF-16 code unit.`);
+  }
+}
+
+export function number(test: unknown, label: string): void {
+  if (isNumber(test) !== true) {
+    throw new TypeError(`\`${label}\` must be a \`number\`.`);
+  }
+}
+
+export function positiveNumber(test: unknown, label: string): void {
+  if (isPositiveNumber(test) !== true) {
+    throw new TypeError(`\`${label}\` must be a positive \`number\`.`);
+  }
+}
+
+export function nonNegativeNumber(test: unknown, label: string): void {
+  if (isNonNegativeNumber(test) !== true) {
+    throw new TypeError(`\`${label}\` must be a non-negative \`number\`.`);
   }
 }

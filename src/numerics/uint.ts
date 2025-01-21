@@ -1,7 +1,5 @@
-import {
-  assert as assertNumber,
-  normalize as normalizeNumber,
-} from "../basics/number_type.ts";
+import { normalize as normalizeNumber } from "../basics/number_type.ts";
+import { number } from "../basics/assert.ts";
 import {
   assert as assertSafeInteger,
   fromBigInt as safeIntegerFromBigInt,
@@ -144,7 +142,7 @@ class _UinNOperations<T extends int> implements UintNOperations<T> {
   }
 
   fromNumber(value: number, options?: FromNumberOptions): T {
-    assertNumber(value, "value");
+    number(value, "value");
 
     if (Number.isNaN(value)) {
       throw new TypeError("`value` must not be `NaN`.");

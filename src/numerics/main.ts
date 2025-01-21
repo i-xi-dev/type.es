@@ -6,10 +6,9 @@ import {
 } from "./bigint_type.ts";
 import {
   isNegative as isNegativeNumber,
-  isNonNegative as isNonNegativeNumber,
   isNonPositive as isNonPositiveNumber,
-  isPositive as isPositiveNumber,
 } from "../basics/number_type.ts";
+import { isNonNegativeNumber, isPositiveNumber } from "../basics/type.ts";
 import { numeric } from "../_.ts";
 import { Radix } from "./radix.ts";
 import { RoundingMode } from "./rounding_mode.ts";
