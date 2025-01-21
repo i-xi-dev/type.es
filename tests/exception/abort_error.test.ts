@@ -1,7 +1,5 @@
 import { assertStrictEquals } from "@std/assert";
-import { Basics } from "../../mod.ts";
-
-const { AbortError } = Basics;
+import { AbortError } from "../../mod.ts";
 
 Deno.test("AbortError", () => {
   // new AbortError()

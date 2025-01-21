@@ -1,7 +1,5 @@
 import { assertStrictEquals } from "@std/assert";
-import { Basics } from "../../mod.ts";
-
-const { TimeoutError } = Basics;
+import { TimeoutError } from "../../mod.ts";
 
 Deno.test("TimeoutError", () => {
   // new TimeoutError()
