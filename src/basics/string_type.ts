@@ -1,52 +1,15 @@
 import { char, int } from "../_.ts";
+import { string } from "./assert.ts";
+
+import { isEmptyString, isString } from "./type.ts";
 
 /**
  * The zero-length string.
  */
 export const EMPTY = "";
 
-export function is(test: unknown): test is string {
-  return (typeof test === "string");
-}
-
-export function isEmpty(test: unknown): test is string {
-  return is(test) && (test.length === 0);
-}
-
-export function isNonEmpty(test: unknown): test is string {
-  return is(test) && (test.length > 0);
-}
-
-export function isChar(test: unknown): test is char {
-  return is(test) && (test.length === 1);
-}
-
-export function assert(test: unknown, label: string): void {
-  if (is(test) !== true) {
-    throw new TypeError(`\`${label}\` must be a \`string\`.`);
-  }
-}
-
-export function assertEmpty(test: unknown, label: string): void {
-  if (isEmpty(test) !== true) {
-    throw new TypeError(`\`${label}\` must be an empty string.`);
-  }
-}
-
-export function assertNonEmpty(test: unknown, label: string): void {
-  if (isNonEmpty(test) !== true) {
-    throw new TypeError(`\`${label}\` must be a non-empty string.`);
-  }
-}
-
-export function assertChar(test: unknown, label: string): void {
-  if (isChar(test) !== true) {
-    throw new TypeError(`\`${label}\` must be an UTF-16 code unit.`);
-  }
-}
-
 export function charCountOf(value: string): int {
-  assert(value, "value");
+  string(value, "value");
   return value.length;
 }
 
@@ -54,7 +17,7 @@ export function charCountOf(value: string): int {
 //XXX fromCharsAsync
 
 export function toChars(value: string): IterableIterator<char, void, void> {
-  assert(value, "value");
+  string(value, "value");
 
   return (function* (s) {
     for (let i = 0; i < s.length; i++) {
@@ -103,7 +66,7 @@ export function isomorphicDecode(input: BufferSource): string {
  * @returns A byte sequence of isomorphic encoded `input`.
  */
 export function isomorphicEncode(input: string): Uint8Array {
-  assert(input, "input");
+  string(input, "input");
 
   // deno-lint-ignore no-control-regex
   if (/^[\u{0}-\u{FF}]*$/u.test(input) !== true) {
@@ -126,12 +89,12 @@ export function isomorphicEncode(input: string): Uint8Array {
 const _flags = "v";
 
 export function matchesPattern(test: string, pattern: string): test is string {
-  return is(test) && is(pattern) &&
+  return isString(test) && isString(pattern) &&
     (new RegExp(`^${pattern}$`, _flags)).test(test);
 }
 
 export function containsPattern(test: string, pattern: string): test is string {
-  return is(test) && is(pattern) &&
+  return isString(test) && isString(pattern) &&
     (new RegExp(`${pattern}`, _flags)).test(test);
 }
 
@@ -139,12 +102,12 @@ export function startsWithPattern(
   test: string,
   pattern: string,
 ): test is string {
-  return is(test) && is(pattern) &&
+  return isString(test) && isString(pattern) &&
     (new RegExp(`^${pattern}`, _flags)).test(test);
 }
 
 export function endsWithPattern(test: string, pattern: string): test is string {
-  return is(test) && is(pattern) &&
+  return isString(test) && isString(pattern) &&
     (new RegExp(`${pattern}$`, _flags)).test(test);
 }
 
@@ -152,10 +115,10 @@ export function endsWithPattern(test: string, pattern: string): test is string {
 // };
 
 export function truncateStart(value: string, truncatePattern: string): string {
-  assert(value, "value");
-  assert(truncatePattern, "truncatePattern");
+  string(value, "value");
+  string(truncatePattern, "truncatePattern");
 
-  if (isEmpty(truncatePattern)) {
+  if (isEmptyString(truncatePattern)) {
     return value;
   }
 
@@ -163,10 +126,10 @@ export function truncateStart(value: string, truncatePattern: string): string {
 }
 
 export function truncateEnd(value: string, truncatePattern: string): string {
-  assert(value, "value");
-  assert(truncatePattern, "truncatePattern");
+  string(value, "value");
+  string(truncatePattern, "truncatePattern");
 
-  if (isEmpty(truncatePattern)) {
+  if (isEmptyString(truncatePattern)) {
     return value;
   }
 
@@ -174,10 +137,10 @@ export function truncateEnd(value: string, truncatePattern: string): string {
 }
 
 export function truncateBoth(value: string, truncatePattern: string): string {
-  assert(value, "value");
-  assert(truncatePattern, "truncatePattern");
+  string(value, "value");
+  string(truncatePattern, "truncatePattern");
 
-  if (isEmpty(truncatePattern)) {
+  if (isEmptyString(truncatePattern)) {
     return value;
   }
 
@@ -188,10 +151,10 @@ export function truncateBoth(value: string, truncatePattern: string): string {
 }
 
 export function collectStart(value: string, collectPattern: string): string {
-  assert(value, "value");
-  assert(collectPattern, "collectPattern");
+  string(value, "value");
+  string(collectPattern, "collectPattern");
 
-  if (isEmpty(collectPattern)) {
+  if (isEmptyString(collectPattern)) {
     return EMPTY;
   }
 
@@ -203,10 +166,10 @@ export function collectStart(value: string, collectPattern: string): string {
 }
 
 export function collectEnd(value: string, collectPattern: string): string {
-  assert(value, "value");
-  assert(collectPattern, "collectPattern");
+  string(value, "value");
+  string(collectPattern, "collectPattern");
 
-  if (isEmpty(collectPattern)) {
+  if (isEmptyString(collectPattern)) {
     return EMPTY;
   }
 

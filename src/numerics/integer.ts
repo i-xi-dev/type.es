@@ -1,4 +1,3 @@
-import { is as isString } from "../basics/string_type.ts";
 import {
   isEven as isEvenBigInt,
   isNegative as isNegativeBigInt,
@@ -15,6 +14,7 @@ import {
   isOdd as isOddSafeInteger,
   isPositive as isPositiveSafeInteger,
 } from "./safe_integer.ts";
+import { isString } from "../basics/type.ts";
 import { Radix, RadixProperties } from "./radix.ts";
 import { xint } from "../_.ts";
 

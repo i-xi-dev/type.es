@@ -1,6 +1,6 @@
 import { plane, rune, script } from "../_.ts";
 import { assertGeneralCategory, GeneralCategory } from "./unicode.ts";
-import { is as isString } from "../basics/string_type.ts";
+import { isString } from "../basics/type.ts";
 import { isBmp as isBmpCodePoint } from "./code_point.ts";
 import { Script } from "../i18n/script.ts";
 

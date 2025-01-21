@@ -1,11 +1,9 @@
 import { assert as assertCodePoint } from "./code_point.ts";
-import {
-  assert as assertString,
-  EMPTY,
-  is as isString,
-} from "../basics/string_type.ts";
+import { EMPTY } from "../basics/string_type.ts";
 import { assertIterable as assertIterableObject } from "../basics/object_type.ts";
 import { codepoint, int, rune, script, usvstring } from "../_.ts";
+import { isString } from "../basics/type.ts";
+import { string } from "../basics/assert.ts";
 import { Rune } from "./mod.ts";
 import { Script } from "../i18n/script.ts";
 
@@ -38,7 +36,7 @@ export function runeCountOf(
   options?: AllowMalformedOptions,
 ): int {
   if (options?.allowMalformed === true) {
-    assertString(value, "value");
+    string(value, "value");
   } else {
     assert(value, "value");
   }
@@ -56,7 +54,7 @@ export function toRunes(
   options?: AllowMalformedOptions,
 ): IterableIterator<rune, void, void> {
   if (options?.allowMalformed === true) {
-    assertString(value, "value");
+    string(value, "value");
   } else {
     assert(value, "value");
   }
@@ -102,7 +100,7 @@ export function toCodePoints(
   options?: AllowMalformedOptions,
 ): IterableIterator<codepoint, void, void> {
   if (options?.allowMalformed === true) {
-    assertString(value, "value");
+    string(value, "value");
   } else {
     assert(value, "value");
   }
@@ -114,14 +112,19 @@ export function toCodePoints(
   })(value);
 }
 
-//TODO
-// export type BelongsToScriptsOptions = {
-//   //inherited?: script;
-// };
+export type BelongsToScriptsOptions = {
+  excludeCommon?: boolean;
+  excludeInherited?: boolean;
+  checkScx?: boolean;
+  //TODO okとみなすrune配列オプション
+  //XXX 1つめのruneのscがInheritまたはgcがMe|Mnの場合 okにするか否か
+};
 
+//TODO
 export function belongsToScripts(
   test: unknown,
   scripts: script[],
+  options?: BelongsToScriptsOptions,
 ): test is usvstring {
   let scriptSet: script[];
   if (Array.isArray(scripts) && (scripts.length > 0)) {
@@ -130,7 +133,7 @@ export function belongsToScripts(
       Script.assertUnicodePropertyValue(script, script);
     }
   } else {
-    throw new TypeError("TODO");
+    throw new TypeError("`scripts` must be an Array of script.");
   }
 
   if (is(test) !== true) {
@@ -143,10 +146,13 @@ export function belongsToScripts(
   }
 
   const orSc = [];
+  const orScx = [];
   for (const script of scriptSet) {
     orSc.push(`\\p{sc=${script}}`);
+    orScx.push(`\\p{scx=${script}}`);
   }
   const specifiedScRegex = new RegExp(`^(?:${orSc.join("|")})$`, "v");
+  const specifiedScxRegex = new RegExp(`^(?:${orScx.join("|")})$`, "v");
   const inheritedScRegex = new RegExp(
     `^(?:\\p{sc=Zinh}|\\p{gc=Me}|\\p{gc=Mn})$`,
     "v",
@@ -161,20 +167,29 @@ export function belongsToScripts(
       continue;
     }
 
-    if (Rune.matchesCommonScript(rune)) {
-      // scがCommon: ok
-      //TODO scxもチェックするオプション or okとみなすrune配列オプション
-      continue;
+    if (options?.excludeCommon !== true) {
+      if (Rune.matchesCommonScript(rune)) {
+        // scがCommon: ok
+        if ((options?.checkScx === true) && specifiedScxRegex.test(rune)) {
+          continue;
+        } else {
+          continue;
+        }
+      }
     }
 
-    if ((runeCount > 1) && inheritedScRegex.test(rune)) {
-      // scがInherited or gcがMe|Mn: ok
-      //TODO scxもチェックするオプション or okとみなすrune配列オプション
-      continue;
-    } else {
-      return false;
+    if (options?.excludeInherited !== true) {
+      if ((runeCount > 1) && inheritedScRegex.test(rune)) {
+        // scがInherited or gcがMe|Mn: ok
+        if ((options?.checkScx === true) && specifiedScxRegex.test(rune)) {
+          continue;
+        } else {
+          continue;
+        }
+      }
     }
-    //TODO 1つめのruneのscがInheritまたはgcがMe|Mnの場合
+
+    return false;
   }
 
   return false;

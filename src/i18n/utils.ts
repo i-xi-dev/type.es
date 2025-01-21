@@ -1,8 +1,6 @@
 import { language, region, script } from "../_.ts";
-import {
-  EMPTY as EMPTY_STRING,
-  is as isString,
-} from "../basics/string_type.ts";
+import { EMPTY as EMPTY_STRING } from "../basics/string_type.ts";
+import { isString } from "../basics/type.ts";
 
 const _FALLBACK = "en";
 
