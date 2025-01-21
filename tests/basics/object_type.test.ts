@@ -71,13 +71,25 @@ Deno.test("ObjectType.assertNonNull()", () => {
 Deno.test("ObjectType.isNull()", () => {
   assertStrictEquals(ObjectType.isNull({}), false);
   assertStrictEquals(ObjectType.isNull(null), true);
-  assertStrictEquals(ObjectType.isNull(undefined), true);
+  assertStrictEquals(ObjectType.isNull(undefined), false);
   assertStrictEquals(ObjectType.isNull([]), false);
   assertStrictEquals(ObjectType.isNull(new Error()), false);
   assertStrictEquals(ObjectType.isNull(""), false);
   assertStrictEquals(ObjectType.isNull(1), false);
   assertStrictEquals(ObjectType.isNull(true), false);
   assertStrictEquals(ObjectType.isNull(false), false);
+});
+
+Deno.test("ObjectType.isNullOrUndefined()", () => {
+  assertStrictEquals(ObjectType.isNullOrUndefined({}), false);
+  assertStrictEquals(ObjectType.isNullOrUndefined(null), true);
+  assertStrictEquals(ObjectType.isNullOrUndefined(undefined), true);
+  assertStrictEquals(ObjectType.isNullOrUndefined([]), false);
+  assertStrictEquals(ObjectType.isNullOrUndefined(new Error()), false);
+  assertStrictEquals(ObjectType.isNullOrUndefined(""), false);
+  assertStrictEquals(ObjectType.isNullOrUndefined(1), false);
+  assertStrictEquals(ObjectType.isNullOrUndefined(true), false);
+  assertStrictEquals(ObjectType.isNullOrUndefined(false), false);
 });
 
 Deno.test("ObjectType.isIterable()", () => {

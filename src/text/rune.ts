@@ -104,7 +104,7 @@ function _planeMatches(
     bmp?: boolean;
   },
 ): boolean {
-  if (isNull(options?.planes) && (options?.bmp !== true)) {
+  if (isNullOrUndefined(options?.planes) && (options?.bmp !== true)) {
     return true;
   }
 

@@ -10,16 +10,21 @@ export function assert(test: unknown, label: string): void {
 
 export function isNonNull(test: unknown): test is NonNullable<object> {
   return (is(test) && (test !== null));
-}
-
-export function isNull(test: unknown): test is null | undefined {
-  return (test === null) || (test === undefined);
+  // is()によってundefinedは弾かれる。よってisNonNull(undefined)はfalseとなる
 }
 
 export function assertNonNull(test: unknown, label: string): void {
   if (isNonNull(test) !== true) {
     throw new TypeError(`\`${label}\` must be an \`Object\` except \`null\`.`);
   }
+}
+
+export function isNull(test: unknown): test is null {
+  return (test === null);
+}
+
+export function isNullOrUndefined(test: unknown): test is null | undefined {
+  return (test === null) || (test === undefined);
 }
 
 // deno-lint-ignore no-explicit-any
