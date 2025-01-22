@@ -425,3 +425,44 @@ Deno.test("Assert.negativeNumber()", () => {
     //
   }
 });
+
+Deno.test("Assert.object()", () => {
+  try {
+    Assert.object({}, "test-1");
+    Assert.object(null, "test-1");
+    Assert.object([], "test-1");
+    Assert.object(new Error(), "test-1");
+  } catch (exception) {
+    fail((exception as Error).toString());
+  }
+
+  try {
+    Assert.object(undefined, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+});
+
+Deno.test("Assert.nonNullObject()", () => {
+  try {
+    Assert.nonNullObject({}, "test-1");
+    Assert.nonNullObject([], "test-1");
+    Assert.nonNullObject(new Error(), "test-1");
+  } catch (exception) {
+    fail((exception as Error).toString());
+  }
+
+  try {
+    Assert.nonNullObject(null, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+  try {
+    Assert.nonNullObject(undefined, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+});

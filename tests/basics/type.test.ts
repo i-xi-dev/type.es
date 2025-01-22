@@ -245,3 +245,27 @@ Deno.test("Type.isNegativeNumber()", () => {
   assertStrictEquals(Type.isNegativeNumber(""), false);
   assertStrictEquals(Type.isNegativeNumber("0"), false);
 });
+
+Deno.test("Type.isObject()", () => {
+  assertStrictEquals(Type.isObject({}), true);
+  assertStrictEquals(Type.isObject(null), true);
+  assertStrictEquals(Type.isObject(undefined), false);
+  assertStrictEquals(Type.isObject([]), true);
+  assertStrictEquals(Type.isObject(new Error()), true);
+  assertStrictEquals(Type.isObject(""), false);
+  assertStrictEquals(Type.isObject(1), false);
+  assertStrictEquals(Type.isObject(true), false);
+  assertStrictEquals(Type.isObject(false), false);
+});
+
+Deno.test("Type.isNonNullObject()", () => {
+  assertStrictEquals(Type.isNonNullObject({}), true);
+  assertStrictEquals(Type.isNonNullObject(null), false);
+  assertStrictEquals(Type.isNonNullObject(undefined), false);
+  assertStrictEquals(Type.isNonNullObject([]), true);
+  assertStrictEquals(Type.isNonNullObject(new Error()), true);
+  assertStrictEquals(Type.isNonNullObject(""), false);
+  assertStrictEquals(Type.isNonNullObject(1), false);
+  assertStrictEquals(Type.isNonNullObject(true), false);
+  assertStrictEquals(Type.isNonNullObject(false), false);
+});

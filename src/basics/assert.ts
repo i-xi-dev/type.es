@@ -4,8 +4,10 @@ import {
   isNegativeNumber,
   isNonEmptyString,
   isNonNegativeNumber,
+  isNonNullObject,
   isNonPositiveNumber,
   isNumber,
+  isObject,
   isPositiveNumber,
   isString,
 } from "./type.ts";
@@ -61,5 +63,17 @@ export function nonPositiveNumber(test: unknown, label: string): void {
 export function negativeNumber(test: unknown, label: string): void {
   if (isNegativeNumber(test) !== true) {
     throw new TypeError(`\`${label}\` must be a negative \`number\`.`);
+  }
+}
+
+export function object(test: unknown, label: string): void {
+  if (isObject(test) !== true) {
+    throw new TypeError(`\`${label}\` must be an \`Object\`.`);
+  }
+}
+
+export function nonNullObject(test: unknown, label: string): void {
+  if (isNonNullObject(test) !== true) {
+    throw new TypeError(`\`${label}\` must be an \`Object\` except \`null\`.`);
   }
 }

@@ -35,3 +35,12 @@ export function isNonPositiveNumber(test: unknown): test is number {
 export function isNegativeNumber(test: unknown): test is number {
   return isNumber(test) && (test < 0);
 }
+
+export function isObject(test: unknown): test is object | null {
+  return (typeof test === "object");
+}
+
+export function isNonNullObject(test: unknown): test is NonNullable<object> {
+  return (isObject(test) && (test !== null));
+  // is()によってundefinedは弾かれる。よってisNonNull(undefined)はfalseとなる
+}
