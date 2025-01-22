@@ -321,3 +321,107 @@ Deno.test("Assert.nonNegativeNumber()", () => {
     //
   }
 });
+
+Deno.test("Assert.nonPositiveNumber()", () => {
+  try {
+    Assert.nonPositiveNumber(-1, "test-1");
+    Assert.nonPositiveNumber(-0.5, "test-1");
+    Assert.nonPositiveNumber(Number.NEGATIVE_INFINITY, "test-1");
+  } catch (exception) {
+    fail((exception as Error).toString());
+  }
+
+  try {
+    Assert.nonPositiveNumber(0, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    Assert.nonPositiveNumber(Number.POSITIVE_INFINITY, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    Assert.nonPositiveNumber(Number.NaN, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    Assert.nonPositiveNumber(undefined, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    Assert.nonPositiveNumber(0n, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    Assert.nonPositiveNumber(new Number(0), "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+});
+
+Deno.test("Assert.negativeNumber()", () => {
+  try {
+    Assert.negativeNumber(-1, "test-1");
+    Assert.negativeNumber(-0.5, "test-1");
+    Assert.negativeNumber(Number.NEGATIVE_INFINITY, "test-1");
+  } catch (exception) {
+    fail((exception as Error).toString());
+  }
+
+  try {
+    Assert.negativeNumber(0, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    Assert.negativeNumber(Number.POSITIVE_INFINITY, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    Assert.negativeNumber(Number.NaN, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    Assert.negativeNumber(undefined, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    Assert.negativeNumber(0n, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    Assert.negativeNumber(new Number(0), "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+});

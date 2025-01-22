@@ -1,26 +1,6 @@
 import { number } from "./assert.ts";
 import { isNumber } from "./type.ts";
 
-export function isNonPositive(test: unknown): test is number {
-  return isNumber(test) && (test <= 0);
-}
-
-export function isNegative(test: unknown): test is number {
-  return isNumber(test) && (test < 0);
-}
-
-export function assertNonPositive(test: unknown, label: string): void {
-  if (isNonPositive(test) !== true) {
-    throw new TypeError(`\`${label}\` must be a non-positive \`number\`.`);
-  }
-}
-
-export function assertNegative(test: unknown, label: string): void {
-  if (isNegative(test) !== true) {
-    throw new TypeError(`\`${label}\` must be a negative \`number\`.`);
-  }
-}
-
 export function isInRange<T extends number>(
   test: unknown,
   min: T,

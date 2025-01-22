@@ -185,3 +185,63 @@ Deno.test("Type.isNonNegativeNumber()", () => {
   assertStrictEquals(Type.isNonNegativeNumber(""), false);
   assertStrictEquals(Type.isNonNegativeNumber("0"), false);
 });
+
+Deno.test("Type.isNonPositiveNumber()", () => {
+  assertStrictEquals(Type.isNonPositiveNumber(0), true);
+  assertStrictEquals(Type.isNonPositiveNumber(-0), true);
+  assertStrictEquals(Type.isNonPositiveNumber(1), false);
+  assertStrictEquals(Type.isNonPositiveNumber(-1), true);
+
+  assertStrictEquals(Type.isNonPositiveNumber(-10.1), true);
+  assertStrictEquals(Type.isNonPositiveNumber(-9.9), true);
+  assertStrictEquals(Type.isNonPositiveNumber(9.9), false);
+  assertStrictEquals(Type.isNonPositiveNumber(10.1), false);
+
+  assertStrictEquals(Type.isNonPositiveNumber(0n), false);
+  assertStrictEquals(Type.isNonPositiveNumber(-0n), false);
+  assertStrictEquals(Type.isNonPositiveNumber(1n), false);
+  assertStrictEquals(Type.isNonPositiveNumber(-1n), false);
+
+  assertStrictEquals(Type.isNonPositiveNumber(Number.NaN), false);
+  assertStrictEquals(Type.isNonPositiveNumber(Number.POSITIVE_INFINITY), false);
+  assertStrictEquals(Type.isNonPositiveNumber(Number.MAX_SAFE_INTEGER), false);
+  assertStrictEquals(Type.isNonPositiveNumber(Number.MIN_SAFE_INTEGER), true);
+  assertStrictEquals(Type.isNonPositiveNumber(Number.NEGATIVE_INFINITY), true);
+
+  assertStrictEquals(Type.isNonPositiveNumber(undefined), false);
+  assertStrictEquals(Type.isNonPositiveNumber(null), false);
+  assertStrictEquals(Type.isNonPositiveNumber(true), false);
+  assertStrictEquals(Type.isNonPositiveNumber(false), false);
+  assertStrictEquals(Type.isNonPositiveNumber(""), false);
+  assertStrictEquals(Type.isNonPositiveNumber("0"), false);
+});
+
+Deno.test("Type.isNegativeNumber()", () => {
+  assertStrictEquals(Type.isNegativeNumber(0), false);
+  assertStrictEquals(Type.isNegativeNumber(-0), false);
+  assertStrictEquals(Type.isNegativeNumber(1), false);
+  assertStrictEquals(Type.isNegativeNumber(-1), true);
+
+  assertStrictEquals(Type.isNegativeNumber(-10.1), true);
+  assertStrictEquals(Type.isNegativeNumber(-9.9), true);
+  assertStrictEquals(Type.isNegativeNumber(9.9), false);
+  assertStrictEquals(Type.isNegativeNumber(10.1), false);
+
+  assertStrictEquals(Type.isNegativeNumber(0n), false);
+  assertStrictEquals(Type.isNegativeNumber(-0n), false);
+  assertStrictEquals(Type.isNegativeNumber(1n), false);
+  assertStrictEquals(Type.isNegativeNumber(-1n), false);
+
+  assertStrictEquals(Type.isNegativeNumber(Number.NaN), false);
+  assertStrictEquals(Type.isNegativeNumber(Number.POSITIVE_INFINITY), false);
+  assertStrictEquals(Type.isNegativeNumber(Number.MAX_SAFE_INTEGER), false);
+  assertStrictEquals(Type.isNegativeNumber(Number.MIN_SAFE_INTEGER), true);
+  assertStrictEquals(Type.isNegativeNumber(Number.NEGATIVE_INFINITY), true);
+
+  assertStrictEquals(Type.isNegativeNumber(undefined), false);
+  assertStrictEquals(Type.isNegativeNumber(null), false);
+  assertStrictEquals(Type.isNegativeNumber(true), false);
+  assertStrictEquals(Type.isNegativeNumber(false), false);
+  assertStrictEquals(Type.isNegativeNumber(""), false);
+  assertStrictEquals(Type.isNegativeNumber("0"), false);
+});

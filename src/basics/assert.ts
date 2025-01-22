@@ -1,8 +1,10 @@
 import {
   isChar,
   isEmptyString,
+  isNegativeNumber,
   isNonEmptyString,
   isNonNegativeNumber,
+  isNonPositiveNumber,
   isNumber,
   isPositiveNumber,
   isString,
@@ -47,5 +49,17 @@ export function positiveNumber(test: unknown, label: string): void {
 export function nonNegativeNumber(test: unknown, label: string): void {
   if (isNonNegativeNumber(test) !== true) {
     throw new TypeError(`\`${label}\` must be a non-negative \`number\`.`);
+  }
+}
+
+export function nonPositiveNumber(test: unknown, label: string): void {
+  if (isNonPositiveNumber(test) !== true) {
+    throw new TypeError(`\`${label}\` must be a non-positive \`number\`.`);
+  }
+}
+
+export function negativeNumber(test: unknown, label: string): void {
+  if (isNegativeNumber(test) !== true) {
+    throw new TypeError(`\`${label}\` must be a negative \`number\`.`);
   }
 }

@@ -27,3 +27,11 @@ export function isPositiveNumber(test: unknown): test is number {
 export function isNonNegativeNumber(test: unknown): test is number {
   return isNumber(test) && (test >= 0);
 }
+
+export function isNonPositiveNumber(test: unknown): test is number {
+  return isNumber(test) && (test <= 0);
+}
+
+export function isNegativeNumber(test: unknown): test is number {
+  return isNumber(test) && (test < 0);
+}
