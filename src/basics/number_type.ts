@@ -1,13 +1,13 @@
-import { number } from "./assert.ts";
-import { isNumber } from "./type.ts";
+import { assertNumber } from "../type/assert.ts";
+import { isNumber } from "../type/is.ts";
 
 export function isInRange<T extends number>(
   test: unknown,
   min: T,
   max: T,
 ): test is T {
-  number(min, "min");
-  number(max, "max");
+  assertNumber(min, "min");
+  assertNumber(max, "max");
   if (Number.isNaN(min)) {
     throw new TypeError("`min` must not be `NaN`.");
   }
@@ -19,7 +19,7 @@ export function isInRange<T extends number>(
 }
 
 export function normalize<T extends number>(value: T): T {
-  number(value, "value");
+  assertNumber(value, "value");
   return ((value === 0) ? (value + 0) : value) as T; // -0を0
 }
 
@@ -28,9 +28,9 @@ export function clamp<T extends number>(
   min: T,
   max: T,
 ): T {
-  number(value, "value");
-  number(min, "min");
-  number(max, "max");
+  assertNumber(value, "value");
+  assertNumber(min, "min");
+  assertNumber(max, "max");
 
   if (min > max) {
     throw new RangeError("`max` must be greater than or equal to `min`.");

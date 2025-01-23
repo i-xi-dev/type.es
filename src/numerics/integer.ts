@@ -14,7 +14,7 @@ import {
   isOdd as isOddSafeInteger,
   isPositive as isPositiveSafeInteger,
 } from "./safe_integer.ts";
-import { isString } from "../basics/type.ts";
+import { isString } from "../type/is.ts";
 import { Radix, RadixProperties } from "./radix.ts";
 import { xint } from "../_.ts";
 

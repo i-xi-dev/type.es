@@ -4,9 +4,7 @@ import {
   fail,
   unreachable,
 } from "@std/assert";
-import { Basics } from "../../mod.ts";
-
-const { Type } = Basics;
+import { Type } from "../../mod.ts";
 
 Deno.test("Type.isString()", () => {
   assertStrictEquals(Type.isString(0), false);
@@ -268,4 +266,16 @@ Deno.test("Type.isNonNullObject()", () => {
   assertStrictEquals(Type.isNonNullObject(1), false);
   assertStrictEquals(Type.isNonNullObject(true), false);
   assertStrictEquals(Type.isNonNullObject(false), false);
+});
+
+Deno.test("Type.isNull()", () => {
+  assertStrictEquals(Type.isNull({}), false);
+  assertStrictEquals(Type.isNull(null), true);
+  assertStrictEquals(Type.isNull(undefined), false);
+  assertStrictEquals(Type.isNull([]), false);
+  assertStrictEquals(Type.isNull(new Error()), false);
+  assertStrictEquals(Type.isNull(""), false);
+  assertStrictEquals(Type.isNull(1), false);
+  assertStrictEquals(Type.isNull(true), false);
+  assertStrictEquals(Type.isNull(false), false);
 });

@@ -71,7 +71,7 @@ Deno.test("new GrowableBuffer()/capacity/position/putRange() - 2", () => {
   // }
 });
 
-Deno.test("new GrowableBuffer(number)/capacity/position/putRange()", () => {
+Deno.test("new GrowableBuffer()/capacity/position/putRange()", () => {
   const b = new GrowableBuffer(10);
 
   assertStrictEquals(b.capacity, 10);

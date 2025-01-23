@@ -1,5 +1,5 @@
 import { assert as assertRuneSequence } from "./rune_string.ts";
-import { string } from "../basics/assert.ts";
+import { assertString } from "../type/assert.ts";
 import { EMPTY as EMPTY_STRING } from "../basics/string_type.ts";
 import { grapheme } from "../_.ts";
 import { segmentGraphemes } from "../i18n/utils.ts";
@@ -32,7 +32,7 @@ export class GraphemeSequence {
     options?: GraphemeSequence.FromOptions,
   ): GraphemeSequence {
     if (options?.allowMalformed === true) {
-      string(value, "value");
+      assertString(value, "value");
     } else {
       assertRuneSequence(value, "value");
     }

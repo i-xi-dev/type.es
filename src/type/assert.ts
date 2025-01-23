@@ -6,74 +6,81 @@ import {
   isNonNegativeNumber,
   isNonNullObject,
   isNonPositiveNumber,
+  isNull,
   isNumber,
   isObject,
   isPositiveNumber,
   isString,
-} from "./type.ts";
+} from "./is.ts";
 
-export function string(test: unknown, label: string): void {
+export function assertString(test: unknown, label: string): void {
   if (isString(test) !== true) {
     throw new TypeError(`\`${label}\` must be a \`string\`.`);
   }
 }
 
-export function emptyString(test: unknown, label: string): void {
+export function assertEmptyString(test: unknown, label: string): void {
   if (isEmptyString(test) !== true) {
     throw new TypeError(`\`${label}\` must be an empty string.`);
   }
 }
 
-export function nonEmptyString(test: unknown, label: string): void {
+export function assertNonEmptyString(test: unknown, label: string): void {
   if (isNonEmptyString(test) !== true) {
     throw new TypeError(`\`${label}\` must be a non-empty string.`);
   }
 }
 
-export function char(test: unknown, label: string): void {
+export function assertChar(test: unknown, label: string): void {
   if (isChar(test) !== true) {
     throw new TypeError(`\`${label}\` must be an UTF-16 code unit.`);
   }
 }
 
-export function number(test: unknown, label: string): void {
+export function assertNumber(test: unknown, label: string): void {
   if (isNumber(test) !== true) {
     throw new TypeError(`\`${label}\` must be a \`number\`.`);
   }
 }
 
-export function positiveNumber(test: unknown, label: string): void {
+export function assertPositiveNumber(test: unknown, label: string): void {
   if (isPositiveNumber(test) !== true) {
     throw new TypeError(`\`${label}\` must be a positive \`number\`.`);
   }
 }
 
-export function nonNegativeNumber(test: unknown, label: string): void {
+export function assertNonNegativeNumber(test: unknown, label: string): void {
   if (isNonNegativeNumber(test) !== true) {
     throw new TypeError(`\`${label}\` must be a non-negative \`number\`.`);
   }
 }
 
-export function nonPositiveNumber(test: unknown, label: string): void {
+export function assertNonPositiveNumber(test: unknown, label: string): void {
   if (isNonPositiveNumber(test) !== true) {
     throw new TypeError(`\`${label}\` must be a non-positive \`number\`.`);
   }
 }
 
-export function negativeNumber(test: unknown, label: string): void {
+export function assertNegativeNumber(test: unknown, label: string): void {
   if (isNegativeNumber(test) !== true) {
     throw new TypeError(`\`${label}\` must be a negative \`number\`.`);
   }
 }
 
-export function object(test: unknown, label: string): void {
+export function assertObject(test: unknown, label: string): void {
   if (isObject(test) !== true) {
     throw new TypeError(`\`${label}\` must be an \`Object\`.`);
   }
 }
 
-export function nonNullObject(test: unknown, label: string): void {
+export function assertNonNullObject(test: unknown, label: string): void {
   if (isNonNullObject(test) !== true) {
     throw new TypeError(`\`${label}\` must be an \`Object\` except \`null\`.`);
+  }
+}
+
+export function assertNull(test: unknown, label: string): void {
+  if (isNull(test) !== true) {
+    throw new TypeError(`\`${label}\` must be a \`null\`.`);
   }
 }

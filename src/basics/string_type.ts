@@ -1,7 +1,7 @@
 import { char, int } from "../_.ts";
-import { string } from "./assert.ts";
+import { assertString } from "../type/assert.ts";
 
-import { isEmptyString, isString } from "./type.ts";
+import { isEmptyString, isString } from "../type/is.ts";
 
 /**
  * The zero-length string.
@@ -9,7 +9,7 @@ import { isEmptyString, isString } from "./type.ts";
 export const EMPTY = "";
 
 export function charCountOf(value: string): int {
-  string(value, "value");
+  assertString(value, "value");
   return value.length;
 }
 
@@ -17,7 +17,7 @@ export function charCountOf(value: string): int {
 //XXX fromCharsAsync
 
 export function toChars(value: string): IterableIterator<char, void, void> {
-  string(value, "value");
+  assertString(value, "value");
 
   return (function* (s) {
     for (let i = 0; i < s.length; i++) {
@@ -66,7 +66,7 @@ export function isomorphicDecode(input: BufferSource): string {
  * @returns A byte sequence of isomorphic encoded `input`.
  */
 export function isomorphicEncode(input: string): Uint8Array {
-  string(input, "input");
+  assertString(input, "input");
 
   // deno-lint-ignore no-control-regex
   if (/^[\u{0}-\u{FF}]*$/u.test(input) !== true) {
@@ -115,8 +115,8 @@ export function endsWithPattern(test: string, pattern: string): test is string {
 // };
 
 export function truncateStart(value: string, truncatePattern: string): string {
-  string(value, "value");
-  string(truncatePattern, "truncatePattern");
+  assertString(value, "value");
+  assertString(truncatePattern, "truncatePattern");
 
   if (isEmptyString(truncatePattern)) {
     return value;
@@ -126,8 +126,8 @@ export function truncateStart(value: string, truncatePattern: string): string {
 }
 
 export function truncateEnd(value: string, truncatePattern: string): string {
-  string(value, "value");
-  string(truncatePattern, "truncatePattern");
+  assertString(value, "value");
+  assertString(truncatePattern, "truncatePattern");
 
   if (isEmptyString(truncatePattern)) {
     return value;
@@ -137,8 +137,8 @@ export function truncateEnd(value: string, truncatePattern: string): string {
 }
 
 export function truncateBoth(value: string, truncatePattern: string): string {
-  string(value, "value");
-  string(truncatePattern, "truncatePattern");
+  assertString(value, "value");
+  assertString(truncatePattern, "truncatePattern");
 
   if (isEmptyString(truncatePattern)) {
     return value;
@@ -151,8 +151,8 @@ export function truncateBoth(value: string, truncatePattern: string): string {
 }
 
 export function collectStart(value: string, collectPattern: string): string {
-  string(value, "value");
-  string(collectPattern, "collectPattern");
+  assertString(value, "value");
+  assertString(collectPattern, "collectPattern");
 
   if (isEmptyString(collectPattern)) {
     return EMPTY;
@@ -166,8 +166,8 @@ export function collectStart(value: string, collectPattern: string): string {
 }
 
 export function collectEnd(value: string, collectPattern: string): string {
-  string(value, "value");
-  string(collectPattern, "collectPattern");
+  assertString(value, "value");
+  assertString(collectPattern, "collectPattern");
 
   if (isEmptyString(collectPattern)) {
     return EMPTY;

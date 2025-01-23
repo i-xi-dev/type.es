@@ -1,8 +1,4 @@
-import { isNonNullObject } from "./type.ts";
-
-export function isNull(test: unknown): test is null {
-  return (test === null);
-}
+import { isNonNullObject } from "../type/is.ts";
 
 export function isNullOrUndefined(test: unknown): test is null | undefined {
   return (test === null) || (test === undefined);

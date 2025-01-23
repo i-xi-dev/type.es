@@ -2,8 +2,8 @@ import { assert as assertCodePoint } from "./code_point.ts";
 import { EMPTY } from "../basics/string_type.ts";
 import { assertIterable as assertIterableObject } from "../basics/object_type.ts";
 import { codepoint, int, rune, script, usvstring } from "../_.ts";
-import { isString } from "../basics/type.ts";
-import { string } from "../basics/assert.ts";
+import { isString } from "../type/is.ts";
+import { assertString } from "../type/assert.ts";
 import { Rune } from "./mod.ts";
 import { Script } from "../i18n/script.ts";
 
@@ -36,7 +36,7 @@ export function runeCountOf(
   options?: AllowMalformedOptions,
 ): int {
   if (options?.allowMalformed === true) {
-    string(value, "value");
+    assertString(value, "value");
   } else {
     assert(value, "value");
   }
@@ -54,7 +54,7 @@ export function toRunes(
   options?: AllowMalformedOptions,
 ): IterableIterator<rune, void, void> {
   if (options?.allowMalformed === true) {
-    string(value, "value");
+    assertString(value, "value");
   } else {
     assert(value, "value");
   }
@@ -100,7 +100,7 @@ export function toCodePoints(
   options?: AllowMalformedOptions,
 ): IterableIterator<codepoint, void, void> {
   if (options?.allowMalformed === true) {
-    string(value, "value");
+    assertString(value, "value");
   } else {
     assert(value, "value");
   }

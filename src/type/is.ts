@@ -44,3 +44,7 @@ export function isNonNullObject(test: unknown): test is NonNullable<object> {
   return (isObject(test) && (test !== null));
   // is()によってundefinedは弾かれる。よってisNonNull(undefined)はfalseとなる
 }
+
+export function isNull(test: unknown): test is null {
+  return (test === null);
+}

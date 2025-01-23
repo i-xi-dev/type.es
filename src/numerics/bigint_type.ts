@@ -1,4 +1,4 @@
-import { number } from "../basics/assert.ts";
+import { assertNumber } from "../type/assert.ts";
 import { assertStringified as assertStringifiedInteger } from "./integer.ts";
 import {
   FromNumberOptions,
@@ -189,7 +189,7 @@ export function fromNumber(
   value: number,
   options?: FromNumberOptions,
 ): bigint {
-  number(value, "value");
+  assertNumber(value, "value");
   //XXX Finiteでなければエラーで良いのでは
 
   if (Number.isNaN(value)) {
