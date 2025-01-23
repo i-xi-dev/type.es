@@ -279,3 +279,15 @@ Deno.test("Type.isNull()", () => {
   assertStrictEquals(Type.isNull(true), false);
   assertStrictEquals(Type.isNull(false), false);
 });
+
+Deno.test("Type.isNullOrUndefined()", () => {
+  assertStrictEquals(Type.isNullOrUndefined({}), false);
+  assertStrictEquals(Type.isNullOrUndefined(null), true);
+  assertStrictEquals(Type.isNullOrUndefined(undefined), true);
+  assertStrictEquals(Type.isNullOrUndefined([]), false);
+  assertStrictEquals(Type.isNullOrUndefined(new Error()), false);
+  assertStrictEquals(Type.isNullOrUndefined(""), false);
+  assertStrictEquals(Type.isNullOrUndefined(1), false);
+  assertStrictEquals(Type.isNullOrUndefined(true), false);
+  assertStrictEquals(Type.isNullOrUndefined(false), false);
+});

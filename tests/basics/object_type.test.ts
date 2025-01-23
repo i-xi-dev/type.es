@@ -3,18 +3,6 @@ import { Basics } from "../../mod.ts";
 
 const { ObjectType } = Basics;
 
-Deno.test("ObjectType.isNullOrUndefined()", () => {
-  assertStrictEquals(ObjectType.isNullOrUndefined({}), false);
-  assertStrictEquals(ObjectType.isNullOrUndefined(null), true);
-  assertStrictEquals(ObjectType.isNullOrUndefined(undefined), true);
-  assertStrictEquals(ObjectType.isNullOrUndefined([]), false);
-  assertStrictEquals(ObjectType.isNullOrUndefined(new Error()), false);
-  assertStrictEquals(ObjectType.isNullOrUndefined(""), false);
-  assertStrictEquals(ObjectType.isNullOrUndefined(1), false);
-  assertStrictEquals(ObjectType.isNullOrUndefined(true), false);
-  assertStrictEquals(ObjectType.isNullOrUndefined(false), false);
-});
-
 Deno.test("ObjectType.isIterable()", () => {
   assertStrictEquals(ObjectType.isIterable({}), false);
   assertStrictEquals(ObjectType.isIterable(null), false);

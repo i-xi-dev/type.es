@@ -7,6 +7,7 @@ import {
   isNonNullObject,
   isNonPositiveNumber,
   isNull,
+  isNullOrUndefined,
   isNumber,
   isObject,
   isPositiveNumber,
@@ -82,5 +83,11 @@ export function assertNonNullObject(test: unknown, label: string): void {
 export function assertNull(test: unknown, label: string): void {
   if (isNull(test) !== true) {
     throw new TypeError(`\`${label}\` must be a \`null\`.`);
+  }
+}
+
+export function assertNullOrUndefined(test: unknown, label: string): void {
+  if (isNullOrUndefined(test) !== true) {
+    throw new TypeError(`\`${label}\` must be a \`null\` or an \`undefined\`.`);
   }
 }

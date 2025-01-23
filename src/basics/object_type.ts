@@ -1,9 +1,5 @@
 import { isNonNullObject } from "../type/is.ts";
 
-export function isNullOrUndefined(test: unknown): test is null | undefined {
-  return (test === null) || (test === undefined);
-}
-
 // deno-lint-ignore no-explicit-any
 export function isIterable<T = any>(test: unknown): test is Iterable<T> {
   return isNonNullObject(test) && (Symbol.iterator in test);

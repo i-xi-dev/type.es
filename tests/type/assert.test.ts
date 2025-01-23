@@ -473,6 +473,13 @@ Deno.test("Type.assertNull()", () => {
   }
 
   try {
+    Type.assertNull(undefined, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
     Type.assertNull({}, "test-1");
     unreachable();
   } catch {
@@ -480,6 +487,28 @@ Deno.test("Type.assertNull()", () => {
   }
   try {
     Type.assertNull(0, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+});
+
+Deno.test("Type.assertNullOrUndefined()", () => {
+  try {
+    Type.assertNullOrUndefined(null, "test-1");
+    Type.assertNullOrUndefined(undefined, "test-1");
+  } catch (exception) {
+    fail((exception as Error).toString());
+  }
+
+  try {
+    Type.assertNullOrUndefined({}, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+  try {
+    Type.assertNullOrUndefined(0, "test-1");
     unreachable();
   } catch {
     //

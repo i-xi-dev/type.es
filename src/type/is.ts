@@ -48,3 +48,7 @@ export function isNonNullObject(test: unknown): test is NonNullable<object> {
 export function isNull(test: unknown): test is null {
   return (test === null);
 }
+
+export function isNullOrUndefined(test: unknown): test is null | undefined {
+  return (test === null) || (test === undefined);
+}
