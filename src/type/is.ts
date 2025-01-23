@@ -52,3 +52,15 @@ export function isNull(test: unknown): test is null {
 export function isNullOrUndefined(test: unknown): test is null | undefined {
   return (test === null) || (test === undefined);
 }
+
+export function isBoolean(test: unknown): test is boolean {
+  return (typeof test === "boolean");
+}
+
+export function isTrue(test: unknown): test is true {
+  return (test === true);
+}
+
+export function isFalse(test: unknown): test is false {
+  return (test === false);
+}

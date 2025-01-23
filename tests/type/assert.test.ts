@@ -514,3 +514,105 @@ Deno.test("Type.assertNullOrUndefined()", () => {
     //
   }
 });
+
+Deno.test("Type.assertBoolean()", () => {
+  try {
+    Type.assertBoolean(true, "test-1");
+    Type.assertBoolean(false, "test-1");
+  } catch (exception) {
+    fail((exception as Error).toString());
+  }
+
+  try {
+    Type.assertBoolean(undefined, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    Type.assertBoolean(0, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    Type.assertBoolean(new Boolean(0), "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+});
+
+Deno.test("Type.assertTrue()", () => {
+  try {
+    Type.assertTrue(true, "test-1");
+  } catch (exception) {
+    fail((exception as Error).toString());
+  }
+
+  try {
+    Type.assertTrue(false, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    Type.assertTrue(undefined, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    Type.assertTrue(0, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    Type.assertTrue(new Boolean(0), "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+});
+
+Deno.test("Type.assertFalse()", () => {
+  try {
+    Type.assertFalse(false, "test-1");
+  } catch (exception) {
+    fail((exception as Error).toString());
+  }
+
+  try {
+    Type.assertFalse(true, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    Type.assertFalse(undefined, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    Type.assertFalse(0, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    Type.assertFalse(new Boolean(0), "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+});

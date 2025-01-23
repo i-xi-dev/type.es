@@ -291,3 +291,39 @@ Deno.test("Type.isNullOrUndefined()", () => {
   assertStrictEquals(Type.isNullOrUndefined(true), false);
   assertStrictEquals(Type.isNullOrUndefined(false), false);
 });
+
+Deno.test("Type.isBoolean()", () => {
+  assertStrictEquals(Type.isBoolean({}), false);
+  assertStrictEquals(Type.isBoolean(null), false);
+  assertStrictEquals(Type.isBoolean(undefined), false);
+  assertStrictEquals(Type.isBoolean([]), false);
+  assertStrictEquals(Type.isBoolean(new Error()), false);
+  assertStrictEquals(Type.isBoolean(""), false);
+  assertStrictEquals(Type.isBoolean(1), false);
+  assertStrictEquals(Type.isBoolean(true), true);
+  assertStrictEquals(Type.isBoolean(false), true);
+});
+
+Deno.test("Type.isTrue()", () => {
+  assertStrictEquals(Type.isTrue({}), false);
+  assertStrictEquals(Type.isTrue(null), false);
+  assertStrictEquals(Type.isTrue(undefined), false);
+  assertStrictEquals(Type.isTrue([]), false);
+  assertStrictEquals(Type.isTrue(new Error()), false);
+  assertStrictEquals(Type.isTrue(""), false);
+  assertStrictEquals(Type.isTrue(1), false);
+  assertStrictEquals(Type.isTrue(true), true);
+  assertStrictEquals(Type.isTrue(false), false);
+});
+
+Deno.test("Type.isFalse()", () => {
+  assertStrictEquals(Type.isFalse({}), false);
+  assertStrictEquals(Type.isFalse(null), false);
+  assertStrictEquals(Type.isFalse(undefined), false);
+  assertStrictEquals(Type.isFalse([]), false);
+  assertStrictEquals(Type.isFalse(new Error()), false);
+  assertStrictEquals(Type.isFalse(""), false);
+  assertStrictEquals(Type.isFalse(1), false);
+  assertStrictEquals(Type.isFalse(true), false);
+  assertStrictEquals(Type.isFalse(false), true);
+});

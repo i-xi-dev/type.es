@@ -1,6 +1,8 @@
 import {
+  isBoolean,
   isChar,
   isEmptyString,
+  isFalse,
   isNegativeNumber,
   isNonEmptyString,
   isNonNegativeNumber,
@@ -12,6 +14,7 @@ import {
   isObject,
   isPositiveNumber,
   isString,
+  isTrue,
 } from "./is.ts";
 
 export function assertString(test: unknown, label: string): void {
@@ -89,5 +92,23 @@ export function assertNull(test: unknown, label: string): void {
 export function assertNullOrUndefined(test: unknown, label: string): void {
   if (isNullOrUndefined(test) !== true) {
     throw new TypeError(`\`${label}\` must be a \`null\` or an \`undefined\`.`);
+  }
+}
+
+export function assertBoolean(test: unknown, label: string): void {
+  if (isBoolean(test) !== true) {
+    throw new TypeError(`\`${label}\` must be a \`boolean\`.`);
+  }
+}
+
+export function assertTrue(test: unknown, label: string): void {
+  if (isTrue(test) !== true) {
+    throw new TypeError(`\`${label}\` must be a \`true\`.`);
+  }
+}
+
+export function assertFalse(test: unknown, label: string): void {
+  if (isFalse(test) !== true) {
+    throw new TypeError(`\`${label}\` must be a \`false\`.`);
   }
 }
