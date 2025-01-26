@@ -1,13 +1,15 @@
 import {
   isNegativeBigInt,
-  isNegativeNumber,
   isNonNegativeBigInt,
-  isNonNegativeNumber,
   isNonPositiveBigInt,
-  isNonPositiveNumber,
   isPositiveBigInt,
-  isPositiveNumber,
 } from "../type/is_0.ts";
+import {
+  isNegativeNumber,
+  isNonNegativeNumber,
+  isNonPositiveNumber,
+  isPositiveNumber,
+} from "../type/number.ts";
 import { numeric } from "../_.ts";
 import { Radix } from "../basics/radix.ts";
 import { RoundingMode } from "./rounding_mode.ts";

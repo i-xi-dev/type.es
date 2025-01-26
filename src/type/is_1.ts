@@ -1,16 +1,6 @@
-import { assertBigInt, assertFiniteNumber } from "./assert.ts";
-import { isBigInt, isNumber } from "./is_0.ts";
-
-export function isNumberInRange<T extends number>(
-  test: unknown,
-  min: T,
-  max: T,
-): test is T {
-  assertFiniteNumber(min, "min");
-  assertFiniteNumber(max, "max");
-
-  return isNumber(test) && (min <= test) && (max >= test);
-}
+import { assertBigInt } from "./assert.ts";
+import { assertFiniteNumber, isNumber } from "./number.ts";
+import { isBigInt } from "./is_0.ts";
 
 export function isBigIntInRange(
   test: unknown,

@@ -4,57 +4,16 @@ import {
   isEvenBigInt,
   isFalse,
   isNegativeBigInt,
-  isNegativeNumber,
   isNonNegativeBigInt,
-  isNonNegativeNumber,
   isNonNullObject,
   isNonPositiveBigInt,
-  isNonPositiveNumber,
   isNull,
   isNullOrUndefined,
-  isNumber,
   isObject,
   isOddBigInt,
   isPositiveBigInt,
-  isPositiveNumber,
   isTrue,
 } from "./is_0.ts";
-
-export function assertNumber(test: unknown, label: string): void {
-  if (isNumber(test) !== true) {
-    throw new TypeError(`\`${label}\` must be a \`number\`.`);
-  }
-}
-
-export function assertFiniteNumber(test: unknown, label: string): void {
-  if (Number.isFinite(test) !== true) {
-    throw new TypeError(`\`${label}\` must be a finite \`number\`.`);
-  }
-}
-
-export function assertPositiveNumber(test: unknown, label: string): void {
-  if (isPositiveNumber(test) !== true) {
-    throw new TypeError(`\`${label}\` must be a positive \`number\`.`);
-  }
-}
-
-export function assertNonNegativeNumber(test: unknown, label: string): void {
-  if (isNonNegativeNumber(test) !== true) {
-    throw new TypeError(`\`${label}\` must be a non-negative \`number\`.`);
-  }
-}
-
-export function assertNonPositiveNumber(test: unknown, label: string): void {
-  if (isNonPositiveNumber(test) !== true) {
-    throw new TypeError(`\`${label}\` must be a non-positive \`number\`.`);
-  }
-}
-
-export function assertNegativeNumber(test: unknown, label: string): void {
-  if (isNegativeNumber(test) !== true) {
-    throw new TypeError(`\`${label}\` must be a negative \`number\`.`);
-  }
-}
 
 export function assertObject(test: unknown, label: string): void {
   if (isObject(test) !== true) {

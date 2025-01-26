@@ -1,5 +1,5 @@
 import * as NumberUtils from "../utils/number.ts";
-import { assertNumber } from "../type/assert.ts";
+import { assertNumber } from "../type/number.ts";
 import {
   assert as assertSafeInteger,
   fromBigInt as safeIntegerFromBigInt,

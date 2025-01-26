@@ -1,4 +1,4 @@
-import { assertNumber } from "../type/assert.ts";
+import { assertNumber } from "../type/number.ts";
 
 export function normalize<T extends number>(value: T): T {
   assertNumber(value, "value");

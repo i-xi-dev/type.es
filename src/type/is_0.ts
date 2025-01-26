@@ -1,25 +1,3 @@
-export function isNumber(test: unknown): test is number {
-  return (typeof test === "number");
-}
-
-// isFiniteNumber → Number.isFinite
-
-export function isPositiveNumber(test: unknown): test is number {
-  return isNumber(test) && (test > 0);
-}
-
-export function isNonNegativeNumber(test: unknown): test is number {
-  return isNumber(test) && (test >= 0);
-}
-
-export function isNonPositiveNumber(test: unknown): test is number {
-  return isNumber(test) && (test <= 0);
-}
-
-export function isNegativeNumber(test: unknown): test is number {
-  return isNumber(test) && (test < 0);
-}
-
 export function isObject(test: unknown): test is object | null {
   return (typeof test === "object");
 }
