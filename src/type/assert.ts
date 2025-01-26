@@ -3,6 +3,7 @@ import {
   isBoolean,
   isChar,
   isEmptyString,
+  isEvenBigInt,
   isFalse,
   isNegativeBigInt,
   isNegativeNumber,
@@ -16,6 +17,7 @@ import {
   isNullOrUndefined,
   isNumber,
   isObject,
+  isOddBigInt,
   isPositiveBigInt,
   isPositiveNumber,
   isString,
@@ -145,5 +147,17 @@ export function assertNonPositiveBigInt(test: unknown, label: string): void {
 export function assertNegativeBigInt(test: unknown, label: string): void {
   if (isNegativeBigInt(test) !== true) {
     throw new TypeError(`\`${label}\` must be a negative \`bigint\`.`);
+  }
+}
+
+export function assertOddBigInt(test: unknown, label: string): void {
+  if (isOddBigInt(test) !== true) {
+    throw new TypeError(`\`${label}\` must be an odd \`bigint\`.`);
+  }
+}
+
+export function assertEvenBigInt(test: unknown, label: string): void {
+  if (isEvenBigInt(test) !== true) {
+    throw new TypeError(`\`${label}\` must be an even \`bigint\`.`);
   }
 }

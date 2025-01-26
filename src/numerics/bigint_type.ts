@@ -13,26 +13,6 @@ import {
 } from "./safe_integer.ts";
 import { RadixProperties } from "./radix.ts";
 
-export function isOdd(test: unknown): test is bigint {
-  return isBigInt(test) && ((test % 2n) !== 0n);
-}
-
-export function isEven(test: unknown): test is bigint {
-  return isBigInt(test) && ((test % 2n) === 0n);
-}
-
-export function assertOdd(test: unknown, label: string): void {
-  if (isOdd(test) !== true) {
-    throw new TypeError(`\`${label}\` must be an odd \`bigint\`.`);
-  }
-}
-
-export function assertEven(test: unknown, label: string): void {
-  if (isEven(test) !== true) {
-    throw new TypeError(`\`${label}\` must be an even \`bigint\`.`);
-  }
-}
-
 export function minOf<T extends bigint>(value0: T, ...values: T[]): T {
   assertBigInt(value0, `value0`);
 

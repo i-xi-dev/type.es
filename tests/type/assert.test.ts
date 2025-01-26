@@ -756,3 +756,53 @@ Deno.test("Type.assertNegativeBigInt()", () => {
     //
   }
 });
+
+Deno.test("Type.assertOddBigInt()", () => {
+  try {
+    Type.assertOddBigInt(1n, "test-1");
+    Type.assertOddBigInt(-1n, "test-1");
+    Type.assertOddBigInt(3n, "test-1");
+    Type.assertOddBigInt(-3n, "test-1");
+  } catch (exception) {
+    fail((exception as Error).toString());
+  }
+
+  try {
+    Type.assertOddBigInt(0n, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    Type.assertOddBigInt(2n, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+});
+
+Deno.test("Type.assertEvenBigInt()", () => {
+  try {
+    Type.assertEvenBigInt(0n, "test-1");
+    Type.assertEvenBigInt(-0n, "test-1");
+    Type.assertEvenBigInt(2n, "test-1");
+    Type.assertEvenBigInt(-2n, "test-1");
+  } catch (exception) {
+    fail((exception as Error).toString());
+  }
+
+  try {
+    Type.assertEvenBigInt(1n, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    Type.assertEvenBigInt(-1n, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+});

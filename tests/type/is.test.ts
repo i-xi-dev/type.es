@@ -480,3 +480,29 @@ Deno.test("Type.isNegativeBigInt()", () => {
   assertStrictEquals(Type.isNegativeBigInt(""), false);
   assertStrictEquals(Type.isNegativeBigInt("0"), false);
 });
+
+Deno.test("Type.isOddBigInt()", () => {
+  assertStrictEquals(Type.isOddBigInt(0n), false);
+  assertStrictEquals(Type.isOddBigInt(-0n), false);
+  assertStrictEquals(Type.isOddBigInt(1n), true);
+  assertStrictEquals(Type.isOddBigInt(-1n), true);
+  assertStrictEquals(Type.isOddBigInt(2n), false);
+  assertStrictEquals(Type.isOddBigInt(-2n), false);
+  assertStrictEquals(Type.isOddBigInt(3n), true);
+  assertStrictEquals(Type.isOddBigInt(-3n), true);
+  assertStrictEquals(Type.isOddBigInt(4n), false);
+  assertStrictEquals(Type.isOddBigInt(-4n), false);
+});
+
+Deno.test("Type.isEvenBigInt()", () => {
+  assertStrictEquals(Type.isEvenBigInt(0n), true);
+  assertStrictEquals(Type.isEvenBigInt(-0n), true);
+  assertStrictEquals(Type.isEvenBigInt(1n), false);
+  assertStrictEquals(Type.isEvenBigInt(-1n), false);
+  assertStrictEquals(Type.isEvenBigInt(2n), true);
+  assertStrictEquals(Type.isEvenBigInt(-2n), true);
+  assertStrictEquals(Type.isEvenBigInt(3n), false);
+  assertStrictEquals(Type.isEvenBigInt(-3n), false);
+  assertStrictEquals(Type.isEvenBigInt(4n), true);
+  assertStrictEquals(Type.isEvenBigInt(-4n), true);
+});
