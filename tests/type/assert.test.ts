@@ -215,6 +215,57 @@ Deno.test("Type.assertNumber()", () => {
   }
 });
 
+Deno.test("Type.assertFiniteNumber()", () => {
+  try {
+    Type.assertFiniteNumber(0, "test-1");
+    Type.assertFiniteNumber(0.5, "test-1");
+  } catch (exception) {
+    fail((exception as Error).toString());
+  }
+
+  try {
+    Type.assertFiniteNumber(Number.NaN, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    Type.assertFiniteNumber(Number.POSITIVE_INFINITY, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    Type.assertFiniteNumber(Number.NEGATIVE_INFINITY, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    Type.assertFiniteNumber(undefined, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    Type.assertFiniteNumber(0n, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    Type.assertFiniteNumber(new Number(0), "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+});
+
 Deno.test("Type.assertPositiveNumber()", () => {
   try {
     Type.assertPositiveNumber(1, "test-1");

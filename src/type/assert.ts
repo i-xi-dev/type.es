@@ -22,7 +22,7 @@ import {
   isPositiveNumber,
   isString,
   isTrue,
-} from "./is.ts";
+} from "./is_0.ts";
 
 export function assertString(test: unknown, label: string): void {
   if (isString(test) !== true) {
@@ -51,6 +51,12 @@ export function assertChar(test: unknown, label: string): void {
 export function assertNumber(test: unknown, label: string): void {
   if (isNumber(test) !== true) {
     throw new TypeError(`\`${label}\` must be a \`number\`.`);
+  }
+}
+
+export function assertFiniteNumber(test: unknown, label: string): void {
+  if (Number.isFinite(test) !== true) {
+    throw new TypeError(`\`${label}\` must be a finite \`number\`.`);
   }
 }
 

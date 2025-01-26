@@ -5,7 +5,7 @@ import {
 import { FromStringOptions, ToStringOptions } from "./main.ts";
 import { int } from "../_.ts";
 import * as NumberUtils from "../utils/number.ts";
-import { isPositiveNumber } from "../type/is.ts";
+import { isPositiveNumber } from "../type/is_0.ts";
 import { RadixProperties } from "../basics/radix.ts";
 import { RoundingMode } from "./rounding_mode.ts";
 

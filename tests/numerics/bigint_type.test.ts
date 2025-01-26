@@ -11,52 +11,6 @@ const { BigIntType } = Numerics;
 const SIMIN = Number.MIN_SAFE_INTEGER;
 const SIMAX = Number.MAX_SAFE_INTEGER;
 
-Deno.test("BigIntType.isInRange()", () => {
-  assertStrictEquals(BigIntType.isInRange(0n, 0n, 0n), true);
-  assertStrictEquals(BigIntType.isInRange(0n, 1n, 0n), false); // 負のrange
-  assertStrictEquals(BigIntType.isInRange(0n, 0n, 1n), true);
-  assertStrictEquals(BigIntType.isInRange(0n, -1n, 0n), true);
-  assertStrictEquals(BigIntType.isInRange(0n, 0n, -1n), false); // 負のrange
-  assertStrictEquals(BigIntType.isInRange(0n, 1n, 1n), false);
-  assertStrictEquals(BigIntType.isInRange(0n, -1n, -1n), false);
-
-  assertStrictEquals(BigIntType.isInRange(1n, 0n, 0n), false);
-  assertStrictEquals(BigIntType.isInRange(1n, 1n, 0n), false); // 負のrange
-  assertStrictEquals(BigIntType.isInRange(1n, 0n, 1n), true);
-  assertStrictEquals(BigIntType.isInRange(1n, -1n, 0n), false);
-  assertStrictEquals(BigIntType.isInRange(1n, 0n, -1n), false); // 負のrange
-  assertStrictEquals(BigIntType.isInRange(1n, 1n, 1n), true);
-  assertStrictEquals(BigIntType.isInRange(1n, -1n, -1n), false);
-
-  assertStrictEquals(BigIntType.isInRange(-1n, 0n, 0n), false);
-  assertStrictEquals(BigIntType.isInRange(-1n, 1n, 0n), false); // 負のrange
-  assertStrictEquals(BigIntType.isInRange(-1n, 0n, 1n), false);
-  assertStrictEquals(BigIntType.isInRange(-1n, -1n, 0n), true);
-  assertStrictEquals(BigIntType.isInRange(-1n, 0n, -1n), false); // 負のrange
-  assertStrictEquals(BigIntType.isInRange(-1n, 1n, 1n), false);
-  assertStrictEquals(BigIntType.isInRange(-1n, -1n, -1n), true);
-
-  assertStrictEquals(BigIntType.isInRange(0, 0n, 0n), false);
-
-  const ex2 = "`min` must be a `bigint`.";
-  assertThrows(
-    () => {
-      BigIntType.isInRange(0n, undefined as unknown as bigint, 0n);
-    },
-    TypeError,
-    ex2,
-  );
-
-  const ex3 = "`max` must be a `bigint`.";
-  assertThrows(
-    () => {
-      BigIntType.isInRange(0n, 0n, undefined as unknown as bigint);
-    },
-    TypeError,
-    ex3,
-  );
-});
-
 Deno.test("BigIntType.fromString()", () => {
   assertStrictEquals(BigIntType.fromString("0"), 0n);
   assertStrictEquals(BigIntType.fromString("-0"), 0n);

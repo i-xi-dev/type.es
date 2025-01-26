@@ -6,23 +6,12 @@ import {
   ToStringOptions,
 } from "./main.ts";
 import { int } from "../_.ts";
-import { isBigInt } from "../type/is.ts";
+import { isBigIntInRange } from "../type/is_1.ts";
 import {
   isPositive as isPositiveSafeInteger,
   round as roundNumber,
 } from "./safe_integer.ts";
 import { RadixProperties } from "../basics/radix.ts";
-
-export function isInRange<T extends bigint>(
-  test: unknown,
-  min: T,
-  max: T,
-): test is T {
-  assertBigInt(min, "min");
-  assertBigInt(max, "max");
-
-  return isBigInt(test) && (min <= test) && (max >= test);
-}
 
 export function fromString(value: string, options?: FromStringOptions): bigint {
   assertStringifiedInteger(value, "value", options?.radix);
@@ -91,7 +80,7 @@ export function toNumber(value: bigint): int {
   assertBigInt(value, "value");
 
   if (
-    isInRange(
+    isBigIntInRange(
       value,
       BigInt(Number.MIN_SAFE_INTEGER),
       BigInt(Number.MAX_SAFE_INTEGER),

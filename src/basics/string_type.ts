@@ -1,7 +1,6 @@
 import { char, int } from "../_.ts";
 import { assertString } from "../type/assert.ts";
-
-import { isEmptyString, isString } from "../type/is.ts";
+import { isEmptyString, isString } from "../type/is_0.ts";
 
 /**
  * The zero-length string.
