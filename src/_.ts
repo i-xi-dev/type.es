@@ -8,12 +8,6 @@ export type script = string;
 export type region = string;
 
 /**
- * String matching regular expression `/^[\u0000-\uFFFF]{1}$/`.
- * including surrogates.
- */
-export type char = string;
-
-/**
  * String matching regular expression `/^[\u{0}-\u{10FFFF}]{1}$/u`.
  * excluding any lone surrogates.
  */

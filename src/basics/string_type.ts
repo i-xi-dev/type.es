@@ -1,5 +1,10 @@
-import { char, int } from "../_.ts";
-import { assertString, isEmptyString, isString } from "../type/string.ts";
+import { int } from "../_.ts";
+import {
+  assertString,
+  type char,
+  isEmptyString,
+  isString,
+} from "../type/string.ts";
 
 /**
  * The zero-length string.
