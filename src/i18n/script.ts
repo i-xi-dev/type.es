@@ -1,6 +1,6 @@
 import scriptMap from "../../dat/i18n/script_map.json" with { type: "json" };
 import { getScriptName } from "./utils.ts";
-import { isNonEmptyString } from "../type/is_0.ts";
+import { isNonEmptyString } from "../type/string.ts";
 import { script } from "../_.ts";
 
 type _script = keyof typeof scriptMap;

@@ -1,13 +1,10 @@
 import {
   isBigInt,
   isBoolean,
-  isChar,
-  isEmptyString,
   isEvenBigInt,
   isFalse,
   isNegativeBigInt,
   isNegativeNumber,
-  isNonEmptyString,
   isNonNegativeBigInt,
   isNonNegativeNumber,
   isNonNullObject,
@@ -20,33 +17,8 @@ import {
   isOddBigInt,
   isPositiveBigInt,
   isPositiveNumber,
-  isString,
   isTrue,
 } from "./is_0.ts";
-
-export function assertString(test: unknown, label: string): void {
-  if (isString(test) !== true) {
-    throw new TypeError(`\`${label}\` must be a \`string\`.`);
-  }
-}
-
-export function assertEmptyString(test: unknown, label: string): void {
-  if (isEmptyString(test) !== true) {
-    throw new TypeError(`\`${label}\` must be an empty string.`);
-  }
-}
-
-export function assertNonEmptyString(test: unknown, label: string): void {
-  if (isNonEmptyString(test) !== true) {
-    throw new TypeError(`\`${label}\` must be a non-empty string.`);
-  }
-}
-
-export function assertChar(test: unknown, label: string): void {
-  if (isChar(test) !== true) {
-    throw new TypeError(`\`${label}\` must be an UTF-16 code unit.`);
-  }
-}
 
 export function assertNumber(test: unknown, label: string): void {
   if (isNumber(test) !== true) {
