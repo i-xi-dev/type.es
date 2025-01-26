@@ -1,32 +1,3 @@
-export function isObject(test: unknown): test is object | null {
-  return (typeof test === "object");
-}
-
-export function isNonNullObject(test: unknown): test is NonNullable<object> {
-  return (isObject(test) && (test !== null));
-  // is()によってundefinedは弾かれる。よってisNonNull(undefined)はfalseとなる
-}
-
-export function isNull(test: unknown): test is null {
-  return (test === null);
-}
-
-export function isNullOrUndefined(test: unknown): test is null | undefined {
-  return (test === null) || (test === undefined);
-}
-
-export function isBoolean(test: unknown): test is boolean {
-  return (typeof test === "boolean");
-}
-
-export function isTrue(test: unknown): test is true {
-  return (test === true);
-}
-
-export function isFalse(test: unknown): test is false {
-  return (test === false);
-}
-
 export function isBigInt(test: unknown): test is bigint {
   return (typeof test === "bigint");
 }

@@ -1,61 +1,12 @@
 import {
   isBigInt,
-  isBoolean,
   isEvenBigInt,
-  isFalse,
   isNegativeBigInt,
   isNonNegativeBigInt,
-  isNonNullObject,
   isNonPositiveBigInt,
-  isNull,
-  isNullOrUndefined,
-  isObject,
   isOddBigInt,
   isPositiveBigInt,
-  isTrue,
 } from "./is_0.ts";
-
-export function assertObject(test: unknown, label: string): void {
-  if (isObject(test) !== true) {
-    throw new TypeError(`\`${label}\` must be an \`Object\`.`);
-  }
-}
-
-export function assertNonNullObject(test: unknown, label: string): void {
-  if (isNonNullObject(test) !== true) {
-    throw new TypeError(`\`${label}\` must be an \`Object\` except \`null\`.`);
-  }
-}
-
-export function assertNull(test: unknown, label: string): void {
-  if (isNull(test) !== true) {
-    throw new TypeError(`\`${label}\` must be a \`null\`.`);
-  }
-}
-
-export function assertNullOrUndefined(test: unknown, label: string): void {
-  if (isNullOrUndefined(test) !== true) {
-    throw new TypeError(`\`${label}\` must be a \`null\` or an \`undefined\`.`);
-  }
-}
-
-export function assertBoolean(test: unknown, label: string): void {
-  if (isBoolean(test) !== true) {
-    throw new TypeError(`\`${label}\` must be a \`boolean\`.`);
-  }
-}
-
-export function assertTrue(test: unknown, label: string): void {
-  if (isTrue(test) !== true) {
-    throw new TypeError(`\`${label}\` must be a \`true\`.`);
-  }
-}
-
-export function assertFalse(test: unknown, label: string): void {
-  if (isFalse(test) !== true) {
-    throw new TypeError(`\`${label}\` must be a \`false\`.`);
-  }
-}
 
 export function assertBigInt(test: unknown, label: string): void {
   if (isBigInt(test) !== true) {

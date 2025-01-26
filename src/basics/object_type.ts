@@ -1,4 +1,4 @@
-import { isNonNullObject } from "../type/is_0.ts";
+import { isNonNullObject } from "../type/object.ts";
 
 // deno-lint-ignore no-explicit-any
 export function isIterable<T = any>(test: unknown): test is Iterable<T> {
