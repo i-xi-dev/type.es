@@ -1,4 +1,4 @@
-import { assertBigInt } from "../type/assert.ts";
+import { assertBigInt } from "../type/bigint.ts";
 import { assertNumber } from "../type/number.ts";
 import { assertStringified as assertStringifiedInteger } from "./integer.ts";
 import {

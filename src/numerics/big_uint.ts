@@ -1,5 +1,5 @@
 import { assert as assertSafeInteger } from "./safe_integer.ts";
-import { assertBigInt } from "../type/assert.ts";
+import { assertBigInt } from "../type/bigint.ts";
 import { biguint64, int } from "../_.ts";
 import { BigIntRange } from "./bigint_range.ts";
 import {

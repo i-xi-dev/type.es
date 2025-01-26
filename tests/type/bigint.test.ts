@@ -39,6 +39,28 @@ Deno.test("Type.isBigInt()", () => {
   assertStrictEquals(Type.isBigInt("0"), false);
 });
 
+Deno.test("Type.assertBigInt()", () => {
+  try {
+    Type.assertBigInt(0n, "test-1");
+  } catch (exception) {
+    fail((exception as Error).toString());
+  }
+
+  try {
+    Type.assertBigInt(undefined, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    Type.assertBigInt(0, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+});
+
 Deno.test("Type.isPositiveBigInt()", () => {
   assertStrictEquals(Type.isPositiveBigInt(0), false);
   assertStrictEquals(Type.isPositiveBigInt(-0), false);
@@ -67,6 +89,35 @@ Deno.test("Type.isPositiveBigInt()", () => {
   assertStrictEquals(Type.isPositiveBigInt(false), false);
   assertStrictEquals(Type.isPositiveBigInt(""), false);
   assertStrictEquals(Type.isPositiveBigInt("0"), false);
+});
+
+Deno.test("Type.assertPositiveBigInt()", () => {
+  try {
+    Type.assertPositiveBigInt(1n, "test-1");
+  } catch (exception) {
+    fail((exception as Error).toString());
+  }
+
+  try {
+    Type.assertPositiveBigInt(0n, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    Type.assertPositiveBigInt(undefined, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    Type.assertPositiveBigInt(0, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
 });
 
 Deno.test("Type.isNonNegativeBigInt()", () => {
@@ -99,6 +150,36 @@ Deno.test("Type.isNonNegativeBigInt()", () => {
   assertStrictEquals(Type.isNonNegativeBigInt("0"), false);
 });
 
+Deno.test("Type.assertNonNegativeBigInt()", () => {
+  try {
+    Type.assertNonNegativeBigInt(1n, "test-1");
+    Type.assertNonNegativeBigInt(0n, "test-1");
+  } catch (exception) {
+    fail((exception as Error).toString());
+  }
+
+  try {
+    Type.assertNonNegativeBigInt(-1n, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    Type.assertNonNegativeBigInt(undefined, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    Type.assertNonNegativeBigInt(0, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+});
+
 Deno.test("Type.isNonPositiveBigInt()", () => {
   assertStrictEquals(Type.isNonPositiveBigInt(0), false);
   assertStrictEquals(Type.isNonPositiveBigInt(-0), false);
@@ -127,6 +208,36 @@ Deno.test("Type.isNonPositiveBigInt()", () => {
   assertStrictEquals(Type.isNonPositiveBigInt(false), false);
   assertStrictEquals(Type.isNonPositiveBigInt(""), false);
   assertStrictEquals(Type.isNonPositiveBigInt("0"), false);
+});
+
+Deno.test("Type.assertNonPositiveBigInt()", () => {
+  try {
+    Type.assertNonPositiveBigInt(-1n, "test-1");
+    Type.assertNonPositiveBigInt(0n, "test-1");
+  } catch (exception) {
+    fail((exception as Error).toString());
+  }
+
+  try {
+    Type.assertNonPositiveBigInt(1n, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    Type.assertNonPositiveBigInt(undefined, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    Type.assertNonPositiveBigInt(0, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
 });
 
 Deno.test("Type.isNegativeBigInt()", () => {
@@ -159,6 +270,35 @@ Deno.test("Type.isNegativeBigInt()", () => {
   assertStrictEquals(Type.isNegativeBigInt("0"), false);
 });
 
+Deno.test("Type.assertNegativeBigInt()", () => {
+  try {
+    Type.assertNegativeBigInt(-1n, "test-1");
+  } catch (exception) {
+    fail((exception as Error).toString());
+  }
+
+  try {
+    Type.assertNegativeBigInt(0n, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    Type.assertNegativeBigInt(undefined, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    Type.assertNegativeBigInt(0, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+});
+
 Deno.test("Type.isOddBigInt()", () => {
   assertStrictEquals(Type.isOddBigInt(0n), false);
   assertStrictEquals(Type.isOddBigInt(-0n), false);
@@ -172,6 +312,31 @@ Deno.test("Type.isOddBigInt()", () => {
   assertStrictEquals(Type.isOddBigInt(-4n), false);
 });
 
+Deno.test("Type.assertOddBigInt()", () => {
+  try {
+    Type.assertOddBigInt(1n, "test-1");
+    Type.assertOddBigInt(-1n, "test-1");
+    Type.assertOddBigInt(3n, "test-1");
+    Type.assertOddBigInt(-3n, "test-1");
+  } catch (exception) {
+    fail((exception as Error).toString());
+  }
+
+  try {
+    Type.assertOddBigInt(0n, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    Type.assertOddBigInt(2n, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+});
+
 Deno.test("Type.isEvenBigInt()", () => {
   assertStrictEquals(Type.isEvenBigInt(0n), true);
   assertStrictEquals(Type.isEvenBigInt(-0n), true);
@@ -183,4 +348,29 @@ Deno.test("Type.isEvenBigInt()", () => {
   assertStrictEquals(Type.isEvenBigInt(-3n), false);
   assertStrictEquals(Type.isEvenBigInt(4n), true);
   assertStrictEquals(Type.isEvenBigInt(-4n), true);
+});
+
+Deno.test("Type.assertEvenBigInt()", () => {
+  try {
+    Type.assertEvenBigInt(0n, "test-1");
+    Type.assertEvenBigInt(-0n, "test-1");
+    Type.assertEvenBigInt(2n, "test-1");
+    Type.assertEvenBigInt(-2n, "test-1");
+  } catch (exception) {
+    fail((exception as Error).toString());
+  }
+
+  try {
+    Type.assertEvenBigInt(1n, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    Type.assertEvenBigInt(-1n, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
 });

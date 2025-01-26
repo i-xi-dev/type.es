@@ -1,5 +1,5 @@
 import { int, xint } from "../_.ts";
-import { isBigInt } from "../type/is_0.ts";
+import { isBigInt } from "../type/bigint.ts";
 import { is as isSafeInteger } from "./safe_integer.ts";
 
 export interface IntegerRange<T extends xint> {

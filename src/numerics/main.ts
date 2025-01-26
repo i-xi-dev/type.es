@@ -3,7 +3,7 @@ import {
   isNonNegativeBigInt,
   isNonPositiveBigInt,
   isPositiveBigInt,
-} from "../type/is_0.ts";
+} from "../type/bigint.ts";
 import {
   isNegativeNumber,
   isNonNegativeNumber,

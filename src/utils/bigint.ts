@@ -1,4 +1,4 @@
-import { assertBigInt } from "../type/assert.ts";
+import { assertBigInt } from "../type/bigint.ts";
 
 export function min<T extends bigint>(value0: T, ...values: T[]): T {
   assertBigInt(value0, `value0`);

@@ -1,6 +1,4 @@
-import { assertBigInt } from "./assert.ts";
-import { assertFiniteNumber, isNumber } from "./number.ts";
-import { isBigInt } from "./is_0.ts";
+import { assertBigInt, isBigInt } from "./bigint.ts";
 
 export function isBigIntInRange(
   test: unknown,
