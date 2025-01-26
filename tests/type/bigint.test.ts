@@ -374,3 +374,72 @@ Deno.test("Type.assertEvenBigInt()", () => {
     //
   }
 });
+
+Deno.test("Type.isBigIntInRange()", () => {
+  assertStrictEquals(Type.isBigIntInRange(0n, 0n, 0n), true);
+  assertStrictEquals(Type.isBigIntInRange(0n, 1n, 0n), false); // 負のrange
+  assertStrictEquals(Type.isBigIntInRange(0n, 0n, 1n), true);
+  assertStrictEquals(Type.isBigIntInRange(0n, -1n, 0n), true);
+  assertStrictEquals(Type.isBigIntInRange(0n, 0n, -1n), false); // 負のrange
+  assertStrictEquals(Type.isBigIntInRange(0n, 1n, 1n), false);
+  assertStrictEquals(Type.isBigIntInRange(0n, -1n, -1n), false);
+
+  assertStrictEquals(Type.isBigIntInRange(1n, 0n, 0n), false);
+  assertStrictEquals(Type.isBigIntInRange(1n, 1n, 0n), false); // 負のrange
+  assertStrictEquals(Type.isBigIntInRange(1n, 0n, 1n), true);
+  assertStrictEquals(Type.isBigIntInRange(1n, -1n, 0n), false);
+  assertStrictEquals(Type.isBigIntInRange(1n, 0n, -1n), false); // 負のrange
+  assertStrictEquals(Type.isBigIntInRange(1n, 1n, 1n), true);
+  assertStrictEquals(Type.isBigIntInRange(1n, -1n, -1n), false);
+
+  assertStrictEquals(Type.isBigIntInRange(-1n, 0n, 0n), false);
+  assertStrictEquals(Type.isBigIntInRange(-1n, 1n, 0n), false); // 負のrange
+  assertStrictEquals(Type.isBigIntInRange(-1n, 0n, 1n), false);
+  assertStrictEquals(Type.isBigIntInRange(-1n, -1n, 0n), true);
+  assertStrictEquals(Type.isBigIntInRange(-1n, 0n, -1n), false); // 負のrange
+  assertStrictEquals(Type.isBigIntInRange(-1n, 1n, 1n), false);
+  assertStrictEquals(Type.isBigIntInRange(-1n, -1n, -1n), true);
+
+  assertStrictEquals(Type.isBigIntInRange(0, 0n, 0n), false);
+
+  const ex2 = "`min` must be a `bigint`.";
+  assertThrows(
+    () => {
+      Type.isBigIntInRange(0n, undefined as unknown as bigint, 0n);
+    },
+    TypeError,
+    ex2,
+  );
+
+  const ex3 = "`max` must be a `bigint`.";
+  assertThrows(
+    () => {
+      Type.isBigIntInRange(0n, 0n, undefined as unknown as bigint);
+    },
+    TypeError,
+    ex3,
+  );
+});
+
+Deno.test("Type.assertBigIntInRange()", () => {
+  try {
+    Type.assertBigIntInRange(0n, "test-1", 0n, 0n);
+    Type.assertBigIntInRange(1n, "test-1", -1n, 1n);
+    Type.assertBigIntInRange(-1n, "test-1", -1n, 1n);
+  } catch (exception) {
+    fail((exception as Error).toString());
+  }
+
+  try {
+    Type.assertBigIntInRange(0n, "test-1", 1n, 1n);
+    unreachable();
+  } catch {
+    //
+  }
+  try {
+    Type.assertBigIntInRange(1n, "test-1", 0n, 0n);
+    unreachable();
+  } catch {
+    //
+  }
+});

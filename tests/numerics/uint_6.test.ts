@@ -418,7 +418,8 @@ Deno.test("Uint6.fromBigInt()", () => {
   assertStrictEquals(Uint6.fromBigInt(BigInt(Number.MIN_SAFE_INTEGER)), 0);
   assertStrictEquals(Uint6.fromBigInt(BigInt(Number.MAX_SAFE_INTEGER)), 63);
 
-  const e1 = "`value` must be a `bigint`.";
+  const e1 =
+    "`value` must be a `bigint` in the range -9007199254740991-9007199254740991.";
   assertThrows(
     () => {
       Uint6.fromBigInt(undefined as unknown as bigint);
@@ -434,20 +435,19 @@ Deno.test("Uint6.fromBigInt()", () => {
     e1,
   );
 
-  const e2 = "`value` must be within the range of safe integer.";
   assertThrows(
     () => {
       Uint6.fromBigInt(BigInt(Number.MAX_SAFE_INTEGER) + 1n);
     },
-    RangeError,
-    e2,
+    TypeError,
+    e1,
   );
   assertThrows(
     () => {
       Uint6.fromBigInt(BigInt(Number.MIN_SAFE_INTEGER) - 1n);
     },
-    RangeError,
-    e2,
+    TypeError,
+    e1,
   );
 });
 

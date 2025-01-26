@@ -1110,19 +1110,19 @@ Deno.test("BigUint64.toNumber()", () => {
     e1,
   );
 
-  const e2 = "`self` must be within the range of safe integer.";
+  const e2 = "`self` must be a `bigint` in the range -9007199254740991-9007199254740991.";
   assertThrows(
     () => {
       BigUint64.toNumber(0xFFFFFFFFFFFFFFFFn);
     },
-    RangeError,
+    TypeError,
     e2,
   );
   assertThrows(
     () => {
       BigUint64.toNumber(BigInt(Number.MAX_SAFE_INTEGER) + 1n);
     },
-    RangeError,
+    TypeError,
     e2,
   );
 });

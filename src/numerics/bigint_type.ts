@@ -1,4 +1,4 @@
-import { assertBigInt } from "../type/bigint.ts";
+import { assertBigInt, assertBigIntInRange } from "../type/bigint.ts";
 import { assertNumber } from "../type/number.ts";
 import { assertStringified as assertStringifiedInteger } from "./integer.ts";
 import {
@@ -7,7 +7,6 @@ import {
   ToStringOptions,
 } from "./main.ts";
 import { int } from "../_.ts";
-import { isBigIntInRange } from "../type/is_1.ts";
 import {
   isPositive as isPositiveSafeInteger,
   round as roundNumber,
@@ -78,17 +77,12 @@ export function fromNumber(
 }
 
 export function toNumber(value: bigint): int {
-  assertBigInt(value, "value");
-
-  if (
-    isBigIntInRange(
-      value,
-      BigInt(Number.MIN_SAFE_INTEGER),
-      BigInt(Number.MAX_SAFE_INTEGER),
-    ) !== true
-  ) {
-    throw new RangeError("`value` must be within the range of safe integer.");
-  }
+  assertBigIntInRange(
+    value,
+    "value",
+    BigInt(Number.MIN_SAFE_INTEGER),
+    BigInt(Number.MAX_SAFE_INTEGER),
+  );
 
   return Number(value);
 }

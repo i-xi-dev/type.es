@@ -811,15 +811,14 @@ Deno.test("SafeInteger.clampToNegative()", () => {
 });
 
 Deno.test("SafeInteger.fromBigInt()", () => {
-  const rfe1 = "`value` must be a `bigint`.";
-  const rfe2 = "`value` must be within the range of safe integer.";
+  const rfe2 = "`value` must be a `bigint` in the range -9007199254740991-9007199254740991.";
 
   assertThrows(
     () => {
       SafeInteger.fromBigInt(undefined as unknown as bigint);
     },
     TypeError,
-    rfe1,
+    rfe2,
   );
 
   assertThrows(
@@ -827,14 +826,14 @@ Deno.test("SafeInteger.fromBigInt()", () => {
       SafeInteger.fromBigInt(0 as unknown as bigint);
     },
     TypeError,
-    rfe1,
+    rfe2,
   );
 
   assertThrows(
     () => {
       SafeInteger.fromBigInt(BigInt(MIN) - 1n);
     },
-    RangeError,
+    TypeError,
     rfe2,
   );
 
@@ -842,7 +841,7 @@ Deno.test("SafeInteger.fromBigInt()", () => {
     () => {
       SafeInteger.fromBigInt(BigInt(MAX) + 1n);
     },
-    RangeError,
+    TypeError,
     rfe2,
   );
 
@@ -973,19 +972,19 @@ Deno.test("SafeInteger.fromString()", () => {
   assertStrictEquals(SafeInteger.fromString("1f", op16), 31);
   assertStrictEquals(SafeInteger.fromString("1F", op16), 31);
 
-  const eo = "`value` must be within the range of safe integer.";
+  const eo = "`value` must be a `bigint` in the range -9007199254740991-9007199254740991.";
   assertThrows(
     () => {
       SafeInteger.fromString("9007199254740992");
     },
-    RangeError,
+    TypeError,
     eo,
   );
   assertThrows(
     () => {
       SafeInteger.fromString("-9007199254740992");
     },
-    RangeError,
+    TypeError,
     eo,
   );
 });

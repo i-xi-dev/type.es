@@ -74,6 +74,8 @@ export function assertNumberInRange(
   max: number,
 ): void {
   if (isNumberInRange(test, min, max) !== true) {
-    throw new TypeError(`\`${label}\` must be in the range ${min}-${max}.`);
+    throw new TypeError(
+      `\`${label}\` must be a \`number\` in the range ${min}-${max}.`,
+    );
   }
 }

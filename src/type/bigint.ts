@@ -67,3 +67,27 @@ export function assertEvenBigInt(test: unknown, label: string): void {
     throw new TypeError(`\`${label}\` must be an even \`bigint\`.`);
   }
 }
+
+export function isBigIntInRange(
+  test: unknown,
+  min: bigint,
+  max: bigint,
+): test is bigint {
+  assertBigInt(min, "min");
+  assertBigInt(max, "max");
+
+  return isBigInt(test) && (min <= test) && (max >= test);
+}
+
+export function assertBigIntInRange(
+  test: unknown,
+  label: string,
+  min: bigint,
+  max: bigint,
+): void {
+  if (isBigIntInRange(test, min, max) !== true) {
+    throw new TypeError(
+      `\`${label}\` must be a \`bigint\` in the range ${min}-${max}.`,
+    );
+  }
+}
