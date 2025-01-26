@@ -64,3 +64,23 @@ export function isTrue(test: unknown): test is true {
 export function isFalse(test: unknown): test is false {
   return (test === false);
 }
+
+export function isBigInt(test: unknown): test is bigint {
+  return (typeof test === "bigint");
+}
+
+export function isPositiveBigInt(test: unknown): test is bigint {
+  return isBigInt(test) && (test > 0n);
+}
+
+export function isNonNegativeBigInt(test: unknown): test is bigint {
+  return isBigInt(test) && (test >= 0n);
+}
+
+export function isNonPositiveBigInt(test: unknown): test is bigint {
+  return isBigInt(test) && (test <= 0n);
+}
+
+export function isNegativeBigInt(test: unknown): test is bigint {
+  return isBigInt(test) && (test < 0n);
+}

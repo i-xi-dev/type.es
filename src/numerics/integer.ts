@@ -1,11 +1,10 @@
 import {
-  isEven as isEvenBigInt,
-  isNegative as isNegativeBigInt,
-  isNonNegative as isNonNegativeBigInt,
-  isNonPositive as isNonPositiveBigInt,
-  isOdd as isOddBigInt,
-  isPositive as isPositiveBigInt,
-} from "./bigint_type.ts";
+  isNegativeBigInt,
+  isNonNegativeBigInt,
+  isNonPositiveBigInt,
+  isPositiveBigInt,
+} from "../type/is.ts";
+import { isEven as isEvenBigInt, isOdd as isOddBigInt } from "./bigint_type.ts";
 import {
   isEven as isEvenSafeInteger,
   isNegative as isNegativeSafeInteger,

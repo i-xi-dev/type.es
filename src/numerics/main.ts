@@ -1,13 +1,11 @@
 import {
-  isNegative as isNegativeBigInt,
-  isNonNegative as isNonNegativeBigInt,
-  isNonPositive as isNonPositiveBigInt,
-  isPositive as isPositiveBigInt,
-} from "./bigint_type.ts";
-import {
+  isNegativeBigInt,
   isNegativeNumber,
+  isNonNegativeBigInt,
   isNonNegativeNumber,
+  isNonPositiveBigInt,
   isNonPositiveNumber,
+  isPositiveBigInt,
   isPositiveNumber,
 } from "../type/is.ts";
 import { numeric } from "../_.ts";

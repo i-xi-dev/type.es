@@ -1,5 +1,5 @@
+import { assertBigInt } from "../type/assert.ts";
 import {
-  assert as assertBigInt,
   fromNumber as bigIntFromNumber,
   fromString as bigIntFromString,
   isInRange as isBigIntInRange,
