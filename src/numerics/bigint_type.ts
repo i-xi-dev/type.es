@@ -11,39 +11,7 @@ import {
   isPositive as isPositiveSafeInteger,
   round as roundNumber,
 } from "./safe_integer.ts";
-import { RadixProperties } from "./radix.ts";
-
-export function minOf<T extends bigint>(value0: T, ...values: T[]): T {
-  assertBigInt(value0, `value0`);
-
-  let provMin = value0;
-  let value: T;
-  for (let i = 0; i < values.length; i++) {
-    value = values[i];
-    assertBigInt(value, `values[${i}]`);
-
-    if (value < provMin) {
-      provMin = value;
-    }
-  }
-  return provMin;
-}
-
-export function maxOf<T extends bigint>(value0: T, ...values: T[]): T {
-  assertBigInt(value0, `value0`);
-
-  let provMax = value0;
-  let value: T;
-  for (let i = 0; i < values.length; i++) {
-    value = values[i];
-    assertBigInt(value, `values[${i}]`);
-
-    if (value > provMax) {
-      provMax = value;
-    }
-  }
-  return provMax;
-}
+import { RadixProperties } from "../basics/radix.ts";
 
 export function isInRange<T extends bigint>(
   test: unknown,
@@ -54,33 +22,6 @@ export function isInRange<T extends bigint>(
   assertBigInt(max, "max");
 
   return isBigInt(test) && (min <= test) && (max >= test);
-}
-
-export function clamp<T extends bigint>(value: bigint, min: T, max: T): T {
-  assertBigInt(value, "value");
-  assertBigInt(min, "min");
-  assertBigInt(max, "max");
-
-  if (min > max) {
-    throw new RangeError("`max` must be greater than or equal to `min`.");
-  }
-  return minOf(maxOf(value, min), max) as T;
-}
-
-export function clampToPositive<T extends bigint>(value: T): T {
-  return maxOf(value, 1n as T);
-}
-
-export function clampToNonNegative<T extends bigint>(value: T): T {
-  return maxOf(value, 0n as T);
-}
-
-export function clampToNonPositive<T extends bigint>(value: T): T {
-  return minOf(value, 0n as T);
-}
-
-export function clampToNegative<T extends bigint>(value: T): T {
-  return minOf(value, -1n as T);
 }
 
 export function fromString(value: string, options?: FromStringOptions): bigint {

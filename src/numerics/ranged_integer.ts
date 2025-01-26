@@ -1,6 +1,6 @@
 import { int, xint } from "../_.ts";
 import { OverflowMode } from "./overflow_mode.ts";
-import { Radix } from "./radix.ts";
+import { Radix } from "../basics/radix.ts";
 import { RoundingMode } from "./rounding_mode.ts";
 
 export type FromNumberOptions = {

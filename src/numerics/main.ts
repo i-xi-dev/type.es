@@ -9,7 +9,7 @@ import {
   isPositiveNumber,
 } from "../type/is.ts";
 import { numeric } from "../_.ts";
-import { Radix } from "./radix.ts";
+import { Radix } from "../basics/radix.ts";
 import { RoundingMode } from "./rounding_mode.ts";
 
 export function isPositive(test: unknown): test is numeric {

@@ -15,7 +15,7 @@ import {
   isPositive as isPositiveSafeInteger,
 } from "./safe_integer.ts";
 import { isString } from "../type/is.ts";
-import { Radix, RadixProperties } from "./radix.ts";
+import { Radix, RadixProperties } from "../basics/radix.ts";
 import { xint } from "../_.ts";
 
 // ここでは、safe integerではないnumber型は「整数」とみなさない

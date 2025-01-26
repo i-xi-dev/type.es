@@ -5,7 +5,7 @@ import {
   isInRange as isSafeIntegerInRange,
   toString as safeIntegerToString,
 } from "../numerics/safe_integer.ts";
-import { Radix } from "../numerics/radix.ts";
+import { Radix } from "../basics/radix.ts";
 import { SafeIntegerRange } from "../numerics/safe_integer_range.ts";
 import { ToStringOptions } from "../numerics/main.ts";
 

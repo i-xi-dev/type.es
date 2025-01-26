@@ -1,7 +1,7 @@
 import { assertStrictEquals } from "@std/assert";
-import { Numerics } from "../../mod.ts";
+import { Basics } from "../../mod.ts";
 
-const { RadixProperties } = Numerics;
+const { RadixProperties } = Basics;
 
 Deno.test("RadixProperties.of()", () => {
   const bp = RadixProperties.of(2);

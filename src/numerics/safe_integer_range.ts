@@ -1,6 +1,6 @@
 import { assert as assertSafeInteger } from "./safe_integer.ts";
 import { IntegerRange } from "./integer_range.ts";
-import { normalize as normalizeNumber } from "../basics/number_type.ts";
+import * as NumberUtils from "../utils/number.ts";
 
 export class SafeIntegerRange<T extends number> implements IntegerRange<T> {
   readonly #min: T;
@@ -12,8 +12,8 @@ export class SafeIntegerRange<T extends number> implements IntegerRange<T> {
       throw new RangeError("Range size exceeds upper limit.");
     }
 
-    this.#min = normalizeNumber(min);
-    this.#max = normalizeNumber(max);
+    this.#min = NumberUtils.normalize(min);
+    this.#max = NumberUtils.normalize(max);
   }
 
   get min(): T {
@@ -101,7 +101,7 @@ export class SafeIntegerRange<T extends number> implements IntegerRange<T> {
     assertSafeInteger(input, "input");
 
     if (this.includes(input)) {
-      return normalizeNumber(input);
+      return NumberUtils.normalize(input);
     }
 
     if (input < this.#min) {

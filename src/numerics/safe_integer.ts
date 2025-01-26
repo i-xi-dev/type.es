@@ -4,9 +4,9 @@ import {
 } from "./bigint_type.ts";
 import { FromStringOptions, ToStringOptions } from "./main.ts";
 import { int } from "../_.ts";
-import { normalize as normalizeNumber } from "../basics/number_type.ts";
+import * as NumberUtils from "../utils/number.ts";
 import { isPositiveNumber } from "../type/is.ts";
-import { RadixProperties } from "./radix.ts";
+import { RadixProperties } from "../basics/radix.ts";
 import { RoundingMode } from "./rounding_mode.ts";
 
 export function is(test: unknown): test is int {
@@ -98,27 +98,27 @@ export function clamp<T extends int>(value: int, min: T, max: T): T {
   if (min > max) {
     throw new RangeError("`max` must be greater than or equal to `min`.");
   }
-  return normalizeNumber(Math.min(Math.max(value, min), max)) as T;
+  return NumberUtils.normalize(Math.min(Math.max(value, min), max)) as T;
 }
 
 export function clampToPositive<T extends int>(value: T): T {
   assert(value, "value");
-  return normalizeNumber(Math.max(value, 1) as T);
+  return NumberUtils.normalize(Math.max(value, 1) as T);
 }
 
 export function clampToNonNegative<T extends int>(value: T): T {
   assert(value, "value");
-  return normalizeNumber(Math.max(value, 0) as T);
+  return NumberUtils.normalize(Math.max(value, 0) as T);
 }
 
 export function clampToNonPositive<T extends int>(value: T): T {
   assert(value, "value");
-  return normalizeNumber(Math.min(value, 0) as T);
+  return NumberUtils.normalize(Math.min(value, 0) as T);
 }
 
 export function clampToNegative<T extends int>(value: T): T {
   assert(value, "value");
-  return normalizeNumber(Math.min(value, -1) as T);
+  return NumberUtils.normalize(Math.min(value, -1) as T);
 }
 
 export function fromBigInt(value: bigint): int {
@@ -159,7 +159,7 @@ export function round(value: number, roundingMode?: RoundingMode): int {
     throw new TypeError("`value` must be a finite number.");
   }
 
-  const integralPart = normalizeNumber(Math.trunc(value));
+  const integralPart = NumberUtils.normalize(Math.trunc(value));
   const integralPartIsEven = isEven(integralPart);
 
   const resolvedRoundingMode =
@@ -168,11 +168,11 @@ export function round(value: number, roundingMode?: RoundingMode): int {
       : RoundingMode.TRUNCATE;
 
   if (Number.isInteger(value)) {
-    return normalizeNumber(value);
+    return NumberUtils.normalize(value);
   }
 
-  const nearestP = normalizeNumber(Math.ceil(value));
-  const nearestN = normalizeNumber(Math.floor(value));
+  const nearestP = NumberUtils.normalize(Math.ceil(value));
+  const nearestN = NumberUtils.normalize(Math.floor(value));
   const sourceIsNegative = value < 0;
   const nearestPH = nearestP - 0.5;
   const nearestNH = nearestN + 0.5;
