@@ -1,3 +1,4 @@
+import { assertArrayBuffer } from "../type/array_buffer.ts";
 import {
   assertAsyncIterable as assertAsyncIterableObject,
   assertIterable as assertIterableObject,
@@ -8,16 +9,6 @@ import { GrowableBuffer } from "./growable_buffer.ts";
 import { biguint64, int, uint16, uint32, uint8, xint } from "../_.ts";
 import { BigUint64 } from "../numerics/big_uint.ts";
 import { Uint16, Uint32, Uint8 } from "../numerics/uint.ts";
-
-export function is(test: unknown): test is ArrayBuffer {
-  return (test instanceof ArrayBuffer);
-}
-
-export function assert(test: unknown, label: string): void {
-  if (is(test) !== true) {
-    throw new TypeError(`\`${label}\` must be an \`ArrayBuffer\`.`);
-  }
-}
 
 // const _DEFAULT_BYTE_LENGTH = 1_024;
 // const _DEFAULT_MAX_BYTE_LENGTH = 1_048_576;
@@ -57,7 +48,7 @@ export async function fromUint8AsyncIterable(
 }
 
 export function toUint8Iterable(value: ArrayBuffer): Iterable<uint8> {
-  assert(value, "value");
+  assertArrayBuffer(value, "value");
   return (new Uint8Array(value))[Symbol.iterator]() as Iterable<uint8>;
 }
 
@@ -135,7 +126,7 @@ function _toUint8xIterable<T extends xint>(
   viewGetter: _Getter<T>,
   byteOrder: ByteOrder,
 ): Iterable<T> {
-  assert(value, "value");
+  assertArrayBuffer(value, "value");
 
   const bytesPerElement = uint8xArrayCtor.BYTES_PER_ELEMENT;
   if ((value.byteLength % bytesPerElement) !== 0) {
