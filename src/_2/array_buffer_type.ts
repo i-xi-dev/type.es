@@ -1,8 +1,5 @@
 import { assertArrayBuffer } from "../type/array_buffer.ts";
-import {
-  assertAsyncIterable as assertAsyncIterableObject,
-  assertIterable as assertIterableObject,
-} from "../basics/object_type.ts";
+import { assertAsyncIterable, assertIterable } from "../type/iterable.ts";
 import { ByteOrder } from "../basics/byte_order.ts";
 import * as env from "../env.ts";
 import { GrowableBuffer } from "./growable_buffer.ts";
@@ -22,7 +19,7 @@ export function fromUint8Iterable(
   value: Iterable<int /* uint8 */>,
   // options?: FromUint8IterableOptions,
 ): ArrayBuffer {
-  assertIterableObject(value, "value");
+  assertIterable(value, "value");
 
   return Uint8Array.from(value, (byte, index) => {
     Uint8.assert(byte, `value[${index}]`);
@@ -34,7 +31,7 @@ export async function fromUint8AsyncIterable(
   value: AsyncIterable<int /* uint8 */>,
   // options?: FromUint8IterableOptions,
 ): Promise<ArrayBuffer> {
-  assertAsyncIterableObject(value, "value");
+  assertAsyncIterable(value, "value");
 
   //XXX resizable ArrayBufferが広く実装されたらそちらに変更する
   const gb = new GrowableBuffer();
@@ -161,7 +158,7 @@ export function fromUint16Iterable(
   value: Iterable<uint16>,
   options?: FromUint8xIterableOptions,
 ): ArrayBuffer {
-  assertIterableObject(value, "value");
+  assertIterable(value, "value");
 
   const byteOrder = _resolveByteOrder(options?.byteOrder);
 
@@ -187,7 +184,7 @@ export async function fromUint16AsyncIterable(
   value: AsyncIterable<uint16>,
   options?: FromUint8xIterableOptions,
 ): Promise<ArrayBuffer> {
-  assertAsyncIterableObject(value, "value");
+  assertAsyncIterable(value, "value");
 
   const byteOrder = _resolveByteOrder(options?.byteOrder);
 
@@ -234,7 +231,7 @@ export function fromUint32Iterable(
   value: Iterable<uint32>,
   options?: FromUint8xIterableOptions,
 ): ArrayBuffer {
-  assertIterableObject(value, "value");
+  assertIterable(value, "value");
 
   const byteOrder = _resolveByteOrder(options?.byteOrder);
 
@@ -260,7 +257,7 @@ export async function fromUint32AsyncIterable(
   value: AsyncIterable<uint32>,
   options?: FromUint8xIterableOptions,
 ): Promise<ArrayBuffer> {
-  assertAsyncIterableObject(value, "value");
+  assertAsyncIterable(value, "value");
 
   const byteOrder = _resolveByteOrder(options?.byteOrder);
 
@@ -302,7 +299,7 @@ export function fromBigUint64Iterable(
   value: Iterable<biguint64>,
   options?: FromUint8xIterableOptions,
 ): ArrayBuffer {
-  assertIterableObject(value, "value");
+  assertIterable(value, "value");
 
   const byteOrder = _resolveByteOrder(options?.byteOrder);
 
@@ -332,7 +329,7 @@ export async function fromBigUint64AsyncIterable(
   value: AsyncIterable<biguint64>,
   options?: FromUint8xIterableOptions,
 ): Promise<ArrayBuffer> {
-  assertAsyncIterableObject(value, "value");
+  assertAsyncIterable(value, "value");
 
   const byteOrder = _resolveByteOrder(options?.byteOrder);
 

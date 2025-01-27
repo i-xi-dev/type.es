@@ -1,7 +1,7 @@
 import { assert as assertCodePoint } from "./code_point.ts";
 import { assertString, isString } from "../type/string.ts";
 import { EMPTY } from "../basics/string_type.ts";
-import { assertIterable as assertIterableObject } from "../basics/object_type.ts";
+import { assertIterable } from "../type/iterable.ts";
 import { codepoint, int, rune, script, usvstring } from "../_.ts";
 import { Rune } from "./mod.ts";
 import { Script } from "../i18n/script.ts";
@@ -69,7 +69,7 @@ export function fromCodePoints(
   value: Iterable<codepoint>,
   options?: AllowMalformedOptions,
 ): string {
-  assertIterableObject(value, "value");
+  assertIterable(value, "value");
 
   const disallowMalformed = options?.allowMalformed !== true;
 

@@ -1,4 +1,4 @@
-import { assertIterable as assertIterableObject } from "../basics/object_type.ts";
+import { assertIterable } from "../type/iterable.ts";
 import { int, uint8 } from "../_.ts";
 import { Uint8 } from "./uint.ts";
 
@@ -47,7 +47,7 @@ export function elementsStartsWith(
   self: Iterable<int /* uint8 */>,
   other: ArrayLikeOfExpectUint8,
 ): boolean {
-  assertIterableObject(self, "self");
+  assertIterable(self, "self");
   assertArrayLikeOfUint8(other, "other");
 
   if (other.length <= 0) {
@@ -80,7 +80,7 @@ export function elementsEquals(
   self: Iterable<int /* uint8 */>,
   other: ArrayLikeOfExpectUint8,
 ): boolean {
-  assertIterableObject(self, "self");
+  assertIterable(self, "self");
   assertArrayLikeOfUint8(other, "other");
 
   const otherLastIndex = other.length - 1;
