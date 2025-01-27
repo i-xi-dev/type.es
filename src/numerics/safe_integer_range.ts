@@ -1,4 +1,4 @@
-import { assert as assertSafeInteger } from "./safe_integer.ts";
+import { assertSafeInteger } from "../type/number.ts";
 import { IntegerRange } from "./integer_range.ts";
 import * as NumberUtils from "../utils/number.ts";
 

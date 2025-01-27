@@ -7,13 +7,13 @@ import {
   isPositiveBigInt,
 } from "../type/bigint.ts";
 import {
-  isEven as isEvenSafeInteger,
-  isNegative as isNegativeSafeInteger,
-  isNonNegative as isNonNegativeSafeInteger,
-  isNonPositive as isNonPositiveSafeInteger,
-  isOdd as isOddSafeInteger,
-  isPositive as isPositiveSafeInteger,
-} from "./safe_integer.ts";
+  isEvenSafeInteger,
+  isNegativeSafeInteger,
+  isNonNegativeSafeInteger,
+  isNonPositiveSafeInteger,
+  isOddSafeInteger,
+  isPositiveSafeInteger,
+} from "../type/number.ts";
 import { isString } from "../type/string.ts";
 import { Radix, RadixProperties } from "../basics/radix.ts";
 import { xint } from "../_.ts";

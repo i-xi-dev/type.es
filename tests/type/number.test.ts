@@ -598,3 +598,577 @@ Deno.test("Type.assertNumberInRange()", () => {
     //
   }
 });
+
+const MIN = Number.MIN_SAFE_INTEGER;
+const MAX = Number.MAX_SAFE_INTEGER;
+
+// Deno.test("Type.isSafeInteger()", () => {
+//   assertStrictEquals(Type.isSafeInteger(0), true);
+//   assertStrictEquals(Type.isSafeInteger(-0), true);
+//   assertStrictEquals(Type.isSafeInteger(1), true);
+//   assertStrictEquals(Type.isSafeInteger(-1), true);
+
+//   assertStrictEquals(Type.isSafeInteger(-10.1), false);
+//   assertStrictEquals(Type.isSafeInteger(-9.9), false);
+//   assertStrictEquals(Type.isSafeInteger(9.9), false);
+//   assertStrictEquals(Type.isSafeInteger(10.1), false);
+
+//   assertStrictEquals(Type.isSafeInteger(0n), false);
+//   assertStrictEquals(Type.isSafeInteger(-0n), false);
+//   assertStrictEquals(Type.isSafeInteger(1n), false);
+//   assertStrictEquals(Type.isSafeInteger(-1n), false);
+
+//   assertStrictEquals(Type.isSafeInteger(Number.NaN), false);
+//   assertStrictEquals(Type.isSafeInteger(Number.POSITIVE_INFINITY), false);
+//   assertStrictEquals(Type.isSafeInteger(MAX), true);
+//   assertStrictEquals(Type.isSafeInteger(MIN), true);
+//   assertStrictEquals(Type.isSafeInteger(Number.NEGATIVE_INFINITY), false);
+
+//   assertStrictEquals(Type.isSafeInteger(undefined), false);
+//   assertStrictEquals(Type.isSafeInteger(null), false);
+//   assertStrictEquals(Type.isSafeInteger(true), false);
+//   assertStrictEquals(Type.isSafeInteger(false), false);
+//   assertStrictEquals(Type.isSafeInteger(""), false);
+//   assertStrictEquals(Type.isSafeInteger("0"), false);
+// });
+
+Deno.test("Type.assertSafeInteger()", () => {
+  try {
+    Type.assertSafeInteger(0, "test-1");
+    Type.assertSafeInteger(MAX, "test-1");
+    Type.assertSafeInteger(MIN, "test-1");
+  } catch (exception) {
+    fail((exception as Error).toString());
+  }
+
+  try {
+    Type.assertSafeInteger(Number.POSITIVE_INFINITY, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    Type.assertSafeInteger(Number.NEGATIVE_INFINITY, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    Type.assertSafeInteger(Number.NaN, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    Type.assertSafeInteger(0.5, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    Type.assertSafeInteger(undefined, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    Type.assertSafeInteger(0n, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    Type.assertSafeInteger(new Number(0), "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+});
+
+Deno.test("Type.isPositiveSafeInteger()", () => {
+  assertStrictEquals(Type.isPositiveSafeInteger(0), false);
+  assertStrictEquals(Type.isPositiveSafeInteger(-0), false);
+  assertStrictEquals(Type.isPositiveSafeInteger(1), true);
+  assertStrictEquals(Type.isPositiveSafeInteger(-1), false);
+
+  assertStrictEquals(Type.isPositiveSafeInteger(-10.1), false);
+  assertStrictEquals(Type.isPositiveSafeInteger(-9.9), false);
+  assertStrictEquals(Type.isPositiveSafeInteger(9.9), false);
+  assertStrictEquals(Type.isPositiveSafeInteger(10.1), false);
+
+  assertStrictEquals(Type.isPositiveSafeInteger(0n), false);
+  assertStrictEquals(Type.isPositiveSafeInteger(-0n), false);
+  assertStrictEquals(Type.isPositiveSafeInteger(1n), false);
+  assertStrictEquals(Type.isPositiveSafeInteger(-1n), false);
+
+  assertStrictEquals(Type.isPositiveSafeInteger(Number.NaN), false);
+  assertStrictEquals(
+    Type.isPositiveSafeInteger(Number.POSITIVE_INFINITY),
+    false,
+  );
+  assertStrictEquals(Type.isPositiveSafeInteger(MAX), true);
+  assertStrictEquals(Type.isPositiveSafeInteger(MIN), false);
+  assertStrictEquals(
+    Type.isPositiveSafeInteger(Number.NEGATIVE_INFINITY),
+    false,
+  );
+
+  assertStrictEquals(Type.isPositiveSafeInteger(undefined), false);
+  assertStrictEquals(Type.isPositiveSafeInteger(null), false);
+  assertStrictEquals(Type.isPositiveSafeInteger(true), false);
+  assertStrictEquals(Type.isPositiveSafeInteger(false), false);
+  assertStrictEquals(Type.isPositiveSafeInteger(""), false);
+  assertStrictEquals(Type.isPositiveSafeInteger("0"), false);
+});
+
+Deno.test("Type.assertPositiveSafeInteger()", () => {
+  try {
+    Type.assertPositiveSafeInteger(1, "test-1");
+    Type.assertPositiveSafeInteger(MAX, "test-1");
+  } catch (exception) {
+    fail((exception as Error).toString());
+  }
+
+  try {
+    Type.assertPositiveSafeInteger(0, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    Type.assertPositiveSafeInteger(Number.POSITIVE_INFINITY, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    Type.assertPositiveSafeInteger(Number.NEGATIVE_INFINITY, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    Type.assertPositiveSafeInteger(Number.NaN, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    Type.assertPositiveSafeInteger(0.5, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    Type.assertPositiveSafeInteger(undefined, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    Type.assertPositiveSafeInteger(0n, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    Type.assertPositiveSafeInteger(new Number(0), "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+});
+
+Deno.test("Type.isNonNegativeSafeInteger()", () => {
+  assertStrictEquals(Type.isNonNegativeSafeInteger(0), true);
+  assertStrictEquals(Type.isNonNegativeSafeInteger(-0), true);
+  assertStrictEquals(Type.isNonNegativeSafeInteger(1), true);
+  assertStrictEquals(Type.isNonNegativeSafeInteger(-1), false);
+
+  assertStrictEquals(Type.isNonNegativeSafeInteger(-10.1), false);
+  assertStrictEquals(Type.isNonNegativeSafeInteger(-9.9), false);
+  assertStrictEquals(Type.isNonNegativeSafeInteger(9.9), false);
+  assertStrictEquals(Type.isNonNegativeSafeInteger(10.1), false);
+
+  assertStrictEquals(Type.isNonNegativeSafeInteger(0n), false);
+  assertStrictEquals(Type.isNonNegativeSafeInteger(-0n), false);
+  assertStrictEquals(Type.isNonNegativeSafeInteger(1n), false);
+  assertStrictEquals(Type.isNonNegativeSafeInteger(-1n), false);
+
+  assertStrictEquals(Type.isNonNegativeSafeInteger(Number.NaN), false);
+  assertStrictEquals(
+    Type.isNonNegativeSafeInteger(Number.POSITIVE_INFINITY),
+    false,
+  );
+  assertStrictEquals(Type.isNonNegativeSafeInteger(MAX), true);
+  assertStrictEquals(Type.isNonNegativeSafeInteger(MIN), false);
+  assertStrictEquals(
+    Type.isNonNegativeSafeInteger(Number.NEGATIVE_INFINITY),
+    false,
+  );
+
+  assertStrictEquals(Type.isNonNegativeSafeInteger(undefined), false);
+  assertStrictEquals(Type.isNonNegativeSafeInteger(null), false);
+  assertStrictEquals(Type.isNonNegativeSafeInteger(true), false);
+  assertStrictEquals(Type.isNonNegativeSafeInteger(false), false);
+  assertStrictEquals(Type.isNonNegativeSafeInteger(""), false);
+  assertStrictEquals(Type.isNonNegativeSafeInteger("0"), false);
+});
+
+Deno.test("Type.assertNonNegativeSafeInteger()", () => {
+  try {
+    Type.assertNonNegativeSafeInteger(0, "test-1");
+    Type.assertNonNegativeSafeInteger(1, "test-1");
+    Type.assertNonNegativeSafeInteger(MAX, "test-1");
+  } catch (exception) {
+    fail((exception as Error).toString());
+  }
+
+  try {
+    Type.assertNonNegativeSafeInteger(-1, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    Type.assertNonNegativeSafeInteger(Number.POSITIVE_INFINITY, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    Type.assertNonNegativeSafeInteger(Number.NEGATIVE_INFINITY, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    Type.assertNonNegativeSafeInteger(Number.NaN, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    Type.assertNonNegativeSafeInteger(0.5, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    Type.assertNonNegativeSafeInteger(undefined, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    Type.assertNonNegativeSafeInteger(0n, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    Type.assertNonNegativeSafeInteger(new Number(0), "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+});
+
+Deno.test("Type.isNonPositiveSafeInteger()", () => {
+  assertStrictEquals(Type.isNonPositiveSafeInteger(0), true);
+  assertStrictEquals(Type.isNonPositiveSafeInteger(-0), true);
+  assertStrictEquals(Type.isNonPositiveSafeInteger(1), false);
+  assertStrictEquals(Type.isNonPositiveSafeInteger(-1), true);
+
+  assertStrictEquals(Type.isNonPositiveSafeInteger(-10.1), false);
+  assertStrictEquals(Type.isNonPositiveSafeInteger(-9.9), false);
+  assertStrictEquals(Type.isNonPositiveSafeInteger(9.9), false);
+  assertStrictEquals(Type.isNonPositiveSafeInteger(10.1), false);
+
+  assertStrictEquals(Type.isNonPositiveSafeInteger(0n), false);
+  assertStrictEquals(Type.isNonPositiveSafeInteger(-0n), false);
+  assertStrictEquals(Type.isNonPositiveSafeInteger(1n), false);
+  assertStrictEquals(Type.isNonPositiveSafeInteger(-1n), false);
+
+  assertStrictEquals(Type.isNonPositiveSafeInteger(Number.NaN), false);
+  assertStrictEquals(
+    Type.isNonPositiveSafeInteger(Number.POSITIVE_INFINITY),
+    false,
+  );
+  assertStrictEquals(Type.isNonPositiveSafeInteger(MAX), false);
+  assertStrictEquals(Type.isNonPositiveSafeInteger(MIN), true);
+  assertStrictEquals(
+    Type.isNonPositiveSafeInteger(Number.NEGATIVE_INFINITY),
+    false,
+  );
+
+  assertStrictEquals(Type.isNonPositiveSafeInteger(undefined), false);
+  assertStrictEquals(Type.isNonPositiveSafeInteger(null), false);
+  assertStrictEquals(Type.isNonPositiveSafeInteger(true), false);
+  assertStrictEquals(Type.isNonPositiveSafeInteger(false), false);
+  assertStrictEquals(Type.isNonPositiveSafeInteger(""), false);
+  assertStrictEquals(Type.isNonPositiveSafeInteger("0"), false);
+});
+
+Deno.test("Type.assertNonPositiveSafeInteger()", () => {
+  try {
+    Type.assertNonPositiveSafeInteger(0, "test-1");
+    Type.assertNonPositiveSafeInteger(-1, "test-1");
+    Type.assertNonPositiveSafeInteger(MIN, "test-1");
+  } catch (exception) {
+    fail((exception as Error).toString());
+  }
+
+  try {
+    Type.assertNonPositiveSafeInteger(1, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    Type.assertNonPositiveSafeInteger(Number.POSITIVE_INFINITY, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    Type.assertNonPositiveSafeInteger(Number.NEGATIVE_INFINITY, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    Type.assertNonPositiveSafeInteger(Number.NaN, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    Type.assertNonPositiveSafeInteger(0.5, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    Type.assertNonPositiveSafeInteger(undefined, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    Type.assertNonPositiveSafeInteger(0n, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    Type.assertNonPositiveSafeInteger(new Number(0), "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+});
+
+Deno.test("Type.isNegativeSafeInteger()", () => {
+  assertStrictEquals(Type.isNegativeSafeInteger(0), false);
+  assertStrictEquals(Type.isNegativeSafeInteger(-0), false);
+  assertStrictEquals(Type.isNegativeSafeInteger(1), false);
+  assertStrictEquals(Type.isNegativeSafeInteger(-1), true);
+
+  assertStrictEquals(Type.isNegativeSafeInteger(-10.1), false);
+  assertStrictEquals(Type.isNegativeSafeInteger(-9.9), false);
+  assertStrictEquals(Type.isNegativeSafeInteger(9.9), false);
+  assertStrictEquals(Type.isNegativeSafeInteger(10.1), false);
+
+  assertStrictEquals(Type.isNegativeSafeInteger(0n), false);
+  assertStrictEquals(Type.isNegativeSafeInteger(-0n), false);
+  assertStrictEquals(Type.isNegativeSafeInteger(1n), false);
+  assertStrictEquals(Type.isNegativeSafeInteger(-1n), false);
+
+  assertStrictEquals(Type.isNegativeSafeInteger(Number.NaN), false);
+  assertStrictEquals(
+    Type.isNegativeSafeInteger(Number.POSITIVE_INFINITY),
+    false,
+  );
+  assertStrictEquals(Type.isNegativeSafeInteger(MAX), false);
+  assertStrictEquals(Type.isNegativeSafeInteger(MIN), true);
+  assertStrictEquals(
+    Type.isNegativeSafeInteger(Number.NEGATIVE_INFINITY),
+    false,
+  );
+
+  assertStrictEquals(Type.isNegativeSafeInteger(undefined), false);
+  assertStrictEquals(Type.isNegativeSafeInteger(null), false);
+  assertStrictEquals(Type.isNegativeSafeInteger(true), false);
+  assertStrictEquals(Type.isNegativeSafeInteger(false), false);
+  assertStrictEquals(Type.isNegativeSafeInteger(""), false);
+  assertStrictEquals(Type.isNegativeSafeInteger("0"), false);
+});
+
+Deno.test("Type.assertNegativeSafeInteger()", () => {
+  try {
+    Type.assertNegativeSafeInteger(-1, "test-1");
+    Type.assertNegativeSafeInteger(MIN, "test-1");
+  } catch (exception) {
+    fail((exception as Error).toString());
+  }
+
+  try {
+    Type.assertNegativeSafeInteger(0, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    Type.assertNegativeSafeInteger(Number.POSITIVE_INFINITY, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    Type.assertNegativeSafeInteger(Number.NEGATIVE_INFINITY, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    Type.assertNegativeSafeInteger(Number.NaN, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    Type.assertNegativeSafeInteger(0.5, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    Type.assertNegativeSafeInteger(undefined, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    Type.assertNegativeSafeInteger(0n, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    Type.assertNegativeSafeInteger(new Number(0), "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+});
+
+Deno.test("Type.isOddSafeInteger()", () => {
+  assertStrictEquals(Type.isOddSafeInteger(0), false);
+  assertStrictEquals(Type.isOddSafeInteger(-0), false);
+  assertStrictEquals(Type.isOddSafeInteger(1), true);
+  assertStrictEquals(Type.isOddSafeInteger(-1), true);
+  assertStrictEquals(Type.isOddSafeInteger(2), false);
+  assertStrictEquals(Type.isOddSafeInteger(-2), false);
+  assertStrictEquals(Type.isOddSafeInteger(3), true);
+  assertStrictEquals(Type.isOddSafeInteger(-3), true);
+  assertStrictEquals(Type.isOddSafeInteger(4), false);
+  assertStrictEquals(Type.isOddSafeInteger(-4), false);
+});
+
+Deno.test("Type.assertOddSafeInteger()", () => {
+  try {
+    Type.assertOddSafeInteger(1, "test-1");
+    Type.assertOddSafeInteger(-1, "test-1");
+    Type.assertOddSafeInteger(3, "test-1");
+    Type.assertOddSafeInteger(-3, "test-1");
+  } catch (exception) {
+    fail((exception as Error).toString());
+  }
+
+  try {
+    Type.assertOddSafeInteger(0, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    Type.assertOddSafeInteger(2, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+});
+
+Deno.test("Type.isEvenSafeInteger()", () => {
+  assertStrictEquals(Type.isEvenSafeInteger(0), true);
+  assertStrictEquals(Type.isEvenSafeInteger(-0), true);
+  assertStrictEquals(Type.isEvenSafeInteger(1), false);
+  assertStrictEquals(Type.isEvenSafeInteger(-1), false);
+  assertStrictEquals(Type.isEvenSafeInteger(2), true);
+  assertStrictEquals(Type.isEvenSafeInteger(-2), true);
+  assertStrictEquals(Type.isEvenSafeInteger(3), false);
+  assertStrictEquals(Type.isEvenSafeInteger(-3), false);
+  assertStrictEquals(Type.isEvenSafeInteger(4), true);
+  assertStrictEquals(Type.isEvenSafeInteger(-4), true);
+});
+
+Deno.test("Type.assertEvenSafeInteger()", () => {
+  try {
+    Type.assertEvenSafeInteger(0, "test-1");
+    Type.assertEvenSafeInteger(-0, "test-1");
+    Type.assertEvenSafeInteger(2, "test-1");
+    Type.assertEvenSafeInteger(-2, "test-1");
+  } catch (exception) {
+    fail((exception as Error).toString());
+  }
+
+  try {
+    Type.assertEvenSafeInteger(1, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    Type.assertEvenSafeInteger(-1, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+});

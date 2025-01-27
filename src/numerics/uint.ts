@@ -1,12 +1,9 @@
 import * as NumberUtils from "../utils/number.ts";
-import { assertNumber } from "../type/number.ts";
 import {
-  assert as assertSafeInteger,
-  fromBigInt as safeIntegerFromBigInt,
-  isNonPositive as isNonPositiveSafeInteger,
-  round as roundNumber,
-  toString as safeIntegerToString,
-} from "./safe_integer.ts";
+  assertNumber,
+  assertSafeInteger,
+  isNonPositiveSafeInteger,
+} from "../type/number.ts";
 import {
   BITS_PER_BYTE,
   FromBigIntOptions,
@@ -16,6 +13,11 @@ import {
   Uint8xOperations,
   UintNOperations,
 } from "./ranged_integer.ts";
+import {
+  fromBigInt as safeIntegerFromBigInt,
+  round as roundNumber,
+  toString as safeIntegerToString,
+} from "./safe_integer.ts";
 import { fromString as bigIntFromString } from "./bigint_type.ts";
 import { int, uint16, uint24, uint32, uint6, uint7, uint8 } from "../_.ts";
 import { OverflowMode } from "./overflow_mode.ts";

@@ -79,3 +79,79 @@ export function assertNumberInRange(
     );
   }
 }
+
+export type safeint = number;
+
+// isSafeInteger → Number.isSafeInteger
+
+export function assertSafeInteger(test: unknown, label: string): void {
+  if (Number.isSafeInteger(test) !== true) {
+    throw new TypeError(`\`${label}\` must be a safe integer.`);
+  }
+}
+
+export function isPositiveSafeInteger(test: unknown): test is safeint {
+  return Number.isSafeInteger(test) && ((test as safeint) > 0);
+}
+
+export function assertPositiveSafeInteger(test: unknown, label: string): void {
+  if (isPositiveSafeInteger(test) !== true) {
+    throw new TypeError(`\`${label}\` must be a positive safe integer.`);
+  }
+}
+
+export function isNonNegativeSafeInteger(test: unknown): test is safeint {
+  return Number.isSafeInteger(test) && ((test as safeint) >= 0);
+}
+
+export function assertNonNegativeSafeInteger(
+  test: unknown,
+  label: string,
+): void {
+  if (isNonNegativeSafeInteger(test) !== true) {
+    throw new TypeError(`\`${label}\` must be a non-negative safe integer.`);
+  }
+}
+
+export function isNonPositiveSafeInteger(test: unknown): test is safeint {
+  return Number.isSafeInteger(test) && ((test as safeint) <= 0);
+}
+
+export function assertNonPositiveSafeInteger(
+  test: unknown,
+  label: string,
+): void {
+  if (isNonPositiveSafeInteger(test) !== true) {
+    throw new TypeError(`\`${label}\` must be a non-positive safe integer.`);
+  }
+}
+
+export function isNegativeSafeInteger(test: unknown): test is safeint {
+  return Number.isSafeInteger(test) && ((test as safeint) < 0);
+}
+
+export function assertNegativeSafeInteger(test: unknown, label: string): void {
+  if (isNegativeSafeInteger(test) !== true) {
+    throw new TypeError(`\`${label}\` must be a negative safe integer.`);
+  }
+}
+
+export function isOddSafeInteger(test: unknown): test is safeint {
+  return Number.isSafeInteger(test) && (((test as safeint) % 2) !== 0);
+}
+
+export function assertOddSafeInteger(test: unknown, label: string): void {
+  if (isOddSafeInteger(test) !== true) {
+    throw new TypeError(`\`${label}\` must be an odd safe integer.`);
+  }
+}
+
+export function isEvenSafeInteger(test: unknown): test is safeint {
+  return Number.isSafeInteger(test) && (((test as safeint) % 2) === 0);
+}
+
+export function assertEvenSafeInteger(test: unknown, label: string): void {
+  if (isEvenSafeInteger(test) !== true) {
+    throw new TypeError(`\`${label}\` must be an even safe integer.`);
+  }
+}

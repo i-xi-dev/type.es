@@ -1,5 +1,5 @@
 import { assertBigInt, assertBigIntInRange } from "../type/bigint.ts";
-import { assertNumber } from "../type/number.ts";
+import { assertNumber, isPositiveSafeInteger } from "../type/number.ts";
 import { assertStringified as assertStringifiedInteger } from "./integer.ts";
 import {
   FromNumberOptions,
@@ -7,10 +7,7 @@ import {
   ToStringOptions,
 } from "./main.ts";
 import { int } from "../_.ts";
-import {
-  isPositive as isPositiveSafeInteger,
-  round as roundNumber,
-} from "./safe_integer.ts";
+import { round as roundNumber } from "./safe_integer.ts";
 import { RadixProperties } from "../basics/radix.ts";
 
 export function fromString(value: string, options?: FromStringOptions): bigint {
