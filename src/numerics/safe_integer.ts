@@ -13,17 +13,6 @@ import {
 import { RadixProperties } from "../basics/radix.ts";
 import { RoundingMode } from "./rounding_mode.ts";
 
-export function clamp<T extends int>(value: int, min: T, max: T): T {
-  assertSafeInteger(value, "value");
-  assertSafeInteger(min, "min");
-  assertSafeInteger(max, "max");
-
-  if (min > max) {
-    throw new RangeError("`max` must be greater than or equal to `min`.");
-  }
-  return NumberUtils.normalize(Math.min(Math.max(value, min), max)) as T;
-}
-
 export function clampToPositive<T extends int>(value: T): T {
   assertSafeInteger(value, "value");
   return NumberUtils.normalize(Math.max(value, 1) as T);
