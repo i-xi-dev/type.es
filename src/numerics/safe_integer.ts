@@ -13,18 +13,6 @@ import {
 import { RadixProperties } from "../basics/radix.ts";
 import { RoundingMode } from "./rounding_mode.ts";
 
-export function isInRange<T extends int>(
-  test: unknown,
-  min: T,
-  max: T,
-): test is T {
-  assertSafeInteger(min, "min");
-  assertSafeInteger(max, "max");
-
-  return Number.isSafeInteger(test) && (min <= (test as int)) &&
-    (max >= (test as int));
-}
-
 export function clamp<T extends int>(value: int, min: T, max: T): T {
   assertSafeInteger(value, "value");
   assertSafeInteger(min, "min");

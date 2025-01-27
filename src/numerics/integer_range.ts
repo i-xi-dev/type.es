@@ -1,5 +1,6 @@
 import { int, xint } from "../_.ts";
 import { isBigInt } from "../type/bigint.ts";
+import { isSafeInteger } from "../type/number.ts";
 
 export interface IntegerRange<T extends xint> {
   get min(): T;
@@ -101,7 +102,7 @@ export namespace IntegerRange {
         parsedMax = test[1];
       }
 
-      if (Number.isSafeInteger(parsedMin) && Number.isSafeInteger(parsedMax)) {
+      if (isSafeInteger(parsedMin) && isSafeInteger(parsedMax)) {
         return true;
       } else if (isBigInt(parsedMin) && isBigInt(parsedMax)) {
         return true;
@@ -147,7 +148,7 @@ export namespace IntegerRange {
         throw new TypeError("`rangeLike` must be a `IntegerRange.Like`.");
       }
 
-      if (Number.isSafeInteger(parsedMin) && Number.isSafeInteger(parsedMax)) {
+      if (isSafeInteger(parsedMin) && isSafeInteger(parsedMax)) {
         // ok
       } else if (isBigInt(parsedMin) && isBigInt(parsedMax)) {
         // ok
@@ -157,15 +158,15 @@ export namespace IntegerRange {
         );
       }
 
-      if ((parsedMin as T) > (parsedMax as T)) {
+      if (parsedMin > parsedMax) {
         throw new RangeError(
           "`min` must be less than or equal to `max`.",
         );
       }
 
       return {
-        min: parsedMin as T,
-        max: parsedMax as T,
+        min: parsedMin,
+        max: parsedMax,
       };
     }
   }

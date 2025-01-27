@@ -3,6 +3,7 @@ import {
   assertNumber,
   assertSafeInteger,
   isNonPositiveSafeInteger,
+  isSafeInteger,
 } from "../type/number.ts";
 import {
   BITS_PER_BYTE,
@@ -161,7 +162,7 @@ class _UinNOperations<T extends int> implements UintNOperations<T> {
     }
 
     let valueAsInt: int;
-    if (Number.isSafeInteger(adjustedValue)) {
+    if (isSafeInteger(adjustedValue)) {
       valueAsInt = adjustedValue;
     } else {
       valueAsInt = roundNumber(adjustedValue, options?.roundingMode);

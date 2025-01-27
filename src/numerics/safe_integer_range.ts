@@ -1,4 +1,4 @@
-import { assertSafeInteger } from "../type/number.ts";
+import { assertSafeInteger, isSafeInteger } from "../type/number.ts";
 import { IntegerRange } from "./integer_range.ts";
 import * as NumberUtils from "../utils/number.ts";
 
@@ -93,7 +93,7 @@ export class SafeIntegerRange<T extends number> implements IntegerRange<T> {
   }
 
   includes(test: number): test is T {
-    return Number.isSafeInteger(test) && (test >= this.#min) &&
+    return isSafeInteger(test) && (test >= this.#min) &&
       (test <= this.#max);
   }
 

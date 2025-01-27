@@ -1,99 +1,10 @@
-import {
-  assertStrictEquals,
-  assertThrows,
-  fail,
-  unreachable,
-} from "@std/assert";
+import { assertStrictEquals, assertThrows } from "@std/assert";
 import { Numerics } from "../../mod.ts";
 
 const { SafeInteger } = Numerics;
 
 const MIN = Number.MIN_SAFE_INTEGER;
 const MAX = Number.MAX_SAFE_INTEGER;
-
-Deno.test("SafeInteger.isInRange()", () => {
-  assertStrictEquals(SafeInteger.isInRange(0, 0, 0), true);
-  assertStrictEquals(SafeInteger.isInRange(0, 1, 0), false); // 負のrange
-  assertStrictEquals(SafeInteger.isInRange(0, 0, 1), true);
-  assertStrictEquals(SafeInteger.isInRange(0, -1, 0), true);
-  assertStrictEquals(SafeInteger.isInRange(0, 0, -1), false); // 負のrange
-  assertStrictEquals(SafeInteger.isInRange(0, 1, 1), false);
-  assertStrictEquals(SafeInteger.isInRange(0, -1, -1), false);
-
-  assertStrictEquals(SafeInteger.isInRange(1, 0, 0), false);
-  assertStrictEquals(SafeInteger.isInRange(1, 1, 0), false); // 負のrange
-  assertStrictEquals(SafeInteger.isInRange(1, 0, 1), true);
-  assertStrictEquals(SafeInteger.isInRange(1, -1, 0), false);
-  assertStrictEquals(SafeInteger.isInRange(1, 0, -1), false); // 負のrange
-  assertStrictEquals(SafeInteger.isInRange(1, 1, 1), true);
-  assertStrictEquals(SafeInteger.isInRange(1, -1, -1), false);
-
-  assertStrictEquals(SafeInteger.isInRange(-1, 0, 0), false);
-  assertStrictEquals(SafeInteger.isInRange(-1, 1, 0), false); // 負のrange
-  assertStrictEquals(SafeInteger.isInRange(-1, 0, 1), false);
-  assertStrictEquals(SafeInteger.isInRange(-1, -1, 0), true);
-  assertStrictEquals(SafeInteger.isInRange(-1, 0, -1), false); // 負のrange
-  assertStrictEquals(SafeInteger.isInRange(-1, 1, 1), false);
-  assertStrictEquals(SafeInteger.isInRange(-1, -1, -1), true);
-
-  assertStrictEquals(SafeInteger.isInRange(0n, 0, 0), false);
-  assertStrictEquals(SafeInteger.isInRange(0.5, -1, 1), false);
-
-  assertStrictEquals(SafeInteger.isInRange(0, 0, MAX), true);
-  assertStrictEquals(SafeInteger.isInRange(0, MIN, 0), true);
-
-  assertStrictEquals(SafeInteger.isInRange(0, 1, MAX), false);
-  assertStrictEquals(SafeInteger.isInRange(0, MIN, 1), true);
-
-  assertStrictEquals(SafeInteger.isInRange(0, -1, MAX), true);
-  assertStrictEquals(SafeInteger.isInRange(0, MIN, -1), false);
-
-  const e1 = "`min` must be a safe integer.";
-  assertThrows(
-    () => {
-      SafeInteger.isInRange(0, Number.NEGATIVE_INFINITY, 0);
-    },
-    TypeError,
-    e1,
-  );
-  assertThrows(
-    () => {
-      SafeInteger.isInRange(0, Number.NaN, 0);
-    },
-    TypeError,
-    e1,
-  );
-  assertThrows(
-    () => {
-      SafeInteger.isInRange(0, undefined as unknown as number, 0);
-    },
-    TypeError,
-    e1,
-  );
-
-  const e2 = "`max` must be a safe integer.";
-  assertThrows(
-    () => {
-      SafeInteger.isInRange(0, 0, Number.POSITIVE_INFINITY);
-    },
-    TypeError,
-    e2,
-  );
-  assertThrows(
-    () => {
-      SafeInteger.isInRange(0, 0, Number.NaN);
-    },
-    TypeError,
-    e2,
-  );
-  assertThrows(
-    () => {
-      SafeInteger.isInRange(0, 0, "0" as unknown as number);
-    },
-    TypeError,
-    e2,
-  );
-});
 
 Deno.test("SafeInteger.clamp()", () => {
   const e1 = "`value` must be a safe integer.";

@@ -1,5 +1,5 @@
 import { plane } from "../_.ts";
-import { isInRange as isSafeIntegerInRange } from "../numerics/safe_integer.ts";
+import { isSafeIntegerInRange } from "../type/number.ts";
 
 const _BMP: plane = 0;
 const _SPUA_B: plane = 16;

@@ -602,35 +602,35 @@ Deno.test("Type.assertNumberInRange()", () => {
 const MIN = Number.MIN_SAFE_INTEGER;
 const MAX = Number.MAX_SAFE_INTEGER;
 
-// Deno.test("Type.isSafeInteger()", () => {
-//   assertStrictEquals(Type.isSafeInteger(0), true);
-//   assertStrictEquals(Type.isSafeInteger(-0), true);
-//   assertStrictEquals(Type.isSafeInteger(1), true);
-//   assertStrictEquals(Type.isSafeInteger(-1), true);
+Deno.test("Type.isSafeInteger()", () => {
+  assertStrictEquals(Type.isSafeInteger(0), true);
+  assertStrictEquals(Type.isSafeInteger(-0), true);
+  assertStrictEquals(Type.isSafeInteger(1), true);
+  assertStrictEquals(Type.isSafeInteger(-1), true);
 
-//   assertStrictEquals(Type.isSafeInteger(-10.1), false);
-//   assertStrictEquals(Type.isSafeInteger(-9.9), false);
-//   assertStrictEquals(Type.isSafeInteger(9.9), false);
-//   assertStrictEquals(Type.isSafeInteger(10.1), false);
+  assertStrictEquals(Type.isSafeInteger(-10.1), false);
+  assertStrictEquals(Type.isSafeInteger(-9.9), false);
+  assertStrictEquals(Type.isSafeInteger(9.9), false);
+  assertStrictEquals(Type.isSafeInteger(10.1), false);
 
-//   assertStrictEquals(Type.isSafeInteger(0n), false);
-//   assertStrictEquals(Type.isSafeInteger(-0n), false);
-//   assertStrictEquals(Type.isSafeInteger(1n), false);
-//   assertStrictEquals(Type.isSafeInteger(-1n), false);
+  assertStrictEquals(Type.isSafeInteger(0n), false);
+  assertStrictEquals(Type.isSafeInteger(-0n), false);
+  assertStrictEquals(Type.isSafeInteger(1n), false);
+  assertStrictEquals(Type.isSafeInteger(-1n), false);
 
-//   assertStrictEquals(Type.isSafeInteger(Number.NaN), false);
-//   assertStrictEquals(Type.isSafeInteger(Number.POSITIVE_INFINITY), false);
-//   assertStrictEquals(Type.isSafeInteger(MAX), true);
-//   assertStrictEquals(Type.isSafeInteger(MIN), true);
-//   assertStrictEquals(Type.isSafeInteger(Number.NEGATIVE_INFINITY), false);
+  assertStrictEquals(Type.isSafeInteger(Number.NaN), false);
+  assertStrictEquals(Type.isSafeInteger(Number.POSITIVE_INFINITY), false);
+  assertStrictEquals(Type.isSafeInteger(MAX), true);
+  assertStrictEquals(Type.isSafeInteger(MIN), true);
+  assertStrictEquals(Type.isSafeInteger(Number.NEGATIVE_INFINITY), false);
 
-//   assertStrictEquals(Type.isSafeInteger(undefined), false);
-//   assertStrictEquals(Type.isSafeInteger(null), false);
-//   assertStrictEquals(Type.isSafeInteger(true), false);
-//   assertStrictEquals(Type.isSafeInteger(false), false);
-//   assertStrictEquals(Type.isSafeInteger(""), false);
-//   assertStrictEquals(Type.isSafeInteger("0"), false);
-// });
+  assertStrictEquals(Type.isSafeInteger(undefined), false);
+  assertStrictEquals(Type.isSafeInteger(null), false);
+  assertStrictEquals(Type.isSafeInteger(true), false);
+  assertStrictEquals(Type.isSafeInteger(false), false);
+  assertStrictEquals(Type.isSafeInteger(""), false);
+  assertStrictEquals(Type.isSafeInteger("0"), false);
+});
 
 Deno.test("Type.assertSafeInteger()", () => {
   try {
@@ -1171,4 +1171,88 @@ Deno.test("Type.assertEvenSafeInteger()", () => {
   } catch {
     //
   }
+});
+
+Deno.test("Type.isSafeIntegerInRange()", () => {
+  assertStrictEquals(Type.isSafeIntegerInRange(0, 0, 0), true);
+  assertStrictEquals(Type.isSafeIntegerInRange(0, 1, 0), false); // 負のrange
+  assertStrictEquals(Type.isSafeIntegerInRange(0, 0, 1), true);
+  assertStrictEquals(Type.isSafeIntegerInRange(0, -1, 0), true);
+  assertStrictEquals(Type.isSafeIntegerInRange(0, 0, -1), false); // 負のrange
+  assertStrictEquals(Type.isSafeIntegerInRange(0, 1, 1), false);
+  assertStrictEquals(Type.isSafeIntegerInRange(0, -1, -1), false);
+
+  assertStrictEquals(Type.isSafeIntegerInRange(1, 0, 0), false);
+  assertStrictEquals(Type.isSafeIntegerInRange(1, 1, 0), false); // 負のrange
+  assertStrictEquals(Type.isSafeIntegerInRange(1, 0, 1), true);
+  assertStrictEquals(Type.isSafeIntegerInRange(1, -1, 0), false);
+  assertStrictEquals(Type.isSafeIntegerInRange(1, 0, -1), false); // 負のrange
+  assertStrictEquals(Type.isSafeIntegerInRange(1, 1, 1), true);
+  assertStrictEquals(Type.isSafeIntegerInRange(1, -1, -1), false);
+
+  assertStrictEquals(Type.isSafeIntegerInRange(-1, 0, 0), false);
+  assertStrictEquals(Type.isSafeIntegerInRange(-1, 1, 0), false); // 負のrange
+  assertStrictEquals(Type.isSafeIntegerInRange(-1, 0, 1), false);
+  assertStrictEquals(Type.isSafeIntegerInRange(-1, -1, 0), true);
+  assertStrictEquals(Type.isSafeIntegerInRange(-1, 0, -1), false); // 負のrange
+  assertStrictEquals(Type.isSafeIntegerInRange(-1, 1, 1), false);
+  assertStrictEquals(Type.isSafeIntegerInRange(-1, -1, -1), true);
+
+  assertStrictEquals(Type.isSafeIntegerInRange(0n, 0, 0), false);
+  assertStrictEquals(Type.isSafeIntegerInRange(0.5, -1, 1), false);
+
+  assertStrictEquals(Type.isSafeIntegerInRange(0, 0, MAX), true);
+  assertStrictEquals(Type.isSafeIntegerInRange(0, MIN, 0), true);
+
+  assertStrictEquals(Type.isSafeIntegerInRange(0, 1, MAX), false);
+  assertStrictEquals(Type.isSafeIntegerInRange(0, MIN, 1), true);
+
+  assertStrictEquals(Type.isSafeIntegerInRange(0, -1, MAX), true);
+  assertStrictEquals(Type.isSafeIntegerInRange(0, MIN, -1), false);
+
+  const e1 = "`min` must be a safe integer.";
+  assertThrows(
+    () => {
+      Type.isSafeIntegerInRange(0, Number.NEGATIVE_INFINITY, 0);
+    },
+    TypeError,
+    e1,
+  );
+  assertThrows(
+    () => {
+      Type.isSafeIntegerInRange(0, Number.NaN, 0);
+    },
+    TypeError,
+    e1,
+  );
+  assertThrows(
+    () => {
+      Type.isSafeIntegerInRange(0, undefined as unknown as number, 0);
+    },
+    TypeError,
+    e1,
+  );
+
+  const e2 = "`max` must be a safe integer.";
+  assertThrows(
+    () => {
+      Type.isSafeIntegerInRange(0, 0, Number.POSITIVE_INFINITY);
+    },
+    TypeError,
+    e2,
+  );
+  assertThrows(
+    () => {
+      Type.isSafeIntegerInRange(0, 0, Number.NaN);
+    },
+    TypeError,
+    e2,
+  );
+  assertThrows(
+    () => {
+      Type.isSafeIntegerInRange(0, 0, "0" as unknown as number);
+    },
+    TypeError,
+    e2,
+  );
 });

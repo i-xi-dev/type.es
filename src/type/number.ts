@@ -82,16 +82,18 @@ export function assertNumberInRange(
 
 export type safeint = number;
 
-// isSafeInteger → Number.isSafeInteger
+export function isSafeInteger(test: unknown): test is safeint {
+  return Number.isSafeInteger(test);
+}
 
 export function assertSafeInteger(test: unknown, label: string): void {
-  if (Number.isSafeInteger(test) !== true) {
+  if (isSafeInteger(test) !== true) {
     throw new TypeError(`\`${label}\` must be a safe integer.`);
   }
 }
 
 export function isPositiveSafeInteger(test: unknown): test is safeint {
-  return Number.isSafeInteger(test) && ((test as safeint) > 0);
+  return isSafeInteger(test) && (test > 0);
 }
 
 export function assertPositiveSafeInteger(test: unknown, label: string): void {
@@ -101,7 +103,7 @@ export function assertPositiveSafeInteger(test: unknown, label: string): void {
 }
 
 export function isNonNegativeSafeInteger(test: unknown): test is safeint {
-  return Number.isSafeInteger(test) && ((test as safeint) >= 0);
+  return isSafeInteger(test) && (test >= 0);
 }
 
 export function assertNonNegativeSafeInteger(
@@ -114,7 +116,7 @@ export function assertNonNegativeSafeInteger(
 }
 
 export function isNonPositiveSafeInteger(test: unknown): test is safeint {
-  return Number.isSafeInteger(test) && ((test as safeint) <= 0);
+  return isSafeInteger(test) && (test <= 0);
 }
 
 export function assertNonPositiveSafeInteger(
@@ -127,7 +129,7 @@ export function assertNonPositiveSafeInteger(
 }
 
 export function isNegativeSafeInteger(test: unknown): test is safeint {
-  return Number.isSafeInteger(test) && ((test as safeint) < 0);
+  return isSafeInteger(test) && (test < 0);
 }
 
 export function assertNegativeSafeInteger(test: unknown, label: string): void {
@@ -137,7 +139,7 @@ export function assertNegativeSafeInteger(test: unknown, label: string): void {
 }
 
 export function isOddSafeInteger(test: unknown): test is safeint {
-  return Number.isSafeInteger(test) && (((test as safeint) % 2) !== 0);
+  return isSafeInteger(test) && ((test % 2) !== 0);
 }
 
 export function assertOddSafeInteger(test: unknown, label: string): void {
@@ -147,7 +149,7 @@ export function assertOddSafeInteger(test: unknown, label: string): void {
 }
 
 export function isEvenSafeInteger(test: unknown): test is safeint {
-  return Number.isSafeInteger(test) && (((test as safeint) % 2) === 0);
+  return isSafeInteger(test) && ((test % 2) === 0);
 }
 
 export function assertEvenSafeInteger(test: unknown, label: string): void {
@@ -155,3 +157,16 @@ export function assertEvenSafeInteger(test: unknown, label: string): void {
     throw new TypeError(`\`${label}\` must be an even safe integer.`);
   }
 }
+
+export function isSafeIntegerInRange(
+  test: unknown,
+  min: safeint,
+  max: safeint,
+): test is safeint {
+  assertSafeInteger(min, "min");
+  assertSafeInteger(max, "max");
+
+  return isSafeInteger(test) && (min <= test) && (max >= test);
+}
+
+//TODO assertSafeIntegerInRange
