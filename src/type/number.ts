@@ -169,4 +169,15 @@ export function isSafeIntegerInRange(
   return isSafeInteger(test) && (min <= test) && (max >= test);
 }
 
-//TODO assertSafeIntegerInRange
+export function assertSafeIntegerInRange(
+  test: unknown,
+  label: string,
+  min: safeint,
+  max: safeint,
+): void {
+  if (isSafeIntegerInRange(test, min, max) !== true) {
+    throw new TypeError(
+      `\`${label}\` must be a safe integer in the range ${min}-${max}.`,
+    );
+  }
+}

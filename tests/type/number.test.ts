@@ -1256,3 +1256,26 @@ Deno.test("Type.isSafeIntegerInRange()", () => {
     e2,
   );
 });
+
+Deno.test("Type.assertSafeIntegerInRange()", () => {
+  try {
+    Type.assertSafeIntegerInRange(0, "test-1", 0, 0);
+    Type.assertSafeIntegerInRange(1, "test-1", -1, 1);
+    Type.assertSafeIntegerInRange(-1, "test-1", -1, 1);
+  } catch (exception) {
+    fail((exception as Error).toString());
+  }
+
+  try {
+    Type.assertSafeIntegerInRange(0, "test-1", 1, 1);
+    unreachable();
+  } catch {
+    //
+  }
+  try {
+    Type.assertSafeIntegerInRange(1, "test-1", 0, 0);
+    unreachable();
+  } catch {
+    //
+  }
+});
