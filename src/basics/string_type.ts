@@ -28,29 +28,6 @@ export function toChars(value: string): IterableIterator<char, void, void> {
 //XXX fromCharCodes(source: Iterable<uint16 | [uint16] | [uint16, uint16]>): string
 //XXX toCharCodes(source: string): IterableIterator<[uint16] | [uint16, uint16]>
 
-/**
- * Implementation of [isomorphic encode](https://infra.spec.whatwg.org/#isomorphic-encode) defined in WHATWG Infra Standard.
- *
- * @param input A string that does not contain code points greater than `U+00FF`.
- * @returns A byte sequence of isomorphic encoded `input`.
- */
-export function isomorphicEncode(input: string): Uint8Array {
-  assertString(input, "input");
-
-  // deno-lint-ignore no-control-regex
-  if (/^[\u{0}-\u{FF}]*$/u.test(input) !== true) {
-    throw new RangeError(
-      "Code point of `input` must be less than or equal to 255.",
-    );
-  }
-
-  const bytes = new Uint8Array(input.length);
-  for (let i = 0; i < input.length; i++) {
-    bytes[i] = input.charCodeAt(i);
-  }
-  return bytes;
-}
-
 // export type PatternOptions = {
 //   noUnicodeSets?: boolean;
 // };

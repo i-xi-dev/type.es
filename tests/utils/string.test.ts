@@ -43,3 +43,60 @@ Deno.test("ExtString.isomorphicDecode", () => {
     "`input` must be a `BufferSource`.",
   );
 });
+
+Deno.test("ExtString.isomorphicEncode", () => {
+  // encode(string)
+  assertStrictEquals(
+    JSON.stringify([...ExtString.isomorphicEncode("")]),
+    "[]",
+  );
+  assertStrictEquals(
+    JSON.stringify([...ExtString.isomorphicEncode("ABCD")]),
+    "[65,66,67,68]",
+  );
+  assertStrictEquals(
+    JSON.stringify([...ExtString.isomorphicEncode("\u0000\u00FF")]),
+    "[0,255]",
+  );
+
+  const c = 1200000;
+  const t = "\u0000".repeat(c);
+  //const bf = performance.now();
+  const rs = JSON.stringify([...ExtString.isomorphicEncode(t)]);
+  //console.log(performance.now() - bf);
+  assertStrictEquals(rs, JSON.stringify([...new Uint8Array(c)]));
+
+  const em = "Code point of `input` must be less than or equal to 255.";
+  assertThrows(
+    () => {
+      ExtString.isomorphicEncode("\u0100");
+    },
+    RangeError,
+    em,
+  );
+
+  assertThrows(
+    () => {
+      ExtString.isomorphicEncode("あ");
+    },
+    RangeError,
+    em,
+  );
+
+  // encode(any)
+  assertThrows(
+    () => {
+      ExtString.isomorphicEncode(undefined as unknown as string);
+    },
+    TypeError,
+    "`input` must be a \`string\`.",
+  );
+
+  assertThrows(
+    () => {
+      ExtString.isomorphicEncode(0 as unknown as string);
+    },
+    TypeError,
+    "`input` must be a `string`.",
+  );
+});
