@@ -57,49 +57,6 @@ Deno.test("StringType.toChars()", () => {
   );
 });
 
-Deno.test("StringType.isomorphicDecode", () => {
-  // decode(ArrayBuffer)
-  assertStrictEquals(StringType.isomorphicDecode(new ArrayBuffer(0)), "");
-  assertStrictEquals(
-    StringType.isomorphicDecode(Uint8Array.of(0x41, 0x42, 0x43, 0x44).buffer),
-    "ABCD",
-  );
-
-  // decode(Uint8Array)
-  assertStrictEquals(StringType.isomorphicDecode(Uint8Array.of()), "");
-  assertStrictEquals(
-    StringType.isomorphicDecode(Uint8Array.of(0x41, 0x42, 0x43, 0x44)),
-    "ABCD",
-  );
-  assertStrictEquals(
-    StringType.isomorphicDecode(Uint8Array.of(0x0, 0xFF)),
-    "\u0000\u00FF",
-  );
-
-  const c = 1200000;
-  const t = "\u0000".repeat(c);
-  //const bf = performance.now();
-  assertStrictEquals(StringType.isomorphicDecode(new Uint8Array(c)), t);
-  //console.log(performance.now() - bf);
-
-  // decode(any)
-  assertThrows(
-    () => {
-      StringType.isomorphicDecode(undefined as unknown as Uint8Array);
-    },
-    TypeError,
-    "`input` must be a `BufferSource`.",
-  );
-
-  assertThrows(
-    () => {
-      StringType.isomorphicDecode([] as unknown as Uint8Array);
-    },
-    TypeError,
-    "`input` must be a `BufferSource`.",
-  );
-});
-
 Deno.test("StringType.isomorphicEncode", () => {
   // encode(string)
   assertStrictEquals(

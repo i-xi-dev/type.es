@@ -1,3 +1,4 @@
-export * as BigIntUtils from "./bigint.ts";
-export * as NumberUtils from "./number.ts";
+export * as ExtBigInt from "./bigint.ts";
+export * as ExtNumber from "./number.ts";
+export * as ExtString from "./string.ts";
 export * as SafeInteger from "./safe_integer.ts";

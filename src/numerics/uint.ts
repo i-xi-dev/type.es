@@ -1,4 +1,4 @@
-import * as NumberUtils from "../utils/number.ts";
+import * as ExtNumber from "../utils/number.ts";
 import {
   assertNumber,
   assertSafeInteger,
@@ -169,7 +169,7 @@ class _UinNOperations<T extends int> implements UintNOperations<T> {
     }
 
     if (this.is(valueAsInt)) {
-      return NumberUtils.normalize(valueAsInt);
+      return ExtNumber.normalize(valueAsInt);
     }
 
     switch (options?.overflowMode) {
@@ -196,7 +196,7 @@ class _UinNOperations<T extends int> implements UintNOperations<T> {
   //     return this.#range.min;
   //   }
 
-  //   return NumberUtils.normalize(value as T);
+  //   return ExtNumber.normalize(value as T);
   // }
 
   #truncateFromInteger(value: int): T {
@@ -214,7 +214,7 @@ class _UinNOperations<T extends int> implements UintNOperations<T> {
   toNumber(self: T): int {
     this.assert(self, "self");
 
-    return NumberUtils.normalize(self);
+    return ExtNumber.normalize(self);
   }
 
   fromBigInt(value: bigint, options?: FromBigIntOptions): T {
