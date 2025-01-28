@@ -1,15 +1,11 @@
-import { int } from "../_.ts";
 import {
   assertString,
   type char,
   isEmptyString,
   isString,
 } from "../type/string.ts";
-
-/**
- * The zero-length string.
- */
-export const EMPTY = "";
+import { EMPTY } from "../utils/string.ts";
+import { int } from "../_.ts";
 
 export function charCountOf(value: string): int {
   assertString(value, "value");
