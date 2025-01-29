@@ -1,4 +1,5 @@
 import * as ExtNumber from "../utils/number.ts";
+import * as Safenteger from "../utils/safe_integer.ts";
 import {
   assertNumber,
   assertSafeInteger,
@@ -15,7 +16,6 @@ import {
   UintNOperations,
 } from "./ranged_integer.ts";
 import {
-  fromBigInt as safeIntegerFromBigInt,
   round as roundNumber,
   toString as safeIntegerToString,
 } from "./safe_integer.ts";
@@ -218,7 +218,7 @@ class _UinNOperations<T extends int> implements UintNOperations<T> {
   }
 
   fromBigInt(value: bigint, options?: FromBigIntOptions): T {
-    const valueAsNumber = safeIntegerFromBigInt(value);
+    const valueAsNumber = Safenteger.fromBigInt(value);
 
     if (this.is(valueAsNumber)) {
       return valueAsNumber;

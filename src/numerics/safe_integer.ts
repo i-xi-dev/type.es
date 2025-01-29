@@ -31,10 +31,6 @@ export function clampToNegative<T extends int>(value: T): T {
   return ExtNumber.normalize(Math.min(value, -1) as T);
 }
 
-export function fromBigInt(value: bigint): int {
-  return BigInteger.toNumber(value);
-}
-
 export function fromString(value: string, options?: FromStringOptions): int {
   const valueAsBigInt = fromStringToBigInt(value, options);
   return BigInteger.toNumber(valueAsBigInt);

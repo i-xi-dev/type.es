@@ -1,3 +1,4 @@
+import { assertBigIntInSafeIntegerRange } from "../type/bigint.ts";
 import { assertSafeInteger, type safeint } from "../type/number.ts";
 import { normalize } from "./number.ts";
 
@@ -12,7 +13,11 @@ export function clamp<T extends safeint>(value: safeint, min: T, max: T): T {
   return normalize(Math.min(Math.max(value, min), max)) as T;
 }
 
-//XXX fromBigInt
+export function fromBigInt(value: bigint): safeint {
+  // return BigInteger.toNumber(value);
+  assertBigIntInSafeIntegerRange(value, "value");
+  return Number(value);
+}
 
 export function toBigInt(value: safeint): bigint {
   assertSafeInteger(value, "value");

@@ -92,49 +92,6 @@ Deno.test("SafeInteger.clampToNegative()", () => {
   );
 });
 
-Deno.test("SafeInteger.fromBigInt()", () => {
-  const rfe2 = "`value` must be a `bigint` in the safe integer range.";
-
-  assertThrows(
-    () => {
-      SafeInteger.fromBigInt(undefined as unknown as bigint);
-    },
-    TypeError,
-    rfe2,
-  );
-
-  assertThrows(
-    () => {
-      SafeInteger.fromBigInt(0 as unknown as bigint);
-    },
-    TypeError,
-    rfe2,
-  );
-
-  assertThrows(
-    () => {
-      SafeInteger.fromBigInt(BigInt(MIN) - 1n);
-    },
-    TypeError,
-    rfe2,
-  );
-
-  assertThrows(
-    () => {
-      SafeInteger.fromBigInt(BigInt(MAX) + 1n);
-    },
-    TypeError,
-    rfe2,
-  );
-
-  assertStrictEquals(SafeInteger.fromBigInt(BigInt(MIN)), MIN);
-  assertStrictEquals(SafeInteger.fromBigInt(-1n), -1);
-  assertStrictEquals(SafeInteger.fromBigInt(-0n), 0);
-  assertStrictEquals(SafeInteger.fromBigInt(0n), 0);
-  assertStrictEquals(SafeInteger.fromBigInt(1n), 1);
-  assertStrictEquals(SafeInteger.fromBigInt(BigInt(MAX)), MAX);
-});
-
 Deno.test("SafeInteger.fromString()", () => {
   // const rfe1 = "`value` must be a `string`.";
   const rfe2 = "`value` must be a decimal representation of an integer.";
