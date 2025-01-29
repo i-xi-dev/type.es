@@ -35,11 +35,6 @@ export function fromBigInt(value: bigint): int {
   return BigInteger.toNumber(value);
 }
 
-export function toBigInt(value: int): bigint {
-  assertSafeInteger(value, "value");
-  return BigInt(value);
-}
-
 export function fromString(value: string, options?: FromStringOptions): int {
   const valueAsBigInt = fromStringToBigInt(value, options);
   return BigInteger.toNumber(valueAsBigInt);

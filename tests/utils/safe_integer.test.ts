@@ -1,6 +1,9 @@
 import { assertStrictEquals, assertThrows } from "@std/assert";
 import { SafeInteger } from "../../mod.ts";
 
+const MIN = Number.MIN_SAFE_INTEGER;
+const MAX = Number.MAX_SAFE_INTEGER;
+
 Deno.test("SafeInteger.clamp()", () => {
   const e1 = "`value` must be a safe integer.";
   assertThrows(
@@ -57,4 +60,47 @@ Deno.test("SafeInteger.clamp()", () => {
   assertStrictEquals(SafeInteger.clamp(1, 0, 2), 1);
   assertStrictEquals(SafeInteger.clamp(2, 0, 2), 2);
   assertStrictEquals(SafeInteger.clamp(3, 0, 2), 2);
+});
+
+Deno.test("SafeInteger.toBigInt()", () => {
+  const rfe1 = "`value` must be a safe integer.";
+
+  assertThrows(
+    () => {
+      SafeInteger.toBigInt(undefined as unknown as number);
+    },
+    TypeError,
+    rfe1,
+  );
+
+  assertThrows(
+    () => {
+      SafeInteger.toBigInt(0n as unknown as number);
+    },
+    TypeError,
+    rfe1,
+  );
+
+  assertThrows(
+    () => {
+      SafeInteger.toBigInt("0" as unknown as number);
+    },
+    TypeError,
+    rfe1,
+  );
+
+  assertThrows(
+    () => {
+      SafeInteger.toBigInt(1.5);
+    },
+    TypeError,
+    rfe1,
+  );
+
+  assertStrictEquals(SafeInteger.toBigInt(MIN), BigInt(MIN));
+  assertStrictEquals(SafeInteger.toBigInt(-1), -1n);
+  assertStrictEquals(SafeInteger.toBigInt(-0), 0n);
+  assertStrictEquals(SafeInteger.toBigInt(0), 0n);
+  assertStrictEquals(SafeInteger.toBigInt(1), 1n);
+  assertStrictEquals(SafeInteger.toBigInt(MAX), BigInt(MAX));
 });

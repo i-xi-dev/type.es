@@ -11,3 +11,10 @@ export function clamp<T extends safeint>(value: safeint, min: T, max: T): T {
   }
   return normalize(Math.min(Math.max(value, min), max)) as T;
 }
+
+//XXX fromBigInt
+
+export function toBigInt(value: safeint): bigint {
+  assertSafeInteger(value, "value");
+  return BigInt(value);
+}
