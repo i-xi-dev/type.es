@@ -1,4 +1,7 @@
-import { assertBigInt, assertBigIntInRange } from "../type/bigint.ts";
+import {
+  assertBigInt,
+  assertBigIntInSafeIntegerRange,
+} from "../type/bigint.ts";
 import { assertSafeInteger } from "../type/number.ts";
 import { biguint64, int } from "../_.ts";
 import { BigIntRange } from "./bigint_range.ts";
@@ -129,12 +132,7 @@ class _UinNOperations<T extends bigint> implements UintNOperations<T> {
 
   toNumber(self: T): int {
     this.assert(self, "self");
-    assertBigIntInRange(
-      self,
-      "self",
-      BigInt(Number.MIN_SAFE_INTEGER),
-      BigInt(Number.MAX_SAFE_INTEGER),
-    );
+    assertBigIntInSafeIntegerRange(self, "self");
 
     return Number(self);
   }

@@ -1,8 +1,6 @@
+import * as BigInteger from "../utils/big_integer.ts";
 import * as ExtNumber from "../utils/number.ts";
-import {
-  fromString as fromStringToBigInt,
-  toNumber as fromBigIntToNumber,
-} from "./bigint_type.ts";
+import { fromString as fromStringToBigInt } from "./bigint_type.ts";
 import { FromStringOptions, ToStringOptions } from "./main.ts";
 import { int } from "../_.ts";
 import {
@@ -34,7 +32,7 @@ export function clampToNegative<T extends int>(value: T): T {
 }
 
 export function fromBigInt(value: bigint): int {
-  return fromBigIntToNumber(value);
+  return BigInteger.toNumber(value);
 }
 
 export function toBigInt(value: int): bigint {
@@ -44,7 +42,7 @@ export function toBigInt(value: int): bigint {
 
 export function fromString(value: string, options?: FromStringOptions): int {
   const valueAsBigInt = fromStringToBigInt(value, options);
-  return fromBigIntToNumber(valueAsBigInt);
+  return BigInteger.toNumber(valueAsBigInt);
 }
 
 export function toString(value: int, options?: ToStringOptions): string {

@@ -91,3 +91,19 @@ export function assertBigIntInRange(
     );
   }
 }
+
+export function isBigIntInSafeIntegerRange(test: unknown): test is bigint {
+  return isBigInt(test) && (Number.MIN_SAFE_INTEGER <= test) &&
+    (Number.MAX_SAFE_INTEGER >= test);
+}
+
+export function assertBigIntInSafeIntegerRange(
+  test: unknown,
+  label: string,
+): void {
+  if (isBigIntInSafeIntegerRange(test) !== true) {
+    throw new TypeError(
+      `\`${label}\` must be a \`bigint\` in the safe integer range.`,
+    );
+  }
+}

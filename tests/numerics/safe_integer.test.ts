@@ -93,8 +93,7 @@ Deno.test("SafeInteger.clampToNegative()", () => {
 });
 
 Deno.test("SafeInteger.fromBigInt()", () => {
-  const rfe2 =
-    "`value` must be a `bigint` in the range -9007199254740991-9007199254740991.";
+  const rfe2 = "`value` must be a `bigint` in the safe integer range.";
 
   assertThrows(
     () => {
@@ -255,8 +254,7 @@ Deno.test("SafeInteger.fromString()", () => {
   assertStrictEquals(SafeInteger.fromString("1f", op16), 31);
   assertStrictEquals(SafeInteger.fromString("1F", op16), 31);
 
-  const eo =
-    "`value` must be a `bigint` in the range -9007199254740991-9007199254740991.";
+  const eo = "`value` must be a `bigint` in the safe integer range.";
   assertThrows(
     () => {
       SafeInteger.fromString("9007199254740992");

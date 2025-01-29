@@ -1,4 +1,8 @@
-import { assertBigInt } from "../type/bigint.ts";
+import {
+  assertBigInt,
+  assertBigIntInSafeIntegerRange,
+} from "../type/bigint.ts";
+import { type safeint } from "../type/number.ts";
 
 export function min<T extends bigint>(value0: T, ...values: T[]): T {
   assertBigInt(value0, `value0`);
@@ -44,4 +48,11 @@ export function clamp<T extends bigint>(value: bigint, min: T, max: T): T {
     throw new RangeError("`max` must be greater than or equal to `min`.");
   }
   return _min(_max(value, min), max) as T;
+}
+
+//XXX fromNumber
+
+export function toNumber(value: bigint): safeint {
+  assertBigIntInSafeIntegerRange(value, "value");
+  return Number(value);
 }

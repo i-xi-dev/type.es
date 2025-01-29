@@ -917,8 +917,7 @@ Deno.test("Uint24.fromBigInt()", () => {
     16777215,
   );
 
-  const e1 =
-    "`value` must be a `bigint` in the range -9007199254740991-9007199254740991.";
+  const e1 = "`value` must be a `bigint` in the safe integer range.";
   assertThrows(
     () => {
       Uint24.fromBigInt(undefined as unknown as bigint);

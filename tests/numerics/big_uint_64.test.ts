@@ -1111,7 +1111,7 @@ Deno.test("BigUint64.toNumber()", () => {
   );
 
   const e2 =
-    "`self` must be a `bigint` in the range -9007199254740991-9007199254740991.";
+    "`self` must be a `bigint` in the safe integer range.";
   assertThrows(
     () => {
       BigUint64.toNumber(0xFFFFFFFFFFFFFFFFn);

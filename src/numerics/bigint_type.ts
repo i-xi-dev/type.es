@@ -76,14 +76,3 @@ export function fromNumber(
 
   return BigInt(valueAsInt);
 }
-
-export function toNumber(value: bigint): int {
-  assertBigIntInRange(
-    value,
-    "value",
-    BigInt(Number.MIN_SAFE_INTEGER),
-    BigInt(Number.MAX_SAFE_INTEGER),
-  );
-
-  return Number(value);
-}
