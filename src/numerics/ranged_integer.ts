@@ -1,6 +1,6 @@
 import { int, xint } from "../_.ts";
 import { OverflowMode } from "./overflow_mode.ts";
-import { Radix } from "../basics/radix.ts";
+import { type radix } from "../utils/radix.ts";
 import { RoundingMode } from "./rounding_mode.ts";
 
 export type FromNumberOptions = {
@@ -14,13 +14,13 @@ export type FromBigIntOptions = {
 
 export type FromStringOptions = {
   overflowMode?: OverflowMode;
-  radix?: Radix;
+  radix?: radix;
 }; // Numerics.FromStringOptions & { overflowMode }
 
 export type ToStringOptions = {
   lowerCase?: boolean;
   minIntegralDigits?: int;
-  radix?: Radix;
+  radix?: radix;
 }; // Numerics.ToStringOptions;
 
 export interface UintNOperations<T extends xint> {

@@ -1202,10 +1202,10 @@ Deno.test("Uint32.fromString()", () => {
   assertStrictEquals(Uint32.fromString("4294967296"), 4294967295);
 
   // const e1 = "`value` must be a `string`.";
-  const e2 = "`value` must be a decimal representation of an integer.";
-  const e22 = "`value` must be a binary representation of an integer.";
-  const e28 = "`value` must be an octal representation of an integer.";
-  const e216 = "`value` must be a hexadecimal representation of an integer.";
+  const e2 = "`value` must be text representation of 10 based integer.";
+  const e22 = "`value` must be text representation of 2 based integer.";
+  const e28 = "`value` must be text representation of 8 based integer.";
+  const e216 = "`value` must be text representation of 16 based integer.";
   assertThrows(
     () => {
       Uint32.fromString("");

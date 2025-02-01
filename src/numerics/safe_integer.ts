@@ -8,7 +8,7 @@ import {
   isEvenSafeInteger,
   isPositiveNumber,
 } from "../type/number.ts";
-import { RadixProperties } from "../basics/radix.ts";
+import { Radix } from "../utils/radix.ts";
 import { RoundingMode } from "./rounding_mode.ts";
 
 export function clampToPositive<T extends int>(value: T): T {
@@ -39,7 +39,7 @@ export function fromString(value: string, options?: FromStringOptions): int {
 export function toString(value: int, options?: ToStringOptions): string {
   assertSafeInteger(value, "value");
 
-  const radix = RadixProperties.of(options?.radix).radix;
+  const radix = Radix.from(options?.radix).radix;
   let result = value.toString(radix);
 
   if (options?.lowerCase !== true) {

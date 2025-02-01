@@ -15,7 +15,7 @@ import {
   isPositiveSafeInteger,
 } from "../type/number.ts";
 import { isString } from "../type/string.ts";
-import { Radix, RadixProperties } from "../basics/radix.ts";
+import { integerPatternOf, type radix } from "../utils/radix.ts";
 import { xint } from "../_.ts";
 
 // ここでは、safe integerではないnumber型は「整数」とみなさない
@@ -46,22 +46,24 @@ export function isEven(test: unknown): test is xint {
 
 export function isStringified(
   test: unknown,
-  radix?: Radix,
+  radix: radix = 10,
 ): test is string {
-  const integralRegex = RadixProperties.of(radix).digitsRegex;
-  return isString(test) && integralRegex.test(test);
+  if (isString(test)) {
+    return (new RegExp(integerPatternOf(radix, { includesSign: true }))).test(
+      test,
+    );
+  }
+  return false;
 }
 
 export function assertStringified(
   test: unknown,
   label: string,
-  radix?: Radix,
+  radix: radix = 10,
 ): void {
   if (isStringified(test, radix) !== true) {
     throw new TypeError(
-      `\`${label}\` must be ${
-        RadixProperties.of(radix).label
-      } representation of an integer.`,
+      `\`${label}\` must be text representation of ${radix} based integer.`,
     );
   }
 }

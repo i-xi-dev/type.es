@@ -1,4 +1,9 @@
-import { assertStrictEquals, fail, unreachable } from "@std/assert";
+import {
+  assertStrictEquals,
+  assertThrows,
+  fail,
+  unreachable,
+} from "@std/assert";
 import { Numerics } from "../../mod.ts";
 
 const { Integer } = Numerics;
@@ -535,39 +540,47 @@ Deno.test("Integer.isStringified() - 16", () => {
 });
 
 Deno.test("Integer.isStringified() - X", () => {
-  assertStrictEquals(Integer.isStringified("0", 101 as 2), true);
-  assertStrictEquals(Integer.isStringified("-0", 101 as 2), true);
-  assertStrictEquals(Integer.isStringified("+0", 101 as 2), true);
-  assertStrictEquals(Integer.isStringified("-1", 101 as 2), true);
-  assertStrictEquals(Integer.isStringified("+1", 101 as 2), true);
-
-  assertStrictEquals(Integer.isStringified("2", 101 as 2), true);
-  assertStrictEquals(Integer.isStringified("3", 101 as 2), true);
-  assertStrictEquals(Integer.isStringified("4", 101 as 2), true);
-  assertStrictEquals(Integer.isStringified("5", 101 as 2), true);
-  assertStrictEquals(Integer.isStringified("6", 101 as 2), true);
-  assertStrictEquals(Integer.isStringified("7", 101 as 2), true);
-  assertStrictEquals(Integer.isStringified("8", 101 as 2), true);
-  assertStrictEquals(Integer.isStringified("9", 101 as 2), true);
-  assertStrictEquals(Integer.isStringified("A", 101 as 2), false);
-  assertStrictEquals(Integer.isStringified("b", 101 as 2), false);
-  assertStrictEquals(Integer.isStringified("c", 101 as 2), false);
-  assertStrictEquals(Integer.isStringified("D", 101 as 2), false);
-  assertStrictEquals(Integer.isStringified("e", 101 as 2), false);
-  assertStrictEquals(Integer.isStringified("F", 101 as 2), false);
-  assertStrictEquals(Integer.isStringified("G", 101 as 2), false);
-  assertStrictEquals(Integer.isStringified("10", 101 as 2), true);
-
-  assertStrictEquals(Integer.isStringified("0.5", 101 as 2), false);
-  assertStrictEquals(Integer.isStringified(0, 101 as 2), false);
-
-  assertStrictEquals(
-    Integer.isStringified(
-      "10000000000000000000000000000000000000000000000000000000000",
-      101 as 2,
-    ),
-    true,
+  assertThrows(
+    () => {
+      Integer.isStringified("0", 101 as 2);
+    },
+    TypeError,
+    "`radix` must be 2, 8, 10 or 16.",
   );
+
+  // assertStrictEquals(Integer.isStringified("0", 101 as 2), true);
+  // assertStrictEquals(Integer.isStringified("-0", 101 as 2), true);
+  // assertStrictEquals(Integer.isStringified("+0", 101 as 2), true);
+  // assertStrictEquals(Integer.isStringified("-1", 101 as 2), true);
+  // assertStrictEquals(Integer.isStringified("+1", 101 as 2), true);
+
+  // assertStrictEquals(Integer.isStringified("2", 101 as 2), true);
+  // assertStrictEquals(Integer.isStringified("3", 101 as 2), true);
+  // assertStrictEquals(Integer.isStringified("4", 101 as 2), true);
+  // assertStrictEquals(Integer.isStringified("5", 101 as 2), true);
+  // assertStrictEquals(Integer.isStringified("6", 101 as 2), true);
+  // assertStrictEquals(Integer.isStringified("7", 101 as 2), true);
+  // assertStrictEquals(Integer.isStringified("8", 101 as 2), true);
+  // assertStrictEquals(Integer.isStringified("9", 101 as 2), true);
+  // assertStrictEquals(Integer.isStringified("A", 101 as 2), false);
+  // assertStrictEquals(Integer.isStringified("b", 101 as 2), false);
+  // assertStrictEquals(Integer.isStringified("c", 101 as 2), false);
+  // assertStrictEquals(Integer.isStringified("D", 101 as 2), false);
+  // assertStrictEquals(Integer.isStringified("e", 101 as 2), false);
+  // assertStrictEquals(Integer.isStringified("F", 101 as 2), false);
+  // assertStrictEquals(Integer.isStringified("G", 101 as 2), false);
+  // assertStrictEquals(Integer.isStringified("10", 101 as 2), true);
+
+  // assertStrictEquals(Integer.isStringified("0.5", 101 as 2), false);
+  // assertStrictEquals(Integer.isStringified(0, 101 as 2), false);
+
+  // assertStrictEquals(
+  //   Integer.isStringified(
+  //     "10000000000000000000000000000000000000000000000000000000000",
+  //     101 as 2,
+  //   ),
+  //   true,
+  // );
 });
 
 Deno.test("Integer.assertStringified()", () => {

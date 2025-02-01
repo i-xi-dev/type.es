@@ -39,7 +39,7 @@ Deno.test("BigIntType.fromString()", () => {
 
   assertStrictEquals(BigIntType.fromString("+111"), 111n);
 
-  const e1 = "`value` must be a decimal representation of an integer.";
+  const e1 = "`value` must be text representation of 10 based integer.";
   assertThrows(
     () => {
       BigIntType.fromString(undefined as unknown as string);
@@ -77,7 +77,7 @@ Deno.test("BigIntType.fromString() - 2", () => {
 
   assertStrictEquals(BigIntType.fromString("+111", op2), 7n);
 
-  const e1 = "`value` must be a binary representation of an integer.";
+  const e1 = "`value` must be text representation of 2 based integer.";
   assertThrows(
     () => {
       BigIntType.fromString(undefined as unknown as string, op2);
@@ -127,7 +127,7 @@ Deno.test("BigIntType.fromString() - 8", () => {
 
   assertStrictEquals(BigIntType.fromString("+111", op8), 73n);
 
-  const e1 = "`value` must be an octal representation of an integer.";
+  const e1 = "`value` must be text representation of 8 based integer.";
   assertThrows(
     () => {
       BigIntType.fromString(undefined as unknown as string, op8);
@@ -181,7 +181,7 @@ Deno.test("BigIntType.fromString() - 10", () => {
 
   assertStrictEquals(BigIntType.fromString("+111", op10), 111n);
 
-  const e1 = "`value` must be a decimal representation of an integer.";
+  const e1 = "`value` must be text representation of 10 based integer.";
   assertThrows(
     () => {
       BigIntType.fromString(undefined as unknown as string, op10);
@@ -247,7 +247,7 @@ Deno.test("BigIntType.fromString() - 16", () => {
 
   assertStrictEquals(BigIntType.fromString("+111", op16), 273n);
 
-  const e1 = "`value` must be a hexadecimal representation of an integer.";
+  const e1 = "`value` must be text representation of 16 based integer.";
   assertThrows(
     () => {
       BigIntType.fromString(undefined as unknown as string, op16);

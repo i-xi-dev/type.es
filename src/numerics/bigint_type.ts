@@ -1,4 +1,4 @@
-import { assertBigInt, assertBigIntInRange } from "../type/bigint.ts";
+import { assertBigInt } from "../type/bigint.ts";
 import {
   assertNumber,
   isPositiveSafeInteger,
@@ -12,7 +12,7 @@ import {
 } from "./main.ts";
 import { int } from "../_.ts";
 import { round as roundNumber } from "./safe_integer.ts";
-import { RadixProperties } from "../basics/radix.ts";
+import { Radix } from "../utils/radix.ts";
 
 export function fromString(value: string, options?: FromStringOptions): bigint {
   assertStringifiedInteger(value, "value", options?.radix);
@@ -20,7 +20,7 @@ export function fromString(value: string, options?: FromStringOptions): bigint {
   const negative = value.startsWith("-");
   let adjustedValue = value;
   adjustedValue = adjustedValue.replace(/^[-+]?/, "");
-  adjustedValue = RadixProperties.of(options?.radix).prefix + adjustedValue;
+  adjustedValue = Radix.from(options?.radix).prefix + adjustedValue;
   let valueAsBigInt = BigInt(adjustedValue);
   if (negative === true) {
     valueAsBigInt *= -1n;
@@ -32,7 +32,7 @@ export function fromString(value: string, options?: FromStringOptions): bigint {
 export function toString(value: bigint, options?: ToStringOptions): string {
   assertBigInt(value, "value");
 
-  const radix = RadixProperties.of(options?.radix).radix;
+  const radix = Radix.from(options?.radix).radix;
   let result = value.toString(radix);
 
   if (options?.lowerCase !== true) {

@@ -2,7 +2,6 @@ import { codepoint, plane } from "../_.ts";
 import { IntegerRange } from "../numerics/integer_range.ts";
 import { is as isPlane } from "./plane.ts";
 import { isSafeIntegerInRange } from "../type/number.ts";
-import { Radix } from "../basics/radix.ts";
 import { SafeIntegerRange } from "../numerics/safe_integer_range.ts";
 import { toString as safeIntegerToString } from "../numerics/safe_integer.ts";
 import { ToStringOptions } from "../numerics/main.ts";
@@ -24,7 +23,7 @@ export function assert(test: unknown, label: string): void {
 const _toStringOptions: ToStringOptions = {
   // lowerCase: false,
   minIntegralDigits: 4,
-  radix: Radix.HEXADECIMAL,
+  radix: 16,
 } as const;
 
 export function toString(codePoint: codepoint): string {
