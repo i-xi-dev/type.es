@@ -1,4 +1,3 @@
-import * as SafeInteger from "./safe_integer.ts";
 import { assertBigInt, assertBigIntInSafeIntegerRange } from "../bigint.ts";
 import { assertStringified as assertStringifiedInteger } from "../../numerics/integer.ts";
 import {
@@ -13,6 +12,7 @@ import {
   isSafeInteger,
   type safeint,
 } from "../number.ts";
+import { round as roundFromNumber } from "./safe_integer.ts";
 import { RoundingMode } from "./rounding_mode.ts";
 
 export function min<T extends bigint>(value0: T, ...values: T[]): T {
@@ -133,7 +133,7 @@ export function fromNumber(
   if (isSafeInteger(adjustedValue)) {
     valueAsInt = adjustedValue;
   } else {
-    valueAsInt = SafeInteger.round(adjustedValue, options?.roundingMode);
+    valueAsInt = roundFromNumber(adjustedValue, options?.roundingMode);
   }
 
   return BigInt(valueAsInt);

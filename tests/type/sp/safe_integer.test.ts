@@ -62,6 +62,26 @@ Deno.test("SafeInteger.clamp()", () => {
   assertStrictEquals(SafeInteger.clamp(3, 0, 2), 2);
 });
 
+Deno.test("SafeInteger.clampToPositive()", () => {
+  assertStrictEquals(SafeInteger.clampToPositive(MIN), 1);
+  assertStrictEquals(SafeInteger.clampToPositive(-2), 1);
+  assertStrictEquals(SafeInteger.clampToPositive(-1), 1);
+  assertStrictEquals(SafeInteger.clampToPositive(-0), 1);
+  assertStrictEquals(SafeInteger.clampToPositive(0), 1);
+  assertStrictEquals(SafeInteger.clampToPositive(1), 1);
+  assertStrictEquals(SafeInteger.clampToPositive(2), 2);
+  assertStrictEquals(SafeInteger.clampToPositive(MAX), MAX);
+
+  const e1 = "`value` must be a safe integer.";
+  assertThrows(
+    () => {
+      SafeInteger.clampToPositive(undefined as unknown as number);
+    },
+    TypeError,
+    e1,
+  );
+});
+
 Deno.test("SafeInteger.fromString()", () => {
   // const rfe1 = "`value` must be a `string`.";
   const rfe2 = "`value` must be text representation of 10 based integer.";

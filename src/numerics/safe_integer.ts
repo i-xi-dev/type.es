@@ -2,11 +2,6 @@ import { int } from "../_.ts";
 import { assertSafeInteger } from "../type/number.ts";
 import { normalize as normalizeNumber } from "../type/sp/number.ts";
 
-export function clampToPositive<T extends int>(value: T): T {
-  assertSafeInteger(value, "value");
-  return normalizeNumber(Math.max(value, 1) as T);
-}
-
 export function clampToNonNegative<T extends int>(value: T): T {
   assertSafeInteger(value, "value");
   return normalizeNumber(Math.max(value, 0) as T);

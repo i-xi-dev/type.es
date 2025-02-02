@@ -6,26 +6,6 @@ const { SafeInteger } = Numerics;
 const MIN = Number.MIN_SAFE_INTEGER;
 const MAX = Number.MAX_SAFE_INTEGER;
 
-Deno.test("SafeInteger.clampToPositive()", () => {
-  assertStrictEquals(SafeInteger.clampToPositive(MIN), 1);
-  assertStrictEquals(SafeInteger.clampToPositive(-2), 1);
-  assertStrictEquals(SafeInteger.clampToPositive(-1), 1);
-  assertStrictEquals(SafeInteger.clampToPositive(-0), 1);
-  assertStrictEquals(SafeInteger.clampToPositive(0), 1);
-  assertStrictEquals(SafeInteger.clampToPositive(1), 1);
-  assertStrictEquals(SafeInteger.clampToPositive(2), 2);
-  assertStrictEquals(SafeInteger.clampToPositive(MAX), MAX);
-
-  const e1 = "`value` must be a safe integer.";
-  assertThrows(
-    () => {
-      SafeInteger.clampToPositive(undefined as unknown as number);
-    },
-    TypeError,
-    e1,
-  );
-});
-
 Deno.test("SafeInteger.clampToNonNegative()", () => {
   assertStrictEquals(SafeInteger.clampToNonNegative(MIN), 0);
   assertStrictEquals(SafeInteger.clampToNonNegative(-2), 0);

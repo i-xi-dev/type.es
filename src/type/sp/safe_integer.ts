@@ -27,6 +27,11 @@ export function clamp<T extends safeint>(value: safeint, min: T, max: T): T {
   return normalizeNumber(Math.min(Math.max(value, min), max)) as T;
 }
 
+export function clampToPositive<T extends safeint>(value: T): T {
+  assertSafeInteger(value, "value");
+  return normalizeNumber(Math.max(value, 1) as T);
+}
+
 export type FromStringOptions = {
   radix?: radix;
 };
