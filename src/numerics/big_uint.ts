@@ -15,10 +15,7 @@ import {
   Uint8xOperations,
   UintNOperations,
 } from "./ranged_integer.ts";
-import {
-  fromNumber as bigIntFromNumber,
-  toString as bigIntToString,
-} from "./bigint_type.ts";
+import { fromNumber as bigIntFromNumber } from "./bigint_type.ts";
 import { OverflowMode } from "./overflow_mode.ts";
 
 class _UinNOperations<T extends bigint> implements UintNOperations<T> {
@@ -171,7 +168,7 @@ class _UinNOperations<T extends bigint> implements UintNOperations<T> {
 
   toString(self: T, options?: ToStringOptions): string {
     this.assert(self, "self");
-    return bigIntToString(self, options);
+    return BigInteger.toString(self, options);
   }
 }
 

@@ -1,35 +1,7 @@
-import { assertBigInt } from "../type/bigint.ts";
-import {
-  assertNumber,
-  isPositiveSafeInteger,
-  isSafeInteger,
-} from "../type/number.ts";
-import {
-  assertSupportedRadix,
-  DECIMAL as DECIMAL_RADIX,
-} from "../utils/radix.ts";
-import { FromNumberOptions, ToStringOptions } from "./main.ts";
+import { assertNumber, isSafeInteger } from "../type/number.ts";
+import { FromNumberOptions } from "./main.ts";
 import { int } from "../_.ts";
 import { round as roundNumber } from "./safe_integer.ts";
-
-export function toString(value: bigint, options?: ToStringOptions): string {
-  assertBigInt(value, "value");
-  const radix = options?.radix ?? DECIMAL_RADIX;
-  assertSupportedRadix(radix, "radix");
-
-  let result = value.toString(radix);
-
-  if (options?.lowerCase !== true) {
-    result = result.toUpperCase();
-  }
-
-  const minIntegralDigits = options?.minIntegralDigits;
-  if (isPositiveSafeInteger(minIntegralDigits)) {
-    result = result.padStart(minIntegralDigits, "0");
-  }
-
-  return result;
-}
 
 export function fromNumber(
   value: number,

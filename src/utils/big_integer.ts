@@ -3,8 +3,13 @@ import {
   assertBigIntInSafeIntegerRange,
 } from "../type/bigint.ts";
 import { assertStringified as assertStringifiedInteger } from "../numerics/integer.ts";
-import { DECIMAL as DECIMAL_RADIX, prefixOf, type radix } from "./radix.ts";
-import { type safeint } from "../type/number.ts";
+import {
+  assertSupportedRadix,
+  DECIMAL as DECIMAL_RADIX,
+  prefixOf,
+  type radix,
+} from "./radix.ts";
+import { isPositiveSafeInteger, type safeint } from "../type/number.ts";
 
 export function min<T extends bigint>(value0: T, ...values: T[]): T {
   assertBigInt(value0, `value0`);
@@ -72,7 +77,30 @@ export function fromString(value: string, options?: FromStringOptions): bigint {
   return valueAsBigInt;
 }
 
-//XXX toString
+export type ToStringOptions = {
+  lowerCase?: boolean;
+  minIntegralDigits?: number;
+  radix?: radix;
+};
+
+export function toString(value: bigint, options?: ToStringOptions): string {
+  assertBigInt(value, "value");
+  const radix = options?.radix ?? DECIMAL_RADIX;
+  assertSupportedRadix(radix, "radix");
+
+  let result = value.toString(radix);
+
+  if (options?.lowerCase !== true) {
+    result = result.toUpperCase();
+  }
+
+  const minIntegralDigits = options?.minIntegralDigits;
+  if (isPositiveSafeInteger(minIntegralDigits)) {
+    result = result.padStart(minIntegralDigits, "0");
+  }
+
+  return result;
+}
 
 //XXX fromNumber
 
