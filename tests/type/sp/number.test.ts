@@ -1,5 +1,5 @@
 import { assertStrictEquals, assertThrows } from "@std/assert";
-import { ExtNumber } from "../../mod.ts";
+import { ExtNumber } from "../../../mod.ts";
 
 Deno.test("ExtNumber.normalize()", () => {
   assertStrictEquals(Object.is(ExtNumber.normalize(0), 0), true);

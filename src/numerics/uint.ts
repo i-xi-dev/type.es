@@ -1,4 +1,3 @@
-import * as ExtNumber from "../utils/number.ts";
 import * as SafeInteger from "../utils/safe_integer.ts";
 import {
   assertNumber,
@@ -17,6 +16,7 @@ import {
 } from "./ranged_integer.ts";
 import { fromString as bigintFromString } from "../type/sp/bigint.ts";
 import { int, uint16, uint24, uint32, uint6, uint7, uint8 } from "../_.ts";
+import { normalize as normalizeNumber } from "../type/sp/number.ts";
 import { OverflowMode } from "./overflow_mode.ts";
 import { SafeIntegerRange } from "./safe_integer_range.ts";
 
@@ -165,7 +165,7 @@ class _UinNOperations<T extends int> implements UintNOperations<T> {
     }
 
     if (this.is(valueAsInt)) {
-      return ExtNumber.normalize(valueAsInt);
+      return normalizeNumber(valueAsInt);
     }
 
     switch (options?.overflowMode) {
@@ -210,7 +210,7 @@ class _UinNOperations<T extends int> implements UintNOperations<T> {
   toNumber(self: T): int {
     this.assert(self, "self");
 
-    return ExtNumber.normalize(self);
+    return normalizeNumber(self);
   }
 
   fromBigInt(value: bigint, options?: FromBigIntOptions): T {

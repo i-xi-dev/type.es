@@ -1,9 +1,4 @@
 import {
-  fromString as bigintFromString,
-  toNumber as bigintToNumber,
-} from "../type/sp/bigint.ts";
-import * as ExtNumber from "../utils/number.ts";
-import {
   assertSafeInteger,
   isEvenSafeInteger,
   isPositiveNumber,
@@ -14,7 +9,11 @@ import {
   DECIMAL as DECIMAL_RADIX,
   type radix,
 } from "./radix.ts";
-import { normalize } from "./number.ts";
+import {
+  fromString as bigintFromString,
+  toNumber as bigintToNumber,
+} from "../type/sp/bigint.ts";
+import { normalize as normalizeNumber } from "../type/sp/number.ts";
 import { RoundingMode } from "./rounding_mode.ts";
 
 export function clamp<T extends safeint>(value: safeint, min: T, max: T): T {
@@ -25,7 +24,7 @@ export function clamp<T extends safeint>(value: safeint, min: T, max: T): T {
   if (min > max) {
     throw new RangeError("`max` must be greater than or equal to `min`.");
   }
-  return normalize(Math.min(Math.max(value, min), max)) as T;
+  return normalizeNumber(Math.min(Math.max(value, min), max)) as T;
 }
 
 export type FromStringOptions = {
@@ -80,7 +79,7 @@ export function round(value: number, roundingMode?: RoundingMode): safeint {
     throw new TypeError("`value` must be a finite number.");
   }
 
-  const integralPart = ExtNumber.normalize(Math.trunc(value));
+  const integralPart = normalizeNumber(Math.trunc(value));
   const integralPartIsEven = isEvenSafeInteger(integralPart);
 
   const resolvedRoundingMode =
@@ -89,11 +88,11 @@ export function round(value: number, roundingMode?: RoundingMode): safeint {
       : RoundingMode.TRUNCATE;
 
   if (Number.isInteger(value)) {
-    return ExtNumber.normalize(value);
+    return normalizeNumber(value);
   }
 
-  const nearestP = ExtNumber.normalize(Math.ceil(value));
-  const nearestN = ExtNumber.normalize(Math.floor(value));
+  const nearestP = normalizeNumber(Math.ceil(value));
+  const nearestN = normalizeNumber(Math.floor(value));
   const sourceIsNegative = value < 0;
   const nearestPH = nearestP - 0.5;
   const nearestNH = nearestN + 0.5;
