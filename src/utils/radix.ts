@@ -1,7 +1,15 @@
 import { EMPTY as EMPTY_STRING } from "./string.ts";
 
+export const BINARY = 2;
+
+export const OCTAL = 8;
+
+export const DECIMAL = 10;
+
+export const HEXADECIMAL = 16;
+
 // 2,8,10,16にしているのはstringからbigintへのパースが面倒になるからというだけ
-const _radix = [2, 8, 10, 16] as const;
+const _radix = [BINARY, OCTAL, DECIMAL, HEXADECIMAL] as const;
 
 export type radix = typeof _radix[number];
 
@@ -9,7 +17,7 @@ function _isSupportedRadix(test: unknown): test is radix {
   return _radix.includes(test as radix);
 }
 
-function _assertSupportedRadix(test: unknown, label: string): void {
+export function assertSupportedRadix(test: unknown, label: string): void {
   if (_isSupportedRadix(test) !== true) {
     throw new TypeError(`\`${label}\` must be 2, 8, 10 or 16.`);
   }
@@ -25,7 +33,7 @@ export function integerPatternOf(
   radix: radix,
   options?: PatternOptions,
 ): string {
-  _assertSupportedRadix(radix, "radix");
+  assertSupportedRadix(radix, "radix");
 
   let signPattern = EMPTY_STRING;
   if (options?.includesSign) {
@@ -35,16 +43,16 @@ export function integerPatternOf(
   // 2-36でなく2|8|10|16なので算出せずに固定値を返す
   let digitsPattern = EMPTY_STRING;
   switch (radix) {
-    case 2:
+    case BINARY:
       digitsPattern = "[01]+";
       break;
-    case 8:
+    case OCTAL:
       digitsPattern = "[0-7]+";
       break;
-    case 10:
+    case DECIMAL:
       digitsPattern = "[0-9]+";
       break;
-    case 16:
+    case HEXADECIMAL:
       digitsPattern = "[0-9a-fA-F]+";
       break;
   }
@@ -52,51 +60,19 @@ export function integerPatternOf(
   return `^${signPattern}${digitsPattern}$`;
 }
 
-/*
-TODO
+export function prefixOf(radix: radix): string {
+  assertSupportedRadix(radix, "radix");
 
-
-*/
-
-export type Radix = {
-  prefix: string;
-  radix: radix;
-};
-
-export namespace Radix {
-  export const BINARY: Radix = {
-    prefix: "0b",
-    radix: 2,
-  } as const;
-
-  export const OCTAL: Radix = {
-    prefix: "0o",
-    radix: 8,
-  } as const;
-
-  export const DECIMAL: Radix = {
-    prefix: EMPTY_STRING,
-    radix: 10,
-  } as const;
-
-  export const HEXADECIMAL: Radix = {
-    prefix: "0x",
-    radix: 16,
-  } as const;
-
-  export function from(radix?: radix): Radix {
-    switch (radix) {
-      // case 10:
-      //   return DECIMAL;
-      case 16:
-        return HEXADECIMAL;
-      case 2:
-        return BINARY;
-      case 8:
-        return OCTAL;
-      default:
-        // throw new TypeError("");
-        return DECIMAL;
-    }
+  switch (radix) {
+    case BINARY:
+      return "0b";
+    case OCTAL:
+      return "0o";
+    // case DECIMAL:
+    //   return EMPTY_STRING;
+    case HEXADECIMAL:
+      return "0x";
+    default:
+      return EMPTY_STRING;
   }
 }

@@ -503,29 +503,35 @@ Deno.test("SafeInteger.toString() - radix:16", () => {
 });
 
 Deno.test("SafeInteger.toString() - radix:unknown", () => {
-  // radix:10 として処理する
   const op = { radix: 3 as 10 } as const;
 
-  assertStrictEquals(SafeInteger.toString(-1, op), "-1");
-  assertStrictEquals(SafeInteger.toString(-0, op), "0");
-  assertStrictEquals(SafeInteger.toString(0, op), "0");
-  assertStrictEquals(SafeInteger.toString(1, op), "1");
+  assertThrows(
+    () => {
+      SafeInteger.toString(-1, op);
+    },
+    TypeError,
+    "`radix` must be 2, 8, 10 or 16.",
+  );
+  // assertStrictEquals(SafeInteger.toString(-1, op), "-1");
+  // assertStrictEquals(SafeInteger.toString(-0, op), "0");
+  // assertStrictEquals(SafeInteger.toString(0, op), "0");
+  // assertStrictEquals(SafeInteger.toString(1, op), "1");
 
-  assertStrictEquals(SafeInteger.toString(1111, op), "1111");
+  // assertStrictEquals(SafeInteger.toString(1111, op), "1111");
 
-  assertStrictEquals(SafeInteger.toString(2, op), "2");
-  assertStrictEquals(SafeInteger.toString(3, op), "3");
-  assertStrictEquals(SafeInteger.toString(4, op), "4");
-  assertStrictEquals(SafeInteger.toString(5, op), "5");
-  assertStrictEquals(SafeInteger.toString(6, op), "6");
-  assertStrictEquals(SafeInteger.toString(7, op), "7");
-  assertStrictEquals(SafeInteger.toString(8, op), "8");
-  assertStrictEquals(SafeInteger.toString(9, op), "9");
-  assertStrictEquals(SafeInteger.toString(10, op), "10");
-  assertStrictEquals(SafeInteger.toString(11, op), "11");
-  assertStrictEquals(SafeInteger.toString(12, op), "12");
-  assertStrictEquals(SafeInteger.toString(13, op), "13");
-  assertStrictEquals(SafeInteger.toString(14, op), "14");
-  assertStrictEquals(SafeInteger.toString(15, op), "15");
-  assertStrictEquals(SafeInteger.toString(16, op), "16");
+  // assertStrictEquals(SafeInteger.toString(2, op), "2");
+  // assertStrictEquals(SafeInteger.toString(3, op), "3");
+  // assertStrictEquals(SafeInteger.toString(4, op), "4");
+  // assertStrictEquals(SafeInteger.toString(5, op), "5");
+  // assertStrictEquals(SafeInteger.toString(6, op), "6");
+  // assertStrictEquals(SafeInteger.toString(7, op), "7");
+  // assertStrictEquals(SafeInteger.toString(8, op), "8");
+  // assertStrictEquals(SafeInteger.toString(9, op), "9");
+  // assertStrictEquals(SafeInteger.toString(10, op), "10");
+  // assertStrictEquals(SafeInteger.toString(11, op), "11");
+  // assertStrictEquals(SafeInteger.toString(12, op), "12");
+  // assertStrictEquals(SafeInteger.toString(13, op), "13");
+  // assertStrictEquals(SafeInteger.toString(14, op), "14");
+  // assertStrictEquals(SafeInteger.toString(15, op), "15");
+  // assertStrictEquals(SafeInteger.toString(16, op), "16");
 });

@@ -185,6 +185,278 @@ Deno.test("BigInteger.clamp()", () => {
   );
 });
 
+Deno.test("BigInteger.fromString()", () => {
+  assertStrictEquals(BigInteger.fromString("0"), 0n);
+  assertStrictEquals(BigInteger.fromString("-0"), 0n);
+  assertStrictEquals(BigInteger.fromString("+0"), 0n);
+  assertStrictEquals(BigInteger.fromString("1"), 1n);
+  assertStrictEquals(BigInteger.fromString("-1"), -1n);
+  assertStrictEquals(BigInteger.fromString("+1"), 1n);
+  assertStrictEquals(BigInteger.fromString("2"), 2n);
+  assertStrictEquals(BigInteger.fromString("-2"), -2n);
+  assertStrictEquals(BigInteger.fromString("3"), 3n);
+  assertStrictEquals(BigInteger.fromString("-3"), -3n);
+  assertStrictEquals(BigInteger.fromString("4"), 4n);
+  assertStrictEquals(BigInteger.fromString("-4"), -4n);
+  assertStrictEquals(BigInteger.fromString("5"), 5n);
+  assertStrictEquals(BigInteger.fromString("-5"), -5n);
+  assertStrictEquals(BigInteger.fromString("6"), 6n);
+  assertStrictEquals(BigInteger.fromString("-6"), -6n);
+  assertStrictEquals(BigInteger.fromString("7"), 7n);
+  assertStrictEquals(BigInteger.fromString("-7"), -7n);
+  assertStrictEquals(BigInteger.fromString("8"), 8n);
+  assertStrictEquals(BigInteger.fromString("-8"), -8n);
+  assertStrictEquals(BigInteger.fromString("9"), 9n);
+  assertStrictEquals(BigInteger.fromString("-9"), -9n);
+  assertStrictEquals(BigInteger.fromString("10"), 10n);
+  assertStrictEquals(BigInteger.fromString("-10"), -10n);
+
+  assertStrictEquals(BigInteger.fromString("+111"), 111n);
+
+  const e1 = "`value` must be text representation of 10 based integer.";
+  assertThrows(
+    () => {
+      BigInteger.fromString(undefined as unknown as string);
+    },
+    TypeError,
+    e1,
+  );
+  assertThrows(
+    () => {
+      BigInteger.fromString("" as unknown as string);
+    },
+    TypeError,
+    e1,
+  );
+  assertThrows(
+    () => {
+      BigInteger.fromString("A" as unknown as string);
+    },
+    TypeError,
+    e1,
+  );
+});
+
+Deno.test("BigInteger.fromString() - 2", () => {
+  const op2 = { radix: 2 } as const;
+
+  assertStrictEquals(BigInteger.fromString("0", op2), 0n);
+  assertStrictEquals(BigInteger.fromString("-0", op2), 0n);
+  assertStrictEquals(BigInteger.fromString("+0", op2), 0n);
+  assertStrictEquals(BigInteger.fromString("1", op2), 1n);
+  assertStrictEquals(BigInteger.fromString("-1", op2), -1n);
+  assertStrictEquals(BigInteger.fromString("+1", op2), 1n);
+  assertStrictEquals(BigInteger.fromString("10", op2), 2n);
+  assertStrictEquals(BigInteger.fromString("-10", op2), -2n);
+
+  assertStrictEquals(BigInteger.fromString("+111", op2), 7n);
+
+  const e1 = "`value` must be text representation of 2 based integer.";
+  assertThrows(
+    () => {
+      BigInteger.fromString(undefined as unknown as string, op2);
+    },
+    TypeError,
+    e1,
+  );
+  assertThrows(
+    () => {
+      BigInteger.fromString("" as unknown as string, op2);
+    },
+    TypeError,
+    e1,
+  );
+  assertThrows(
+    () => {
+      BigInteger.fromString("2" as unknown as string, op2);
+    },
+    TypeError,
+    e1,
+  );
+});
+
+Deno.test("BigInteger.fromString() - 8", () => {
+  const op8 = { radix: 8 } as const;
+
+  assertStrictEquals(BigInteger.fromString("0", op8), 0n);
+  assertStrictEquals(BigInteger.fromString("-0", op8), 0n);
+  assertStrictEquals(BigInteger.fromString("+0", op8), 0n);
+  assertStrictEquals(BigInteger.fromString("1", op8), 1n);
+  assertStrictEquals(BigInteger.fromString("-1", op8), -1n);
+  assertStrictEquals(BigInteger.fromString("+1", op8), 1n);
+  assertStrictEquals(BigInteger.fromString("2", op8), 2n);
+  assertStrictEquals(BigInteger.fromString("-2", op8), -2n);
+  assertStrictEquals(BigInteger.fromString("3", op8), 3n);
+  assertStrictEquals(BigInteger.fromString("-3", op8), -3n);
+  assertStrictEquals(BigInteger.fromString("4", op8), 4n);
+  assertStrictEquals(BigInteger.fromString("-4", op8), -4n);
+  assertStrictEquals(BigInteger.fromString("5", op8), 5n);
+  assertStrictEquals(BigInteger.fromString("-5", op8), -5n);
+  assertStrictEquals(BigInteger.fromString("6", op8), 6n);
+  assertStrictEquals(BigInteger.fromString("-6", op8), -6n);
+  assertStrictEquals(BigInteger.fromString("7", op8), 7n);
+  assertStrictEquals(BigInteger.fromString("-7", op8), -7n);
+  assertStrictEquals(BigInteger.fromString("10", op8), 8n);
+  assertStrictEquals(BigInteger.fromString("-10", op8), -8n);
+
+  assertStrictEquals(BigInteger.fromString("+111", op8), 73n);
+
+  const e1 = "`value` must be text representation of 8 based integer.";
+  assertThrows(
+    () => {
+      BigInteger.fromString(undefined as unknown as string, op8);
+    },
+    TypeError,
+    e1,
+  );
+  assertThrows(
+    () => {
+      BigInteger.fromString("" as unknown as string, op8);
+    },
+    TypeError,
+    e1,
+  );
+  assertThrows(
+    () => {
+      BigInteger.fromString("8" as unknown as string, op8);
+    },
+    TypeError,
+    e1,
+  );
+});
+
+Deno.test("BigInteger.fromString() - 10", () => {
+  const op10 = { radix: 10 } as const;
+
+  assertStrictEquals(BigInteger.fromString("0", op10), 0n);
+  assertStrictEquals(BigInteger.fromString("-0", op10), 0n);
+  assertStrictEquals(BigInteger.fromString("+0", op10), 0n);
+  assertStrictEquals(BigInteger.fromString("1", op10), 1n);
+  assertStrictEquals(BigInteger.fromString("-1", op10), -1n);
+  assertStrictEquals(BigInteger.fromString("+1", op10), 1n);
+  assertStrictEquals(BigInteger.fromString("2", op10), 2n);
+  assertStrictEquals(BigInteger.fromString("-2", op10), -2n);
+  assertStrictEquals(BigInteger.fromString("3", op10), 3n);
+  assertStrictEquals(BigInteger.fromString("-3", op10), -3n);
+  assertStrictEquals(BigInteger.fromString("4", op10), 4n);
+  assertStrictEquals(BigInteger.fromString("-4", op10), -4n);
+  assertStrictEquals(BigInteger.fromString("5", op10), 5n);
+  assertStrictEquals(BigInteger.fromString("-5", op10), -5n);
+  assertStrictEquals(BigInteger.fromString("6", op10), 6n);
+  assertStrictEquals(BigInteger.fromString("-6", op10), -6n);
+  assertStrictEquals(BigInteger.fromString("7", op10), 7n);
+  assertStrictEquals(BigInteger.fromString("-7", op10), -7n);
+  assertStrictEquals(BigInteger.fromString("8", op10), 8n);
+  assertStrictEquals(BigInteger.fromString("-8", op10), -8n);
+  assertStrictEquals(BigInteger.fromString("9", op10), 9n);
+  assertStrictEquals(BigInteger.fromString("-9", op10), -9n);
+  assertStrictEquals(BigInteger.fromString("10", op10), 10n);
+  assertStrictEquals(BigInteger.fromString("-10", op10), -10n);
+
+  assertStrictEquals(BigInteger.fromString("+111", op10), 111n);
+
+  const e1 = "`value` must be text representation of 10 based integer.";
+  assertThrows(
+    () => {
+      BigInteger.fromString(undefined as unknown as string, op10);
+    },
+    TypeError,
+    e1,
+  );
+  assertThrows(
+    () => {
+      BigInteger.fromString("" as unknown as string, op10);
+    },
+    TypeError,
+    e1,
+  );
+  assertThrows(
+    () => {
+      BigInteger.fromString("A" as unknown as string, op10);
+    },
+    TypeError,
+    e1,
+  );
+});
+
+Deno.test("BigInteger.fromString() - 16", () => {
+  const op16 = { radix: 16 } as const;
+
+  assertStrictEquals(BigInteger.fromString("0", op16), 0n);
+  assertStrictEquals(BigInteger.fromString("-0", op16), 0n);
+  assertStrictEquals(BigInteger.fromString("+0", op16), 0n);
+  assertStrictEquals(BigInteger.fromString("1", op16), 1n);
+  assertStrictEquals(BigInteger.fromString("-1", op16), -1n);
+  assertStrictEquals(BigInteger.fromString("+1", op16), 1n);
+  assertStrictEquals(BigInteger.fromString("2", op16), 2n);
+  assertStrictEquals(BigInteger.fromString("-2", op16), -2n);
+  assertStrictEquals(BigInteger.fromString("3", op16), 3n);
+  assertStrictEquals(BigInteger.fromString("-3", op16), -3n);
+  assertStrictEquals(BigInteger.fromString("4", op16), 4n);
+  assertStrictEquals(BigInteger.fromString("-4", op16), -4n);
+  assertStrictEquals(BigInteger.fromString("5", op16), 5n);
+  assertStrictEquals(BigInteger.fromString("-5", op16), -5n);
+  assertStrictEquals(BigInteger.fromString("6", op16), 6n);
+  assertStrictEquals(BigInteger.fromString("-6", op16), -6n);
+  assertStrictEquals(BigInteger.fromString("7", op16), 7n);
+  assertStrictEquals(BigInteger.fromString("-7", op16), -7n);
+  assertStrictEquals(BigInteger.fromString("8", op16), 8n);
+  assertStrictEquals(BigInteger.fromString("-8", op16), -8n);
+  assertStrictEquals(BigInteger.fromString("9", op16), 9n);
+  assertStrictEquals(BigInteger.fromString("-9", op16), -9n);
+  assertStrictEquals(BigInteger.fromString("A", op16), 10n);
+  assertStrictEquals(BigInteger.fromString("-a", op16), -10n);
+  assertStrictEquals(BigInteger.fromString("b", op16), 11n);
+  assertStrictEquals(BigInteger.fromString("-B", op16), -11n);
+  assertStrictEquals(BigInteger.fromString("C", op16), 12n);
+  assertStrictEquals(BigInteger.fromString("-c", op16), -12n);
+  assertStrictEquals(BigInteger.fromString("d", op16), 13n);
+  assertStrictEquals(BigInteger.fromString("-D", op16), -13n);
+  assertStrictEquals(BigInteger.fromString("E", op16), 14n);
+  assertStrictEquals(BigInteger.fromString("-e", op16), -14n);
+  assertStrictEquals(BigInteger.fromString("f", op16), 15n);
+  assertStrictEquals(BigInteger.fromString("-F", op16), -15n);
+  assertStrictEquals(BigInteger.fromString("10", op16), 16n);
+  assertStrictEquals(BigInteger.fromString("-10", op16), -16n);
+
+  assertStrictEquals(BigInteger.fromString("+111", op16), 273n);
+
+  const e1 = "`value` must be text representation of 16 based integer.";
+  assertThrows(
+    () => {
+      BigInteger.fromString(undefined as unknown as string, op16);
+    },
+    TypeError,
+    e1,
+  );
+  assertThrows(
+    () => {
+      BigInteger.fromString("" as unknown as string, op16);
+    },
+    TypeError,
+    e1,
+  );
+  assertThrows(
+    () => {
+      BigInteger.fromString("G" as unknown as string, op16);
+    },
+    TypeError,
+    e1,
+  );
+});
+
+Deno.test("BigInteger.fromString() - x", () => {
+  const opx = { radix: 3 as 2 } as const;
+
+  assertThrows(
+    () => {
+      BigInteger.fromString("G" as unknown as string, opx);
+    },
+    TypeError,
+    "`radix` must be 2, 8, 10 or 16.",
+  );
+});
+
 Deno.test("BigInteger.toNumber()", () => {
   assertStrictEquals(BigInteger.toNumber(0n), 0);
   assertStrictEquals(BigInteger.toNumber(-1n), -1);

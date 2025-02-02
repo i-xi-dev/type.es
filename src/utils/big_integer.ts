@@ -2,6 +2,8 @@ import {
   assertBigInt,
   assertBigIntInSafeIntegerRange,
 } from "../type/bigint.ts";
+import { assertStringified as assertStringifiedInteger } from "../numerics/integer.ts";
+import { DECIMAL as DECIMAL_RADIX, prefixOf, type radix } from "./radix.ts";
 import { type safeint } from "../type/number.ts";
 
 export function min<T extends bigint>(value0: T, ...values: T[]): T {
@@ -49,6 +51,28 @@ export function clamp<T extends bigint>(value: bigint, min: T, max: T): T {
   }
   return _min(_max(value, min), max) as T;
 }
+
+export type FromStringOptions = {
+  radix?: radix;
+};
+
+export function fromString(value: string, options?: FromStringOptions): bigint {
+  const radix = options?.radix ?? DECIMAL_RADIX;
+  assertStringifiedInteger(value, "value", radix);
+
+  const negative = value.startsWith("-");
+  let adjustedValue = value;
+  adjustedValue = adjustedValue.replace(/^[-+]?/, "");
+  adjustedValue = prefixOf(radix) + adjustedValue;
+  let valueAsBigInt = BigInt(adjustedValue);
+  if (negative === true) {
+    valueAsBigInt *= -1n;
+  }
+
+  return valueAsBigInt;
+}
+
+//XXX toString
 
 //XXX fromNumber
 

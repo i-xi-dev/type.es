@@ -1,5 +1,6 @@
+import * as BigInteger from "../utils/big_integer.ts";
 import * as ExtNumber from "../utils/number.ts";
-import * as Safenteger from "../utils/safe_integer.ts";
+import * as SafeInteger from "../utils/safe_integer.ts";
 import {
   assertNumber,
   assertSafeInteger,
@@ -19,7 +20,6 @@ import {
   round as roundNumber,
   toString as safeIntegerToString,
 } from "./safe_integer.ts";
-import { fromString as bigIntFromString } from "./bigint_type.ts";
 import { int, uint16, uint24, uint32, uint6, uint7, uint8 } from "../_.ts";
 import { OverflowMode } from "./overflow_mode.ts";
 import { SafeIntegerRange } from "./safe_integer_range.ts";
@@ -218,7 +218,7 @@ class _UinNOperations<T extends int> implements UintNOperations<T> {
   }
 
   fromBigInt(value: bigint, options?: FromBigIntOptions): T {
-    const valueAsNumber = Safenteger.fromBigInt(value);
+    const valueAsNumber = SafeInteger.fromBigInt(value);
 
     if (this.is(valueAsNumber)) {
       return valueAsNumber;
@@ -246,7 +246,7 @@ class _UinNOperations<T extends int> implements UintNOperations<T> {
 
   //XXX 小数も受け付ける？
   fromString(value: string, options?: FromStringOptions): T {
-    const valueAsBigInt = bigIntFromString(value, options);
+    const valueAsBigInt = BigInteger.fromString(value, options);
     return this.fromBigInt(valueAsBigInt, options);
   }
 

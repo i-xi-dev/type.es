@@ -1,3 +1,4 @@
+import * as BigInteger from "../utils/big_integer.ts";
 import {
   assertBigInt,
   assertBigIntInSafeIntegerRange,
@@ -16,7 +17,6 @@ import {
 } from "./ranged_integer.ts";
 import {
   fromNumber as bigIntFromNumber,
-  fromString as bigIntFromString,
   toString as bigIntToString,
 } from "./bigint_type.ts";
 import { OverflowMode } from "./overflow_mode.ts";
@@ -165,7 +165,7 @@ class _UinNOperations<T extends bigint> implements UintNOperations<T> {
   }
 
   fromString(value: string, options?: FromStringOptions): T {
-    const valueAsBigInt = bigIntFromString(value, options);
+    const valueAsBigInt = BigInteger.fromString(value, options);
     return this.fromBigInt(valueAsBigInt, options);
   }
 

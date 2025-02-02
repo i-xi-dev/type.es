@@ -1,6 +1,5 @@
 import * as BigInteger from "../utils/big_integer.ts";
 import * as ExtNumber from "../utils/number.ts";
-import { fromString as fromStringToBigInt } from "./bigint_type.ts";
 import { FromStringOptions, ToStringOptions } from "./main.ts";
 import { int } from "../_.ts";
 import {
@@ -8,7 +7,10 @@ import {
   isEvenSafeInteger,
   isPositiveNumber,
 } from "../type/number.ts";
-import { Radix } from "../utils/radix.ts";
+import {
+  assertSupportedRadix,
+  DECIMAL as DECIMAL_RADIX,
+} from "../utils/radix.ts";
 import { RoundingMode } from "./rounding_mode.ts";
 
 export function clampToPositive<T extends int>(value: T): T {
@@ -32,14 +34,15 @@ export function clampToNegative<T extends int>(value: T): T {
 }
 
 export function fromString(value: string, options?: FromStringOptions): int {
-  const valueAsBigInt = fromStringToBigInt(value, options);
+  const valueAsBigInt = BigInteger.fromString(value, options);
   return BigInteger.toNumber(valueAsBigInt);
 }
 
 export function toString(value: int, options?: ToStringOptions): string {
   assertSafeInteger(value, "value");
+  const radix = options?.radix ?? DECIMAL_RADIX;
+  assertSupportedRadix(radix, "radix");
 
-  const radix = Radix.from(options?.radix).radix;
   let result = value.toString(radix);
 
   if (options?.lowerCase !== true) {

@@ -15,7 +15,11 @@ import {
   isPositiveSafeInteger,
 } from "../type/number.ts";
 import { isString } from "../type/string.ts";
-import { integerPatternOf, type radix } from "../utils/radix.ts";
+import {
+  DECIMAL as DECIMAL_RADIX,
+  integerPatternOf,
+  type radix,
+} from "../utils/radix.ts";
 import { xint } from "../_.ts";
 
 // ここでは、safe integerではないnumber型は「整数」とみなさない
@@ -46,7 +50,7 @@ export function isEven(test: unknown): test is xint {
 
 export function isStringified(
   test: unknown,
-  radix: radix = 10,
+  radix: radix = DECIMAL_RADIX,
 ): test is string {
   if (isString(test)) {
     return (new RegExp(integerPatternOf(radix, { includesSign: true }))).test(
@@ -59,7 +63,7 @@ export function isStringified(
 export function assertStringified(
   test: unknown,
   label: string,
-  radix: radix = 10,
+  radix: radix = DECIMAL_RADIX,
 ): void {
   if (isStringified(test, radix) !== true) {
     throw new TypeError(
