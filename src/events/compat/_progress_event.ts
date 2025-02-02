@@ -1,7 +1,7 @@
 import * as SafeInteger from "../../type/sp/safe_integer.ts";
 import {
   clampToNonNegative as clampToNonNegativeSafeInteger,
-} from "../../numerics/safe_integer.ts";
+} from "../../type/sp/safe_integer.ts";
 import { int } from "../../_.ts";
 import { RoundingMode } from "../../type/sp/rounding_mode.ts";
 
