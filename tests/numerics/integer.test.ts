@@ -8,64 +8,6 @@ import { Numerics } from "../../mod.ts";
 
 const { Integer } = Numerics;
 
-Deno.test("Integer.isNegative()", () => {
-  assertStrictEquals(Integer.isNegative(0), false);
-  assertStrictEquals(Integer.isNegative(-0), false);
-  assertStrictEquals(Integer.isNegative(1), false);
-  assertStrictEquals(Integer.isNegative(-1), true);
-
-  assertStrictEquals(Integer.isNegative(-10.1), false);
-  assertStrictEquals(Integer.isNegative(-9.9), false);
-  assertStrictEquals(Integer.isNegative(9.9), false);
-  assertStrictEquals(Integer.isNegative(10.1), false);
-
-  assertStrictEquals(Integer.isNegative(0n), false);
-  assertStrictEquals(Integer.isNegative(-0n), false);
-  assertStrictEquals(Integer.isNegative(1n), false);
-  assertStrictEquals(Integer.isNegative(-1n), true);
-
-  assertStrictEquals(Integer.isNegative(Number.NaN), false);
-  assertStrictEquals(Integer.isNegative(Number.POSITIVE_INFINITY), false);
-  assertStrictEquals(
-    Integer.isNegative(Number.MAX_SAFE_INTEGER + 1),
-    false,
-  );
-  assertStrictEquals(Integer.isNegative(Number.MAX_SAFE_INTEGER), false);
-  assertStrictEquals(Integer.isNegative(Number.MIN_SAFE_INTEGER), true);
-  assertStrictEquals(
-    Integer.isNegative(Number.MIN_SAFE_INTEGER - 1),
-    false,
-  );
-  assertStrictEquals(Integer.isNegative(Number.NEGATIVE_INFINITY), false);
-
-  assertStrictEquals(
-    Integer.isNegative(BigInt(Number.MAX_SAFE_INTEGER) + 1n),
-    false,
-  );
-  assertStrictEquals(
-    Integer.isNegative(BigInt(Number.MAX_SAFE_INTEGER)),
-    false,
-  );
-  assertStrictEquals(
-    Integer.isNegative(BigInt(Number.MIN_SAFE_INTEGER)),
-    true,
-  );
-  assertStrictEquals(
-    Integer.isNegative(BigInt(Number.MIN_SAFE_INTEGER) - 1n),
-    true,
-  );
-
-  assertStrictEquals(
-    Integer.isNegative(undefined as unknown as number),
-    false,
-  );
-  assertStrictEquals(Integer.isNegative(null as unknown as number), false);
-  assertStrictEquals(Integer.isNegative(true as unknown as number), false);
-  assertStrictEquals(Integer.isNegative(false as unknown as number), false);
-  assertStrictEquals(Integer.isNegative("" as unknown as number), false);
-  assertStrictEquals(Integer.isNegative("0" as unknown as number), false);
-});
-
 Deno.test("Integer.isOdd()", () => {
   assertStrictEquals(Integer.isOdd(0), false);
   assertStrictEquals(Integer.isOdd(-0), false);

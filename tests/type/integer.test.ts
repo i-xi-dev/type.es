@@ -261,3 +261,69 @@ Deno.test("Type.assertNonPositiveInteger()", () => {
     //
   }
 });
+
+Deno.test("Type.isNegativeInteger()", () => {
+  assertStrictEquals(Type.isNegativeInteger(0), false);
+  assertStrictEquals(Type.isNegativeInteger(-0), false);
+  assertStrictEquals(Type.isNegativeInteger(1), false);
+  assertStrictEquals(Type.isNegativeInteger(-1), true);
+
+  assertStrictEquals(Type.isNegativeInteger(-10.1), false);
+  assertStrictEquals(Type.isNegativeInteger(-9.9), false);
+  assertStrictEquals(Type.isNegativeInteger(9.9), false);
+  assertStrictEquals(Type.isNegativeInteger(10.1), false);
+
+  assertStrictEquals(Type.isNegativeInteger(0n), false);
+  assertStrictEquals(Type.isNegativeInteger(-0n), false);
+  assertStrictEquals(Type.isNegativeInteger(1n), false);
+  assertStrictEquals(Type.isNegativeInteger(-1n), true);
+
+  assertStrictEquals(Type.isNegativeInteger(Number.NaN), false);
+  assertStrictEquals(
+    Type.isNegativeInteger(Number.POSITIVE_INFINITY),
+    false,
+  );
+  assertStrictEquals(Type.isNegativeInteger(SIMAX), false);
+  assertStrictEquals(Type.isNegativeInteger(SIMIN), true);
+  assertStrictEquals(
+    Type.isNegativeInteger(Number.NEGATIVE_INFINITY),
+    false,
+  );
+
+  assertStrictEquals(Type.isNegativeInteger(undefined), false);
+  assertStrictEquals(Type.isNegativeInteger(null), false);
+  assertStrictEquals(Type.isNegativeInteger(true), false);
+  assertStrictEquals(Type.isNegativeInteger(false), false);
+  assertStrictEquals(Type.isNegativeInteger(""), false);
+  assertStrictEquals(Type.isNegativeInteger("0"), false);
+});
+
+Deno.test("Type.assertNegativeInteger()", () => {
+  try {
+    Type.assertNegativeInteger(-1, "test-1");
+    Type.assertNegativeInteger(-1n, "test-1");
+  } catch (exception) {
+    fail((exception as Error).toString());
+  }
+
+  try {
+    Type.assertNegativeInteger(0, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    Type.assertNegativeInteger(undefined, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    Type.assertNegativeInteger("0", "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+});
