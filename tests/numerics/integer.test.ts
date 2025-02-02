@@ -8,46 +8,6 @@ import { Numerics } from "../../mod.ts";
 
 const { Integer } = Numerics;
 
-Deno.test("Integer.isEven()", () => {
-  assertStrictEquals(Integer.isEven(0), true);
-  assertStrictEquals(Integer.isEven(-0), true);
-  assertStrictEquals(Integer.isEven(1), false);
-  assertStrictEquals(Integer.isEven(-1), false);
-  assertStrictEquals(Integer.isEven(2), true);
-  assertStrictEquals(Integer.isEven(-2), true);
-  assertStrictEquals(Integer.isEven(3), false);
-  assertStrictEquals(Integer.isEven(-3), false);
-
-  assertStrictEquals(Integer.isEven(-10.1), false);
-  assertStrictEquals(Integer.isEven(-9.9), false);
-  assertStrictEquals(Integer.isEven(9.9), false);
-  assertStrictEquals(Integer.isEven(10.1), false);
-
-  assertStrictEquals(Integer.isEven(0n), true);
-  assertStrictEquals(Integer.isEven(-0n), true);
-  assertStrictEquals(Integer.isEven(1n), false);
-  assertStrictEquals(Integer.isEven(-1n), false);
-  assertStrictEquals(Integer.isEven(2n), true);
-  assertStrictEquals(Integer.isEven(-2n), true);
-  assertStrictEquals(Integer.isEven(3n), false);
-  assertStrictEquals(Integer.isEven(-3n), false);
-
-  assertStrictEquals(Integer.isEven(Number.MAX_SAFE_INTEGER), false);
-  assertStrictEquals(Integer.isEven(1.1), false);
-  assertStrictEquals(Integer.isEven(-1.1), false);
-  assertStrictEquals(Integer.isEven(Number.NaN), false);
-  assertStrictEquals(Integer.isEven(Number.POSITIVE_INFINITY), false);
-  assertStrictEquals(Integer.isEven(Number.NEGATIVE_INFINITY), false);
-  assertStrictEquals(Integer.isEven(Number.MIN_SAFE_INTEGER), false);
-
-  assertStrictEquals(Integer.isEven(undefined as unknown as number), false);
-  assertStrictEquals(Integer.isEven(null as unknown as number), false);
-  assertStrictEquals(Integer.isEven(true as unknown as number), false);
-  assertStrictEquals(Integer.isEven(false as unknown as number), false);
-  assertStrictEquals(Integer.isEven("" as unknown as number), false);
-  assertStrictEquals(Integer.isEven("0" as unknown as number), false);
-});
-
 Deno.test("Integer.isStringified()", () => {
   assertStrictEquals(Integer.isStringified("0"), true);
   assertStrictEquals(Integer.isStringified("-0"), true);

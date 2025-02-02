@@ -60,3 +60,14 @@ export function assertOddInteger(test: unknown, label: string): void {
     throw new TypeError(`\`${label}\` must be an odd integer.`);
   }
 }
+
+export function isEvenInteger(test: unknown): test is safeint | bigint {
+  return (Number.isSafeInteger(test) && (((test as safeint) % 2) === 0)) ||
+    ((typeof test === "bigint") && ((test % 2n) === 0n));
+}
+
+export function assertEvenInteger(test: unknown, label: string): void {
+  if (isEvenInteger(test) !== true) {
+    throw new TypeError(`\`${label}\` must be an even integer.`);
+  }
+}

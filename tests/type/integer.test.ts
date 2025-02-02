@@ -403,3 +403,81 @@ Deno.test("Type.assertOddInteger()", () => {
     //
   }
 });
+
+Deno.test("Type.isEvenInteger()", () => {
+  assertStrictEquals(Type.isEvenInteger(0), true);
+  assertStrictEquals(Type.isEvenInteger(-0), true);
+  assertStrictEquals(Type.isEvenInteger(1), false);
+  assertStrictEquals(Type.isEvenInteger(-1), false);
+  assertStrictEquals(Type.isEvenInteger(2), true);
+  assertStrictEquals(Type.isEvenInteger(-2), true);
+  assertStrictEquals(Type.isEvenInteger(3), false);
+  assertStrictEquals(Type.isEvenInteger(-3), false);
+
+  assertStrictEquals(Type.isEvenInteger(-10.1), false);
+  assertStrictEquals(Type.isEvenInteger(-9.9), false);
+  assertStrictEquals(Type.isEvenInteger(9.9), false);
+  assertStrictEquals(Type.isEvenInteger(10.1), false);
+
+  assertStrictEquals(Type.isEvenInteger(0n), true);
+  assertStrictEquals(Type.isEvenInteger(-0n), true);
+  assertStrictEquals(Type.isEvenInteger(1n), false);
+  assertStrictEquals(Type.isEvenInteger(-1n), false);
+  assertStrictEquals(Type.isEvenInteger(2n), true);
+  assertStrictEquals(Type.isEvenInteger(-2n), true);
+  assertStrictEquals(Type.isEvenInteger(3n), false);
+  assertStrictEquals(Type.isEvenInteger(-3n), false);
+
+  assertStrictEquals(Type.isEvenInteger(Number.MAX_SAFE_INTEGER), false);
+  assertStrictEquals(Type.isEvenInteger(1.1), false);
+  assertStrictEquals(Type.isEvenInteger(-1.1), false);
+  assertStrictEquals(Type.isEvenInteger(Number.NaN), false);
+  assertStrictEquals(Type.isEvenInteger(Number.POSITIVE_INFINITY), false);
+  assertStrictEquals(Type.isEvenInteger(Number.NEGATIVE_INFINITY), false);
+  assertStrictEquals(Type.isEvenInteger(Number.MIN_SAFE_INTEGER), false);
+
+  assertStrictEquals(Type.isEvenInteger(undefined as unknown as number), false);
+  assertStrictEquals(Type.isEvenInteger(null as unknown as number), false);
+  assertStrictEquals(Type.isEvenInteger(true as unknown as number), false);
+  assertStrictEquals(Type.isEvenInteger(false as unknown as number), false);
+  assertStrictEquals(Type.isEvenInteger("" as unknown as number), false);
+  assertStrictEquals(Type.isEvenInteger("0" as unknown as number), false);
+});
+
+Deno.test("Type.assertEvenInteger()", () => {
+  try {
+    Type.assertEvenInteger(-4, "test-1");
+    Type.assertEvenInteger(-4n, "test-1");
+    Type.assertEvenInteger(-2, "test-1");
+    Type.assertEvenInteger(-2n, "test-1");
+    Type.assertEvenInteger(0, "test-1");
+    Type.assertEvenInteger(0n, "test-1");
+    Type.assertEvenInteger(2, "test-1");
+    Type.assertEvenInteger(2n, "test-1");
+    Type.assertEvenInteger(4, "test-1");
+    Type.assertEvenInteger(4n, "test-1");
+  } catch (exception) {
+    fail((exception as Error).toString());
+  }
+
+  try {
+    Type.assertEvenInteger(1, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    Type.assertEvenInteger(undefined, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    Type.assertEvenInteger("0", "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+});
