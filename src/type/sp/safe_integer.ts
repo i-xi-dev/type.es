@@ -3,17 +3,17 @@ import {
   isEvenSafeInteger,
   isPositiveNumber,
   type safeint,
-} from "../type/number.ts";
+} from "../number.ts";
 import {
   assertSupportedRadix,
   DECIMAL as DECIMAL_RADIX,
   type radix,
-} from "../type/sp/radix.ts";
+} from "./radix.ts";
 import {
   fromString as bigintFromString,
   toNumber as bigintToNumber,
-} from "../type/sp/bigint.ts";
-import { normalize as normalizeNumber } from "../type/sp/number.ts";
+} from "./bigint.ts";
+import { normalize as normalizeNumber } from "./number.ts";
 import { RoundingMode } from "./rounding_mode.ts";
 
 export function clamp<T extends safeint>(value: safeint, min: T, max: T): T {

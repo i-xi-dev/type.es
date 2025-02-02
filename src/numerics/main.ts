@@ -12,7 +12,7 @@ import {
 } from "../type/number.ts";
 import { numeric } from "../_.ts";
 import { type radix } from "../type/sp/radix.ts";
-import { RoundingMode } from "../utils/rounding_mode.ts";
+import { RoundingMode } from "../type/sp/rounding_mode.ts";
 
 export function isPositive(test: unknown): test is numeric {
   return isPositiveNumber(test) || isPositiveBigInt(test);

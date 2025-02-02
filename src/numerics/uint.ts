@@ -1,4 +1,4 @@
-import * as SafeInteger from "../utils/safe_integer.ts";
+import * as SafeInteger from "../type/sp/safe_integer.ts";
 import {
   assertNumber,
   assertSafeInteger,

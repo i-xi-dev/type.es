@@ -1,4 +1,4 @@
-import * as SafeInteger from "../utils/safe_integer.ts";
+import * as SafeInteger from "../type/sp/safe_integer.ts";
 import { codepoint, plane } from "../_.ts";
 import { IntegerRange } from "../numerics/integer_range.ts";
 import { is as isPlane } from "./plane.ts";

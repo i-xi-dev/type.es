@@ -1,4 +1,4 @@
-import * as SafeInteger from "../../utils/safe_integer.ts";
+import * as SafeInteger from "./safe_integer.ts";
 import { assertBigInt, assertBigIntInSafeIntegerRange } from "../bigint.ts";
 import { assertStringified as assertStringifiedInteger } from "../../numerics/integer.ts";
 import {
@@ -13,7 +13,7 @@ import {
   isSafeInteger,
   type safeint,
 } from "../number.ts";
-import { RoundingMode } from "../../utils/rounding_mode.ts";
+import { RoundingMode } from "./rounding_mode.ts";
 
 export function min<T extends bigint>(value0: T, ...values: T[]): T {
   assertBigInt(value0, `value0`);
