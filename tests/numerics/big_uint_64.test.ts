@@ -835,16 +835,16 @@ Deno.test("BigUint64.fromNumber()", () => {
   assertStrictEquals(BigUint64.fromNumber(4294967296), 4294967296n);
   assertStrictEquals(BigUint64.fromNumber(-1), 0n);
 
-  assertStrictEquals(BigUint64.fromNumber(Number.NEGATIVE_INFINITY), 0n);
+  // assertStrictEquals(BigUint64.fromNumber(Number.NEGATIVE_INFINITY), 0n);
   assertStrictEquals(BigUint64.fromNumber(Number.MIN_SAFE_INTEGER), 0n);
   assertStrictEquals(
     BigUint64.fromNumber(Number.MAX_SAFE_INTEGER),
     BigInt(Number.MAX_SAFE_INTEGER),
   );
-  assertStrictEquals(
-    BigUint64.fromNumber(Number.POSITIVE_INFINITY),
-    BigInt(Number.MAX_SAFE_INTEGER),
-  );
+  // assertStrictEquals(
+  //   BigUint64.fromNumber(Number.POSITIVE_INFINITY),
+  //   BigInt(Number.MAX_SAFE_INTEGER),
+  // );
 
   assertStrictEquals(BigUint64.fromNumber(0.1), 0n);
   assertStrictEquals(BigUint64.fromNumber(0.4), 0n);
@@ -879,7 +879,7 @@ Deno.test("BigUint64.fromNumber()", () => {
     9007199254740991n,
   );
 
-  const e1 = "`value` must be a `number`.";
+  const e1 = "`value` must be a finite `number`.";
   assertThrows(
     () => {
       BigUint64.fromNumber(undefined as unknown as number);
@@ -895,13 +895,12 @@ Deno.test("BigUint64.fromNumber()", () => {
     e1,
   );
 
-  const e2 = "`value` must not be `NaN`.";
   assertThrows(
     () => {
       BigUint64.fromNumber(Number.NaN);
     },
     TypeError,
-    e2,
+    e1,
   );
 });
 
@@ -925,16 +924,16 @@ Deno.test("BigUint64.fromNumber() - roundingMode", () => {
   assertStrictEquals(BigUint64.fromNumber(4294967296, op), 4294967296n);
   assertStrictEquals(BigUint64.fromNumber(-1, op), 0n);
 
-  assertStrictEquals(BigUint64.fromNumber(Number.NEGATIVE_INFINITY, op), 0n);
+  // assertStrictEquals(BigUint64.fromNumber(Number.NEGATIVE_INFINITY, op), 0n);
   assertStrictEquals(BigUint64.fromNumber(Number.MIN_SAFE_INTEGER, op), 0n);
   assertStrictEquals(
     BigUint64.fromNumber(Number.MAX_SAFE_INTEGER, op),
     BigInt(Number.MAX_SAFE_INTEGER),
   );
-  assertStrictEquals(
-    BigUint64.fromNumber(Number.POSITIVE_INFINITY, op),
-    BigInt(Number.MAX_SAFE_INTEGER),
-  );
+  // assertStrictEquals(
+  //   BigUint64.fromNumber(Number.POSITIVE_INFINITY, op),
+  //   BigInt(Number.MAX_SAFE_INTEGER),
+  // );
 
   assertStrictEquals(BigUint64.fromNumber(0.1, op), 1n);
   assertStrictEquals(BigUint64.fromNumber(0.4, op), 1n);
@@ -988,16 +987,16 @@ Deno.test("BigUint64.fromNumber() - roundingMode", () => {
   assertStrictEquals(BigUint64.fromNumber(4294967296, op2), 4294967296n);
   assertStrictEquals(BigUint64.fromNumber(-1, op2), 0n);
 
-  assertStrictEquals(BigUint64.fromNumber(Number.NEGATIVE_INFINITY, op2), 0n);
+  // assertStrictEquals(BigUint64.fromNumber(Number.NEGATIVE_INFINITY, op2), 0n);
   assertStrictEquals(BigUint64.fromNumber(Number.MIN_SAFE_INTEGER, op2), 0n);
   assertStrictEquals(
     BigUint64.fromNumber(Number.MAX_SAFE_INTEGER, op2),
     BigInt(Number.MAX_SAFE_INTEGER),
   );
-  assertStrictEquals(
-    BigUint64.fromNumber(Number.POSITIVE_INFINITY, op2),
-    BigInt(Number.MAX_SAFE_INTEGER),
-  );
+  // assertStrictEquals(
+  //   BigUint64.fromNumber(Number.POSITIVE_INFINITY, op2),
+  //   BigInt(Number.MAX_SAFE_INTEGER),
+  // );
 
   assertStrictEquals(BigUint64.fromNumber(0.1, op2), 0n);
   assertStrictEquals(BigUint64.fromNumber(0.4, op2), 0n);

@@ -15,7 +15,6 @@ import {
   Uint8xOperations,
   UintNOperations,
 } from "./ranged_integer.ts";
-import { fromNumber as bigIntFromNumber } from "./bigint_type.ts";
 import { OverflowMode } from "./overflow_mode.ts";
 
 class _UinNOperations<T extends bigint> implements UintNOperations<T> {
@@ -93,7 +92,7 @@ class _UinNOperations<T extends bigint> implements UintNOperations<T> {
   }
 
   fromNumber(value: number, options?: FromNumberOptions): T {
-    const valueAsBigInt = bigIntFromNumber(value, options);
+    const valueAsBigInt = BigInteger.fromNumber(value, options);
 
     if (this.is(valueAsBigInt)) {
       return valueAsBigInt;

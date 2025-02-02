@@ -1,3 +1,4 @@
+import * as SafeInteger from "./safe_integer.ts";
 import {
   assertBigInt,
   assertBigIntInSafeIntegerRange,
@@ -9,7 +10,13 @@ import {
   prefixOf,
   type radix,
 } from "./radix.ts";
-import { isPositiveSafeInteger, type safeint } from "../type/number.ts";
+import {
+  assertFiniteNumber,
+  isPositiveSafeInteger,
+  isSafeInteger,
+  type safeint,
+} from "../type/number.ts";
+import { RoundingMode } from "./rounding_mode.ts";
 
 export function min<T extends bigint>(value0: T, ...values: T[]): T {
   assertBigInt(value0, `value0`);
@@ -102,7 +109,38 @@ export function toString(value: bigint, options?: ToStringOptions): string {
   return result;
 }
 
-//XXX fromNumber
+export type FromNumberOptions = {
+  roundingMode?: RoundingMode;
+};
+
+export function fromNumber(
+  value: number,
+  options?: FromNumberOptions,
+): bigint {
+  assertFiniteNumber(value, "value");
+
+  if (Number.isNaN(value)) {
+    throw new TypeError("`value` must not be `NaN`.");
+  }
+
+  let adjustedValue: number;
+  if (value > Number.MAX_SAFE_INTEGER) {
+    adjustedValue = Number.MAX_SAFE_INTEGER;
+  } else if (value < Number.MIN_SAFE_INTEGER) {
+    adjustedValue = Number.MIN_SAFE_INTEGER;
+  } else {
+    adjustedValue = value;
+  }
+
+  let valueAsInt: safeint;
+  if (isSafeInteger(adjustedValue)) {
+    valueAsInt = adjustedValue;
+  } else {
+    valueAsInt = SafeInteger.round(adjustedValue, options?.roundingMode);
+  }
+
+  return BigInt(valueAsInt);
+}
 
 export function toNumber(value: bigint): safeint {
   assertBigIntInSafeIntegerRange(value, "value");

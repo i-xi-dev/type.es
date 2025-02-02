@@ -1,9 +1,4 @@
-import {
-  assertStrictEquals,
-  assertThrows,
-  fail,
-  unreachable,
-} from "@std/assert";
+import { assertStrictEquals, assertThrows } from "@std/assert";
 import { BigInteger } from "../../mod.ts";
 
 const SIMIN = Number.MIN_SAFE_INTEGER;
@@ -640,6 +635,76 @@ Deno.test("BigInteger.toString() - radix:unknown", () => {
   // assertStrictEquals(BigInteger.toString(14n, op), "14");
   // assertStrictEquals(BigInteger.toString(15n, op), "15");
   // assertStrictEquals(BigInteger.toString(16n, op), "16");
+});
+
+Deno.test("BigInteger.fromNumber()", () => {
+  const rfe1 = "`value` must be a finite `number`.";
+
+  assertThrows(
+    () => {
+      BigInteger.fromNumber(undefined as unknown as number);
+    },
+    TypeError,
+    rfe1,
+  );
+
+  assertThrows(
+    () => {
+      BigInteger.fromNumber(0n as unknown as number);
+    },
+    TypeError,
+    rfe1,
+  );
+
+  assertThrows(
+    () => {
+      BigInteger.fromNumber(Number.NaN);
+    },
+    TypeError,
+    rfe1,
+  );
+
+  assertThrows(
+    () => {
+      BigInteger.fromNumber(Number.POSITIVE_INFINITY);
+    },
+    TypeError,
+    rfe1,
+  );
+
+  assertThrows(
+    () => {
+      BigInteger.fromNumber(Number.NEGATIVE_INFINITY);
+    },
+    TypeError,
+    rfe1,
+  );
+
+  // assertThrows(
+  //   () => {
+  //     BigInteger.fromNumber(Number.POSITIVE_INFINITY, ope);
+  //   },
+  //   TypeError,
+  //   rfe3,
+  // );
+
+  // assertThrows(
+  //   () => {
+  //     BigInteger.fromNumber(Number.NEGATIVE_INFINITY, ope);
+  //   },
+  //   TypeError,
+  //   rfe3,
+  // );
+
+  assertStrictEquals(BigInteger.fromNumber(0.5), 0n);
+
+  assertStrictEquals(BigInteger.fromNumber(-1), -1n);
+  assertStrictEquals(BigInteger.fromNumber(-0), 0n);
+  assertStrictEquals(BigInteger.fromNumber(0), 0n);
+  assertStrictEquals(BigInteger.fromNumber(1), 1n);
+
+  assertStrictEquals(BigInteger.fromNumber(SIMAX), BigInt(SIMAX));
+  assertStrictEquals(BigInteger.fromNumber(SIMIN), BigInt(SIMIN));
 });
 
 Deno.test("BigInteger.toNumber()", () => {
