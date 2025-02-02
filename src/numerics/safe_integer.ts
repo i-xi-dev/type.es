@@ -1,6 +1,5 @@
-import * as BigInteger from "../utils/big_integer.ts";
 import * as ExtNumber from "../utils/number.ts";
-import { FromStringOptions, ToStringOptions } from "./main.ts";
+import { ToStringOptions } from "./main.ts";
 import { int } from "../_.ts";
 import {
   assertSafeInteger,
@@ -31,11 +30,6 @@ export function clampToNonPositive<T extends int>(value: T): T {
 export function clampToNegative<T extends int>(value: T): T {
   assertSafeInteger(value, "value");
   return ExtNumber.normalize(Math.min(value, -1) as T);
-}
-
-export function fromString(value: string, options?: FromStringOptions): int {
-  const valueAsBigInt = BigInteger.fromString(value, options);
-  return BigInteger.toNumber(valueAsBigInt);
 }
 
 export function toString(value: int, options?: ToStringOptions): string {
