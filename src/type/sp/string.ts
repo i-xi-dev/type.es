@@ -1,4 +1,4 @@
-import { assertString } from "../type/string.ts";
+import { assertString } from "../string.ts";
 
 /**
  * The zero-length string.

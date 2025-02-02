@@ -4,7 +4,7 @@ import {
   isEmptyString,
   isString,
 } from "../type/string.ts";
-import { EMPTY } from "../utils/string.ts";
+import { EMPTY } from "../type/sp/string.ts";
 import { int } from "../_.ts";
 
 export function charCountOf(value: string): int {

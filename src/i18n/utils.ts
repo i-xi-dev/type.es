@@ -1,4 +1,4 @@
-import { EMPTY as EMPTY_STRING } from "../utils/string.ts";
+import { EMPTY as EMPTY_STRING } from "../type/sp/string.ts";
 import { language, region, script } from "../_.ts";
 import { isString } from "../type/string.ts";
 

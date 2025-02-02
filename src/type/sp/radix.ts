@@ -1,4 +1,4 @@
-import { EMPTY as EMPTY_STRING } from "../../utils/string.ts";
+import { EMPTY as EMPTY_STRING } from "./string.ts";
 
 export const BINARY = 2;
 

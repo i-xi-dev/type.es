@@ -1,5 +1,5 @@
 import { assertStrictEquals, assertThrows } from "@std/assert";
-import { ExtString } from "../../mod.ts";
+import { ExtString } from "../../../mod.ts";
 
 Deno.test("ExtString.isomorphicDecode", () => {
   // decode(ArrayBuffer)

@@ -1,6 +1,6 @@
 import { assert as assertCodePoint } from "./code_point.ts";
 import { assertString, isString } from "../type/string.ts";
-import { EMPTY } from "../utils/string.ts";
+import { EMPTY } from "../type/sp/string.ts";
 import { assertIterable } from "../type/iterable.ts";
 import { codepoint, int, rune, script, usvstring } from "../_.ts";
 import { Rune } from "./mod.ts";
