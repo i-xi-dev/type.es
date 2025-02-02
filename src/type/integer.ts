@@ -19,3 +19,13 @@ export function assertPositiveInteger(test: unknown, label: string): void {
     throw new TypeError(`\`${label}\` must be a positive integer.`);
   }
 }
+
+export function isNonNegativeInteger(test: unknown): test is safeint | bigint {
+  return isInteger(test) && (test >= 0);
+}
+
+export function assertNonNegativeInteger(test: unknown, label: string): void {
+  if (isNonNegativeInteger(test) !== true) {
+    throw new TypeError(`\`${label}\` must be a non-negative integer.`);
+  }
+}
