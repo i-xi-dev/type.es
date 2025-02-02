@@ -1,4 +1,7 @@
-import * as BigInteger from "./big_integer.ts";
+import {
+  fromString as bigintFromString,
+  toNumber as bigintToNumber,
+} from "../type/sp/bigint.ts";
 import * as ExtNumber from "../utils/number.ts";
 import {
   assertSafeInteger,
@@ -33,8 +36,8 @@ export function fromString(
   value: string,
   options?: FromStringOptions,
 ): safeint {
-  const valueAsBigInt = BigInteger.fromString(value, options);
-  return BigInteger.toNumber(valueAsBigInt);
+  const valueAsBigInt = bigintFromString(value, options);
+  return bigintToNumber(valueAsBigInt);
 }
 
 export type ToStringOptions = {
@@ -63,7 +66,7 @@ export function toString(value: safeint, options?: ToStringOptions): string {
 }
 
 export function fromBigInt(value: bigint): safeint {
-  return BigInteger.toNumber(value);
+  return bigintToNumber(value);
 }
 
 export function toBigInt(value: safeint): bigint {

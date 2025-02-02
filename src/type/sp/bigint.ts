@@ -1,22 +1,19 @@
-import * as SafeInteger from "./safe_integer.ts";
-import {
-  assertBigInt,
-  assertBigIntInSafeIntegerRange,
-} from "../type/bigint.ts";
-import { assertStringified as assertStringifiedInteger } from "../numerics/integer.ts";
+import * as SafeInteger from "../../utils/safe_integer.ts";
+import { assertBigInt, assertBigIntInSafeIntegerRange } from "../bigint.ts";
+import { assertStringified as assertStringifiedInteger } from "../../numerics/integer.ts";
 import {
   assertSupportedRadix,
   DECIMAL as DECIMAL_RADIX,
   prefixOf,
   type radix,
-} from "./radix.ts";
+} from "../../utils/radix.ts";
 import {
   assertFiniteNumber,
   isPositiveSafeInteger,
   isSafeInteger,
   type safeint,
-} from "../type/number.ts";
-import { RoundingMode } from "./rounding_mode.ts";
+} from "../number.ts";
+import { RoundingMode } from "../../utils/rounding_mode.ts";
 
 export function min<T extends bigint>(value0: T, ...values: T[]): T {
   assertBigInt(value0, `value0`);
