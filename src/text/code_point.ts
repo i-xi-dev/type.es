@@ -1,9 +1,9 @@
+import * as SafeInteger from "../utils/safe_integer.ts";
 import { codepoint, plane } from "../_.ts";
 import { IntegerRange } from "../numerics/integer_range.ts";
 import { is as isPlane } from "./plane.ts";
 import { isSafeIntegerInRange } from "../type/number.ts";
 import { SafeIntegerRange } from "../numerics/safe_integer_range.ts";
-import { toString as safeIntegerToString } from "../numerics/safe_integer.ts";
 import { ToStringOptions } from "../numerics/main.ts";
 
 export const MIN_VALUE = 0x0;
@@ -28,7 +28,7 @@ const _toStringOptions: ToStringOptions = {
 
 export function toString(codePoint: codepoint): string {
   assert(codePoint, "codePoint");
-  return `U+${safeIntegerToString(codePoint, _toStringOptions)}`;
+  return `U+${SafeInteger.toString(codePoint, _toStringOptions)}`;
 }
 
 export function planeOf(codePoint: codepoint): plane {

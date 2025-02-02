@@ -16,10 +16,7 @@ import {
   Uint8xOperations,
   UintNOperations,
 } from "./ranged_integer.ts";
-import {
-  round as roundNumber,
-  toString as safeIntegerToString,
-} from "./safe_integer.ts";
+import { round as roundNumber } from "./safe_integer.ts";
 import { int, uint16, uint24, uint32, uint6, uint7, uint8 } from "../_.ts";
 import { OverflowMode } from "./overflow_mode.ts";
 import { SafeIntegerRange } from "./safe_integer_range.ts";
@@ -252,7 +249,7 @@ class _UinNOperations<T extends int> implements UintNOperations<T> {
 
   toString(self: T, options?: ToStringOptions): string {
     this.assert(self, "self");
-    return safeIntegerToString(self, options);
+    return SafeInteger.toString(self, options);
   }
 }
 

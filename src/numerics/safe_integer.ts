@@ -1,15 +1,6 @@
 import * as ExtNumber from "../utils/number.ts";
-import { ToStringOptions } from "./main.ts";
 import { int } from "../_.ts";
-import {
-  assertSafeInteger,
-  isEvenSafeInteger,
-  isPositiveNumber,
-} from "../type/number.ts";
-import {
-  assertSupportedRadix,
-  DECIMAL as DECIMAL_RADIX,
-} from "../utils/radix.ts";
+import { assertSafeInteger, isEvenSafeInteger } from "../type/number.ts";
 import { RoundingMode } from "./rounding_mode.ts";
 
 export function clampToPositive<T extends int>(value: T): T {
@@ -30,25 +21,6 @@ export function clampToNonPositive<T extends int>(value: T): T {
 export function clampToNegative<T extends int>(value: T): T {
   assertSafeInteger(value, "value");
   return ExtNumber.normalize(Math.min(value, -1) as T);
-}
-
-export function toString(value: int, options?: ToStringOptions): string {
-  assertSafeInteger(value, "value");
-  const radix = options?.radix ?? DECIMAL_RADIX;
-  assertSupportedRadix(radix, "radix");
-
-  let result = value.toString(radix);
-
-  if (options?.lowerCase !== true) {
-    result = result.toUpperCase();
-  }
-
-  const minIntegralDigits = options?.minIntegralDigits;
-  if (isPositiveNumber(minIntegralDigits)) {
-    result = result.padStart(minIntegralDigits, "0");
-  }
-
-  return result;
 }
 
 //TODO fromNumberの方が一貫性あるか
