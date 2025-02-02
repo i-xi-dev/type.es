@@ -6,7 +6,7 @@ import {
   DECIMAL as DECIMAL_RADIX,
   prefixOf,
   type radix,
-} from "../../utils/radix.ts";
+} from "./radix.ts";
 import {
   assertFiniteNumber,
   isPositiveSafeInteger,

@@ -3,7 +3,7 @@ import {
   DECIMAL as DECIMAL_RADIX,
   integerPatternOf,
   type radix,
-} from "../utils/radix.ts";
+} from "../type/sp/radix.ts";
 
 // ここでは、safe integerではないnumber型は「整数」とみなさない
 

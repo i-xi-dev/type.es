@@ -8,7 +8,7 @@ import {
   assertSupportedRadix,
   DECIMAL as DECIMAL_RADIX,
   type radix,
-} from "./radix.ts";
+} from "../type/sp/radix.ts";
 import {
   fromString as bigintFromString,
   toNumber as bigintToNumber,
