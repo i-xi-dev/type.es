@@ -16,7 +16,6 @@ import {
   Uint8xOperations,
   UintNOperations,
 } from "./ranged_integer.ts";
-import { round as roundNumber } from "./safe_integer.ts";
 import { int, uint16, uint24, uint32, uint6, uint7, uint8 } from "../_.ts";
 import { OverflowMode } from "./overflow_mode.ts";
 import { SafeIntegerRange } from "./safe_integer_range.ts";
@@ -162,7 +161,7 @@ class _UinNOperations<T extends int> implements UintNOperations<T> {
     if (isSafeInteger(adjustedValue)) {
       valueAsInt = adjustedValue;
     } else {
-      valueAsInt = roundNumber(adjustedValue, options?.roundingMode);
+      valueAsInt = SafeInteger.round(adjustedValue, options?.roundingMode);
     }
 
     if (this.is(valueAsInt)) {

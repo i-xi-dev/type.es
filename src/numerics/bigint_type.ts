@@ -1,7 +1,7 @@
 import { assertNumber, isSafeInteger } from "../type/number.ts";
 import { FromNumberOptions } from "./main.ts";
 import { int } from "../_.ts";
-import { round as roundNumber } from "./safe_integer.ts";
+import { round as roundNumber } from "../utils/safe_integer.ts";
 
 export function fromNumber(
   value: number,
