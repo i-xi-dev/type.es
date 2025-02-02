@@ -49,3 +49,14 @@ export function assertNegativeInteger(test: unknown, label: string): void {
     throw new TypeError(`\`${label}\` must be a negative integer.`);
   }
 }
+
+export function isOddInteger(test: unknown): test is safeint | bigint {
+  return (Number.isSafeInteger(test) && (((test as safeint) % 2) !== 0)) ||
+    ((typeof test === "bigint") && ((test % 2n) !== 0n));
+}
+
+export function assertOddInteger(test: unknown, label: string): void {
+  if (isOddInteger(test) !== true) {
+    throw new TypeError(`\`${label}\` must be an odd integer.`);
+  }
+}

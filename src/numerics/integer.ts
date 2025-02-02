@@ -1,8 +1,5 @@
 import { isEvenBigInt, isOddBigInt } from "../type/bigint.ts";
-import {
-  isEvenSafeInteger,
-  isOddSafeInteger,
-} from "../type/number.ts";
+import { isEvenSafeInteger, isOddSafeInteger } from "../type/number.ts";
 import { isString } from "../type/string.ts";
 import {
   DECIMAL as DECIMAL_RADIX,

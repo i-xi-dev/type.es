@@ -327,3 +327,79 @@ Deno.test("Type.assertNegativeInteger()", () => {
     //
   }
 });
+
+Deno.test("Type.isOddInteger()", () => {
+  assertStrictEquals(Type.isOddInteger(0), false);
+  assertStrictEquals(Type.isOddInteger(-0), false);
+  assertStrictEquals(Type.isOddInteger(1), true);
+  assertStrictEquals(Type.isOddInteger(-1), true);
+  assertStrictEquals(Type.isOddInteger(2), false);
+  assertStrictEquals(Type.isOddInteger(-2), false);
+  assertStrictEquals(Type.isOddInteger(3), true);
+  assertStrictEquals(Type.isOddInteger(-3), true);
+
+  assertStrictEquals(Type.isOddInteger(-10.1), false);
+  assertStrictEquals(Type.isOddInteger(-9.9), false);
+  assertStrictEquals(Type.isOddInteger(9.9), false);
+  assertStrictEquals(Type.isOddInteger(10.1), false);
+
+  assertStrictEquals(Type.isOddInteger(0n), false);
+  assertStrictEquals(Type.isOddInteger(-0n), false);
+  assertStrictEquals(Type.isOddInteger(1n), true);
+  assertStrictEquals(Type.isOddInteger(-1n), true);
+  assertStrictEquals(Type.isOddInteger(2n), false);
+  assertStrictEquals(Type.isOddInteger(-2n), false);
+  assertStrictEquals(Type.isOddInteger(3n), true);
+  assertStrictEquals(Type.isOddInteger(-3n), true);
+
+  assertStrictEquals(Type.isOddInteger(Number.MAX_SAFE_INTEGER), true);
+  assertStrictEquals(Type.isOddInteger(1.1), false);
+  assertStrictEquals(Type.isOddInteger(-1.1), false);
+  assertStrictEquals(Type.isOddInteger(Number.NaN), false);
+  assertStrictEquals(Type.isOddInteger(Number.POSITIVE_INFINITY), false);
+  assertStrictEquals(Type.isOddInteger(Number.NEGATIVE_INFINITY), false);
+  assertStrictEquals(Type.isOddInteger(Number.MIN_SAFE_INTEGER), true);
+
+  assertStrictEquals(Type.isOddInteger(undefined as unknown as number), false);
+  assertStrictEquals(Type.isOddInteger(null as unknown as number), false);
+  assertStrictEquals(Type.isOddInteger(true as unknown as number), false);
+  assertStrictEquals(Type.isOddInteger(false as unknown as number), false);
+  assertStrictEquals(Type.isOddInteger("" as unknown as number), false);
+  assertStrictEquals(Type.isOddInteger("0" as unknown as number), false);
+});
+
+Deno.test("Type.assertOddInteger()", () => {
+  try {
+    Type.assertOddInteger(-3, "test-1");
+    Type.assertOddInteger(-3n, "test-1");
+    Type.assertOddInteger(-1, "test-1");
+    Type.assertOddInteger(-1n, "test-1");
+    Type.assertOddInteger(1, "test-1");
+    Type.assertOddInteger(1n, "test-1");
+    Type.assertOddInteger(3, "test-1");
+    Type.assertOddInteger(3n, "test-1");
+  } catch (exception) {
+    fail((exception as Error).toString());
+  }
+
+  try {
+    Type.assertOddInteger(0, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    Type.assertOddInteger(undefined, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    Type.assertOddInteger("0", "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+});

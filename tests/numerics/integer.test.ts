@@ -8,46 +8,6 @@ import { Numerics } from "../../mod.ts";
 
 const { Integer } = Numerics;
 
-Deno.test("Integer.isOdd()", () => {
-  assertStrictEquals(Integer.isOdd(0), false);
-  assertStrictEquals(Integer.isOdd(-0), false);
-  assertStrictEquals(Integer.isOdd(1), true);
-  assertStrictEquals(Integer.isOdd(-1), true);
-  assertStrictEquals(Integer.isOdd(2), false);
-  assertStrictEquals(Integer.isOdd(-2), false);
-  assertStrictEquals(Integer.isOdd(3), true);
-  assertStrictEquals(Integer.isOdd(-3), true);
-
-  assertStrictEquals(Integer.isOdd(-10.1), false);
-  assertStrictEquals(Integer.isOdd(-9.9), false);
-  assertStrictEquals(Integer.isOdd(9.9), false);
-  assertStrictEquals(Integer.isOdd(10.1), false);
-
-  assertStrictEquals(Integer.isOdd(0n), false);
-  assertStrictEquals(Integer.isOdd(-0n), false);
-  assertStrictEquals(Integer.isOdd(1n), true);
-  assertStrictEquals(Integer.isOdd(-1n), true);
-  assertStrictEquals(Integer.isOdd(2n), false);
-  assertStrictEquals(Integer.isOdd(-2n), false);
-  assertStrictEquals(Integer.isOdd(3n), true);
-  assertStrictEquals(Integer.isOdd(-3n), true);
-
-  assertStrictEquals(Integer.isOdd(Number.MAX_SAFE_INTEGER), true);
-  assertStrictEquals(Integer.isOdd(1.1), false);
-  assertStrictEquals(Integer.isOdd(-1.1), false);
-  assertStrictEquals(Integer.isOdd(Number.NaN), false);
-  assertStrictEquals(Integer.isOdd(Number.POSITIVE_INFINITY), false);
-  assertStrictEquals(Integer.isOdd(Number.NEGATIVE_INFINITY), false);
-  assertStrictEquals(Integer.isOdd(Number.MIN_SAFE_INTEGER), true);
-
-  assertStrictEquals(Integer.isOdd(undefined as unknown as number), false);
-  assertStrictEquals(Integer.isOdd(null as unknown as number), false);
-  assertStrictEquals(Integer.isOdd(true as unknown as number), false);
-  assertStrictEquals(Integer.isOdd(false as unknown as number), false);
-  assertStrictEquals(Integer.isOdd("" as unknown as number), false);
-  assertStrictEquals(Integer.isOdd("0" as unknown as number), false);
-});
-
 Deno.test("Integer.isEven()", () => {
   assertStrictEquals(Integer.isEven(0), true);
   assertStrictEquals(Integer.isEven(-0), true);
