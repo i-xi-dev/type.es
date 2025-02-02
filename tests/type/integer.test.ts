@@ -143,10 +143,16 @@ Deno.test("Type.isNonNegativeInteger()", () => {
   assertStrictEquals(Type.isNonNegativeInteger(-1n), false);
 
   assertStrictEquals(Type.isNonNegativeInteger(Number.NaN), false);
-  assertStrictEquals(Type.isNonNegativeInteger(Number.POSITIVE_INFINITY), false);
+  assertStrictEquals(
+    Type.isNonNegativeInteger(Number.POSITIVE_INFINITY),
+    false,
+  );
   assertStrictEquals(Type.isNonNegativeInteger(SIMAX), true);
   assertStrictEquals(Type.isNonNegativeInteger(SIMIN), false);
-  assertStrictEquals(Type.isNonNegativeInteger(Number.NEGATIVE_INFINITY), false);
+  assertStrictEquals(
+    Type.isNonNegativeInteger(Number.NEGATIVE_INFINITY),
+    false,
+  );
 
   assertStrictEquals(Type.isNonNegativeInteger(undefined), false);
   assertStrictEquals(Type.isNonNegativeInteger(null), false);
@@ -182,6 +188,74 @@ Deno.test("Type.assertNonNegativeInteger()", () => {
 
   try {
     Type.assertNonNegativeInteger("0", "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+});
+
+Deno.test("Type.isNonPositiveInteger()", () => {
+  assertStrictEquals(Type.isNonPositiveInteger(0), true);
+  assertStrictEquals(Type.isNonPositiveInteger(-0), true);
+  assertStrictEquals(Type.isNonPositiveInteger(1), false);
+  assertStrictEquals(Type.isNonPositiveInteger(-1), true);
+
+  assertStrictEquals(Type.isNonPositiveInteger(-10.1), false);
+  assertStrictEquals(Type.isNonPositiveInteger(-9.9), false);
+  assertStrictEquals(Type.isNonPositiveInteger(9.9), false);
+  assertStrictEquals(Type.isNonPositiveInteger(10.1), false);
+
+  assertStrictEquals(Type.isNonPositiveInteger(0n), true);
+  assertStrictEquals(Type.isNonPositiveInteger(-0n), true);
+  assertStrictEquals(Type.isNonPositiveInteger(1n), false);
+  assertStrictEquals(Type.isNonPositiveInteger(-1n), true);
+
+  assertStrictEquals(Type.isNonPositiveInteger(Number.NaN), false);
+  assertStrictEquals(
+    Type.isNonPositiveInteger(Number.POSITIVE_INFINITY),
+    false,
+  );
+  assertStrictEquals(Type.isNonPositiveInteger(SIMAX), false);
+  assertStrictEquals(Type.isNonPositiveInteger(SIMIN), true);
+  assertStrictEquals(
+    Type.isNonPositiveInteger(Number.NEGATIVE_INFINITY),
+    false,
+  );
+
+  assertStrictEquals(Type.isNonPositiveInteger(undefined), false);
+  assertStrictEquals(Type.isNonPositiveInteger(null), false);
+  assertStrictEquals(Type.isNonPositiveInteger(true), false);
+  assertStrictEquals(Type.isNonPositiveInteger(false), false);
+  assertStrictEquals(Type.isNonPositiveInteger(""), false);
+  assertStrictEquals(Type.isNonPositiveInteger("0"), false);
+});
+
+Deno.test("Type.assertNonPositiveInteger()", () => {
+  try {
+    Type.assertNonPositiveInteger(0, "test-1");
+    Type.assertNonPositiveInteger(0n, "test-1");
+    Type.assertNonPositiveInteger(-1, "test-1");
+    Type.assertNonPositiveInteger(-1n, "test-1");
+  } catch (exception) {
+    fail((exception as Error).toString());
+  }
+
+  try {
+    Type.assertNonPositiveInteger(1, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    Type.assertNonPositiveInteger(undefined, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    Type.assertNonPositiveInteger("0", "test-1");
     unreachable();
   } catch {
     //

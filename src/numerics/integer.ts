@@ -1,13 +1,7 @@
-import {
-  isEvenBigInt,
-  isNegativeBigInt,
-  isNonPositiveBigInt,
-  isOddBigInt,
-} from "../type/bigint.ts";
+import { isEvenBigInt, isNegativeBigInt, isOddBigInt } from "../type/bigint.ts";
 import {
   isEvenSafeInteger,
   isNegativeSafeInteger,
-  isNonPositiveSafeInteger,
   isOddSafeInteger,
 } from "../type/number.ts";
 import { isString } from "../type/string.ts";
@@ -19,10 +13,6 @@ import {
 import { xint } from "../_.ts";
 
 // ここでは、safe integerではないnumber型は「整数」とみなさない
-
-export function isNonPositive(test: unknown): test is xint {
-  return isNonPositiveSafeInteger(test) || isNonPositiveBigInt(test);
-}
 
 export function isNegative(test: unknown): test is xint {
   return isNegativeSafeInteger(test) || isNegativeBigInt(test);
