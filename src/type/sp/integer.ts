@@ -1,30 +1,27 @@
-import { isString } from "../type/string.ts";
 import {
   DECIMAL as DECIMAL_RADIX,
   integerPatternOf,
   type radix,
-} from "../type/sp/radix.ts";
+} from "./radix.ts";
+import { isString } from "../string.ts";
 
-// ここでは、safe integerではないnumber型は「整数」とみなさない
-
-export function isStringified(
+export function isIntegerString(
   test: unknown,
   radix: radix = DECIMAL_RADIX,
 ): test is string {
   if (isString(test)) {
-    return (new RegExp(integerPatternOf(radix, { includesSign: true }))).test(
-      test,
-    );
+    const pattern = integerPatternOf(radix, { includesSign: true });
+    return (new RegExp(pattern)).test(test);
   }
   return false;
 }
 
-export function assertStringified(
+export function assertIntegerString(
   test: unknown,
   label: string,
   radix: radix = DECIMAL_RADIX,
 ): void {
-  if (isStringified(test, radix) !== true) {
+  if (isIntegerString(test, radix) !== true) {
     throw new TypeError(
       `\`${label}\` must be text representation of ${radix} based integer.`,
     );

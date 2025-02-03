@@ -1,17 +1,17 @@
 import { assertBigInt, assertBigIntInSafeIntegerRange } from "../bigint.ts";
-import { assertStringified as assertStringifiedInteger } from "../../numerics/integer.ts";
-import {
-  assertSupportedRadix,
-  DECIMAL as DECIMAL_RADIX,
-  prefixOf,
-  type radix,
-} from "./radix.ts";
 import {
   assertFiniteNumber,
   isPositiveSafeInteger,
   isSafeInteger,
   type safeint,
 } from "../number.ts";
+import { assertIntegerString } from "./integer.ts";
+import {
+  assertSupportedRadix,
+  DECIMAL as DECIMAL_RADIX,
+  prefixOf,
+  type radix,
+} from "./radix.ts";
 import { round as roundFromNumber } from "./safe_integer.ts";
 import { RoundingMode } from "./rounding_mode.ts";
 
@@ -67,7 +67,7 @@ export type FromStringOptions = {
 
 export function fromString(value: string, options?: FromStringOptions): bigint {
   const radix = options?.radix ?? DECIMAL_RADIX;
-  assertStringifiedInteger(value, "value", radix);
+  assertIntegerString(value, "value", radix);
 
   const negative = value.startsWith("-");
   let adjustedValue = value;
