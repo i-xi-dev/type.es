@@ -20,4 +20,16 @@ export function assertPositiveNumeric(test: unknown, label: string): void {
   }
 }
 
+export function isNonNegativeNumeric(test: unknown): test is number | bigint {
+  return isNumeric(test) && (test >= 0);
+}
+
+export function assertNonNegativeNumeric(test: unknown, label: string): void {
+  if (isNonNegativeNumeric(test) !== true) {
+    throw new TypeError(
+      `\`${label}\` must be a non-negative \`number\` or a non-negative \`bigint\`.`,
+    );
+  }
+}
+
 //XXX isPositiveFiniteNumeric, ...

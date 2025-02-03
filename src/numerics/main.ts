@@ -1,20 +1,8 @@
-import {
-  isNegativeBigInt,
-  isNonNegativeBigInt,
-  isNonPositiveBigInt,
-} from "../type/bigint.ts";
-import {
-  isNegativeNumber,
-  isNonNegativeNumber,
-  isNonPositiveNumber,
-} from "../type/number.ts";
+import { isNegativeBigInt, isNonPositiveBigInt } from "../type/bigint.ts";
+import { isNegativeNumber, isNonPositiveNumber } from "../type/number.ts";
 import { numeric } from "../_.ts";
 import { type radix } from "../type/sp/radix.ts";
 import { RoundingMode } from "../type/sp/rounding_mode.ts";
-
-export function isNonNegative(test: unknown): test is numeric {
-  return isNonNegativeNumber(test) || isNonNegativeBigInt(test);
-}
 
 export function isNonPositive(test: unknown): test is numeric {
   return isNonPositiveNumber(test) || isNonPositiveBigInt(test);
