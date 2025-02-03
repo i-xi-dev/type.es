@@ -5,5 +5,6 @@ export * from "./buffer_source.ts";
 export * from "./integer.ts";
 export * from "./iterable.ts";
 export * from "./number.ts";
+export * from "./numeric.ts";
 export * from "./object.ts";
 export * from "./string.ts";

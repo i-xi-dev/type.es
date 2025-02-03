@@ -1,9 +1,4 @@
-import {
-  assertStrictEquals,
-  assertThrows,
-  fail,
-  unreachable,
-} from "@std/assert";
+import { assertStrictEquals, fail, unreachable } from "@std/assert";
 import { Type } from "../../mod.ts";
 
 const SIMIN = Number.MIN_SAFE_INTEGER;

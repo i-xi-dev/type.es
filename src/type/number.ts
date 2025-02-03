@@ -56,6 +56,8 @@ export function assertNegativeNumber(test: unknown, label: string): void {
   }
 }
 
+//XXX isPositiveFiniteNumber, ...
+
 export function isNumberInRange(
   test: unknown,
   min: number,

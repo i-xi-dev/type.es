@@ -1,61 +1,6 @@
 import { assertStrictEquals } from "@std/assert";
 import { Numerics } from "../../mod.ts";
 
-Deno.test("Numerics.isPositive()", () => {
-  assertStrictEquals(Numerics.isPositive(0), false);
-  assertStrictEquals(Numerics.isPositive(-0), false);
-  assertStrictEquals(Numerics.isPositive(1), true);
-  assertStrictEquals(Numerics.isPositive(-1), false);
-
-  assertStrictEquals(Numerics.isPositive(-10.1), false);
-  assertStrictEquals(Numerics.isPositive(-9.9), false);
-  assertStrictEquals(Numerics.isPositive(9.9), true);
-  assertStrictEquals(Numerics.isPositive(10.1), true);
-
-  assertStrictEquals(Numerics.isPositive(0n), false);
-  assertStrictEquals(Numerics.isPositive(-0n), false);
-  assertStrictEquals(Numerics.isPositive(1n), true);
-  assertStrictEquals(Numerics.isPositive(-1n), false);
-
-  assertStrictEquals(Numerics.isPositive(Number.NaN), false);
-  assertStrictEquals(Numerics.isPositive(Number.POSITIVE_INFINITY), true);
-  assertStrictEquals(Numerics.isPositive(Number.MAX_SAFE_INTEGER + 1), true);
-  assertStrictEquals(Numerics.isPositive(Number.MAX_SAFE_INTEGER), true);
-  assertStrictEquals(Numerics.isPositive(Number.MIN_SAFE_INTEGER), false);
-  assertStrictEquals(
-    Numerics.isPositive(Number.MIN_SAFE_INTEGER - 1),
-    false,
-  );
-  assertStrictEquals(Numerics.isPositive(Number.NEGATIVE_INFINITY), false);
-
-  assertStrictEquals(
-    Numerics.isPositive(BigInt(Number.MAX_SAFE_INTEGER) + 1n),
-    true,
-  );
-  assertStrictEquals(
-    Numerics.isPositive(BigInt(Number.MAX_SAFE_INTEGER)),
-    true,
-  );
-  assertStrictEquals(
-    Numerics.isPositive(BigInt(Number.MIN_SAFE_INTEGER)),
-    false,
-  );
-  assertStrictEquals(
-    Numerics.isPositive(BigInt(Number.MIN_SAFE_INTEGER) - 1n),
-    false,
-  );
-
-  assertStrictEquals(
-    Numerics.isPositive(undefined as unknown as number),
-    false,
-  );
-  assertStrictEquals(Numerics.isPositive(null as unknown as number), false);
-  assertStrictEquals(Numerics.isPositive(true as unknown as number), false);
-  assertStrictEquals(Numerics.isPositive(false as unknown as number), false);
-  assertStrictEquals(Numerics.isPositive("" as unknown as number), false);
-  assertStrictEquals(Numerics.isPositive("0" as unknown as number), false);
-});
-
 Deno.test("Numerics.isNonNegative()", () => {
   assertStrictEquals(Numerics.isNonNegative(0), true);
   assertStrictEquals(Numerics.isNonNegative(-0), true);
