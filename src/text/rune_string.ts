@@ -5,11 +5,11 @@ import {
   type codepoint,
   type rune,
   type safeint,
+  type script,
   type usvstring,
 } from "../type.ts";
 import { EMPTY } from "../type/sp/string.ts";
 import { Rune } from "./mod.ts";
-import { script } from "../_.ts";
 import { Script } from "../i18n/script.ts";
 
 export function is(test: unknown): test is usvstring {

@@ -1,5 +1,5 @@
 import { EMPTY as EMPTY_STRING } from "../type/sp/string.ts";
-import { language, region, script } from "../_.ts";
+import { type language, type region, type script } from "../type.ts";
 import { isString } from "../type/string.ts";
 
 const _FALLBACK = "en";

@@ -1,6 +1,6 @@
 import regionMap from "../../dat/i18n/region_map.json" with { type: "json" };
 import { getRegionName } from "./utils.ts";
-import { region } from "../_.ts";
+import { type region } from "../type.ts";
 
 type _region = keyof typeof regionMap;
 

@@ -16,7 +16,13 @@ export type grapheme = usvstring;
 
 export type int = safeint | bigint;
 
+/** `/^[a-z]{2,3}$/` */
+export type language = string;
+
 export type numeric = number | bigint;
+
+/** `/^[A-Z]{2}$/` */
+export type region = string;
 
 /**
  * String matching regular expression `/^[\u{0}-\u{10FFFF}]{1}$/u`.
@@ -28,6 +34,9 @@ export type rune = string;
  * A safe-integer.
  */
 export type safeint = number;
+
+/** `/^[A-Z][a-z]{3}$/` */
+export type script = string;
 
 /**
  * An 1-bit unsigned integer.

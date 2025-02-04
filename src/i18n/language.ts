@@ -2,7 +2,7 @@ import languageMap from "../../dat/i18n/language_map.json" with {
   type: "json",
 };
 import { getLanguageName } from "./utils.ts";
-import { language } from "../_.ts";
+import { type language } from "../type.ts";
 
 type _lang = keyof typeof languageMap;
 
