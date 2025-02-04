@@ -1,10 +1,15 @@
 import { assert as assertCodePoint } from "./code_point.ts";
 import { assertIterable } from "../type/iterable.ts";
 import { assertString, isString } from "../type/string.ts";
-import { type codepoint, type rune, type safeint } from "../type.ts";
+import {
+  type codepoint,
+  type rune,
+  type safeint,
+  type usvstring,
+} from "../type.ts";
 import { EMPTY } from "../type/sp/string.ts";
 import { Rune } from "./mod.ts";
-import { script, usvstring } from "../_.ts";
+import { script } from "../_.ts";
 import { Script } from "../i18n/script.ts";
 
 export function is(test: unknown): test is usvstring {

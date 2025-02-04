@@ -1,7 +1,7 @@
 import { assert as assertRuneSequence } from "./rune_string.ts";
 import { assertString } from "../type/string.ts";
 import { EMPTY as EMPTY_STRING } from "../type/sp/string.ts";
-import { grapheme } from "../_.ts";
+import { type grapheme } from "../type.ts";
 import { segmentGraphemes } from "../i18n/utils.ts";
 
 const _NormalizationForms = ["NFC", "NFD", "NFKC", "NFKD"] as const;

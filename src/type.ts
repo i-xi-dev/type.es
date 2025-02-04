@@ -9,6 +9,11 @@ export type char = string;
 /** 0x0-0x10FFFF */
 export type codepoint = safeint;
 
+/**
+ * A grapheme cluster.
+ */
+export type grapheme = usvstring;
+
 export type int = safeint | bigint;
 
 export type numeric = number | bigint;
@@ -19,16 +24,20 @@ export type numeric = number | bigint;
  */
 export type rune = string;
 
-export type safeint = number;
 /**
- * The type of 1-bit unsigned integer.
+ * A safe-integer.
+ */
+export type safeint = number;
+
+/**
+ * An 1-bit unsigned integer.
  */
 export type uint1 =
   | 0x0
   | 0x1;
 
 /**
- * The type of 2-bit unsigned integer.
+ * A 2-bit unsigned integer.
  */
 export type uint2 =
   | uint1
@@ -36,7 +45,7 @@ export type uint2 =
   | 0x3;
 
 /**
- * The type of 3-bit unsigned integer.
+ * A 3-bit unsigned integer.
  */
 export type uint3 =
   | uint2
@@ -46,7 +55,7 @@ export type uint3 =
   | 0x7;
 
 /**
- * The type of 4-bit unsigned integer.
+ * A 4-bit unsigned integer.
  */
 export type uint4 =
   | uint3
@@ -60,7 +69,7 @@ export type uint4 =
   | 0xF;
 
 /**
- * The type of 5-bit unsigned integer.
+ * A 5-bit unsigned integer.
  */
 export type uint5 =
   | uint4
@@ -82,7 +91,7 @@ export type uint5 =
   | 0x1F;
 
 /**
- * The type of 6-bit unsigned integer.
+ * A 6-bit unsigned integer.
  */
 export type uint6 =
   | uint5
@@ -120,7 +129,7 @@ export type uint6 =
   | 0x3F;
 
 /**
- * The type of 7-bit unsigned integer.
+ * A 7-bit unsigned integer.
  */
 export type uint7 =
   | uint6
@@ -190,7 +199,7 @@ export type uint7 =
   | 0x7F;
 
 /**
- * The type of 8-bit unsigned integer.
+ * An 8-bit unsigned integer.
  */
 export type uint8 =
   | uint7
@@ -323,8 +332,22 @@ export type uint8 =
   | 0xFE
   | 0xFF;
 
+/**
+ * A 16-bit unsigned integer.
+ */
 export type uint16 = number;
 
+/**
+ * A 24-bit unsigned integer.
+ */
 export type uint24 = number;
 
+/**
+ * A 32-bit unsigned integer.
+ */
 export type uint32 = number;
+
+/**
+ * A rune sequence.
+ */
+export type usvstring = string;

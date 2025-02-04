@@ -7,11 +7,6 @@ export type script = string;
 /** `/^[A-Z]{2}$/` */
 export type region = string;
 
-export type usvstring = string;
-
-/** A grapheme cluster. */
-export type grapheme = usvstring;
-
 /** Unicode plane */
 export type plane =
   | 0
