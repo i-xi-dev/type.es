@@ -1,3 +1,5 @@
+import { type char } from "../type.ts";
+
 export function isString(test: unknown): test is string {
   return (typeof test === "string");
 }
@@ -27,12 +29,6 @@ export function assertNonEmptyString(test: unknown, label: string): void {
     throw new TypeError(`\`${label}\` must be a non-empty string.`);
   }
 }
-
-/**
- * String matching regular expression `/^[\u0000-\uFFFF]{1}$/`.
- * including surrogates.
- */
-export type char = string;
 
 export function isChar(test: unknown): test is char {
   return isString(test) && (test.length === 1);

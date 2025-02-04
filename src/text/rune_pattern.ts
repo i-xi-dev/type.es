@@ -1,4 +1,4 @@
-// import { codepoint, plane } from "../_.ts";
+// import {  plane } from "../_.ts";
 // import { SafeIntegerRange } from "../numerics/safe_integer_range.ts";
 
 // //TODO patternで命名あってる？

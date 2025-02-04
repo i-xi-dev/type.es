@@ -1,9 +1,16 @@
 import { assertArrayBuffer } from "../type/array_buffer.ts";
 import { assertAsyncIterable, assertIterable } from "../type/iterable.ts";
+import {
+  type biguint64,
+  type int,
+  type safeint,
+  type uint16,
+  type uint32,
+  type uint8,
+} from "../type.ts";
 import { ByteOrder } from "../basics/byte_order.ts";
 import * as env from "../env.ts";
 import { GrowableBuffer } from "./growable_buffer.ts";
-import { biguint64, int, uint16, uint32, uint8, xint } from "../_.ts";
 import { BigUint64 } from "../numerics/big_uint.ts";
 import { Uint16, Uint32, Uint8 } from "../numerics/uint.ts";
 
@@ -12,11 +19,11 @@ import { Uint16, Uint32, Uint8 } from "../numerics/uint.ts";
 
 //XXX
 // export type FromUint8IterableOptions = {
-//   maxByteLength?: int;
+//   maxByteLength?: safeint;
 // };
 
 export function fromUint8Iterable(
-  value: Iterable<int /* uint8 */>,
+  value: Iterable<safeint /* uint8 */>,
   // options?: FromUint8IterableOptions,
 ): ArrayBuffer {
   assertIterable(value, "value");
@@ -28,7 +35,7 @@ export function fromUint8Iterable(
 }
 
 export async function fromUint8AsyncIterable(
-  value: AsyncIterable<int /* uint8 */>,
+  value: AsyncIterable<safeint /* uint8 */>,
   // options?: FromUint8IterableOptions,
 ): Promise<ArrayBuffer> {
   assertAsyncIterable(value, "value");
@@ -54,7 +61,7 @@ type _Uint8xArrayCtor =
   | Uint32ArrayConstructor
   | BigUint64ArrayConstructor;
 
-type _Setter<T extends xint> = (
+type _Setter<T extends int> = (
   dataView: DataView,
   value: T,
   isLittleEndian: boolean,
@@ -67,7 +74,7 @@ function _resolveByteOrder(byteOrder?: ByteOrder): ByteOrder {
   return env.BYTE_ORDER;
 }
 
-function _fromUint8xIterable<T extends xint>(
+function _fromUint8xIterable<T extends int>(
   value: Iterable<T>,
   uint8xArrayCtor: _Uint8xArrayCtor,
   assertElement: (i: unknown, label: string) => void,
@@ -89,7 +96,7 @@ function _fromUint8xIterable<T extends xint>(
   return gb.slice().buffer;
 }
 
-async function _fromUint8xAsyncIterable<T extends xint>(
+async function _fromUint8xAsyncIterable<T extends int>(
   value: AsyncIterable<T>,
   uint8xArrayCtor: _Uint8xArrayCtor,
   assertElement: (i: unknown, label: string) => void,
@@ -111,13 +118,13 @@ async function _fromUint8xAsyncIterable<T extends xint>(
   return gb.slice().buffer;
 }
 
-type _Getter<T extends xint> = (
+type _Getter<T extends int> = (
   dataView: DataView,
-  pos: int,
+  pos: safeint,
   isLittleEndian: boolean,
 ) => T;
 
-function _toUint8xIterable<T extends xint>(
+function _toUint8xIterable<T extends int>(
   value: ArrayBuffer,
   uint8xArrayCtor: _Uint8xArrayCtor,
   viewGetter: _Getter<T>,
@@ -151,7 +158,7 @@ function _toUint8xIterable<T extends xint>(
 
 export type FromUint8xIterableOptions = {
   byteOrder?: ByteOrder;
-  // maxByteLength?: int;
+  // maxByteLength?: safeint;
 };
 
 export function fromUint16Iterable(

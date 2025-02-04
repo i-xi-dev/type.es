@@ -2,7 +2,6 @@ import {
   assertSafeInteger,
   isEvenSafeInteger,
   isPositiveNumber,
-  type safeint,
 } from "../number.ts";
 import {
   assertSupportedRadix,
@@ -15,6 +14,7 @@ import {
 } from "./bigint.ts";
 import { normalize as normalizeNumber } from "./number.ts";
 import { RoundingMode } from "./rounding_mode.ts";
+import { type safeint } from "../../type.ts";
 
 export function clamp<T extends safeint>(value: safeint, min: T, max: T): T {
   assertSafeInteger(value, "value");

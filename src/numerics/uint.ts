@@ -15,20 +15,28 @@ import {
   UintNOperations,
 } from "./ranged_integer.ts";
 import { fromString as bigintFromString } from "../type/sp/bigint.ts";
-import { int, uint16, uint24, uint32, uint6, uint7, uint8 } from "../_.ts";
 import { normalize as normalizeNumber } from "../type/sp/number.ts";
 import { OverflowMode } from "./overflow_mode.ts";
+import {
+  type safeint,
+  type uint16,
+  type uint24,
+  type uint32,
+  type uint6,
+  type uint7,
+  type uint8,
+} from "../type.ts";
 import { SafeIntegerRange } from "./safe_integer_range.ts";
 
-class _UinNOperations<T extends int> implements UintNOperations<T> {
-  readonly #bitLength: int;
+class _UinNOperations<T extends safeint> implements UintNOperations<T> {
+  readonly #bitLength: safeint;
   readonly #range: SafeIntegerRange<T>;
 
   readonly #buffer: ArrayBuffer;
   readonly #bufferUint32View: Uint32Array;
   readonly #bufferUint16View: Uint16Array;
 
-  constructor(bitLength: int) {
+  constructor(bitLength: safeint) {
     if (isNonPositiveSafeInteger(bitLength) || (bitLength > 32)) {
       throw new Error("not implemented"); //XXX 対応するとしても48まで
     }
@@ -41,12 +49,12 @@ class _UinNOperations<T extends int> implements UintNOperations<T> {
     this.#bufferUint16View = new Uint16Array(this.#buffer);
   }
 
-  get bitLength(): int {
+  get bitLength(): safeint {
     return this.#bitLength;
   }
 
   is(value: unknown): value is T {
-    return this.#range.includes(value as int);
+    return this.#range.includes(value as safeint);
   }
 
   assert(test: unknown, label: string): void {
@@ -114,7 +122,7 @@ class _UinNOperations<T extends int> implements UintNOperations<T> {
     }
   }
 
-  rotateLeft(self: T, offset: int): T {
+  rotateLeft(self: T, offset: safeint): T {
     this.assert(self, "self");
     assertSafeInteger(offset, "offset");
 
@@ -157,7 +165,7 @@ class _UinNOperations<T extends int> implements UintNOperations<T> {
       adjustedValue = value;
     }
 
-    let valueAsInt: int;
+    let valueAsInt: safeint;
     if (isSafeInteger(adjustedValue)) {
       valueAsInt = adjustedValue;
     } else {
@@ -183,7 +191,7 @@ class _UinNOperations<T extends int> implements UintNOperations<T> {
     }
   }
 
-  // #saturateFromInteger(value: int): T {
+  // #saturateFromInteger(value: safeint): T {
   //   // assertSafeInteger(value, "value");
 
   //   if (value > this.#range.max) {
@@ -195,7 +203,7 @@ class _UinNOperations<T extends int> implements UintNOperations<T> {
   //   return ExtNumber.normalize(value as T);
   // }
 
-  #truncateFromInteger(value: int): T {
+  #truncateFromInteger(value: safeint): T {
     // assertSafeInteger(value, "value");
 
     if (value === 0) {
@@ -207,7 +215,7 @@ class _UinNOperations<T extends int> implements UintNOperations<T> {
     }
   }
 
-  toNumber(self: T): int {
+  toNumber(self: T): safeint {
     this.assert(self, "self");
 
     return normalizeNumber(self);
@@ -253,9 +261,9 @@ class _UinNOperations<T extends int> implements UintNOperations<T> {
 }
 
 const _BITS = [8, 16, 24, 32 /* , 40, 48 */] as const;
-type _BITS = typeof _BITS[int];
+type _BITS = typeof _BITS[safeint];
 
-class _Uint8xOperations<T extends int> extends _UinNOperations<T>
+class _Uint8xOperations<T extends safeint> extends _UinNOperations<T>
   implements Uint8xOperations<T> {
   constructor(bitLength: _BITS) {
     super(bitLength);
@@ -265,7 +273,7 @@ class _Uint8xOperations<T extends int> extends _UinNOperations<T>
     }
   }
 
-  get byteLength(): int {
+  get byteLength(): safeint {
     return this.bitLength / BITS_PER_BYTE;
   }
 

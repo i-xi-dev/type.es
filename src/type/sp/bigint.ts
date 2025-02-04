@@ -3,7 +3,6 @@ import {
   assertFiniteNumber,
   isPositiveSafeInteger,
   isSafeInteger,
-  type safeint,
 } from "../number.ts";
 import { assertIntegerString } from "./integer.ts";
 import {
@@ -14,6 +13,7 @@ import {
 } from "./radix.ts";
 import { round as roundFromNumber } from "./safe_integer.ts";
 import { RoundingMode } from "./rounding_mode.ts";
+import { type safeint } from "../../type.ts";
 
 export function min<T extends bigint>(value0: T, ...values: T[]): T {
   assertBigInt(value0, `value0`);

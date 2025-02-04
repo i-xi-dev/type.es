@@ -1,6 +1,5 @@
 import { assertRejects, assertStrictEquals, assertThrows } from "@std/assert";
-import { ArrayBufferType } from "../../../mod.ts";
-import { uint16 } from "../../../src/_.ts";
+import { ArrayBufferType, type uint16 } from "../../../mod.ts";
 import { BYTE_ORDER } from "../../../src/env.ts";
 
 Deno.test("ArrayBufferType.fromUint16Iterable(Array<uint16>)", () => {

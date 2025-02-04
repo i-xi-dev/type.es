@@ -1,4 +1,4 @@
-import { codepoint } from "../_.ts";
+import { type codepoint } from "../type.ts";
 import { SafeIntegerRange } from "../numerics/safe_integer_range.ts";
 
 export const GeneralCategory = {

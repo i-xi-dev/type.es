@@ -1,13 +1,8 @@
-import {
-  assertString,
-  type char,
-  isEmptyString,
-  isString,
-} from "../type/string.ts";
+import { assertString, isEmptyString, isString } from "../type/string.ts";
+import { type char, type safeint } from "../type.ts";
 import { EMPTY } from "../type/sp/string.ts";
-import { int } from "../_.ts";
 
-export function charCountOf(value: string): int {
+export function charCountOf(value: string): safeint {
   assertString(value, "value");
   return value.length;
 }

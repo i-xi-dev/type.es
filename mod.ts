@@ -8,3 +8,4 @@ export * as Numerics from "./src/numerics/mod.ts";
 export * as Text from "./src/text/mod.ts";
 export * as Type from "./src/type/mod.ts";
 export * from "./src/type/sp/mod.ts";
+export type * from "./src/type.ts";

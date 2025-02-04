@@ -1,11 +1,11 @@
-import { int, xint } from "../_.ts";
+import { type int, type safeint } from "../type.ts";
 import { isBigInt } from "../type/bigint.ts";
 import { isSafeInteger } from "../type/number.ts";
 
-export interface IntegerRange<T extends xint> {
+export interface IntegerRange<T extends int> {
   get min(): T;
   get max(): T;
-  get size(): int;
+  get size(): safeint;
   rangeEquals(otherRangeLike: IntegerRange.Like<T>): boolean;
   overlaps(otherRangeLike: IntegerRange.Like<T>): boolean;
   covers(otherRangeLike: IntegerRange.Like<T>): boolean; // isSuperrangeOf
@@ -25,26 +25,26 @@ export interface IntegerRange<T extends xint> {
 }
 
 export namespace IntegerRange {
-  export type Tuple<T extends xint> = [min: T, max: T] | [
+  export type Tuple<T extends int> = [min: T, max: T] | [
     minmax: T,
   ];
 
-  export type Struct<T extends xint> = {
+  export type Struct<T extends int> = {
     min: T;
     max: T;
   };
 
-  export type Like<T extends xint> = Tuple<T> | Struct<T>;
+  export type Like<T extends int> = Tuple<T> | Struct<T>;
 
-  export function rangeEquals<T extends xint, U extends xint>(
+  export function rangeEquals<T extends int, U extends int>(
     self: Struct<T>,
     other: Struct<U>,
   ) {
-    return ((self.min as xint) === (other.min as xint)) &&
-      ((self.max as xint) === (other.max as xint));
+    return ((self.min as int) === (other.min as int)) &&
+      ((self.max as int) === (other.max as int));
   }
 
-  export function rangeOverlaps<T extends xint, U extends xint>(
+  export function rangeOverlaps<T extends int, U extends int>(
     self: Struct<T>,
     other: Struct<U>,
   ) {
@@ -52,7 +52,7 @@ export namespace IntegerRange {
       (self.min <= other.max) && (self.max >= other.min);
   }
 
-  export function rangeCovers<T extends xint, U extends xint>(
+  export function rangeCovers<T extends int, U extends int>(
     self: Struct<T>,
     other: Struct<U>,
   ) {
@@ -60,7 +60,7 @@ export namespace IntegerRange {
       (self.min <= other.min) && (self.max >= other.max);
   }
 
-  export function rangeIsDisjointFrom<T extends xint, U extends xint>(
+  export function rangeIsDisjointFrom<T extends int, U extends int>(
     self: Struct<T>,
     other: Struct<U>,
   ) {
@@ -68,7 +68,7 @@ export namespace IntegerRange {
   }
 
   // 図形のtouchesとは意味が異なる。disjointかつ隣接
-  export function rangeIsAdjacentTo<T extends xint, U extends xint>(
+  export function rangeIsAdjacentTo<T extends int, U extends int>(
     self: Struct<T>,
     other: Struct<U>,
   ) {
@@ -87,7 +87,7 @@ export namespace IntegerRange {
   }
 
   export namespace Tuple {
-    export function is<T extends xint>(test: unknown): test is Tuple<T> {
+    export function is<T extends int>(test: unknown): test is Tuple<T> {
       if (Array.isArray(test) !== true) {
         return false;
       }
@@ -121,7 +121,7 @@ export namespace IntegerRange {
   }
 
   export namespace Struct {
-    export function fromRangeLike<T extends xint>(
+    export function fromRangeLike<T extends int>(
       rangeLike: Like<T>,
     ): Struct<T> {
       let parsedMin: T | undefined;

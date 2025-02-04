@@ -1,9 +1,9 @@
 import { assertIterable } from "../type/iterable.ts";
-import { int, uint8 } from "../_.ts";
+import { type safeint, type uint8 } from "../type.ts";
 import { Uint8 } from "./uint.ts";
 
 type ArrayLikeOfExpectUint8 =
-  | Array<int /* uint8 */>
+  | Array<safeint /* uint8 */>
   | Uint8Array
   | Uint8ClampedArray; //TODO
 
@@ -44,7 +44,7 @@ export function assertArrayLikeOfUint8(test: unknown, label: string): void {
 }
 
 export function elementsStartsWith(
-  self: Iterable<int /* uint8 */>,
+  self: Iterable<safeint /* uint8 */>,
   other: ArrayLikeOfExpectUint8,
 ): boolean {
   assertIterable(self, "self");
@@ -77,7 +77,7 @@ export function elementsStartsWith(
 
 // bytesEquals
 export function elementsEquals(
-  self: Iterable<int /* uint8 */>,
+  self: Iterable<safeint /* uint8 */>,
   other: ArrayLikeOfExpectUint8,
 ): boolean {
   assertIterable(self, "self");

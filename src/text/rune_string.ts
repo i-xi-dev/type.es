@@ -1,9 +1,10 @@
 import { assert as assertCodePoint } from "./code_point.ts";
-import { assertString, isString } from "../type/string.ts";
-import { EMPTY } from "../type/sp/string.ts";
 import { assertIterable } from "../type/iterable.ts";
-import { codepoint, int, rune, script, usvstring } from "../_.ts";
+import { assertString, isString } from "../type/string.ts";
+import { type codepoint, type rune, type safeint } from "../type.ts";
+import { EMPTY } from "../type/sp/string.ts";
 import { Rune } from "./mod.ts";
+import { script, usvstring } from "../_.ts";
 import { Script } from "../i18n/script.ts";
 
 export function is(test: unknown): test is usvstring {
@@ -33,7 +34,7 @@ export type AllowMalformedOptions = {
 export function runeCountOf(
   value: usvstring,
   options?: AllowMalformedOptions,
-): int {
+): safeint {
   if (options?.allowMalformed === true) {
     assertString(value, "value");
   } else {

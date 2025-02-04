@@ -1,6 +1,6 @@
-import { type safeint } from "./number.ts";
+import { type int, type safeint } from "../type.ts";
 
-export function isInteger(test: unknown): test is safeint | bigint {
+export function isInteger(test: unknown): test is int {
   return Number.isSafeInteger(test) || (typeof test === "bigint");
 }
 
@@ -10,7 +10,7 @@ export function assertInteger(test: unknown, label: string): void {
   }
 }
 
-export function isPositiveInteger(test: unknown): test is safeint | bigint {
+export function isPositiveInteger(test: unknown): test is int {
   return isInteger(test) && (test > 0);
 }
 
@@ -20,7 +20,7 @@ export function assertPositiveInteger(test: unknown, label: string): void {
   }
 }
 
-export function isNonNegativeInteger(test: unknown): test is safeint | bigint {
+export function isNonNegativeInteger(test: unknown): test is int {
   return isInteger(test) && (test >= 0);
 }
 
@@ -30,7 +30,7 @@ export function assertNonNegativeInteger(test: unknown, label: string): void {
   }
 }
 
-export function isNonPositiveInteger(test: unknown): test is safeint | bigint {
+export function isNonPositiveInteger(test: unknown): test is int {
   return isInteger(test) && (test <= 0);
 }
 
@@ -40,7 +40,7 @@ export function assertNonPositiveInteger(test: unknown, label: string): void {
   }
 }
 
-export function isNegativeInteger(test: unknown): test is safeint | bigint {
+export function isNegativeInteger(test: unknown): test is int {
   return isInteger(test) && (test < 0);
 }
 
@@ -50,7 +50,7 @@ export function assertNegativeInteger(test: unknown, label: string): void {
   }
 }
 
-export function isOddInteger(test: unknown): test is safeint | bigint {
+export function isOddInteger(test: unknown): test is int {
   return (Number.isSafeInteger(test) && (((test as safeint) % 2) !== 0)) ||
     ((typeof test === "bigint") && ((test % 2n) !== 0n));
 }
@@ -61,7 +61,7 @@ export function assertOddInteger(test: unknown, label: string): void {
   }
 }
 
-export function isEvenInteger(test: unknown): test is safeint | bigint {
+export function isEvenInteger(test: unknown): test is int {
   return (Number.isSafeInteger(test) && (((test as safeint) % 2) === 0)) ||
     ((typeof test === "bigint") && ((test % 2n) === 0n));
 }

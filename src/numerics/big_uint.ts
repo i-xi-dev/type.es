@@ -3,7 +3,7 @@ import {
   assertBigIntInSafeIntegerRange,
 } from "../type/bigint.ts";
 import { assertSafeInteger } from "../type/number.ts";
-import { biguint64, int } from "../_.ts";
+import { type biguint64, type safeint } from "../type.ts";
 import { BigIntRange } from "./bigint_range.ts";
 import {
   BITS_PER_BYTE,
@@ -22,10 +22,10 @@ import {
 import { OverflowMode } from "./overflow_mode.ts";
 
 class _UinNOperations<T extends bigint> implements UintNOperations<T> {
-  readonly #bitLength: int;
+  readonly #bitLength: safeint;
   readonly #range: BigIntRange<T>;
 
-  constructor(bitLength: int) {
+  constructor(bitLength: safeint) {
     if (bitLength !== 64) {
       throw new Error("not implemented"); //XXX 対応するとしても1～128まで？
     }
@@ -37,7 +37,7 @@ class _UinNOperations<T extends bigint> implements UintNOperations<T> {
     );
   }
 
-  get bitLength(): int {
+  get bitLength(): safeint {
     return this.#bitLength;
   }
 
@@ -77,7 +77,7 @@ class _UinNOperations<T extends bigint> implements UintNOperations<T> {
     return (aXOrB & this.#range.max) as T;
   }
 
-  rotateLeft(self: T, offset: int): T {
+  rotateLeft(self: T, offset: safeint): T {
     this.assert(self, "self");
     assertSafeInteger(offset, "offset");
 
@@ -130,7 +130,7 @@ class _UinNOperations<T extends bigint> implements UintNOperations<T> {
     }
   }
 
-  toNumber(self: T): int {
+  toNumber(self: T): safeint {
     this.assert(self, "self");
     assertBigIntInSafeIntegerRange(self, "self");
 
@@ -176,7 +176,7 @@ class _UinNOperations<T extends bigint> implements UintNOperations<T> {
 }
 
 const _BITS = [/* 56, */ 64, /* 72, 80, 88, 96, 104, 112, 120, */ 128] as const;
-type _BITS = typeof _BITS[int];
+type _BITS = typeof _BITS[safeint];
 
 class _Uint8xOperations<T extends bigint> extends _UinNOperations<T>
   implements Uint8xOperations<T> {
@@ -196,7 +196,7 @@ class _Uint8xOperations<T extends bigint> extends _UinNOperations<T>
     this.#bufferUint8View = new Uint8Array(this.#buffer);
   }
 
-  get byteLength(): int {
+  get byteLength(): safeint {
     return this.bitLength / BITS_PER_BYTE;
   }
 

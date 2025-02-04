@@ -1,6 +1,5 @@
 import { assertStrictEquals, assertThrows } from "@std/assert";
-import { uint8 } from "../../src/_.ts";
-import { Numerics } from "../../mod.ts";
+import { Numerics, type uint8 } from "../../mod.ts";
 
 const { Uint8 } = Numerics;
 

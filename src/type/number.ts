@@ -1,3 +1,5 @@
+import { type safeint } from "../type.ts";
+
 export function isNumber(test: unknown): test is number {
   return (typeof test === "number");
 }
@@ -81,8 +83,6 @@ export function assertNumberInRange(
     );
   }
 }
-
-export type safeint = number;
 
 export function isSafeInteger(test: unknown): test is safeint {
   return Number.isSafeInteger(test);

@@ -2,10 +2,10 @@ import * as SafeInteger from "../../type/sp/safe_integer.ts";
 import {
   clampToNonNegative as clampToNonNegativeSafeInteger,
 } from "../../type/sp/safe_integer.ts";
-import { int } from "../../_.ts";
 import { RoundingMode } from "../../type/sp/rounding_mode.ts";
+import { type safeint } from "../../type.ts";
 
-function _initAmount(value?: number): int {
+function _initAmount(value?: number): safeint {
   let adjustedValue = Number.isFinite(value) ? value as number : 0;
   adjustedValue = SafeInteger.round(
     adjustedValue,
@@ -22,8 +22,8 @@ function _initAmount(value?: number): int {
 export class _ProgressEvent extends Event
   implements ProgressEvent<EventTarget> {
   #lengthComputable: boolean;
-  #loaded: int;
-  #total: int;
+  #loaded: safeint;
+  #total: safeint;
 
   /**
    * Creates a new `_ProgressEvent`.
@@ -51,14 +51,14 @@ export class _ProgressEvent extends Event
   /**
    * @see [ProgressEvent.loaded](https://developer.mozilla.org/en-US/docs/Web/API/ProgressEvent/loaded)
    */
-  get loaded(): int {
+  get loaded(): safeint {
     return this.#loaded;
   }
 
   /**
    * @see [ProgressEvent.total](https://developer.mozilla.org/en-US/docs/Web/API/ProgressEvent/total)
    */
-  get total(): int {
+  get total(): safeint {
     return this.#total;
   }
 }

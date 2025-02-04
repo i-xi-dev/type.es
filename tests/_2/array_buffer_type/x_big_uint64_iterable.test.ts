@@ -1,6 +1,5 @@
 import { assertRejects, assertStrictEquals, assertThrows } from "@std/assert";
-import { ArrayBufferType } from "../../../mod.ts";
-import { biguint64 } from "../../../src/_.ts";
+import { ArrayBufferType, type biguint64 } from "../../../mod.ts";
 import { BYTE_ORDER } from "../../../src/env.ts";
 
 Deno.test("ArrayBufferType.fromBigUint64Iterable(Array<biguint64>)", () => {

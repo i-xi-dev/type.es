@@ -1,7 +1,8 @@
-import { plane, rune, script } from "../_.ts";
 import { assertGeneralCategory, GeneralCategory } from "./unicode.ts";
-import { isString } from "../type/string.ts";
 import { isBmp as isBmpCodePoint } from "./code_point.ts";
+import { isString } from "../type/string.ts";
+import { plane, script } from "../_.ts";
+import { type rune } from "../type.ts";
 import { Script } from "../i18n/script.ts";
 
 export function is(test: unknown): test is rune {
