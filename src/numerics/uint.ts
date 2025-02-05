@@ -1,4 +1,4 @@
-import * as SafeInteger from "../type/sp/safe_integer.ts";
+import * as SafeInteger from "../sp/safe_integer.ts";
 import {
   assertNumber,
   assertSafeInteger,
@@ -14,8 +14,8 @@ import {
   Uint8xOperations,
   UintNOperations,
 } from "./ranged_integer.ts";
-import { fromString as bigintFromString } from "../type/sp/bigint.ts";
-import { normalize as normalizeNumber } from "../type/sp/number.ts";
+import { fromString as bigintFromString } from "../sp/bigint.ts";
+import { normalize as normalizeNumber } from "../number/basics.ts";
 import { OverflowMode } from "./overflow_mode.ts";
 import {
   type safeint,
@@ -27,6 +27,7 @@ import {
   type uint8,
 } from "../type.ts";
 import { SafeIntegerRange } from "./safe_integer_range.ts";
+import { ZERO as NUMBER_ZERO } from "../const/number.ts";
 
 class _UinNOperations<T extends safeint> implements UintNOperations<T> {
   readonly #bitLength: safeint;
@@ -42,7 +43,10 @@ class _UinNOperations<T extends safeint> implements UintNOperations<T> {
     }
 
     this.#bitLength = bitLength;
-    this.#range = SafeIntegerRange.of<T>(0 as T, (2 ** bitLength - 1) as T);
+    this.#range = SafeIntegerRange.of<T>(
+      NUMBER_ZERO as T,
+      (2 ** bitLength - 1) as T,
+    );
 
     this.#buffer = new ArrayBuffer(96);
     this.#bufferUint32View = new Uint32Array(this.#buffer);
@@ -53,6 +57,7 @@ class _UinNOperations<T extends safeint> implements UintNOperations<T> {
     return this.#bitLength;
   }
 
+  //
   is(value: unknown): value is T {
     return this.#range.includes(value as safeint);
   }
@@ -72,9 +77,9 @@ class _UinNOperations<T extends safeint> implements UintNOperations<T> {
     if (this.#bitLength === 32) {
       // ビット演算子はInt32で演算されるので符号を除くと31ビットまでしか演算できない
       // bigintに変換してビット演算するよりこちらの方が速い
-      this.#bufferUint32View[0] = self;
+      this.#bufferUint32View[NUMBER_ZERO] = self;
       this.#bufferUint32View[1] = other;
-      this.#bufferUint32View[2] = 0;
+      this.#bufferUint32View[2] = NUMBER_ZERO;
       const [a1, a2, b1, b2] = this.#bufferUint16View; // バイオオーダーは元の順にセットするので、ここでは関係ない
       this.#bufferUint16View[4] = a1 & b1;
       this.#bufferUint16View[5] = a2 & b2;
@@ -91,9 +96,9 @@ class _UinNOperations<T extends safeint> implements UintNOperations<T> {
     if (this.#bitLength === 32) {
       // ビット演算子はInt32で演算されるので符号を除くと31ビットまでしか演算できない
       // bigintに変換してビット演算するよりこちらの方が速い
-      this.#bufferUint32View[0] = self;
+      this.#bufferUint32View[NUMBER_ZERO] = self;
       this.#bufferUint32View[1] = other;
-      this.#bufferUint32View[2] = 0;
+      this.#bufferUint32View[2] = NUMBER_ZERO;
       const [a1, a2, b1, b2] = this.#bufferUint16View; // バイオオーダーは元の順にセットするので、ここでは関係ない
       this.#bufferUint16View[4] = a1 | b1;
       this.#bufferUint16View[5] = a2 | b2;
@@ -110,9 +115,9 @@ class _UinNOperations<T extends safeint> implements UintNOperations<T> {
     if (this.#bitLength === 32) {
       // ビット演算子はInt32で演算されるので符号を除くと31ビットまでしか演算できない
       // bigintに変換してビット演算するよりこちらの方が速い
-      this.#bufferUint32View[0] = self;
+      this.#bufferUint32View[NUMBER_ZERO] = self;
       this.#bufferUint32View[1] = other;
-      this.#bufferUint32View[2] = 0;
+      this.#bufferUint32View[2] = NUMBER_ZERO;
       const [a1, a2, b1, b2] = this.#bufferUint16View; // バイオオーダーは元の順にセットするので、ここでは関係ない
       this.#bufferUint16View[4] = a1 ^ b1;
       this.#bufferUint16View[5] = a2 ^ b2;
@@ -127,10 +132,10 @@ class _UinNOperations<T extends safeint> implements UintNOperations<T> {
     assertSafeInteger(offset, "offset");
 
     let normalizedOffset = offset % this.#bitLength;
-    if (normalizedOffset < 0) {
+    if (normalizedOffset < NUMBER_ZERO) {
       normalizedOffset = normalizedOffset + this.#bitLength;
     }
-    if (normalizedOffset === 0) {
+    if (normalizedOffset === NUMBER_ZERO) {
       return self;
     }
 
@@ -200,15 +205,15 @@ class _UinNOperations<T extends safeint> implements UintNOperations<T> {
   //     return this.#range.min;
   //   }
 
-  //   return ExtNumber.normalize(value as T);
+  //   return ExNumber.normalize(value as T);
   // }
 
   #truncateFromInteger(value: safeint): T {
     // assertSafeInteger(value, "value");
 
-    if (value === 0) {
-      return 0 as T;
-    } else if (value > 0) {
+    if (value === NUMBER_ZERO) {
+      return NUMBER_ZERO as T;
+    } else if (value > NUMBER_ZERO) {
       return (value % this.#range.size) as T;
     } else {
       return (this.#range.size + (value % this.#range.size)) as T;
@@ -267,7 +272,7 @@ class _Uint8xOperations<T extends safeint> extends _UinNOperations<T>
   implements Uint8xOperations<T> {
   constructor(bitLength: _BITS) {
     super(bitLength);
-    //if ((bitLength % BITS_PER_BYTE) !== 0) {
+    //if ((bitLength % BITS_PER_BYTE) !== NUMBER_ZERO) {
     if (_BITS.includes(bitLength) !== true) {
       throw new Error("Unsupprted bit length.");
     }

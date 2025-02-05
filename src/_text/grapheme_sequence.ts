@@ -1,6 +1,6 @@
 import { assert as assertRuneSequence } from "./rune_string.ts";
 import { assertString } from "../type/string.ts";
-import { EMPTY as EMPTY_STRING } from "../type/sp/string.ts";
+import { EMPTY as EMPTY_STRING } from "../const/string.ts";
 import { type grapheme } from "../type.ts";
 import { segmentGraphemes } from "../i18n/utils.ts";
 

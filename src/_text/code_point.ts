@@ -1,10 +1,11 @@
-import * as SafeInteger from "../type/sp/safe_integer.ts";
+import * as SafeInteger from "../sp/safe_integer.ts";
 import { type codepoint, type plane } from "../type.ts";
 import { IntegerRange } from "../numerics/integer_range.ts";
 import { is as isPlane } from "./plane.ts";
 import { isSafeIntegerInRange } from "../type/number.ts";
 import { SafeIntegerRange } from "../numerics/safe_integer_range.ts";
 import { ToStringOptions } from "../numerics/main.ts";
+import { ZERO as NUMBER_ZERO } from "../const/number.ts";
 
 export const MIN_VALUE = 0x0;
 
@@ -114,7 +115,7 @@ export function isInRanges(
 
   let range: SafeIntegerRange.Struct<codepoint>;
   //for (const rangeSource of ranges) {
-  for (let i = 0; i < ranges.length; i++) {
+  for (let i = NUMBER_ZERO; i < ranges.length; i++) {
     try {
       range = IntegerRange.Struct.fromRangeLike(ranges[i]);
     } catch {

@@ -1,6 +1,7 @@
 import regionMap from "../../dat/i18n/region_map.json" with { type: "json" };
 import { getRegionName } from "./utils.ts";
 import { type region } from "../type.ts";
+import { ZERO as NUMBER_ZERO } from "../const/number.ts";
 
 type _region = keyof typeof regionMap;
 
@@ -41,11 +42,11 @@ export namespace Region {
   ): Region | null {
     if (is(region)) {
       const info = regionMap[region as _region];
-      const num = info[0] as number;
+      const num = info[NUMBER_ZERO] as number;
 
       return Object.freeze({
         alpha2: region,
-        number: (num <= 0) ? Number.NaN : num,
+        number: (num <= NUMBER_ZERO) ? Number.NaN : num,
         alpha3: info[1] as string,
         name: getRegionName(region, nameLocale),
         private: info[2] as boolean,

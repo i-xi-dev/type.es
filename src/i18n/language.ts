@@ -1,8 +1,10 @@
+import { EMPTY as EMPTY_STRING } from "../const/string.ts";
 import languageMap from "../../dat/i18n/language_map.json" with {
   type: "json",
 };
 import { getLanguageName } from "./utils.ts";
 import { type language } from "../type.ts";
+import { ZERO as NUMBER_ZERO } from "../const/number.ts";
 
 type _lang = keyof typeof languageMap;
 
@@ -67,7 +69,7 @@ const _Type = {
   HISTORICAL: "historical",
   LIVING: "living",
   SPECIAL: "special",
-  UNASSIGNED: "",
+  UNASSIGNED: EMPTY_STRING,
 } as const;
 
 function _type(typeCode: string): Language.Type {
@@ -130,9 +132,9 @@ export namespace Language {
       const typeCode = info[4] as string;
 
       return Object.freeze({
-        alpha2: info[0] as string,
+        alpha2: info[NUMBER_ZERO] as string,
         alpha3,
-        alpha3b: (alpha3b.length > 0) ? alpha3b : alpha3,
+        alpha3b: (alpha3b.length > NUMBER_ZERO) ? alpha3b : alpha3,
         name: getLanguageName(language),
         private: (scopeCode === "p"),
         scope: _scope(scopeCode),

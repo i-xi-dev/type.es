@@ -1,6 +1,7 @@
 import { assertString, isEmptyString, isString } from "../type/string.ts";
 import { type char, type safeint } from "../type.ts";
-import { EMPTY } from "../type/sp/string.ts";
+import { EMPTY as EMPTY_STRING } from "../const/string.ts";
+import { ZERO as NUMBER_ZERO } from "../const/number.ts";
 
 export function charCountOf(value: string): safeint {
   assertString(value, "value");
@@ -14,7 +15,7 @@ export function toChars(value: string): IterableIterator<char, void, void> {
   assertString(value, "value");
 
   return (function* (s) {
-    for (let i = 0; i < s.length; i++) {
+    for (let i = NUMBER_ZERO; i < s.length; i++) {
       yield value.charAt(i);
     }
   })(value);
@@ -63,7 +64,7 @@ export function truncateStart(value: string, truncatePattern: string): string {
     return value;
   }
 
-  return value.replace(new RegExp(`^${truncatePattern}`, _flags), EMPTY);
+  return value.replace(new RegExp(`^${truncatePattern}`, _flags), EMPTY_STRING);
 }
 
 export function truncateEnd(value: string, truncatePattern: string): string {
@@ -74,7 +75,7 @@ export function truncateEnd(value: string, truncatePattern: string): string {
     return value;
   }
 
-  return value.replace(new RegExp(`${truncatePattern}$`, _flags), EMPTY);
+  return value.replace(new RegExp(`${truncatePattern}$`, _flags), EMPTY_STRING);
 }
 
 export function truncateBoth(value: string, truncatePattern: string): string {
@@ -87,7 +88,7 @@ export function truncateBoth(value: string, truncatePattern: string): string {
 
   return value.replace(
     new RegExp(`(?:^${truncatePattern}|${truncatePattern}$)`, _flags),
-    EMPTY,
+    EMPTY_STRING,
   );
 }
 
@@ -96,14 +97,14 @@ export function collectStart(value: string, collectPattern: string): string {
   assertString(collectPattern, "collectPattern");
 
   if (isEmptyString(collectPattern)) {
-    return EMPTY;
+    return EMPTY_STRING;
   }
 
   const results = (new RegExp(`^${collectPattern}`, _flags)).exec(value);
   if (results === null) {
-    return EMPTY;
+    return EMPTY_STRING;
   }
-  return results[0];
+  return results[NUMBER_ZERO];
 }
 
 export function collectEnd(value: string, collectPattern: string): string {
@@ -111,12 +112,12 @@ export function collectEnd(value: string, collectPattern: string): string {
   assertString(collectPattern, "collectPattern");
 
   if (isEmptyString(collectPattern)) {
-    return EMPTY;
+    return EMPTY_STRING;
   }
 
   const results = (new RegExp(`${collectPattern}$`, _flags)).exec(value);
   if (results === null) {
-    return EMPTY;
+    return EMPTY_STRING;
   }
-  return results[0];
+  return results[NUMBER_ZERO];
 }

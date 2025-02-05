@@ -1,6 +1,7 @@
 import { assertIterable } from "../type/iterable.ts";
 import { type safeint, type uint8 } from "../type.ts";
 import { Uint8 } from "./uint.ts";
+import { ZERO as NUMBER_ZERO } from "../const/number.ts";
 
 type ArrayLikeOfExpectUint8 =
   | Array<safeint /* uint8 */>
@@ -50,12 +51,12 @@ export function elementsStartsWith(
   assertIterable(self, "self");
   assertArrayLikeOfUint8(other, "other");
 
-  if (other.length <= 0) {
+  if (other.length <= NUMBER_ZERO) {
     return true;
   }
 
   const otherLastIndex = other.length - 1;
-  let i = 0;
+  let i = NUMBER_ZERO;
   for (const byte of self) {
     if (i > otherLastIndex) {
       return true;
@@ -84,7 +85,7 @@ export function elementsEquals(
   assertArrayLikeOfUint8(other, "other");
 
   const otherLastIndex = other.length - 1;
-  let i = 0;
+  let i = NUMBER_ZERO;
   for (const byte of self) {
     if (i > otherLastIndex) {
       return false;

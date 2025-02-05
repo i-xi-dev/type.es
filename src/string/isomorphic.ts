@@ -1,9 +1,6 @@
-import { assertString } from "../string.ts";
-
-/**
- * The zero-length string.
- */
-export const EMPTY = "";
+import { assertString } from "../type/string.ts";
+import { EMPTY as EMPTY_STRING } from "../const/string.ts";
+import { ZERO as NUMBER_ZERO } from "../const/number.ts";
 
 /**
  * Implementation of [isomorphic decode](https://infra.spec.whatwg.org/#isomorphic-decode) defined in WHATWG Infra Standard.
@@ -11,7 +8,7 @@ export const EMPTY = "";
  * @param input A byte sequence.
  * @returns A string that represents a byte sequence by the code point.
  */
-export function isomorphicDecode(input: BufferSource): string {
+export function decode(input: BufferSource): string {
   let bytes: Uint8Array;
   if (ArrayBuffer.isView(input)) {
     bytes = new Uint8Array(input.buffer);
@@ -22,7 +19,7 @@ export function isomorphicDecode(input: BufferSource): string {
   }
 
   // A: Bの2倍以上遅い（Node.js）
-  // let chars: string = EMPTY;
+  // let chars: string = EMPTY_STRING;
   // for (const byte of bytes) {
   //   chars = chars + String.fromCharCode(byte);
   // }
@@ -32,7 +29,7 @@ export function isomorphicDecode(input: BufferSource): string {
   const chars = Array.from(bytes, (byte) => {
     return String.fromCharCode(byte);
   });
-  return chars.join(EMPTY);
+  return chars.join(EMPTY_STRING);
 }
 
 /**
@@ -41,7 +38,7 @@ export function isomorphicDecode(input: BufferSource): string {
  * @param input A string that does not contain code points greater than `U+00FF`.
  * @returns A byte sequence of isomorphic encoded `input`.
  */
-export function isomorphicEncode(input: string): Uint8Array {
+export function encode(input: string): Uint8Array {
   assertString(input, "input");
 
   // deno-lint-ignore no-control-regex
@@ -52,7 +49,7 @@ export function isomorphicEncode(input: string): Uint8Array {
   }
 
   const bytes = new Uint8Array(input.length);
-  for (let i = 0; i < input.length; i++) {
+  for (let i = NUMBER_ZERO; i < input.length; i++) {
     bytes[i] = input.charCodeAt(i);
   }
   return bytes;

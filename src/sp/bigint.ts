@@ -1,26 +1,31 @@
-import { assertBigInt, assertBigIntInSafeIntegerRange } from "../bigint.ts";
+import {
+  assertBigInt,
+  assertBigIntInSafeIntegerRange,
+} from "../type/bigint.ts";
 import {
   assertFiniteNumber,
   isPositiveSafeInteger,
   isSafeInteger,
-} from "../number.ts";
-import { assertIntegerString } from "./integer.ts";
+} from "../type/number.ts";
+import { assertIntegerString } from "../type/integer_string.ts";
 import {
   assertSupportedRadix,
   DECIMAL as DECIMAL_RADIX,
   prefixOf,
   type radix,
-} from "./radix.ts";
+} from "../radix.ts";
+import { EMPTY as EMPTY_STRING } from "../const/string.ts";
 import { round as roundFromNumber } from "./safe_integer.ts";
 import { RoundingMode } from "./rounding_mode.ts";
-import { type safeint } from "../../type.ts";
+import { type safeint } from "../type.ts";
+import { ZERO as NUMBER_ZERO } from "../const/number.ts";
 
 export function min<T extends bigint>(value0: T, ...values: T[]): T {
   assertBigInt(value0, `value0`);
 
   let provMin = value0;
   let value: T;
-  for (let i = 0; i < values.length; i++) {
+  for (let i = NUMBER_ZERO; i < values.length; i++) {
     value = values[i];
     assertBigInt(value, `values[${i}]`);
 
@@ -36,7 +41,7 @@ export function max<T extends bigint>(value0: T, ...values: T[]): T {
 
   let provMax = value0;
   let value: T;
-  for (let i = 0; i < values.length; i++) {
+  for (let i = NUMBER_ZERO; i < values.length; i++) {
     value = values[i];
     assertBigInt(value, `values[${i}]`);
 
@@ -71,7 +76,7 @@ export function fromString(value: string, options?: FromStringOptions): bigint {
 
   const negative = value.startsWith("-");
   let adjustedValue = value;
-  adjustedValue = adjustedValue.replace(/^[-+]?/, "");
+  adjustedValue = adjustedValue.replace(/^[-+]?/, EMPTY_STRING);
   adjustedValue = prefixOf(radix) + adjustedValue;
   let valueAsBigInt = BigInt(adjustedValue);
   if (negative === true) {

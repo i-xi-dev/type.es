@@ -1,6 +1,7 @@
 import { type int, type safeint } from "../type.ts";
 import { isBigInt } from "../type/bigint.ts";
 import { isSafeInteger } from "../type/number.ts";
+import { ZERO as NUMBER_ZERO } from "../const/number.ts";
 
 export interface IntegerRange<T extends int> {
   get min(): T;
@@ -95,10 +96,10 @@ export namespace IntegerRange {
       let parsedMin: T | undefined;
       let parsedMax: T | undefined;
       if (test.length === 1) {
-        parsedMin = test[0];
+        parsedMin = test[NUMBER_ZERO];
         parsedMax = parsedMin;
       } else if (test.length === 2) {
-        parsedMin = test[0];
+        parsedMin = test[NUMBER_ZERO];
         parsedMax = test[1];
       }
 
@@ -129,12 +130,12 @@ export namespace IntegerRange {
 
       //XXX Tuple.is()等に分割
       if (Array.isArray(rangeLike)) {
-        if (rangeLike.length > 0) {
-          parsedMin = rangeLike[0];
+        if (rangeLike.length > NUMBER_ZERO) {
+          parsedMin = rangeLike[NUMBER_ZERO];
           if (rangeLike.length > 1) {
             parsedMax = rangeLike[1];
           } else {
-            parsedMax = rangeLike[0];
+            parsedMax = rangeLike[NUMBER_ZERO];
           }
         } else {
           throw new RangeError(

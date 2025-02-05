@@ -26,7 +26,7 @@ export class BigIntRange<T extends bigint> implements IntegerRange<T> {
   get size(): number {
     const d = this.#max - this.#min;
     // if (d > Number.MAX_SAFE_INTEGER) {
-    //   throw new Error("");
+    //   throw new Error("-");
     // }
     return Number(d) + 1;
   }

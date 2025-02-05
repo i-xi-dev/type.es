@@ -4,7 +4,7 @@ import {
   fail,
   unreachable,
 } from "@std/assert";
-import { Radix } from "../../../mod.ts";
+import { Radix } from "../mod.ts";
 
 Deno.test("Radix.assertSupportedRadix()", () => {
   try {

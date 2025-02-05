@@ -1,4 +1,5 @@
 import { type int, type safeint } from "../type.ts";
+import { ZERO as NUMBER_ZERO } from "../const/number.ts";
 
 export function isInteger(test: unknown): test is int {
   return Number.isSafeInteger(test) || (typeof test === "bigint");
@@ -11,7 +12,7 @@ export function assertInteger(test: unknown, label: string): void {
 }
 
 export function isPositiveInteger(test: unknown): test is int {
-  return isInteger(test) && (test > 0);
+  return isInteger(test) && (test > NUMBER_ZERO);
 }
 
 export function assertPositiveInteger(test: unknown, label: string): void {
@@ -21,7 +22,7 @@ export function assertPositiveInteger(test: unknown, label: string): void {
 }
 
 export function isNonNegativeInteger(test: unknown): test is int {
-  return isInteger(test) && (test >= 0);
+  return isInteger(test) && (test >= NUMBER_ZERO);
 }
 
 export function assertNonNegativeInteger(test: unknown, label: string): void {
@@ -31,7 +32,7 @@ export function assertNonNegativeInteger(test: unknown, label: string): void {
 }
 
 export function isNonPositiveInteger(test: unknown): test is int {
-  return isInteger(test) && (test <= 0);
+  return isInteger(test) && (test <= NUMBER_ZERO);
 }
 
 export function assertNonPositiveInteger(test: unknown, label: string): void {
@@ -41,7 +42,7 @@ export function assertNonPositiveInteger(test: unknown, label: string): void {
 }
 
 export function isNegativeInteger(test: unknown): test is int {
-  return isInteger(test) && (test < 0);
+  return isInteger(test) && (test < NUMBER_ZERO);
 }
 
 export function assertNegativeInteger(test: unknown, label: string): void {
@@ -51,7 +52,8 @@ export function assertNegativeInteger(test: unknown, label: string): void {
 }
 
 export function isOddInteger(test: unknown): test is int {
-  return (Number.isSafeInteger(test) && (((test as safeint) % 2) !== 0)) ||
+  return (Number.isSafeInteger(test) &&
+    (((test as safeint) % 2) !== NUMBER_ZERO)) ||
     ((typeof test === "bigint") && ((test % 2n) !== 0n));
 }
 
@@ -62,7 +64,8 @@ export function assertOddInteger(test: unknown, label: string): void {
 }
 
 export function isEvenInteger(test: unknown): test is int {
-  return (Number.isSafeInteger(test) && (((test as safeint) % 2) === 0)) ||
+  return (Number.isSafeInteger(test) &&
+    (((test as safeint) % 2) === NUMBER_ZERO)) ||
     ((typeof test === "bigint") && ((test % 2n) === 0n));
 }
 

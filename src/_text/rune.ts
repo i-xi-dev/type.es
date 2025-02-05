@@ -3,6 +3,7 @@ import { isBmp as isBmpCodePoint } from "./code_point.ts";
 import { isString } from "../type/string.ts";
 import { type plane, type rune, type script } from "../type.ts";
 import { Script } from "../i18n/script.ts";
+import { ZERO as NUMBER_ZERO } from "../const/number.ts";
 
 export function is(test: unknown): test is rune {
   return isString(test) && (test.length <= 2) && ([...test].length === 1) &&
@@ -17,11 +18,11 @@ export function assert(test: unknown, label: string): void {
 
 export function planeOf(rune: rune): plane {
   assert(rune, "rune");
-  return Math.trunc(rune.codePointAt(0)! / 0x10000) as plane;
+  return Math.trunc(rune.codePointAt(NUMBER_ZERO)! / 0x10000) as plane;
 }
 
 export function isBmp(test: unknown): test is rune {
-  return is(test) && isBmpCodePoint(test.codePointAt(0)!);
+  return is(test) && isBmpCodePoint(test.codePointAt(NUMBER_ZERO)!);
 }
 
 export function matchesGeneralCategory(
@@ -84,7 +85,7 @@ export function isPatternMatched(
     return false;
   }
 
-  const codePoint = test.codePointAt(0)!;
+  const codePoint = test.codePointAt(NUMBER_ZERO)!;
 
   if (_planeMatches(codePoint, pattern) !== true) {
     return false;
@@ -110,10 +111,10 @@ function _planeMatches(
 
   const planeSet = new Set(options?.planes ?? []);
   if (options?.bmp === true) {
-    planeSet.add(0);
+    planeSet.add(NUMBER_ZERO);
   }
 
-  if (planeSet.size > 0) {
+  if (planeSet.size > NUMBER_ZERO) {
     return isInPlanes(test, [...planeSet]);
   }
 
@@ -129,7 +130,7 @@ function _codePointRangeMatches(
   }
   IntegerRange.Tuple.assert(codePointRanges, "options.codePointRanges");
 
-  const min = codePointRanges[0];
+  const min = codePointRanges[NUMBER_ZERO];
   const max = codePointRanges[1] ?? min;
   return (test >= min) && (test <= max);
 }

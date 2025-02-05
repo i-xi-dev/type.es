@@ -18,8 +18,9 @@ import {
   fromNumber as bigintFromNumber,
   fromString as bigintFromString,
   toString as bigintToString,
-} from "../type/sp/bigint.ts";
+} from "../sp/bigint.ts";
 import { OverflowMode } from "./overflow_mode.ts";
+import { ZERO as NUMBER_ZERO } from "../const/number.ts";
 
 class _UinNOperations<T extends bigint> implements UintNOperations<T> {
   readonly #bitLength: safeint;
@@ -82,10 +83,10 @@ class _UinNOperations<T extends bigint> implements UintNOperations<T> {
     assertSafeInteger(offset, "offset");
 
     let normalizedOffset = offset % this.#bitLength;
-    if (normalizedOffset < 0) {
+    if (normalizedOffset < NUMBER_ZERO) {
       normalizedOffset = normalizedOffset + this.#bitLength;
     }
-    if (normalizedOffset === 0) {
+    if (normalizedOffset === NUMBER_ZERO) {
       return self;
     }
 
@@ -186,7 +187,7 @@ class _Uint8xOperations<T extends bigint> extends _UinNOperations<T>
 
   constructor(bitLength: _BITS) {
     super(bitLength);
-    //if ((bitLength % BITS_PER_BYTE) !== 0) {
+    //if ((bitLength % BITS_PER_BYTE) !== NUMBER_ZERO) {
     if (_BITS.includes(bitLength) !== true) {
       throw new Error("Unsupprted bit length.");
     }
@@ -203,7 +204,7 @@ class _Uint8xOperations<T extends bigint> extends _UinNOperations<T>
   toBytes(self: T, littleEndian: boolean = false): Uint8Array {
     this.assert(self, "self");
 
-    this.#bufferView.setBigUint64(0, self, littleEndian);
+    this.#bufferView.setBigUint64(NUMBER_ZERO, self, littleEndian);
     return Uint8Array.from(this.#bufferUint8View);
   }
 }

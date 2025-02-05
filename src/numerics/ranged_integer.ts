@@ -1,7 +1,7 @@
 import { type int, type safeint } from "../type.ts";
 import { OverflowMode } from "./overflow_mode.ts";
-import { type radix } from "../type/sp/radix.ts";
-import { RoundingMode } from "../type/sp/rounding_mode.ts";
+import { type radix } from "../radix.ts";
+import { RoundingMode } from "../sp/rounding_mode.ts";
 
 export type FromNumberOptions = {
   overflowMode?: OverflowMode;

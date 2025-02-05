@@ -2,6 +2,7 @@ import scriptMap from "../../dat/i18n/script_map.json" with { type: "json" };
 import { getScriptName } from "./utils.ts";
 import { isNonEmptyString } from "../type/string.ts";
 import { type script } from "../type.ts";
+import { ZERO as NUMBER_ZERO } from "../const/number.ts";
 
 type _script = keyof typeof scriptMap;
 
@@ -64,7 +65,7 @@ export namespace Script {
 
       return Object.freeze({
         alpha4: script,
-        number: info[0] as number,
+        number: info[NUMBER_ZERO] as number,
         name: getScriptName(script, nameLocale),
         pva: info[1] as string,
         private: info[2] as boolean,

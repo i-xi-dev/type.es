@@ -8,16 +8,17 @@ import {
   type script,
   type usvstring,
 } from "../type.ts";
-import { EMPTY } from "../type/sp/string.ts";
+import { EMPTY as EMPTY_STRING } from "../const/string.ts";
 import { Rune } from "./mod.ts";
 import { Script } from "../i18n/script.ts";
+import { ZERO as NUMBER_ZERO } from "../const/number.ts";
 
 export function is(test: unknown): test is usvstring {
   return isString(test) && test.isWellFormed();
 }
 
 export function isNonEmpty(test: unknown): test is usvstring {
-  return is(test) && (test.length > 0);
+  return is(test) && (test.length > NUMBER_ZERO);
 }
 
 export function assert(test: unknown, label: string): void {
@@ -79,9 +80,9 @@ export function fromCodePoints(
 
   const disallowMalformed = options?.allowMalformed !== true;
 
-  let runes = EMPTY;
+  let runes = EMPTY_STRING;
   let rune: rune;
-  let i = 0;
+  let i = NUMBER_ZERO;
   for (const codePoint of value) {
     assertCodePoint(codePoint, `value[${i}]`);
     rune = String.fromCodePoint(codePoint);
@@ -112,7 +113,7 @@ export function toCodePoints(
 
   return (function* (s) {
     for (const rune of [...s]) {
-      yield rune.codePointAt(0)!;
+      yield rune.codePointAt(NUMBER_ZERO)!;
     }
   })(value);
 }
@@ -132,7 +133,7 @@ export function belongsToScripts(
   options?: BelongsToScriptsOptions,
 ): test is usvstring {
   let scriptSet: script[];
-  if (Array.isArray(scripts) && (scripts.length > 0)) {
+  if (Array.isArray(scripts) && (scripts.length > NUMBER_ZERO)) {
     scriptSet = [...new Set(scripts)];
     for (const script of scriptSet) {
       Script.assertUnicodePropertyValue(script, script);
@@ -145,7 +146,7 @@ export function belongsToScripts(
     return false;
   }
 
-  if (test.length <= 0) {
+  if (test.length <= NUMBER_ZERO) {
     // Array#every等に合わせた
     return true;
   }
@@ -163,7 +164,7 @@ export function belongsToScripts(
     "v",
   );
 
-  let runeCount = 0;
+  let runeCount = NUMBER_ZERO;
   for (const rune of [...test]) {
     runeCount += 1;
 

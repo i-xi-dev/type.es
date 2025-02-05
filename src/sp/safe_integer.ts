@@ -2,19 +2,20 @@ import {
   assertSafeInteger,
   isEvenSafeInteger,
   isPositiveNumber,
-} from "../number.ts";
+} from "../type/number.ts";
 import {
   assertSupportedRadix,
   DECIMAL as DECIMAL_RADIX,
   type radix,
-} from "./radix.ts";
+} from "../radix.ts";
 import {
   fromString as bigintFromString,
   toNumber as bigintToNumber,
 } from "./bigint.ts";
-import { normalize as normalizeNumber } from "./number.ts";
+import { normalize as normalizeNumber } from "../number/basics.ts";
 import { RoundingMode } from "./rounding_mode.ts";
-import { type safeint } from "../../type.ts";
+import { type safeint } from "../type.ts";
+import { ZERO as NUMBER_ZERO } from "../const/number.ts";
 
 export function clamp<T extends safeint>(value: safeint, min: T, max: T): T {
   assertSafeInteger(value, "value");
@@ -34,12 +35,12 @@ export function clampToPositive<T extends safeint>(value: T): T {
 
 export function clampToNonNegative<T extends safeint>(value: T): T {
   assertSafeInteger(value, "value");
-  return normalizeNumber(Math.max(value, 0) as T);
+  return normalizeNumber(Math.max(value, NUMBER_ZERO) as T);
 }
 
 export function clampToNonPositive<T extends safeint>(value: T): T {
   assertSafeInteger(value, "value");
-  return normalizeNumber(Math.min(value, 0) as T);
+  return normalizeNumber(Math.min(value, NUMBER_ZERO) as T);
 }
 
 export function clampToNegative<T extends safeint>(value: T): T {
@@ -113,7 +114,7 @@ export function round(value: number, roundingMode?: RoundingMode): safeint {
 
   const nearestP = normalizeNumber(Math.ceil(value));
   const nearestN = normalizeNumber(Math.floor(value));
-  const sourceIsNegative = value < 0;
+  const sourceIsNegative = value < NUMBER_ZERO;
   const nearestPH = nearestP - 0.5;
   const nearestNH = nearestN + 0.5;
 
@@ -164,6 +165,6 @@ export function round(value: number, roundingMode?: RoundingMode): safeint {
       return halfUp();
 
     default:
-      return 0 as never;
+      return NUMBER_ZERO as never;
   }
 }

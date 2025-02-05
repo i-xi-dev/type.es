@@ -1,4 +1,5 @@
 import { type char } from "../type.ts";
+import { ZERO as NUMBER_ZERO } from "../const/number.ts";
 
 export function isString(test: unknown): test is string {
   return (typeof test === "string");
@@ -11,7 +12,7 @@ export function assertString(test: unknown, label: string): void {
 }
 
 export function isEmptyString(test: unknown): test is string {
-  return isString(test) && (test.length === 0);
+  return isString(test) && (test.length === NUMBER_ZERO);
 }
 
 export function assertEmptyString(test: unknown, label: string): void {
@@ -21,7 +22,7 @@ export function assertEmptyString(test: unknown, label: string): void {
 }
 
 export function isNonEmptyString(test: unknown): test is string {
-  return isString(test) && (test.length > 0);
+  return isString(test) && (test.length > NUMBER_ZERO);
 }
 
 export function assertNonEmptyString(test: unknown, label: string): void {
