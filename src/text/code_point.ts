@@ -1,9 +1,8 @@
 import * as SafeInteger from "../type/sp/safe_integer.ts";
-import { type codepoint } from "../type.ts";
+import { type codepoint, type plane } from "../type.ts";
 import { IntegerRange } from "../numerics/integer_range.ts";
 import { is as isPlane } from "./plane.ts";
 import { isSafeIntegerInRange } from "../type/number.ts";
-import { plane } from "../_.ts";
 import { SafeIntegerRange } from "../numerics/safe_integer_range.ts";
 import { ToStringOptions } from "../numerics/main.ts";
 
