@@ -15,8 +15,8 @@ import {
   type radix,
 } from "../radix.ts";
 import { EMPTY as EMPTY_STRING } from "../const/string.ts";
-import { round as roundFromNumber } from "./safe_integer.ts";
-import { RoundingMode } from "./rounding_mode.ts";
+import { round as roundFromNumber } from "../sp/safe_integer.ts";
+import { RoundingMode } from "../sp/rounding_mode.ts";
 import { type safeint } from "../type.ts";
 import { ZERO as NUMBER_ZERO } from "../const/number.ts";
 

@@ -18,8 +18,9 @@ import {
   fromNumber as bigintFromNumber,
   fromString as bigintFromString,
   toString as bigintToString,
-} from "../sp/bigint.ts";
+} from "../bigint/basics.ts";
 import { OverflowMode } from "./overflow_mode.ts";
+import { ZERO as BIGINT_ZERO } from "../const/bigint.ts";
 import { ZERO as NUMBER_ZERO } from "../const/number.ts";
 
 class _UinNOperations<T extends bigint> implements UintNOperations<T> {
@@ -33,7 +34,7 @@ class _UinNOperations<T extends bigint> implements UintNOperations<T> {
 
     this.#bitLength = bitLength;
     this.#range = BigIntRange.of<T>(
-      0n as T,
+      BIGINT_ZERO as T,
       (2n ** BigInt(bitLength) - 1n) as T,
     );
   }
@@ -119,12 +120,12 @@ class _UinNOperations<T extends bigint> implements UintNOperations<T> {
   }
 
   #truncateFromInteger(value: bigint): T {
-    if (value === 0n) {
-      return 0n as T;
+    if (value === BIGINT_ZERO) {
+      return BIGINT_ZERO as T;
     }
 
     const sizeAsBigInt = BigInt(this.#range.size);
-    if (value > 0n) {
+    if (value > BIGINT_ZERO) {
       return (value % sizeAsBigInt) as T;
     } else {
       return (sizeAsBigInt + (value % sizeAsBigInt)) as T;

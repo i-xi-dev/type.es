@@ -14,7 +14,7 @@ import {
   Uint8xOperations,
   UintNOperations,
 } from "./ranged_integer.ts";
-import { fromString as bigintFromString } from "../sp/bigint.ts";
+import { fromString as bigintFromString } from "../bigint/basics.ts";
 import { normalize as normalizeNumber } from "../number/basics.ts";
 import { OverflowMode } from "./overflow_mode.ts";
 import {

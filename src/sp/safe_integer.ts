@@ -11,7 +11,7 @@ import {
 import {
   fromString as bigintFromString,
   toNumber as bigintToNumber,
-} from "./bigint.ts";
+} from "../bigint/basics.ts";
 import { normalize as normalizeNumber } from "../number/basics.ts";
 import { RoundingMode } from "./rounding_mode.ts";
 import { type safeint } from "../type.ts";

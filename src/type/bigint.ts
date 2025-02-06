@@ -1,3 +1,5 @@
+import { ZERO as BIGINT_ZERO } from "../const/bigint.ts";
+
 export function isBigInt(test: unknown): test is bigint {
   return (typeof test === "bigint");
 }
@@ -9,7 +11,7 @@ export function assertBigInt(test: unknown, label: string): void {
 }
 
 export function isPositiveBigInt(test: unknown): test is bigint {
-  return isBigInt(test) && (test > 0n);
+  return isBigInt(test) && (test > BIGINT_ZERO);
 }
 
 export function assertPositiveBigInt(test: unknown, label: string): void {
@@ -19,7 +21,7 @@ export function assertPositiveBigInt(test: unknown, label: string): void {
 }
 
 export function isNonNegativeBigInt(test: unknown): test is bigint {
-  return isBigInt(test) && (test >= 0n);
+  return isBigInt(test) && (test >= BIGINT_ZERO);
 }
 
 export function assertNonNegativeBigInt(test: unknown, label: string): void {
@@ -29,7 +31,7 @@ export function assertNonNegativeBigInt(test: unknown, label: string): void {
 }
 
 export function isNonPositiveBigInt(test: unknown): test is bigint {
-  return isBigInt(test) && (test <= 0n);
+  return isBigInt(test) && (test <= BIGINT_ZERO);
 }
 
 export function assertNonPositiveBigInt(test: unknown, label: string): void {
@@ -39,7 +41,7 @@ export function assertNonPositiveBigInt(test: unknown, label: string): void {
 }
 
 export function isNegativeBigInt(test: unknown): test is bigint {
-  return isBigInt(test) && (test < 0n);
+  return isBigInt(test) && (test < BIGINT_ZERO);
 }
 
 export function assertNegativeBigInt(test: unknown, label: string): void {
@@ -49,7 +51,7 @@ export function assertNegativeBigInt(test: unknown, label: string): void {
 }
 
 export function isOddBigInt(test: unknown): test is bigint {
-  return isBigInt(test) && ((test % 2n) !== 0n);
+  return isBigInt(test) && ((test % 2n) !== BIGINT_ZERO);
 }
 
 export function assertOddBigInt(test: unknown, label: string): void {
@@ -59,7 +61,7 @@ export function assertOddBigInt(test: unknown, label: string): void {
 }
 
 export function isEvenBigInt(test: unknown): test is bigint {
-  return isBigInt(test) && ((test % 2n) === 0n);
+  return isBigInt(test) && ((test % 2n) === BIGINT_ZERO);
 }
 
 export function assertEvenBigInt(test: unknown, label: string): void {
