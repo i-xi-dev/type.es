@@ -11,8 +11,8 @@ import {
 import { ByteOrder } from "../basics/byte_order.ts";
 import * as env from "../env.ts";
 import { GrowableBuffer } from "./growable_buffer.ts";
-import { BigUint64 } from "../numerics/big_uint.ts";
-import { Uint16, Uint32, Uint8 } from "../numerics/uint.ts";
+import { BigUint64 } from "../_numerics/big_uint.ts";
+import { Uint16, Uint32, Uint8 } from "../_numerics/uint.ts";
 import { ZERO as NUMBER_ZERO } from "../const/number.ts";
 
 // const _DEFAULT_BYTE_LENGTH = 1_024;

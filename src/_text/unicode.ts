@@ -1,5 +1,5 @@
 import { type codepoint } from "../type.ts";
-import { SafeIntegerRange } from "../numerics/safe_integer_range.ts";
+import { SafeIntegerRange } from "../_numerics/safe_integer_range.ts";
 
 export const GeneralCategory = {
   UPPERCASE_LETTER: "Lu",

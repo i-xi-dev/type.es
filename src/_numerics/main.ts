@@ -1,5 +1,5 @@
-import { type radix } from "../radix.ts";
-import { RoundingMode } from "../sp/rounding_mode.ts";
+import { type radix } from "../numerics/radix.ts";
+import { RoundingMode } from "../numerics/rounding_mode.ts";
 
 //XXX Integer.FromNumberOptions or IntegerFromNumberOptions
 export type FromNumberOptions = {

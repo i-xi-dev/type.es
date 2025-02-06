@@ -7,13 +7,13 @@ import {
   assertSupportedRadix,
   DECIMAL as DECIMAL_RADIX,
   type radix,
-} from "../radix.ts";
+} from "../numerics/radix.ts";
 import {
   fromString as bigintFromString,
   toNumber as bigintToNumber,
 } from "../bigint/basics.ts";
 import { normalize as normalizeNumber } from "../number/basics.ts";
-import { RoundingMode } from "./rounding_mode.ts";
+import { RoundingMode } from "../numerics/rounding_mode.ts";
 import { type safeint } from "../type.ts";
 import { ZERO as NUMBER_ZERO } from "../const/number.ts";
 

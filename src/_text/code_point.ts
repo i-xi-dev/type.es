@@ -1,10 +1,10 @@
 import * as SafeInteger from "../sp/safe_integer.ts";
 import { type codepoint, type plane } from "../type.ts";
-import { IntegerRange } from "../numerics/integer_range.ts";
+import { IntegerRange } from "../_numerics/integer_range.ts";
 import { is as isPlane } from "./plane.ts";
 import { isSafeIntegerInRange } from "../type/number.ts";
-import { SafeIntegerRange } from "../numerics/safe_integer_range.ts";
-import { ToStringOptions } from "../numerics/main.ts";
+import { SafeIntegerRange } from "../_numerics/safe_integer_range.ts";
+import { ToStringOptions } from "../_numerics/main.ts";
 import { ZERO as NUMBER_ZERO } from "../const/number.ts";
 
 export const MIN_VALUE = 0x0;

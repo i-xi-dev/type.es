@@ -1,5 +1,5 @@
 // import { type plane } from "../type.ts";
-// import { SafeIntegerRange } from "../numerics/safe_integer_range.ts";
+// import { SafeIntegerRange } from "../_numerics/safe_integer_range.ts";
 
 // //TODO patternで命名あってる？
 // export type RunePattern = {

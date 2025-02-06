@@ -2,7 +2,7 @@ import {
   DECIMAL as DECIMAL_RADIX,
   integerPatternOf,
   type radix,
-} from "../radix.ts";
+} from "../numerics/radix.ts";
 import { isString } from "./string.ts";
 
 export function isIntegerString(

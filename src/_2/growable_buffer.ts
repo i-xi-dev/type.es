@@ -1,5 +1,5 @@
 import { type safeint, type uint8 } from "../type.ts";
-import { Uint8 } from "../numerics/uint.ts";
+import { Uint8 } from "../_numerics/uint.ts";
 import { ZERO as NUMBER_ZERO } from "../const/number.ts";
 
 const _DEFAULT_SIZE = 1_048_576;
