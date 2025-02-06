@@ -1,14 +1,14 @@
-import * as SafeInteger from "../../sp/safe_integer.ts";
 import {
   clampToNonNegative as clampToNonNegativeSafeInteger,
-} from "../../sp/safe_integer.ts";
+  round as roundFromNumber,
+} from "../../safe_integer/basics.ts";
 import { RoundingMode } from "../../numerics/rounding_mode.ts";
 import { type safeint } from "../../type.ts";
 import { ZERO as NUMBER_ZERO } from "../../const/number.ts";
 
 function _initAmount(value?: number): safeint {
   let adjustedValue = Number.isFinite(value) ? value as number : NUMBER_ZERO;
-  adjustedValue = SafeInteger.round(
+  adjustedValue = roundFromNumber(
     adjustedValue,
     RoundingMode.TRUNCATE,
   );

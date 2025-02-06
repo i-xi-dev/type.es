@@ -1,4 +1,3 @@
-import * as SafeInteger from "../sp/safe_integer.ts";
 import {
   assertNumber,
   assertSafeInteger,
@@ -14,6 +13,11 @@ import {
   Uint8xOperations,
   UintNOperations,
 } from "./ranged_integer.ts";
+import {
+  fromBigInt as safeIntegerFromBigInt,
+  round as roundFromNumber,
+  toString as safeIntegerToString,
+} from "../safe_integer/basics.ts";
 import { fromString as bigintFromString } from "../bigint/basics.ts";
 import { normalize as normalizeNumber } from "../number/basics.ts";
 import { OverflowMode } from "./overflow_mode.ts";
@@ -174,7 +178,7 @@ class _UinNOperations<T extends safeint> implements UintNOperations<T> {
     if (isSafeInteger(adjustedValue)) {
       valueAsInt = adjustedValue;
     } else {
-      valueAsInt = SafeInteger.round(adjustedValue, options?.roundingMode);
+      valueAsInt = roundFromNumber(adjustedValue, options?.roundingMode);
     }
 
     if (this.is(valueAsInt)) {
@@ -227,7 +231,7 @@ class _UinNOperations<T extends safeint> implements UintNOperations<T> {
   }
 
   fromBigInt(value: bigint, options?: FromBigIntOptions): T {
-    const valueAsNumber = SafeInteger.fromBigInt(value);
+    const valueAsNumber = safeIntegerFromBigInt(value);
 
     if (this.is(valueAsNumber)) {
       return valueAsNumber;
@@ -261,7 +265,7 @@ class _UinNOperations<T extends safeint> implements UintNOperations<T> {
 
   toString(self: T, options?: ToStringOptions): string {
     this.assert(self, "self");
-    return SafeInteger.toString(self, options);
+    return safeIntegerToString(self, options);
   }
 }
 

@@ -10,7 +10,7 @@ export * as I18n from "./src/i18n/mod.ts";
 export * as Numerics from "./src/_numerics/mod.ts";
 export * as Radix from "./src/numerics/radix.ts";
 export * from "./src/numerics/rounding_mode.ts";
+export * as SafeInteger from "./src/safe_integer/mod.ts";
 export * as Text from "./src/_text/mod.ts";
 export * as Type from "./src/type/mod.ts";
-export * from "./src/sp/mod.ts";
 export type * from "./src/type.ts";
