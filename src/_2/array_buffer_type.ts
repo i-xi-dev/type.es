@@ -8,7 +8,7 @@ import {
   type uint32,
   type uint8,
 } from "../type.ts";
-import { ByteOrder } from "../basics/byte_order.ts";
+import { ByteOrder } from "../byte_order.ts";
 import * as env from "../env.ts";
 import { GrowableBuffer } from "./growable_buffer.ts";
 import { BigUint64 } from "../_numerics/big_uint.ts";

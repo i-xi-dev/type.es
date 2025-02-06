@@ -1,4 +1,4 @@
-import { ByteOrder } from "./basics/byte_order.ts";
+import { ByteOrder } from "./byte_order.ts";
 import { ZERO as NUMBER_ZERO } from "./const/number.ts";
 
 export const BYTE_ORDER = (() => {
