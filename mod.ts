@@ -1,8 +1,8 @@
-export * as ArrayBufferType from "./src/_2/array_buffer_type.ts";
 export * as Basics from "./src/basics/mod.ts";
 export * from "./src/byte_order.ts";
 export * as Events from "./src/events/mod.ts";
 export * from "./src/exception/mod.ts";
+export * as ExArrayBuffer from "./src/array_buffer/mod.ts";
 export * as ExBigInt from "./src/bigint/mod.ts";
 export * as ExNumber from "./src/number/mod.ts";
 export * as ExString from "./src/string/mod.ts";

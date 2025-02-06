@@ -1,11 +1,11 @@
 import { assertRejects, assertStrictEquals, assertThrows } from "@std/assert";
-import { ArrayBufferType, type biguint64 } from "../../../mod.ts";
-import { BYTE_ORDER } from "../../../src/env.ts";
+import { type biguint64, ExArrayBuffer } from "../../mod.ts";
+import { BYTE_ORDER } from "../../src/env.ts";
 
-Deno.test("ArrayBufferType.fromBigUint64Iterable(Array<biguint64>)", () => {
+Deno.test("ExArrayBuffer.fromBigUint64Iterable(Array<biguint64>)", () => {
   assertThrows(
     () => {
-      ArrayBufferType.fromBigUint64Iterable(0 as unknown as Array<biguint64>);
+      ExArrayBuffer.fromBigUint64Iterable(0 as unknown as Array<biguint64>);
     },
     TypeError,
     "`value` must implement \`Symbol.iterator\`.",
@@ -13,7 +13,7 @@ Deno.test("ArrayBufferType.fromBigUint64Iterable(Array<biguint64>)", () => {
 
   assertThrows(
     () => {
-      ArrayBufferType.fromBigUint64Iterable(1 as unknown as Array<biguint64>);
+      ExArrayBuffer.fromBigUint64Iterable(1 as unknown as Array<biguint64>);
     },
     TypeError,
     "`value` must implement \`Symbol.iterator\`.",
@@ -21,7 +21,7 @@ Deno.test("ArrayBufferType.fromBigUint64Iterable(Array<biguint64>)", () => {
 
   assertThrows(
     () => {
-      ArrayBufferType.fromBigUint64Iterable(
+      ExArrayBuffer.fromBigUint64Iterable(
         [-1] as unknown as Array<biguint64>,
       );
     },
@@ -30,7 +30,7 @@ Deno.test("ArrayBufferType.fromBigUint64Iterable(Array<biguint64>)", () => {
   );
   assertThrows(
     () => {
-      ArrayBufferType.fromBigUint64Iterable(
+      ExArrayBuffer.fromBigUint64Iterable(
         ["0"] as unknown as Array<biguint64>,
       );
     },
@@ -39,7 +39,7 @@ Deno.test("ArrayBufferType.fromBigUint64Iterable(Array<biguint64>)", () => {
   );
   assertThrows(
     () => {
-      ArrayBufferType.fromBigUint64Iterable(
+      ExArrayBuffer.fromBigUint64Iterable(
         [0x1_0000_0000_0000_0000n] as unknown as Array<biguint64>,
       );
     },
@@ -48,7 +48,7 @@ Deno.test("ArrayBufferType.fromBigUint64Iterable(Array<biguint64>)", () => {
   );
   assertThrows(
     () => {
-      ArrayBufferType.fromBigUint64Iterable(
+      ExArrayBuffer.fromBigUint64Iterable(
         [0n, 0x1_0000_0000_0000_0000n] as unknown as Array<biguint64>,
       );
     },
@@ -57,7 +57,7 @@ Deno.test("ArrayBufferType.fromBigUint64Iterable(Array<biguint64>)", () => {
   );
   assertThrows(
     () => {
-      ArrayBufferType.fromBigUint64Iterable(
+      ExArrayBuffer.fromBigUint64Iterable(
         [0n, -1n] as unknown as Array<biguint64>,
       );
     },
@@ -65,9 +65,9 @@ Deno.test("ArrayBufferType.fromBigUint64Iterable(Array<biguint64>)", () => {
     "The type of `value[1]` does not match the type of `uint64`.",
   );
 
-  assertStrictEquals(ArrayBufferType.fromBigUint64Iterable([]).byteLength, 0);
+  assertStrictEquals(ExArrayBuffer.fromBigUint64Iterable([]).byteLength, 0);
 
-  const a1be = new Uint8Array(ArrayBufferType.fromBigUint64Iterable(
+  const a1be = new Uint8Array(ExArrayBuffer.fromBigUint64Iterable(
     [0n, 1n, 0xFFFF_FFFF_FFFF_FFFFn],
     { byteOrder: "big-endian" },
   ));
@@ -97,7 +97,7 @@ Deno.test("ArrayBufferType.fromBigUint64Iterable(Array<biguint64>)", () => {
   assertStrictEquals(a1be[22], 255);
   assertStrictEquals(a1be[23], 255);
 
-  const a1le = new Uint8Array(ArrayBufferType.fromBigUint64Iterable(
+  const a1le = new Uint8Array(ExArrayBuffer.fromBigUint64Iterable(
     [0n, 1n, 0xFFFF_FFFF_FFFF_FFFFn],
     { byteOrder: "little-endian" },
   ));
@@ -128,7 +128,7 @@ Deno.test("ArrayBufferType.fromBigUint64Iterable(Array<biguint64>)", () => {
   assertStrictEquals(a1le[23], 255);
 
   const a1x = new Uint8Array(
-    ArrayBufferType.fromBigUint64Iterable([0n, 1n, 0xFFFF_FFFF_FFFF_FFFFn]),
+    ExArrayBuffer.fromBigUint64Iterable([0n, 1n, 0xFFFF_FFFF_FFFF_FFFFn]),
   );
   assertStrictEquals(a1x.length, 24);
   if (BYTE_ORDER === "big-endian") {
@@ -184,13 +184,13 @@ Deno.test("ArrayBufferType.fromBigUint64Iterable(Array<biguint64>)", () => {
   }
 });
 
-Deno.test("ArrayBufferType.fromBigUint64Iterable(BigUint64Array)", () => {
+Deno.test("ExArrayBuffer.fromBigUint64Iterable(BigUint64Array)", () => {
   assertStrictEquals(
-    ArrayBufferType.fromBigUint64Iterable(BigUint64Array.of()).byteLength,
+    ExArrayBuffer.fromBigUint64Iterable(BigUint64Array.of()).byteLength,
     0,
   );
 
-  const a1be = new Uint8Array(ArrayBufferType.fromBigUint64Iterable(
+  const a1be = new Uint8Array(ExArrayBuffer.fromBigUint64Iterable(
     BigUint64Array.of(0n, 1n, 0xFFFF_FFFF_FFFF_FFFFn),
     { byteOrder: "big-endian" },
   ));
@@ -220,7 +220,7 @@ Deno.test("ArrayBufferType.fromBigUint64Iterable(BigUint64Array)", () => {
   assertStrictEquals(a1be[22], 255);
   assertStrictEquals(a1be[23], 255);
 
-  const a1le = new Uint8Array(ArrayBufferType.fromBigUint64Iterable(
+  const a1le = new Uint8Array(ExArrayBuffer.fromBigUint64Iterable(
     BigUint64Array.of(0n, 1n, 0xFFFF_FFFF_FFFF_FFFFn),
     { byteOrder: "little-endian" },
   ));
@@ -250,7 +250,7 @@ Deno.test("ArrayBufferType.fromBigUint64Iterable(BigUint64Array)", () => {
   assertStrictEquals(a1le[22], 255);
   assertStrictEquals(a1le[23], 255);
 
-  const a1x = new Uint8Array(ArrayBufferType.fromBigUint64Iterable(
+  const a1x = new Uint8Array(ExArrayBuffer.fromBigUint64Iterable(
     BigUint64Array.of(0n, 1n, 0xFFFF_FFFF_FFFF_FFFFn),
   ));
   assertStrictEquals(a1x.length, 24);
@@ -307,10 +307,10 @@ Deno.test("ArrayBufferType.fromBigUint64Iterable(BigUint64Array)", () => {
   }
 });
 
-Deno.test("ArrayBufferType.fromBigUint64Iterable(Generator<biguint64>)", () => {
+Deno.test("ExArrayBuffer.fromBigUint64Iterable(Generator<biguint64>)", () => {
   const g0 = (function* () {
   })();
-  assertStrictEquals(ArrayBufferType.fromBigUint64Iterable(g0).byteLength, 0);
+  assertStrictEquals(ExArrayBuffer.fromBigUint64Iterable(g0).byteLength, 0);
 
   const g1 = (function* () {
     yield 0n;
@@ -319,7 +319,7 @@ Deno.test("ArrayBufferType.fromBigUint64Iterable(Generator<biguint64>)", () => {
   })();
 
   const a1be = new Uint8Array(
-    ArrayBufferType.fromBigUint64Iterable(g1, { byteOrder: "big-endian" }),
+    ExArrayBuffer.fromBigUint64Iterable(g1, { byteOrder: "big-endian" }),
   );
   assertStrictEquals(a1be.length, 24);
   assertStrictEquals(a1be[0], 0);
@@ -354,7 +354,7 @@ Deno.test("ArrayBufferType.fromBigUint64Iterable(Generator<biguint64>)", () => {
   })();
 
   const a1le = new Uint8Array(
-    ArrayBufferType.fromBigUint64Iterable(g2, { byteOrder: "little-endian" }),
+    ExArrayBuffer.fromBigUint64Iterable(g2, { byteOrder: "little-endian" }),
   );
   assertStrictEquals(a1le.length, 24);
   assertStrictEquals(a1le[0], 0);
@@ -388,7 +388,7 @@ Deno.test("ArrayBufferType.fromBigUint64Iterable(Generator<biguint64>)", () => {
     yield 0xFFFF_FFFF_FFFF_FFFFn;
   })();
 
-  const a1x = new Uint8Array(ArrayBufferType.fromBigUint64Iterable(g3));
+  const a1x = new Uint8Array(ExArrayBuffer.fromBigUint64Iterable(g3));
   assertStrictEquals(a1x.length, 24);
   if (BYTE_ORDER === "big-endian") {
     assertStrictEquals(a1x[0], 0);
@@ -443,10 +443,10 @@ Deno.test("ArrayBufferType.fromBigUint64Iterable(Generator<biguint64>)", () => {
   }
 });
 
-Deno.test("ArrayBufferType.fromBigUint64AsyncIterable(Array<biguint64>)", () => {
+Deno.test("ExArrayBuffer.fromBigUint64AsyncIterable(Array<biguint64>)", () => {
   assertRejects(
     async () => {
-      await ArrayBufferType.fromBigUint64AsyncIterable(
+      await ExArrayBuffer.fromBigUint64AsyncIterable(
         0 as unknown as AsyncIterable<biguint64>,
       );
     },
@@ -456,7 +456,7 @@ Deno.test("ArrayBufferType.fromBigUint64AsyncIterable(Array<biguint64>)", () => 
 
   assertRejects(
     async () => {
-      await ArrayBufferType.fromBigUint64AsyncIterable(
+      await ExArrayBuffer.fromBigUint64AsyncIterable(
         1 as unknown as AsyncIterable<biguint64>,
       );
     },
@@ -466,7 +466,7 @@ Deno.test("ArrayBufferType.fromBigUint64AsyncIterable(Array<biguint64>)", () => 
 
   assertRejects(
     async () => {
-      await ArrayBufferType.fromBigUint64AsyncIterable(
+      await ExArrayBuffer.fromBigUint64AsyncIterable(
         [-1] as unknown as AsyncIterable<biguint64>,
       );
     },
@@ -475,7 +475,7 @@ Deno.test("ArrayBufferType.fromBigUint64AsyncIterable(Array<biguint64>)", () => 
   );
   assertRejects(
     async () => {
-      await ArrayBufferType.fromBigUint64AsyncIterable(
+      await ExArrayBuffer.fromBigUint64AsyncIterable(
         ["0"] as unknown as AsyncIterable<biguint64>,
       );
     },
@@ -484,7 +484,7 @@ Deno.test("ArrayBufferType.fromBigUint64AsyncIterable(Array<biguint64>)", () => 
   );
   assertRejects(
     async () => {
-      await ArrayBufferType.fromBigUint64AsyncIterable(
+      await ExArrayBuffer.fromBigUint64AsyncIterable(
         [256] as unknown as AsyncIterable<biguint64>,
       );
     },
@@ -493,7 +493,7 @@ Deno.test("ArrayBufferType.fromBigUint64AsyncIterable(Array<biguint64>)", () => 
   );
   assertRejects(
     async () => {
-      await ArrayBufferType.fromBigUint64AsyncIterable(
+      await ExArrayBuffer.fromBigUint64AsyncIterable(
         [0, 256] as unknown as AsyncIterable<biguint64>,
       );
     },
@@ -502,11 +502,11 @@ Deno.test("ArrayBufferType.fromBigUint64AsyncIterable(Array<biguint64>)", () => 
   );
 });
 
-Deno.test("ArrayBufferType.fromBigUint64AsyncIterable(AsyncGenerator<BigUint64>)", async () => {
+Deno.test("ExArrayBuffer.fromBigUint64AsyncIterable(AsyncGenerator<BigUint64>)", async () => {
   const g0 = (async function* () {
   })();
   assertStrictEquals(
-    (await ArrayBufferType.fromBigUint64AsyncIterable(g0)).byteLength,
+    (await ExArrayBuffer.fromBigUint64AsyncIterable(g0)).byteLength,
     0,
   );
 
@@ -517,7 +517,7 @@ Deno.test("ArrayBufferType.fromBigUint64AsyncIterable(AsyncGenerator<BigUint64>)
   })();
 
   const a1 = new BigUint64Array(
-    await ArrayBufferType.fromBigUint64AsyncIterable(g1),
+    await ExArrayBuffer.fromBigUint64AsyncIterable(g1),
   );
   assertStrictEquals(a1.length, 3);
   assertStrictEquals(a1[0], 0n);
@@ -525,7 +525,7 @@ Deno.test("ArrayBufferType.fromBigUint64AsyncIterable(AsyncGenerator<BigUint64>)
   assertStrictEquals(a1[2], 0xFFFF_FFFF_FFFF_FFFFn);
 });
 
-Deno.test("ArrayBufferType.fromBigUint64AsyncIterable(AsyncGenerator<any>)", () => {
+Deno.test("ExArrayBuffer.fromBigUint64AsyncIterable(AsyncGenerator<any>)", () => {
   const g1 = (async function* () {
     yield 0n;
     yield 1n;
@@ -534,7 +534,7 @@ Deno.test("ArrayBufferType.fromBigUint64AsyncIterable(AsyncGenerator<any>)", () 
 
   assertRejects(
     async () => {
-      await ArrayBufferType.fromBigUint64AsyncIterable(
+      await ExArrayBuffer.fromBigUint64AsyncIterable(
         g1 as unknown as AsyncGenerator<biguint64>,
       );
     },
@@ -550,7 +550,7 @@ Deno.test("ArrayBufferType.fromBigUint64AsyncIterable(AsyncGenerator<any>)", () 
 
   assertRejects(
     async () => {
-      await ArrayBufferType.fromBigUint64AsyncIterable(g2);
+      await ExArrayBuffer.fromBigUint64AsyncIterable(g2);
     },
     TypeError,
     "The type of `value[2]` does not match the type of `uint64`.",
@@ -564,66 +564,66 @@ Deno.test("ArrayBufferType.fromBigUint64AsyncIterable(AsyncGenerator<any>)", () 
 
   assertRejects(
     async () => {
-      await ArrayBufferType.fromBigUint64AsyncIterable(g3);
+      await ExArrayBuffer.fromBigUint64AsyncIterable(g3);
     },
     TypeError,
     "The type of `value[2]` does not match the type of `uint64`.",
   );
 });
 
-Deno.test("ArrayBufferType.toBigUint64Iterable(Uint8Array)", () => {
+Deno.test("ExArrayBuffer.toBigUint64Iterable(Uint8Array)", () => {
   assertThrows(
     () => {
-      ArrayBufferType.toBigUint64Iterable(0 as unknown as ArrayBuffer);
+      ExArrayBuffer.toBigUint64Iterable(0 as unknown as ArrayBuffer);
     },
     TypeError,
     "`value` must be an `ArrayBuffer`.",
   );
   assertThrows(
     () => {
-      ArrayBufferType.toBigUint64Iterable(1 as unknown as ArrayBuffer);
+      ExArrayBuffer.toBigUint64Iterable(1 as unknown as ArrayBuffer);
     },
     TypeError,
     "`value` must be an `ArrayBuffer`.",
   );
   assertThrows(
     () => {
-      ArrayBufferType.toBigUint64Iterable(Uint8Array.of(1).buffer);
+      ExArrayBuffer.toBigUint64Iterable(Uint8Array.of(1).buffer);
     },
     RangeError,
     "The byte length of `value` must be divisible by 8.",
   );
   assertThrows(
     () => {
-      ArrayBufferType.toBigUint64Iterable(Uint8Array.of(1, 2).buffer);
+      ExArrayBuffer.toBigUint64Iterable(Uint8Array.of(1, 2).buffer);
     },
     RangeError,
     "The byte length of `value` must be divisible by 8.",
   );
   assertThrows(
     () => {
-      ArrayBufferType.toBigUint64Iterable(Uint8Array.of(1, 2, 3).buffer);
+      ExArrayBuffer.toBigUint64Iterable(Uint8Array.of(1, 2, 3).buffer);
     },
     RangeError,
     "The byte length of `value` must be divisible by 8.",
   );
   assertThrows(
     () => {
-      ArrayBufferType.toBigUint64Iterable(Uint8Array.of(1, 2, 3, 4).buffer);
+      ExArrayBuffer.toBigUint64Iterable(Uint8Array.of(1, 2, 3, 4).buffer);
     },
     RangeError,
     "The byte length of `value` must be divisible by 8.",
   );
   assertThrows(
     () => {
-      ArrayBufferType.toBigUint64Iterable(Uint8Array.of(1, 2, 3, 4, 5).buffer);
+      ExArrayBuffer.toBigUint64Iterable(Uint8Array.of(1, 2, 3, 4, 5).buffer);
     },
     RangeError,
     "The byte length of `value` must be divisible by 8.",
   );
   assertThrows(
     () => {
-      ArrayBufferType.toBigUint64Iterable(
+      ExArrayBuffer.toBigUint64Iterable(
         Uint8Array.of(1, 2, 3, 4, 5, 6).buffer,
       );
     },
@@ -632,7 +632,7 @@ Deno.test("ArrayBufferType.toBigUint64Iterable(Uint8Array)", () => {
   );
   assertThrows(
     () => {
-      ArrayBufferType.toBigUint64Iterable(
+      ExArrayBuffer.toBigUint64Iterable(
         Uint8Array.of(1, 2, 3, 4, 5, 6, 7).buffer,
       );
     },
@@ -642,7 +642,7 @@ Deno.test("ArrayBufferType.toBigUint64Iterable(Uint8Array)", () => {
 
   assertStrictEquals(
     [
-      ...ArrayBufferType.toBigUint64Iterable(
+      ...ExArrayBuffer.toBigUint64Iterable(
         Uint8Array.of().buffer,
         { byteOrder: "big-endian" },
       ),
@@ -651,7 +651,7 @@ Deno.test("ArrayBufferType.toBigUint64Iterable(Uint8Array)", () => {
   );
   assertStrictEquals(
     [
-      ...ArrayBufferType.toBigUint64Iterable(
+      ...ExArrayBuffer.toBigUint64Iterable(
         Uint8Array.of(1, 0, 3, 2, 0, 0, 0, 0).buffer,
         { byteOrder: "big-endian" },
       ),
@@ -660,7 +660,7 @@ Deno.test("ArrayBufferType.toBigUint64Iterable(Uint8Array)", () => {
   );
   assertStrictEquals(
     [
-      ...ArrayBufferType.toBigUint64Iterable(
+      ...ExArrayBuffer.toBigUint64Iterable(
         Uint8Array.of(1, 0, 3, 2, 5, 4, 7, 6, 1, 0, 3, 2, 0, 0, 0, 0).buffer,
         { byteOrder: "big-endian" },
       ),
@@ -670,7 +670,7 @@ Deno.test("ArrayBufferType.toBigUint64Iterable(Uint8Array)", () => {
 
   assertStrictEquals(
     [
-      ...ArrayBufferType.toBigUint64Iterable(
+      ...ExArrayBuffer.toBigUint64Iterable(
         Uint8Array.of().buffer,
         { byteOrder: "little-endian" },
       ),
@@ -679,7 +679,7 @@ Deno.test("ArrayBufferType.toBigUint64Iterable(Uint8Array)", () => {
   );
   assertStrictEquals(
     [
-      ...ArrayBufferType.toBigUint64Iterable(
+      ...ExArrayBuffer.toBigUint64Iterable(
         Uint8Array.of(1, 0, 3, 2, 0, 0, 0, 0).buffer,
         { byteOrder: "little-endian" },
       ),
@@ -688,7 +688,7 @@ Deno.test("ArrayBufferType.toBigUint64Iterable(Uint8Array)", () => {
   );
   assertStrictEquals(
     [
-      ...ArrayBufferType.toBigUint64Iterable(
+      ...ExArrayBuffer.toBigUint64Iterable(
         Uint8Array.of(1, 0, 3, 2, 5, 4, 7, 6, 1, 0, 3, 2, 0, 0, 0, 0).buffer,
         { byteOrder: "little-endian" },
       ),
@@ -698,14 +698,14 @@ Deno.test("ArrayBufferType.toBigUint64Iterable(Uint8Array)", () => {
 
   assertStrictEquals(
     [
-      ...ArrayBufferType.toBigUint64Iterable(Uint8Array.of().buffer),
+      ...ExArrayBuffer.toBigUint64Iterable(Uint8Array.of().buffer),
     ].join(","),
     "",
   );
   if (BYTE_ORDER === "big-endian") {
     assertStrictEquals(
       [
-        ...ArrayBufferType.toBigUint64Iterable(
+        ...ExArrayBuffer.toBigUint64Iterable(
           Uint8Array.of(1, 0, 3, 2, 0, 0, 0, 0).buffer,
         ),
       ].join(","),
@@ -713,7 +713,7 @@ Deno.test("ArrayBufferType.toBigUint64Iterable(Uint8Array)", () => {
     );
     assertStrictEquals(
       [
-        ...ArrayBufferType.toBigUint64Iterable(
+        ...ExArrayBuffer.toBigUint64Iterable(
           Uint8Array.of(1, 0, 3, 2, 5, 4, 7, 6, 1, 0, 3, 2, 0, 0, 0, 0).buffer,
         ),
       ].join(","),
@@ -722,7 +722,7 @@ Deno.test("ArrayBufferType.toBigUint64Iterable(Uint8Array)", () => {
   } else {
     assertStrictEquals(
       [
-        ...ArrayBufferType.toBigUint64Iterable(
+        ...ExArrayBuffer.toBigUint64Iterable(
           Uint8Array.of(1, 0, 3, 2, 0, 0, 0, 0).buffer,
         ),
       ].join(","),
@@ -730,7 +730,7 @@ Deno.test("ArrayBufferType.toBigUint64Iterable(Uint8Array)", () => {
     );
     assertStrictEquals(
       [
-        ...ArrayBufferType.toBigUint64Iterable(
+        ...ExArrayBuffer.toBigUint64Iterable(
           Uint8Array.of(1, 0, 3, 2, 5, 4, 7, 6, 1, 0, 3, 2, 0, 0, 0, 0).buffer,
         ),
       ].join(","),

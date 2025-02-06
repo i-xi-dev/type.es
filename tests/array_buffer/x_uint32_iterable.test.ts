@@ -1,11 +1,11 @@
 import { assertRejects, assertStrictEquals, assertThrows } from "@std/assert";
-import { ArrayBufferType, type uint32 } from "../../../mod.ts";
-import { BYTE_ORDER } from "../../../src/env.ts";
+import { ExArrayBuffer, type uint32 } from "../../mod.ts";
+import { BYTE_ORDER } from "../../src/env.ts";
 
-Deno.test("ArrayBufferType.fromUint32Iterable(Array<uint32>)", () => {
+Deno.test("ExArrayBuffer.fromUint32Iterable(Array<uint32>)", () => {
   assertThrows(
     () => {
-      ArrayBufferType.fromUint32Iterable(0 as unknown as Array<uint32>);
+      ExArrayBuffer.fromUint32Iterable(0 as unknown as Array<uint32>);
     },
     TypeError,
     "`value` must implement \`Symbol.iterator\`.",
@@ -13,7 +13,7 @@ Deno.test("ArrayBufferType.fromUint32Iterable(Array<uint32>)", () => {
 
   assertThrows(
     () => {
-      ArrayBufferType.fromUint32Iterable(1 as unknown as Array<uint32>);
+      ExArrayBuffer.fromUint32Iterable(1 as unknown as Array<uint32>);
     },
     TypeError,
     "`value` must implement \`Symbol.iterator\`.",
@@ -21,21 +21,21 @@ Deno.test("ArrayBufferType.fromUint32Iterable(Array<uint32>)", () => {
 
   assertThrows(
     () => {
-      ArrayBufferType.fromUint32Iterable([-1] as unknown as Array<uint32>);
+      ExArrayBuffer.fromUint32Iterable([-1] as unknown as Array<uint32>);
     },
     TypeError,
     "The type of `value[0]` does not match the type of `uint32`.",
   );
   assertThrows(
     () => {
-      ArrayBufferType.fromUint32Iterable(["0"] as unknown as Array<uint32>);
+      ExArrayBuffer.fromUint32Iterable(["0"] as unknown as Array<uint32>);
     },
     TypeError,
     "The type of `value[0]` does not match the type of `uint32`.",
   );
   assertThrows(
     () => {
-      ArrayBufferType.fromUint32Iterable(
+      ExArrayBuffer.fromUint32Iterable(
         [0x100000000] as unknown as Array<uint32>,
       );
     },
@@ -44,7 +44,7 @@ Deno.test("ArrayBufferType.fromUint32Iterable(Array<uint32>)", () => {
   );
   assertThrows(
     () => {
-      ArrayBufferType.fromUint32Iterable(
+      ExArrayBuffer.fromUint32Iterable(
         [0, 0x100000000] as unknown as Array<uint32>,
       );
     },
@@ -53,7 +53,7 @@ Deno.test("ArrayBufferType.fromUint32Iterable(Array<uint32>)", () => {
   );
   assertThrows(
     () => {
-      ArrayBufferType.fromUint32Iterable(
+      ExArrayBuffer.fromUint32Iterable(
         [0, -1] as unknown as Array<uint32>,
       );
     },
@@ -61,9 +61,9 @@ Deno.test("ArrayBufferType.fromUint32Iterable(Array<uint32>)", () => {
     "The type of `value[1]` does not match the type of `uint32`.",
   );
 
-  assertStrictEquals(ArrayBufferType.fromUint32Iterable([]).byteLength, 0);
+  assertStrictEquals(ExArrayBuffer.fromUint32Iterable([]).byteLength, 0);
 
-  const a1be = new Uint8Array(ArrayBufferType.fromUint32Iterable(
+  const a1be = new Uint8Array(ExArrayBuffer.fromUint32Iterable(
     [0, 1, 0xFFFFFFFF],
     { byteOrder: "big-endian" },
   ));
@@ -81,7 +81,7 @@ Deno.test("ArrayBufferType.fromUint32Iterable(Array<uint32>)", () => {
   assertStrictEquals(a1be[10], 255);
   assertStrictEquals(a1be[11], 255);
 
-  const a1le = new Uint8Array(ArrayBufferType.fromUint32Iterable(
+  const a1le = new Uint8Array(ExArrayBuffer.fromUint32Iterable(
     [0, 1, 0xFFFFFFFF],
     { byteOrder: "little-endian" },
   ));
@@ -100,7 +100,7 @@ Deno.test("ArrayBufferType.fromUint32Iterable(Array<uint32>)", () => {
   assertStrictEquals(a1le[11], 255);
 
   const a1x = new Uint8Array(
-    ArrayBufferType.fromUint32Iterable([0, 1, 0xFFFFFFFF]),
+    ExArrayBuffer.fromUint32Iterable([0, 1, 0xFFFFFFFF]),
   );
   assertStrictEquals(a1x.length, 12);
   if (BYTE_ORDER === "big-endian") {
@@ -132,13 +132,13 @@ Deno.test("ArrayBufferType.fromUint32Iterable(Array<uint32>)", () => {
   }
 });
 
-Deno.test("ArrayBufferType.fromUint32Iterable(Uint32Array)", () => {
+Deno.test("ExArrayBuffer.fromUint32Iterable(Uint32Array)", () => {
   assertStrictEquals(
-    ArrayBufferType.fromUint32Iterable(Uint32Array.of()).byteLength,
+    ExArrayBuffer.fromUint32Iterable(Uint32Array.of()).byteLength,
     0,
   );
 
-  const a1be = new Uint8Array(ArrayBufferType.fromUint32Iterable(
+  const a1be = new Uint8Array(ExArrayBuffer.fromUint32Iterable(
     Uint32Array.of(0, 1, 0xFFFFFFFF),
     { byteOrder: "big-endian" },
   ));
@@ -156,7 +156,7 @@ Deno.test("ArrayBufferType.fromUint32Iterable(Uint32Array)", () => {
   assertStrictEquals(a1be[10], 255);
   assertStrictEquals(a1be[11], 255);
 
-  const a1le = new Uint8Array(ArrayBufferType.fromUint32Iterable(
+  const a1le = new Uint8Array(ExArrayBuffer.fromUint32Iterable(
     Uint32Array.of(0, 1, 0xFFFFFFFF),
     { byteOrder: "little-endian" },
   ));
@@ -174,7 +174,7 @@ Deno.test("ArrayBufferType.fromUint32Iterable(Uint32Array)", () => {
   assertStrictEquals(a1le[10], 255);
   assertStrictEquals(a1le[11], 255);
 
-  const a1x = new Uint8Array(ArrayBufferType.fromUint32Iterable(
+  const a1x = new Uint8Array(ExArrayBuffer.fromUint32Iterable(
     Uint32Array.of(0, 1, 0xFFFFFFFF),
   ));
   assertStrictEquals(a1x.length, 12);
@@ -207,10 +207,10 @@ Deno.test("ArrayBufferType.fromUint32Iterable(Uint32Array)", () => {
   }
 });
 
-Deno.test("ArrayBufferType.fromUint32Iterable(Generator<uint32>)", () => {
+Deno.test("ExArrayBuffer.fromUint32Iterable(Generator<uint32>)", () => {
   const g0 = (function* () {
   })();
-  assertStrictEquals(ArrayBufferType.fromUint32Iterable(g0).byteLength, 0);
+  assertStrictEquals(ExArrayBuffer.fromUint32Iterable(g0).byteLength, 0);
 
   const g1 = (function* () {
     yield 0;
@@ -219,7 +219,7 @@ Deno.test("ArrayBufferType.fromUint32Iterable(Generator<uint32>)", () => {
   })();
 
   const a1be = new Uint8Array(
-    ArrayBufferType.fromUint32Iterable(g1, { byteOrder: "big-endian" }),
+    ExArrayBuffer.fromUint32Iterable(g1, { byteOrder: "big-endian" }),
   );
   assertStrictEquals(a1be.length, 12);
   assertStrictEquals(a1be[0], 0);
@@ -242,7 +242,7 @@ Deno.test("ArrayBufferType.fromUint32Iterable(Generator<uint32>)", () => {
   })();
 
   const a1le = new Uint8Array(
-    ArrayBufferType.fromUint32Iterable(g2, { byteOrder: "little-endian" }),
+    ExArrayBuffer.fromUint32Iterable(g2, { byteOrder: "little-endian" }),
   );
   assertStrictEquals(a1le.length, 12);
   assertStrictEquals(a1le[0], 0);
@@ -264,7 +264,7 @@ Deno.test("ArrayBufferType.fromUint32Iterable(Generator<uint32>)", () => {
     yield 0xFFFFFFFF;
   })();
 
-  const a1x = new Uint8Array(ArrayBufferType.fromUint32Iterable(g3));
+  const a1x = new Uint8Array(ExArrayBuffer.fromUint32Iterable(g3));
   assertStrictEquals(a1x.length, 12);
   if (BYTE_ORDER === "big-endian") {
     assertStrictEquals(a1x[0], 0);
@@ -295,10 +295,10 @@ Deno.test("ArrayBufferType.fromUint32Iterable(Generator<uint32>)", () => {
   }
 });
 
-Deno.test("ArrayBufferType.fromUint32AsyncIterable(Array<uint32>)", () => {
+Deno.test("ExArrayBuffer.fromUint32AsyncIterable(Array<uint32>)", () => {
   assertRejects(
     async () => {
-      await ArrayBufferType.fromUint32AsyncIterable(
+      await ExArrayBuffer.fromUint32AsyncIterable(
         0 as unknown as AsyncIterable<uint32>,
       );
     },
@@ -308,7 +308,7 @@ Deno.test("ArrayBufferType.fromUint32AsyncIterable(Array<uint32>)", () => {
 
   assertRejects(
     async () => {
-      await ArrayBufferType.fromUint32AsyncIterable(
+      await ExArrayBuffer.fromUint32AsyncIterable(
         1 as unknown as AsyncIterable<uint32>,
       );
     },
@@ -318,7 +318,7 @@ Deno.test("ArrayBufferType.fromUint32AsyncIterable(Array<uint32>)", () => {
 
   assertRejects(
     async () => {
-      await ArrayBufferType.fromUint32AsyncIterable(
+      await ExArrayBuffer.fromUint32AsyncIterable(
         [-1] as unknown as AsyncIterable<uint32>,
       );
     },
@@ -327,7 +327,7 @@ Deno.test("ArrayBufferType.fromUint32AsyncIterable(Array<uint32>)", () => {
   );
   assertRejects(
     async () => {
-      await ArrayBufferType.fromUint32AsyncIterable(
+      await ExArrayBuffer.fromUint32AsyncIterable(
         ["0"] as unknown as AsyncIterable<uint32>,
       );
     },
@@ -336,7 +336,7 @@ Deno.test("ArrayBufferType.fromUint32AsyncIterable(Array<uint32>)", () => {
   );
   assertRejects(
     async () => {
-      await ArrayBufferType.fromUint32AsyncIterable(
+      await ExArrayBuffer.fromUint32AsyncIterable(
         [256] as unknown as AsyncIterable<uint32>,
       );
     },
@@ -345,7 +345,7 @@ Deno.test("ArrayBufferType.fromUint32AsyncIterable(Array<uint32>)", () => {
   );
   assertRejects(
     async () => {
-      await ArrayBufferType.fromUint32AsyncIterable(
+      await ExArrayBuffer.fromUint32AsyncIterable(
         [0, 256] as unknown as AsyncIterable<uint32>,
       );
     },
@@ -354,11 +354,11 @@ Deno.test("ArrayBufferType.fromUint32AsyncIterable(Array<uint32>)", () => {
   );
 });
 
-Deno.test("ArrayBufferType.fromUint32AsyncIterable(AsyncGenerator<uint32>)", async () => {
+Deno.test("ExArrayBuffer.fromUint32AsyncIterable(AsyncGenerator<uint32>)", async () => {
   const g0 = (async function* () {
   })();
   assertStrictEquals(
-    (await ArrayBufferType.fromUint32AsyncIterable(g0)).byteLength,
+    (await ExArrayBuffer.fromUint32AsyncIterable(g0)).byteLength,
     0,
   );
 
@@ -368,14 +368,14 @@ Deno.test("ArrayBufferType.fromUint32AsyncIterable(AsyncGenerator<uint32>)", asy
     yield 0xFFFFFFFF;
   })();
 
-  const a1 = new Uint32Array(await ArrayBufferType.fromUint32AsyncIterable(g1));
+  const a1 = new Uint32Array(await ExArrayBuffer.fromUint32AsyncIterable(g1));
   assertStrictEquals(a1.length, 3);
   assertStrictEquals(a1[0], 0);
   assertStrictEquals(a1[1], 1);
   assertStrictEquals(a1[2], 0xFFFFFFFF);
 });
 
-Deno.test("ArrayBufferType.fromUint32AsyncIterable(AsyncGenerator<any>)", () => {
+Deno.test("ExArrayBuffer.fromUint32AsyncIterable(AsyncGenerator<any>)", () => {
   const g1 = (async function* () {
     yield 0;
     yield 1;
@@ -384,7 +384,7 @@ Deno.test("ArrayBufferType.fromUint32AsyncIterable(AsyncGenerator<any>)", () => 
 
   assertRejects(
     async () => {
-      await ArrayBufferType.fromUint32AsyncIterable(
+      await ExArrayBuffer.fromUint32AsyncIterable(
         g1 as unknown as AsyncGenerator<uint32>,
       );
     },
@@ -400,7 +400,7 @@ Deno.test("ArrayBufferType.fromUint32AsyncIterable(AsyncGenerator<any>)", () => 
 
   assertRejects(
     async () => {
-      await ArrayBufferType.fromUint32AsyncIterable(g2);
+      await ExArrayBuffer.fromUint32AsyncIterable(g2);
     },
     TypeError,
     "The type of `value[2]` does not match the type of `uint32`.",
@@ -414,45 +414,45 @@ Deno.test("ArrayBufferType.fromUint32AsyncIterable(AsyncGenerator<any>)", () => 
 
   assertRejects(
     async () => {
-      await ArrayBufferType.fromUint32AsyncIterable(g3);
+      await ExArrayBuffer.fromUint32AsyncIterable(g3);
     },
     TypeError,
     "The type of `value[2]` does not match the type of `uint32`.",
   );
 });
 
-Deno.test("ArrayBufferType.toUint32Iterable(Uint8Array)", () => {
+Deno.test("ExArrayBuffer.toUint32Iterable(Uint8Array)", () => {
   assertThrows(
     () => {
-      ArrayBufferType.toUint32Iterable(0 as unknown as ArrayBuffer);
+      ExArrayBuffer.toUint32Iterable(0 as unknown as ArrayBuffer);
     },
     TypeError,
     "`value` must be an `ArrayBuffer`.",
   );
   assertThrows(
     () => {
-      ArrayBufferType.toUint32Iterable(1 as unknown as ArrayBuffer);
+      ExArrayBuffer.toUint32Iterable(1 as unknown as ArrayBuffer);
     },
     TypeError,
     "`value` must be an `ArrayBuffer`.",
   );
   assertThrows(
     () => {
-      ArrayBufferType.toUint32Iterable(Uint8Array.of(1).buffer);
+      ExArrayBuffer.toUint32Iterable(Uint8Array.of(1).buffer);
     },
     RangeError,
     "The byte length of `value` must be divisible by 4.",
   );
   assertThrows(
     () => {
-      ArrayBufferType.toUint32Iterable(Uint8Array.of(1, 2).buffer);
+      ExArrayBuffer.toUint32Iterable(Uint8Array.of(1, 2).buffer);
     },
     RangeError,
     "The byte length of `value` must be divisible by 4.",
   );
   assertThrows(
     () => {
-      ArrayBufferType.toUint32Iterable(Uint8Array.of(1, 2, 3).buffer);
+      ExArrayBuffer.toUint32Iterable(Uint8Array.of(1, 2, 3).buffer);
     },
     RangeError,
     "The byte length of `value` must be divisible by 4.",
@@ -460,7 +460,7 @@ Deno.test("ArrayBufferType.toUint32Iterable(Uint8Array)", () => {
 
   assertStrictEquals(
     JSON.stringify([
-      ...ArrayBufferType.toUint32Iterable(
+      ...ExArrayBuffer.toUint32Iterable(
         Uint8Array.of().buffer,
         { byteOrder: "big-endian" },
       ),
@@ -469,7 +469,7 @@ Deno.test("ArrayBufferType.toUint32Iterable(Uint8Array)", () => {
   );
   assertStrictEquals(
     JSON.stringify([
-      ...ArrayBufferType.toUint32Iterable(
+      ...ExArrayBuffer.toUint32Iterable(
         Uint8Array.of(1, 0, 3, 2).buffer,
         { byteOrder: "big-endian" },
       ),
@@ -478,7 +478,7 @@ Deno.test("ArrayBufferType.toUint32Iterable(Uint8Array)", () => {
   );
   assertStrictEquals(
     JSON.stringify([
-      ...ArrayBufferType.toUint32Iterable(
+      ...ExArrayBuffer.toUint32Iterable(
         Uint8Array.of(1, 0, 3, 2, 5, 4, 7, 6).buffer,
         { byteOrder: "big-endian" },
       ),
@@ -488,7 +488,7 @@ Deno.test("ArrayBufferType.toUint32Iterable(Uint8Array)", () => {
 
   assertStrictEquals(
     JSON.stringify([
-      ...ArrayBufferType.toUint32Iterable(
+      ...ExArrayBuffer.toUint32Iterable(
         Uint8Array.of().buffer,
         { byteOrder: "little-endian" },
       ),
@@ -497,7 +497,7 @@ Deno.test("ArrayBufferType.toUint32Iterable(Uint8Array)", () => {
   );
   assertStrictEquals(
     JSON.stringify([
-      ...ArrayBufferType.toUint32Iterable(
+      ...ExArrayBuffer.toUint32Iterable(
         Uint8Array.of(1, 0, 3, 2).buffer,
         { byteOrder: "little-endian" },
       ),
@@ -506,7 +506,7 @@ Deno.test("ArrayBufferType.toUint32Iterable(Uint8Array)", () => {
   );
   assertStrictEquals(
     JSON.stringify([
-      ...ArrayBufferType.toUint32Iterable(
+      ...ExArrayBuffer.toUint32Iterable(
         Uint8Array.of(1, 0, 3, 2, 5, 4, 7, 6).buffer,
         { byteOrder: "little-endian" },
       ),
@@ -516,14 +516,14 @@ Deno.test("ArrayBufferType.toUint32Iterable(Uint8Array)", () => {
 
   assertStrictEquals(
     JSON.stringify([
-      ...ArrayBufferType.toUint32Iterable(Uint8Array.of().buffer),
+      ...ExArrayBuffer.toUint32Iterable(Uint8Array.of().buffer),
     ]),
     "[]",
   );
   if (BYTE_ORDER === "big-endian") {
     assertStrictEquals(
       JSON.stringify([
-        ...ArrayBufferType.toUint32Iterable(
+        ...ExArrayBuffer.toUint32Iterable(
           Uint8Array.of(1, 0, 3, 2).buffer,
         ),
       ]),
@@ -531,7 +531,7 @@ Deno.test("ArrayBufferType.toUint32Iterable(Uint8Array)", () => {
     );
     assertStrictEquals(
       JSON.stringify([
-        ...ArrayBufferType.toUint32Iterable(
+        ...ExArrayBuffer.toUint32Iterable(
           Uint8Array.of(1, 0, 3, 2, 5, 4, 7, 6).buffer,
         ),
       ]),
@@ -540,7 +540,7 @@ Deno.test("ArrayBufferType.toUint32Iterable(Uint8Array)", () => {
   } else {
     assertStrictEquals(
       JSON.stringify([
-        ...ArrayBufferType.toUint32Iterable(
+        ...ExArrayBuffer.toUint32Iterable(
           Uint8Array.of(1, 0, 3, 2).buffer,
         ),
       ]),
@@ -548,7 +548,7 @@ Deno.test("ArrayBufferType.toUint32Iterable(Uint8Array)", () => {
     );
     assertStrictEquals(
       JSON.stringify([
-        ...ArrayBufferType.toUint32Iterable(
+        ...ExArrayBuffer.toUint32Iterable(
           Uint8Array.of(1, 0, 3, 2, 5, 4, 7, 6).buffer,
         ),
       ]),

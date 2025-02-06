@@ -10,7 +10,7 @@ import {
 } from "../type.ts";
 import { ByteOrder } from "../byte_order.ts";
 import * as env from "../env.ts";
-import { GrowableBuffer } from "./growable_buffer.ts";
+import { GrowableBuffer } from "../_2/growable_buffer.ts";
 import { BigUint64 } from "../_numerics/big_uint.ts";
 import { Uint16, Uint32, Uint8 } from "../_numerics/uint.ts";
 import { ZERO as NUMBER_ZERO } from "../const/number.ts";
