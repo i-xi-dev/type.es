@@ -193,3 +193,50 @@ Deno.test("Type.assertSurrogateCodePoint()", () => {
     //
   }
 });
+
+Deno.test("Type.isVariationSelectorCodePoint()", () => {
+  assertStrictEquals(Type.isVariationSelectorCodePoint(0xFDFF), false);
+  assertStrictEquals(Type.isVariationSelectorCodePoint(0xFE00), true);
+  assertStrictEquals(Type.isVariationSelectorCodePoint(0xFE0F), true);
+  assertStrictEquals(Type.isVariationSelectorCodePoint(0xFE10), false);
+  assertStrictEquals(Type.isVariationSelectorCodePoint(0xE00FF), false);
+  assertStrictEquals(Type.isVariationSelectorCodePoint(0xE0100), true);
+  assertStrictEquals(Type.isVariationSelectorCodePoint(0xE01EF), true);
+  assertStrictEquals(Type.isVariationSelectorCodePoint(0xE01F0), false);
+  assertStrictEquals(Type.isVariationSelectorCodePoint(0x180A), false);
+  assertStrictEquals(Type.isVariationSelectorCodePoint(0x180B), true);
+  assertStrictEquals(Type.isVariationSelectorCodePoint(0x180F), true);
+  assertStrictEquals(Type.isVariationSelectorCodePoint(0x1810), false);
+});
+
+Deno.test("Type.assertVariationSelectorCodePoint()", () => {
+  try {
+    Type.assertVariationSelectorCodePoint(0xFE00, "test-1");
+    Type.assertVariationSelectorCodePoint(0xFE0F, "test-1");
+    Type.assertVariationSelectorCodePoint(0xE0100, "test-1");
+    Type.assertVariationSelectorCodePoint(0xE01EF, "test-1");
+    Type.assertVariationSelectorCodePoint(0x180B, "test-1");
+    Type.assertVariationSelectorCodePoint(0x180F, "test-1");
+  } catch (exception) {
+    fail((exception as Error).toString());
+  }
+
+  try {
+    Type.assertVariationSelectorCodePoint(0xFDFF, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+  try {
+    Type.assertVariationSelectorCodePoint(0xE01F0, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+  try {
+    Type.assertVariationSelectorCodePoint(undefined, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+});

@@ -44,21 +44,6 @@ export function isInPlanes(test: unknown, planes: plane[]): test is codepoint {
   return planes.includes(planeOf(test));
 }
 
-const _MIN_VS: codepoint = 0xFE00;
-const _MAX_VS: codepoint = 0xFE0F;
-const _MIN_VSS: codepoint = 0xE0100;
-const _MAX_VSS: codepoint = 0xE01EF;
-const _MIN_MONGOLIAN_VS: codepoint = 0x180B;
-const _MAX_MONGOLIAN_VS: codepoint = 0x180F;
-
-export function isVariationSelector(
-  test: unknown,
-): test is codepoint {
-  return isSafeIntegerInRange(test, _MIN_VS, _MAX_VS) ||
-    isSafeIntegerInRange(test, _MIN_VSS, _MAX_VSS) ||
-    isSafeIntegerInRange(test, _MIN_MONGOLIAN_VS, _MAX_MONGOLIAN_VS);
-}
-
 export function isInRanges(
   test: unknown,
   ranges: SafeIntegerRange.Like<codepoint>[],
