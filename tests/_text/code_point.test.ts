@@ -160,42 +160,6 @@ Deno.test("CodePoint.isInPlanes()", () => {
   );
 });
 
-Deno.test("CodePoint.isHighSurrogate()", () => {
-  assertStrictEquals(CodePoint.isHighSurrogate(0xD7FF), false);
-  assertStrictEquals(CodePoint.isHighSurrogate(0xD800), true);
-  assertStrictEquals(CodePoint.isHighSurrogate(0xDBFF), true);
-  assertStrictEquals(CodePoint.isHighSurrogate(0xDC00), false);
-  assertStrictEquals(CodePoint.isHighSurrogate(0xDFFF), false);
-  assertStrictEquals(CodePoint.isHighSurrogate(0xE000), false);
-
-  assertStrictEquals(CodePoint.isHighSurrogate(-1), false);
-  assertStrictEquals(CodePoint.isHighSurrogate(0x110000), false);
-});
-
-Deno.test("CodePoint.isLowSurrogate()", () => {
-  assertStrictEquals(CodePoint.isLowSurrogate(0xD7FF), false);
-  assertStrictEquals(CodePoint.isLowSurrogate(0xD800), false);
-  assertStrictEquals(CodePoint.isLowSurrogate(0xDBFF), false);
-  assertStrictEquals(CodePoint.isLowSurrogate(0xDC00), true);
-  assertStrictEquals(CodePoint.isLowSurrogate(0xDFFF), true);
-  assertStrictEquals(CodePoint.isLowSurrogate(0xE000), false);
-
-  assertStrictEquals(CodePoint.isLowSurrogate(-1), false);
-  assertStrictEquals(CodePoint.isLowSurrogate(0x110000), false);
-});
-
-Deno.test("CodePoint.isSurrogate()", () => {
-  assertStrictEquals(CodePoint.isSurrogate(0xD7FF), false);
-  assertStrictEquals(CodePoint.isSurrogate(0xD800), true);
-  assertStrictEquals(CodePoint.isSurrogate(0xDBFF), true);
-  assertStrictEquals(CodePoint.isSurrogate(0xDC00), true);
-  assertStrictEquals(CodePoint.isSurrogate(0xDFFF), true);
-  assertStrictEquals(CodePoint.isSurrogate(0xE000), false);
-
-  assertStrictEquals(CodePoint.isSurrogate(-1), false);
-  assertStrictEquals(CodePoint.isSurrogate(0x110000), false);
-});
-
 Deno.test("CodePoint.isVariationSelector()", () => {
   assertStrictEquals(CodePoint.isVariationSelector(0xFDFF), false);
   assertStrictEquals(CodePoint.isVariationSelector(0xFE00), true);

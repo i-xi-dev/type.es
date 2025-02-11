@@ -14,3 +14,39 @@ export function assertCodePoint(test: unknown, label: string): void {
     throw new TypeError(`\`${label}\` must be a code point.`);
   }
 }
+
+const _MIN_HIGH_SURROGATE: codepoint = 0xD800;
+const _MAX_HIGH_SURROGATE: codepoint = 0xDBFF;
+
+export function isHighSurrogateCodePoint(test: unknown): test is codepoint {
+  return isSafeIntegerInRange(
+    test,
+    _MIN_HIGH_SURROGATE,
+    _MAX_HIGH_SURROGATE,
+  );
+}
+
+//XXX assertHighSurrogate
+
+const _MIN_LOW_SURROGATE: codepoint = 0xDC00;
+const _MAX_LOW_SURROGATE: codepoint = 0xDFFF;
+
+export function isLowSurrogateCodePoint(test: unknown): test is codepoint {
+  return isSafeIntegerInRange(
+    test,
+    _MIN_LOW_SURROGATE,
+    _MAX_LOW_SURROGATE,
+  );
+}
+
+//XXX assertLowSurrogate
+
+export function isSurrogateCodePoint(test: unknown): test is codepoint {
+  return isSafeIntegerInRange(
+    test,
+    _MIN_HIGH_SURROGATE,
+    _MAX_LOW_SURROGATE,
+  );
+}
+
+//XXX assertSurrogate

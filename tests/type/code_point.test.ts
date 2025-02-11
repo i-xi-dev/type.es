@@ -57,3 +57,39 @@ Deno.test("Type.assertCodePoint()", () => {
     //
   }
 });
+
+Deno.test("Type.isHighSurrogateCodePoint()", () => {
+  assertStrictEquals(Type.isHighSurrogateCodePoint(0xD7FF), false);
+  assertStrictEquals(Type.isHighSurrogateCodePoint(0xD800), true);
+  assertStrictEquals(Type.isHighSurrogateCodePoint(0xDBFF), true);
+  assertStrictEquals(Type.isHighSurrogateCodePoint(0xDC00), false);
+  assertStrictEquals(Type.isHighSurrogateCodePoint(0xDFFF), false);
+  assertStrictEquals(Type.isHighSurrogateCodePoint(0xE000), false);
+
+  assertStrictEquals(Type.isHighSurrogateCodePoint(-1), false);
+  assertStrictEquals(Type.isHighSurrogateCodePoint(0x110000), false);
+});
+
+Deno.test("Type.isLowSurrogateCodePoint()", () => {
+  assertStrictEquals(Type.isLowSurrogateCodePoint(0xD7FF), false);
+  assertStrictEquals(Type.isLowSurrogateCodePoint(0xD800), false);
+  assertStrictEquals(Type.isLowSurrogateCodePoint(0xDBFF), false);
+  assertStrictEquals(Type.isLowSurrogateCodePoint(0xDC00), true);
+  assertStrictEquals(Type.isLowSurrogateCodePoint(0xDFFF), true);
+  assertStrictEquals(Type.isLowSurrogateCodePoint(0xE000), false);
+
+  assertStrictEquals(Type.isLowSurrogateCodePoint(-1), false);
+  assertStrictEquals(Type.isLowSurrogateCodePoint(0x110000), false);
+});
+
+Deno.test("Type.isSurrogateCodePoint()", () => {
+  assertStrictEquals(Type.isSurrogateCodePoint(0xD7FF), false);
+  assertStrictEquals(Type.isSurrogateCodePoint(0xD800), true);
+  assertStrictEquals(Type.isSurrogateCodePoint(0xDBFF), true);
+  assertStrictEquals(Type.isSurrogateCodePoint(0xDC00), true);
+  assertStrictEquals(Type.isSurrogateCodePoint(0xDFFF), true);
+  assertStrictEquals(Type.isSurrogateCodePoint(0xE000), false);
+
+  assertStrictEquals(Type.isSurrogateCodePoint(-1), false);
+  assertStrictEquals(Type.isSurrogateCodePoint(0x110000), false);
+});

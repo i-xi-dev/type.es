@@ -44,36 +44,6 @@ export function isInPlanes(test: unknown, planes: plane[]): test is codepoint {
   return planes.includes(planeOf(test));
 }
 
-const _MIN_HIGH_SURROGATE: codepoint = 0xD800;
-const _MAX_HIGH_SURROGATE: codepoint = 0xDBFF;
-
-export function isHighSurrogate(test: unknown): test is codepoint {
-  return isSafeIntegerInRange(
-    test,
-    _MIN_HIGH_SURROGATE,
-    _MAX_HIGH_SURROGATE,
-  );
-}
-
-const _MIN_LOW_SURROGATE: codepoint = 0xDC00;
-const _MAX_LOW_SURROGATE: codepoint = 0xDFFF;
-
-export function isLowSurrogate(test: unknown): test is codepoint {
-  return isSafeIntegerInRange(
-    test,
-    _MIN_LOW_SURROGATE,
-    _MAX_LOW_SURROGATE,
-  );
-}
-
-export function isSurrogate(test: unknown): test is codepoint {
-  return isSafeIntegerInRange(
-    test,
-    _MIN_HIGH_SURROGATE,
-    _MAX_LOW_SURROGATE,
-  );
-}
-
 const _MIN_VS: codepoint = 0xFE00;
 const _MAX_VS: codepoint = 0xFE0F;
 const _MIN_VSS: codepoint = 0xE0100;
