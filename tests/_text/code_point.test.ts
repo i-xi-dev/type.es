@@ -1,69 +1,7 @@
-import {
-  assertStrictEquals,
-  assertThrows,
-  fail,
-  unreachable,
-} from "@std/assert";
+import { assertStrictEquals, assertThrows } from "@std/assert";
 import { Text } from "../../mod.ts";
 
 const { CodePoint } = Text;
-
-Deno.test("CodePoint.is()", () => {
-  assertStrictEquals(CodePoint.is(-1), false);
-  assertStrictEquals(CodePoint.is(-0), true);
-  assertStrictEquals(CodePoint.is(0), true);
-  assertStrictEquals(CodePoint.is(63), true);
-  assertStrictEquals(CodePoint.is(64), true);
-  assertStrictEquals(CodePoint.is(127), true);
-  assertStrictEquals(CodePoint.is(128), true);
-  assertStrictEquals(CodePoint.is(255), true);
-  assertStrictEquals(CodePoint.is(256), true);
-  assertStrictEquals(CodePoint.is(65535), true);
-  assertStrictEquals(CodePoint.is(65536), true);
-  assertStrictEquals(CodePoint.is(0x10FFFF), true);
-  assertStrictEquals(CodePoint.is(0x110000), false);
-  assertStrictEquals(CodePoint.is(0xFFFFFFFF), false);
-  assertStrictEquals(CodePoint.is(0x100000000), false);
-  assertStrictEquals(CodePoint.is(0.1), false);
-
-  assertStrictEquals(CodePoint.is("0"), false);
-  assertStrictEquals(CodePoint.is("255"), false);
-  assertStrictEquals(CodePoint.is(true), false);
-  assertStrictEquals(CodePoint.is({}), false);
-  assertStrictEquals(CodePoint.is([]), false);
-  assertStrictEquals(CodePoint.is([0]), false);
-  assertStrictEquals(CodePoint.is(undefined), false);
-  assertStrictEquals(CodePoint.is(null), false);
-});
-
-Deno.test("CodePoint.assert()", () => {
-  try {
-    CodePoint.assert(-0, "test-1");
-    CodePoint.assert(0, "test-1");
-    CodePoint.assert(0x10FFFF, "test-1");
-  } catch (exception) {
-    fail((exception as Error).toString());
-  }
-
-  try {
-    CodePoint.assert(-1, "test-1");
-    unreachable();
-  } catch {
-    //
-  }
-  try {
-    CodePoint.assert(0x110000, "test-1");
-    unreachable();
-  } catch {
-    //
-  }
-  try {
-    CodePoint.assert(undefined, "test-1");
-    unreachable();
-  } catch {
-    //
-  }
-});
 
 Deno.test("CodePoint.toString()", () => {
   assertStrictEquals(CodePoint.toString(-0x0), "U+0000");

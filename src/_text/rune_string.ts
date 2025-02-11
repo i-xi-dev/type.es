@@ -1,4 +1,4 @@
-import { assert as assertCodePoint } from "./code_point.ts";
+import { assertCodePoint } from "../type/code_point.ts";
 import { assertIterable } from "../type/iterable.ts";
 import { assertString, isString } from "../type/string.ts";
 import {

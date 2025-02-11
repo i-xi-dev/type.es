@@ -1,25 +1,13 @@
+import { assertCodePoint, isCodePoint } from "../type/code_point.ts";
 import { type codepoint, type plane } from "../type.ts";
 import { IntegerRange } from "../_numerics/integer_range.ts";
 import { is as isPlane } from "./plane.ts";
 import { isSafeIntegerInRange } from "../type/number.ts";
+import { MIN_VALUE as MIN_CODE_POINT } from "../const/code_point.ts";
 import { SafeIntegerRange } from "../_numerics/safe_integer_range.ts";
 import { toString as safeIntegerToString } from "../safe_integer/basics.ts";
 import { ToStringOptions } from "../_numerics/main.ts";
 import { ZERO as NUMBER_ZERO } from "../const/number.ts";
-
-export const MIN_VALUE = 0x0;
-
-export const MAX_VALUE = 0x10FFFF;
-
-export function is(test: unknown): test is codepoint {
-  return isSafeIntegerInRange(test, MIN_VALUE, MAX_VALUE);
-}
-
-export function assert(test: unknown, label: string): void {
-  if (is(test) !== true) {
-    throw new TypeError(`\`${label}\` must be a code point.`);
-  }
-}
 
 const _toStringOptions: ToStringOptions = {
   // lowerCase: false,
@@ -28,21 +16,21 @@ const _toStringOptions: ToStringOptions = {
 } as const;
 
 export function toString(codePoint: codepoint): string {
-  assert(codePoint, "codePoint");
+  assertCodePoint(codePoint, "codePoint");
   return `U+${safeIntegerToString(codePoint, _toStringOptions)}`;
 }
 
 export function planeOf(codePoint: codepoint): plane {
-  assert(codePoint, "codePoint");
+  assertCodePoint(codePoint, "codePoint");
   return Math.trunc(codePoint / 0x10000) as plane;
 }
 
 export function isBmp(test: unknown): test is codepoint {
-  return isSafeIntegerInRange(test, MIN_VALUE, 0xFFFF);
+  return isSafeIntegerInRange(test, MIN_CODE_POINT, 0xFFFF);
 }
 
 export function isInPlanes(test: unknown, planes: plane[]): test is codepoint {
-  if (is(test) !== true) {
+  if (isCodePoint(test) !== true) {
     return false;
   }
 
@@ -105,7 +93,7 @@ export function isInRanges(
   test: unknown,
   ranges: SafeIntegerRange.Like<codepoint>[],
 ): test is codepoint {
-  if (is(test) !== true) {
+  if (isCodePoint(test) !== true) {
     return false;
   }
 
@@ -124,8 +112,8 @@ export function isInRanges(
       );
     }
 
-    assert(range.min, `ranges[${i}].min`);
-    assert(range.max, `ranges[${i}].max`);
+    assertCodePoint(range.min, `ranges[${i}].min`);
+    assertCodePoint(range.max, `ranges[${i}].max`);
     if ((test >= range.min) && (test <= range.max)) {
       return true;
     }

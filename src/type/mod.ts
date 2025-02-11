@@ -2,6 +2,7 @@ export * from "./array_buffer.ts";
 export * from "./bigint.ts";
 export * from "./boolean.ts";
 export * from "./buffer_source.ts";
+export * from "./code_point.ts";
 export * from "./integer.ts";
 export * from "./integer_string.ts";
 export * from "./iterable.ts";
