@@ -70,6 +70,41 @@ Deno.test("Type.isHighSurrogateCodePoint()", () => {
   assertStrictEquals(Type.isHighSurrogateCodePoint(0x110000), false);
 });
 
+Deno.test("Type.assertHighSurrogateCodePoint()", () => {
+  try {
+    Type.assertHighSurrogateCodePoint(0xD800, "test-1");
+    Type.assertHighSurrogateCodePoint(0xDBFF, "test-1");
+  } catch (exception) {
+    fail((exception as Error).toString());
+  }
+
+  try {
+    Type.assertHighSurrogateCodePoint(0xDC00, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    Type.assertHighSurrogateCodePoint(-1, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+  try {
+    Type.assertHighSurrogateCodePoint(0x110000, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+  try {
+    Type.assertHighSurrogateCodePoint(undefined, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+});
+
 Deno.test("Type.isLowSurrogateCodePoint()", () => {
   assertStrictEquals(Type.isLowSurrogateCodePoint(0xD7FF), false);
   assertStrictEquals(Type.isLowSurrogateCodePoint(0xD800), false);
@@ -82,6 +117,41 @@ Deno.test("Type.isLowSurrogateCodePoint()", () => {
   assertStrictEquals(Type.isLowSurrogateCodePoint(0x110000), false);
 });
 
+Deno.test("Type.assertLowSurrogateCodePoint()", () => {
+  try {
+    Type.assertLowSurrogateCodePoint(0xDC00, "test-1");
+    Type.assertLowSurrogateCodePoint(0xDFFF, "test-1");
+  } catch (exception) {
+    fail((exception as Error).toString());
+  }
+
+  try {
+    Type.assertLowSurrogateCodePoint(0xD800, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    Type.assertLowSurrogateCodePoint(-1, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+  try {
+    Type.assertLowSurrogateCodePoint(0x110000, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+  try {
+    Type.assertLowSurrogateCodePoint(undefined, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+});
+
 Deno.test("Type.isSurrogateCodePoint()", () => {
   assertStrictEquals(Type.isSurrogateCodePoint(0xD7FF), false);
   assertStrictEquals(Type.isSurrogateCodePoint(0xD800), true);
@@ -92,4 +162,34 @@ Deno.test("Type.isSurrogateCodePoint()", () => {
 
   assertStrictEquals(Type.isSurrogateCodePoint(-1), false);
   assertStrictEquals(Type.isSurrogateCodePoint(0x110000), false);
+});
+
+Deno.test("Type.assertSurrogateCodePoint()", () => {
+  try {
+    Type.assertSurrogateCodePoint(0xDC00, "test-1");
+    Type.assertSurrogateCodePoint(0xDFFF, "test-1");
+    Type.assertSurrogateCodePoint(0xD800, "test-1");
+    Type.assertSurrogateCodePoint(0xDBFF, "test-1");
+  } catch (exception) {
+    fail((exception as Error).toString());
+  }
+
+  try {
+    Type.assertSurrogateCodePoint(-1, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+  try {
+    Type.assertSurrogateCodePoint(0x110000, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+  try {
+    Type.assertSurrogateCodePoint(undefined, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
 });

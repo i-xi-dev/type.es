@@ -26,7 +26,14 @@ export function isHighSurrogateCodePoint(test: unknown): test is codepoint {
   );
 }
 
-//XXX assertHighSurrogate
+export function assertHighSurrogateCodePoint(
+  test: unknown,
+  label: string,
+): void {
+  if (isHighSurrogateCodePoint(test) !== true) {
+    throw new TypeError(`\`${label}\` must be a high-surrogate code point.`);
+  }
+}
 
 const _MIN_LOW_SURROGATE: codepoint = 0xDC00;
 const _MAX_LOW_SURROGATE: codepoint = 0xDFFF;
@@ -39,7 +46,14 @@ export function isLowSurrogateCodePoint(test: unknown): test is codepoint {
   );
 }
 
-//XXX assertLowSurrogate
+export function assertLowSurrogateCodePoint(
+  test: unknown,
+  label: string,
+): void {
+  if (isLowSurrogateCodePoint(test) !== true) {
+    throw new TypeError(`\`${label}\` must be a low-surrogate code point.`);
+  }
+}
 
 export function isSurrogateCodePoint(test: unknown): test is codepoint {
   return isSafeIntegerInRange(
@@ -49,4 +63,11 @@ export function isSurrogateCodePoint(test: unknown): test is codepoint {
   );
 }
 
-//XXX assertSurrogate
+export function assertSurrogateCodePoint(
+  test: unknown,
+  label: string,
+): void {
+  if (isSurrogateCodePoint(test) !== true) {
+    throw new TypeError(`\`${label}\` must be a surrogate code point.`);
+  }
+}
