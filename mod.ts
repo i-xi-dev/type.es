@@ -1,4 +1,3 @@
-export * as Basics from "./src/basics/mod.ts";
 export * from "./src/byte_order.ts";
 export * as Events from "./src/events/mod.ts";
 export * from "./src/exception/mod.ts";
