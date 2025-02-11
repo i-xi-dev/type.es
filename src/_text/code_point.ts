@@ -1,13 +1,10 @@
 import { assertCodePoint, isCodePoint } from "../type/code_point.ts";
 import { type codepoint, type plane } from "../type.ts";
-import { IntegerRange } from "../_numerics/integer_range.ts";
 import { is as isPlane } from "./plane.ts";
 import { isSafeIntegerInRange } from "../type/number.ts";
 import { MIN_VALUE as MIN_CODE_POINT } from "../const/code_point.ts";
-import { SafeIntegerRange } from "../_numerics/safe_integer_range.ts";
 import { toString as safeIntegerToString } from "../safe_integer/basics.ts";
 import { ToStringOptions } from "../_numerics/main.ts";
-import { ZERO as NUMBER_ZERO } from "../const/number.ts";
 
 const _toStringOptions: ToStringOptions = {
   // lowerCase: false,
@@ -42,37 +39,4 @@ export function isInPlanes(test: unknown, planes: plane[]): test is codepoint {
   }
 
   return planes.includes(planeOf(test));
-}
-
-export function isInRanges(
-  test: unknown,
-  ranges: SafeIntegerRange.Like<codepoint>[],
-): test is codepoint {
-  if (isCodePoint(test) !== true) {
-    return false;
-  }
-
-  if (Array.isArray(ranges) !== true) {
-    throw new TypeError("`ranges` must be an `Array`.");
-  }
-
-  let range: SafeIntegerRange.Struct<codepoint>;
-  //for (const rangeSource of ranges) {
-  for (let i = NUMBER_ZERO; i < ranges.length; i++) {
-    try {
-      range = IntegerRange.Struct.fromRangeLike(ranges[i]);
-    } catch {
-      throw new TypeError(
-        `\`ranges[${i}]\` must be a \`SafeIntegerRange.Like\`.`,
-      );
-    }
-
-    assertCodePoint(range.min, `ranges[${i}].min`);
-    assertCodePoint(range.max, `ranges[${i}].max`);
-    if ((test >= range.min) && (test <= range.max)) {
-      return true;
-    }
-  }
-
-  return false;
 }

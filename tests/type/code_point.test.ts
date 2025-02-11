@@ -1,4 +1,9 @@
-import { assertStrictEquals, fail, unreachable } from "@std/assert";
+import {
+  assertStrictEquals,
+  assertThrows,
+  fail,
+  unreachable,
+} from "@std/assert";
 import { Type } from "../../mod.ts";
 
 Deno.test("Type.isCodePoint()", () => {
@@ -240,3 +245,170 @@ Deno.test("Type.assertVariationSelectorCodePoint()", () => {
     //
   }
 });
+
+Deno.test("Type.isCodePointInRange()", () => {
+  assertStrictEquals(Type.isCodePointInRange(0, 0, 10), true);
+  assertStrictEquals(Type.isCodePointInRange(10, 0, 10), true);
+  assertStrictEquals(Type.isCodePointInRange(9, 10, 11), false);
+  assertStrictEquals(Type.isCodePointInRange(12, 10, 11), false);
+  assertStrictEquals(
+    Type.isCodePointInRange(0x10FFFF, 0x10FFF0, 0x10FFFF),
+    true,
+  );
+  assertStrictEquals(
+    Type.isCodePointInRange(0x10FFF0, 0x10FFF0, 0x10FFFF),
+    true,
+  );
+  assertStrictEquals(
+    Type.isCodePointInRange(0x10FFEF, 0x10FFF0, 0x10FFFF),
+    false,
+  );
+  assertStrictEquals(Type.isCodePointInRange(-1, 0, 0x10FFFF), false);
+  assertStrictEquals(Type.isCodePointInRange(0x110000, 0, 0x10FFFF), false);
+
+  assertThrows(
+    () => {
+      Type.isCodePointInRange(0, 0, 0x110000);
+    },
+    TypeError,
+    "`max` must be a code point.",
+  );
+
+  assertThrows(
+    () => {
+      Type.isCodePointInRange(0, -1, 0x10FFFF);
+    },
+    TypeError,
+    "`min` must be a code point.",
+  );
+
+  assertStrictEquals(Type.isCodePointInRange(0, 0x10FFFF, 0), false); //XXX 負のレンジはエラーにすべき？
+});
+
+Deno.test("Type.assertCodePointInRange()", () => {
+  try {
+    Type.assertCodePointInRange(0, "test-1", 0, 0);
+    Type.assertCodePointInRange(0, "test-1", 0, 1);
+    Type.assertCodePointInRange(1, "test-1", 0, 1);
+  } catch (exception) {
+    fail((exception as Error).toString());
+  }
+
+  try {
+    Type.assertCodePointInRange(1, "test-1", 2, 3);
+    unreachable();
+  } catch {
+    //
+  }
+  try {
+    Type.assertCodePointInRange(1, "test-1", 3, 0);
+    unreachable();
+  } catch {
+    //
+  }
+  try {
+    Type.assertCodePointInRange(undefined, "test-1", 0, 0x10FFFF);
+    unreachable();
+  } catch {
+    //
+  }
+});
+
+// Deno.test("CodePoint.isInRanges()", () => {
+//   const blocks0: Array<[number] | [number, number]> = [];
+//
+//   assertStrictEquals(CodePoint.isInRanges(0x0, blocks0), false);
+//   assertStrictEquals(CodePoint.isInRanges(0x7F, blocks0), false);
+//   assertStrictEquals(CodePoint.isInRanges(0x80, blocks0), false);
+//   assertStrictEquals(CodePoint.isInRanges(0xFF, blocks0), false);
+//   assertStrictEquals(CodePoint.isInRanges(0x100, blocks0), false);
+//
+//   const blocks1 = [
+//     [0x0, 0x7F],
+//     [0x80, 0xFF],
+//   ] as [number, number][];
+//
+//   assertStrictEquals(CodePoint.isInRanges(0x0, blocks1), true);
+//   assertStrictEquals(CodePoint.isInRanges(0x7F, blocks1), true);
+//   assertStrictEquals(CodePoint.isInRanges(0x80, blocks1), true);
+//   assertStrictEquals(CodePoint.isInRanges(0xFF, blocks1), true);
+//   assertStrictEquals(CodePoint.isInRanges(0x100, blocks1), false);
+//
+//   const blocks2 = [
+//     [0x80, 0xFF],
+//     [0x0, 0x7F],
+//   ] as [number, number][];
+//
+//   assertStrictEquals(CodePoint.isInRanges(0x0, blocks2), true);
+//   assertStrictEquals(CodePoint.isInRanges(0x7F, blocks2), true);
+//   assertStrictEquals(CodePoint.isInRanges(0x80, blocks2), true);
+//   assertStrictEquals(CodePoint.isInRanges(0xFF, blocks2), true);
+//   assertStrictEquals(CodePoint.isInRanges(0x100, blocks2), false);
+//
+//   assertStrictEquals(CodePoint.isInRanges(-1, blocks1), false);
+//   assertStrictEquals(CodePoint.isInRanges(0x110000, blocks1), false);
+//
+//   const ea = "`ranges` must be an `Array`.";
+//   assertThrows(
+//     () => {
+//       CodePoint.isInRanges(0, undefined as unknown as []);
+//     },
+//     TypeError,
+//     ea,
+//   );
+//
+//   assertThrows(
+//     () => {
+//       CodePoint.isInRanges(0, 0 as unknown as []);
+//     },
+//     TypeError,
+//     ea,
+//   );
+//
+//   const eai = "`ranges[0]` must be a `SafeIntegerRange.Like`.";
+//   assertThrows(
+//     () => {
+//       CodePoint.isInRanges(0, [0 as unknown as [0]]);
+//     },
+//     TypeError,
+//     eai,
+//   );
+//
+//   const eai1 = "`ranges[1]` must be a `SafeIntegerRange.Like`.";
+//   assertThrows(
+//     () => {
+//       CodePoint.isInRanges(0, [
+//         [0x1, 0x7F],
+//         0 as unknown as [0],
+//       ]);
+//     },
+//     TypeError,
+//     eai1,
+//   );
+//
+//   // assertThrows(
+//   //   () => {
+//   //     CodePoint.isInRanges(0, [
+//   //       [0x0, 0x7F],
+//   //       0 as unknown as [0],
+//   //     ]);
+//   //   },
+//   //   TypeError,
+//   //   eai,
+//   // );
+//   assertStrictEquals(
+//     CodePoint.isInRanges(0, [[0x0, 0x7F], 0 as unknown as [0]]),
+//     true,
+//   );
+//
+//   assertThrows(
+//     () => {
+//       CodePoint.isInRanges(0, [
+//         0 as unknown as [0],
+//         [0x0, 0x7F],
+//       ]);
+//     },
+//     TypeError,
+//     eai,
+//   );
+// });
