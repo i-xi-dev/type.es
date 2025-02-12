@@ -1,28 +1,17 @@
 import { assertGeneralCategory, GeneralCategory } from "./unicode.ts";
 import { isBmp as isBmpCodePoint } from "./code_point.ts";
-import { isString } from "../type/string.ts";
 import { type plane, type rune, type script } from "../type.ts";
 import { Script } from "../i18n/script.ts";
 import { ZERO as NUMBER_ZERO } from "../const/number.ts";
-
-export function is(test: unknown): test is rune {
-  return isString(test) && (test.length <= 2) && ([...test].length === 1) &&
-    test.isWellFormed();
-}
-
-export function assert(test: unknown, label: string): void {
-  if (is(test) !== true) {
-    throw new TypeError(`\`${label}\` must be an Unicode scalar value.`);
-  }
-}
+import { assertRune, isRune } from "../type/rune.ts";
 
 export function planeOf(rune: rune): plane {
-  assert(rune, "rune");
+  assertRune(rune, "rune");
   return Math.trunc(rune.codePointAt(NUMBER_ZERO)! / 0x10000) as plane;
 }
 
 export function isBmp(test: unknown): test is rune {
-  return is(test) && isBmpCodePoint(test.codePointAt(NUMBER_ZERO)!);
+  return isRune(test) && isBmpCodePoint(test.codePointAt(NUMBER_ZERO)!);
 }
 
 export function matchesGeneralCategory(
@@ -30,7 +19,7 @@ export function matchesGeneralCategory(
   category: GeneralCategory,
 ): test is rune {
   assertGeneralCategory(category, "category");
-  return is(test) && (new RegExp(`^\\p{gc=${category}}$`, "v")).test(test);
+  return isRune(test) && (new RegExp(`^\\p{gc=${category}}$`, "v")).test(test);
 }
 
 export type MatchesScriptOptions = {
@@ -51,7 +40,7 @@ export function matchesScript(
   }
   const pattern = or.join("|");
 
-  return is(test) && (new RegExp(`^(?:${pattern})$`, "v")).test(test);
+  return isRune(test) && (new RegExp(`^(?:${pattern})$`, "v")).test(test);
 }
 
 let _commonSc: WeakRef<RegExp> | null = null;
@@ -62,7 +51,7 @@ export function matchesCommonScript(test: unknown): test is rune {
     commonSc = new RegExp(`^\\p{sc=Zyyy}$`, "v");
     _commonSc = new WeakRef(commonSc);
   }
-  return is(test) && commonSc.test(test);
+  return isRune(test) && commonSc.test(test);
 }
 
 let _inheritedSc: WeakRef<RegExp> | null = null;
@@ -73,7 +62,7 @@ export function matchesInheritedScript(test: unknown): test is rune {
     inheritedSc = new RegExp(`^(?:\\p{sc=Zinh})$`, "v");
     _inheritedSc = new WeakRef(inheritedSc);
   }
-  return is(test) && inheritedSc.test(test);
+  return isRune(test) && inheritedSc.test(test);
 }
 
 /*
