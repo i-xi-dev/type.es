@@ -3,7 +3,7 @@ import { assertUnicodeGeneralCategory } from "../type/unicode.ts";
 import { type GeneralCategory } from "../const/unicode.ts";
 import { isBmp as isBmpCodePoint } from "./code_point.ts";
 import { type plane, type rune, type script } from "../type.ts";
-import { Script } from "../i18n/script.ts";
+import { Script } from "../_i18n/script.ts";
 import { ZERO as NUMBER_ZERO } from "../const/number.ts";
 
 export function planeOf(rune: rune): plane {

@@ -6,7 +6,7 @@ export * as ExBigInt from "./src/bigint/mod.ts";
 export * as ExNumber from "./src/number/mod.ts";
 export * as ExString from "./src/string/mod.ts";
 export * from "./src/_2/growable_buffer.ts";
-export * as I18n from "./src/i18n/mod.ts";
+export * as I18n from "./src/_i18n/mod.ts";
 export * as Numerics from "./src/_numerics/mod.ts";
 export * as Radix from "./src/numerics/radix.ts";
 export * from "./src/numerics/rounding_mode.ts";

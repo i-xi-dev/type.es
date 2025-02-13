@@ -1,7 +1,7 @@
 import { assertString, assertUSVString } from "../type/string.ts";
 import { EMPTY as EMPTY_STRING } from "../const/string.ts";
 import { type grapheme } from "../type.ts";
-import { segmentGraphemes } from "../i18n/utils.ts";
+import { segmentGraphemes } from "../_i18n/utils.ts";
 
 const _NormalizationForms = ["NFC", "NFD", "NFKC", "NFKD"] as const;
 
