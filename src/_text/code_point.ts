@@ -1,6 +1,6 @@
 import { assertCodePoint, isCodePoint } from "../type/code_point.ts";
 import { type codepoint, type plane } from "../type.ts";
-import { is as isPlane } from "./plane.ts";
+import { isUnicodePlane } from "../type/unicode.ts";
 import { isSafeIntegerInRange } from "../type/number.ts";
 import { MIN_VALUE as MIN_CODE_POINT } from "../const/code_point.ts";
 import { toString as safeIntegerToString } from "../safe_integer/basics.ts";
@@ -33,7 +33,7 @@ export function isInPlanes(test: unknown, planes: plane[]): test is codepoint {
 
   if (
     (Array.isArray(planes) &&
-      planes.every((plane) => isPlane(plane))) !== true
+      planes.every((plane) => isUnicodePlane(plane))) !== true
   ) {
     throw new TypeError("`planes` must be a array of planes.");
   }

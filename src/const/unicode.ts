@@ -1,3 +1,13 @@
+export const Plane = {
+  BMP: 0,
+  SMP: 1,
+  SIP: 2,
+  TIP: 3,
+  SSP: 14,
+  SPUA_A: 15,
+  SPUA_B: 16,
+};
+
 export const GeneralCategory = {
   UPPERCASE_LETTER: "Lu",
   LOWERCASE_LETTER: "Ll",
