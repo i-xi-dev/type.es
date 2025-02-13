@@ -419,3 +419,70 @@ Deno.test("Type.assertUSVString()", () => {
     //
   }
 });
+
+Deno.test("Type.isNonEmptyUSVString()", () => {
+  assertStrictEquals(Type.isNonEmptyUSVString(0), false);
+  assertStrictEquals(Type.isNonEmptyUSVString(0n), false);
+  assertStrictEquals(Type.isNonEmptyUSVString(Number.NaN), false);
+  assertStrictEquals(Type.isNonEmptyUSVString(Number.POSITIVE_INFINITY), false);
+  assertStrictEquals(Type.isNonEmptyUSVString(Number.MAX_SAFE_INTEGER), false);
+  assertStrictEquals(Type.isNonEmptyUSVString(Number.MIN_SAFE_INTEGER), false);
+  assertStrictEquals(Type.isNonEmptyUSVString(Number.NEGATIVE_INFINITY), false);
+
+  assertStrictEquals(Type.isNonEmptyUSVString(undefined), false);
+  assertStrictEquals(Type.isNonEmptyUSVString(null), false);
+  assertStrictEquals(Type.isNonEmptyUSVString(true), false);
+  assertStrictEquals(Type.isNonEmptyUSVString(false), false);
+  assertStrictEquals(Type.isNonEmptyUSVString(""), false);
+  assertStrictEquals(Type.isNonEmptyUSVString("0"), true);
+  assertStrictEquals(Type.isNonEmptyUSVString("00"), true);
+
+  assertStrictEquals(Type.isNonEmptyUSVString("\uD800\uDC00"), true);
+  assertStrictEquals(Type.isNonEmptyUSVString("\uDC00\uD800"), false);
+});
+
+Deno.test("Type.assertNonEmptyUSVString()", () => {
+  try {
+    Type.assertNonEmptyUSVString("0", "test-1");
+    Type.assertNonEmptyUSVString("00", "test-1");
+
+    Type.assertNonEmptyUSVString("\uD800\uDC00", "test-1");
+  } catch (exception) {
+    fail((exception as Error).toString());
+  }
+
+  try {
+    Type.assertNonEmptyUSVString("\uDC00\uD800", "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    Type.assertNonEmptyUSVString("", "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    Type.assertNonEmptyUSVString(undefined, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    Type.assertNonEmptyUSVString(0, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    Type.assertNonEmptyUSVString(new String("0"), "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+});

@@ -61,3 +61,13 @@ export function assertUSVString(test: unknown, label: string): void {
     throw new TypeError(`\`${label}\` must be a \`USVString\`.`);
   }
 }
+
+export function isNonEmptyUSVString(test: unknown): test is usvstring {
+  return isUSVString(test) && (test.length > NUMBER_ZERO);
+}
+
+export function assertNonEmptyUSVString(test: unknown, label: string): void {
+  if (isNonEmptyUSVString(test) !== true) {
+    throw new TypeError(`\`${label}\` must be a non-empty \`USVString\`.`);
+  }
+}

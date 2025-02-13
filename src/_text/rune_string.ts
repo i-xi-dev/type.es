@@ -13,16 +13,6 @@ import { Rune } from "./mod.ts";
 import { Script } from "../i18n/script.ts";
 import { ZERO as NUMBER_ZERO } from "../const/number.ts";
 
-export function isNonEmpty(test: unknown): test is usvstring {
-  return isUSVString(test) && (test.length > NUMBER_ZERO);
-}
-
-export function assertNonEmpty(test: unknown, label: string): void {
-  if (isNonEmpty(test) !== true) {
-    throw new TypeError(`\`${label}\` must be a non-empty \`USVString\`.`);
-  }
-}
-
 export type AllowMalformedOptions = {
   allowMalformed?: boolean;
 };
