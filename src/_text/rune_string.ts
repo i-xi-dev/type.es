@@ -1,6 +1,6 @@
 import { assertCodePoint } from "../type/code_point.ts";
 import { assertIterable } from "../type/iterable.ts";
-import { assertString, isString } from "../type/string.ts";
+import { assertString, assertUSVString, isUSVString } from "../type/string.ts";
 import {
   type codepoint,
   type rune,
@@ -13,18 +13,8 @@ import { Rune } from "./mod.ts";
 import { Script } from "../i18n/script.ts";
 import { ZERO as NUMBER_ZERO } from "../const/number.ts";
 
-export function is(test: unknown): test is usvstring {
-  return isString(test) && test.isWellFormed();
-}
-
 export function isNonEmpty(test: unknown): test is usvstring {
-  return is(test) && (test.length > NUMBER_ZERO);
-}
-
-export function assert(test: unknown, label: string): void {
-  if (is(test) !== true) {
-    throw new TypeError(`\`${label}\` must be a \`USVString\`.`);
-  }
+  return isUSVString(test) && (test.length > NUMBER_ZERO);
 }
 
 export function assertNonEmpty(test: unknown, label: string): void {
@@ -44,7 +34,7 @@ export function runeCountOf(
   if (options?.allowMalformed === true) {
     assertString(value, "value");
   } else {
-    assert(value, "value");
+    assertUSVString(value, "value");
   }
   return [...value].length;
 }
@@ -62,7 +52,7 @@ export function toRunes(
   if (options?.allowMalformed === true) {
     assertString(value, "value");
   } else {
-    assert(value, "value");
+    assertUSVString(value, "value");
   }
 
   return (function* (s) {
@@ -108,7 +98,7 @@ export function toCodePoints(
   if (options?.allowMalformed === true) {
     assertString(value, "value");
   } else {
-    assert(value, "value");
+    assertUSVString(value, "value");
   }
 
   return (function* (s) {
@@ -142,7 +132,7 @@ export function belongsToScripts(
     throw new TypeError("`scripts` must be an Array of script.");
   }
 
-  if (is(test) !== true) {
+  if (isUSVString(test) !== true) {
     return false;
   }
 

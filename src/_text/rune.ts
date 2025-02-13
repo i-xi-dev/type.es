@@ -1,9 +1,9 @@
 import { assertGeneralCategory, GeneralCategory } from "./unicode.ts";
+import { assertRune, isRune } from "../type/string.ts";
 import { isBmp as isBmpCodePoint } from "./code_point.ts";
 import { type plane, type rune, type script } from "../type.ts";
 import { Script } from "../i18n/script.ts";
 import { ZERO as NUMBER_ZERO } from "../const/number.ts";
-import { assertRune, isRune } from "../type/rune.ts";
 
 export function planeOf(rune: rune): plane {
   assertRune(rune, "rune");

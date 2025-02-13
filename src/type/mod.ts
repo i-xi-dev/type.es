@@ -9,5 +9,4 @@ export * from "./iterable.ts";
 export * from "./number.ts";
 export * from "./numeric.ts";
 export * from "./object.ts";
-export * from "./rune.ts";
 export * from "./string.ts";

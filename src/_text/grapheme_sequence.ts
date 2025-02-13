@@ -1,5 +1,4 @@
-import { assert as assertRuneSequence } from "./rune_string.ts";
-import { assertString } from "../type/string.ts";
+import { assertString, assertUSVString } from "../type/string.ts";
 import { EMPTY as EMPTY_STRING } from "../const/string.ts";
 import { type grapheme } from "../type.ts";
 import { segmentGraphemes } from "../i18n/utils.ts";
@@ -34,7 +33,7 @@ export class GraphemeSequence {
     if (options?.allowMalformed === true) {
       assertString(value, "value");
     } else {
-      assertRuneSequence(value, "value");
+      assertUSVString(value, "value");
     }
 
     let normalized = value;

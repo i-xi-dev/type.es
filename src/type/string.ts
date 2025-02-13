@@ -1,4 +1,4 @@
-import { type char } from "../type.ts";
+import { type char, type rune, type usvstring } from "../type.ts";
 import { ZERO as NUMBER_ZERO } from "../const/number.ts";
 
 export function isString(test: unknown): test is string {
@@ -38,5 +38,26 @@ export function isChar(test: unknown): test is char {
 export function assertChar(test: unknown, label: string): void {
   if (isChar(test) !== true) {
     throw new TypeError(`\`${label}\` must be an UTF-16 code unit.`);
+  }
+}
+
+export function isRune(test: unknown): test is rune {
+  return isString(test) && (test.length <= 2) && ([...test].length === 1) &&
+    test.isWellFormed();
+}
+
+export function assertRune(test: unknown, label: string): void {
+  if (isRune(test) !== true) {
+    throw new TypeError(`\`${label}\` must be an Unicode scalar value.`);
+  }
+}
+
+export function isUSVString(test: unknown): test is usvstring {
+  return isString(test) && test.isWellFormed();
+}
+
+export function assertUSVString(test: unknown, label: string): void {
+  if (isUSVString(test) !== true) {
+    throw new TypeError(`\`${label}\` must be a \`USVString\`.`);
   }
 }
