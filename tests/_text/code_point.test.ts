@@ -3,38 +3,6 @@ import { Text } from "../../mod.ts";
 
 const { CodePoint } = Text;
 
-Deno.test("CodePoint.toString()", () => {
-  assertStrictEquals(CodePoint.toString(-0x0), "U+0000");
-  assertStrictEquals(CodePoint.toString(0x0), "U+0000");
-  assertStrictEquals(CodePoint.toString(0xFFFF), "U+FFFF");
-  assertStrictEquals(CodePoint.toString(0x10000), "U+10000");
-  assertStrictEquals(CodePoint.toString(0x10FFFF), "U+10FFFF");
-
-  assertThrows(
-    () => {
-      CodePoint.toString(-1);
-    },
-    TypeError,
-    "codePoint",
-  );
-
-  assertThrows(
-    () => {
-      CodePoint.toString(0x110000);
-    },
-    TypeError,
-    "codePoint",
-  );
-
-  assertThrows(
-    () => {
-      CodePoint.toString("0" as unknown as number);
-    },
-    TypeError,
-    "codePoint",
-  );
-});
-
 Deno.test("CodePoint.planeOf()", () => {
   assertStrictEquals(CodePoint.planeOf(0x0), 0);
   assertStrictEquals(CodePoint.planeOf(0xFFFF), 0);

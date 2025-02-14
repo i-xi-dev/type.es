@@ -1,4 +1,5 @@
 export * from "./src/byte_order.ts";
+export * as CodePoint from "./src/code_point/mod.ts";
 export * as Events from "./src/events/mod.ts";
 export * from "./src/exception/mod.ts";
 export * as ExArrayBuffer from "./src/array_buffer/mod.ts";
