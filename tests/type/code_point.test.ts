@@ -412,3 +412,55 @@ Deno.test("Type.assertCodePointInRange()", () => {
 //     eai,
 //   );
 // });
+
+Deno.test("Type.isBmpCodePoint()", () => {
+  assertStrictEquals(Type.isBmpCodePoint(0x0), true);
+  assertStrictEquals(Type.isBmpCodePoint(0xFFFF), true);
+  assertStrictEquals(Type.isBmpCodePoint(0x10000), false);
+  assertStrictEquals(Type.isBmpCodePoint(0x10FFFF), false);
+
+  assertStrictEquals(Type.isBmpCodePoint(-1), false);
+  assertStrictEquals(Type.isBmpCodePoint(0x110000), false);
+});
+
+Deno.test("Type.assertCodePoint()", () => {
+  try {
+    Type.assertBmpCodePoint(-0, "test-1");
+    Type.assertBmpCodePoint(0, "test-1");
+    Type.assertBmpCodePoint(0xFFFF, "test-1");
+  } catch (exception) {
+    fail((exception as Error).toString());
+  }
+
+  try {
+    Type.assertBmpCodePoint(0x10000, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+  try {
+    Type.assertBmpCodePoint(0x10FFFF, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    Type.assertBmpCodePoint(-1, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+  try {
+    Type.assertBmpCodePoint(0x110000, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+  try {
+    Type.assertBmpCodePoint(undefined, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+});

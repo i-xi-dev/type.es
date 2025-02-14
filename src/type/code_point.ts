@@ -158,3 +158,13 @@ export function assertCodePointInRange(
 //
 //   return false;
 // }
+
+export function isBmpCodePoint(test: unknown): test is codepoint {
+  return isSafeIntegerInRange(test, MIN_CODE_POINT, 0xFFFF);
+}
+
+export function assertBmpCodePoint(test: unknown, label: string): void {
+  if (isBmpCodePoint(test) !== true) {
+    throw new TypeError(`\`${label}\` must be a code point in the BMP.`);
+  }
+}
