@@ -423,7 +423,7 @@ Deno.test("Type.isBmpCodePoint()", () => {
   assertStrictEquals(Type.isBmpCodePoint(0x110000), false);
 });
 
-Deno.test("Type.assertCodePoint()", () => {
+Deno.test("Type.assertBmpCodePoint()", () => {
   try {
     Type.assertBmpCodePoint(-0, "test-1");
     Type.assertBmpCodePoint(0, "test-1");
@@ -459,6 +459,64 @@ Deno.test("Type.assertCodePoint()", () => {
   }
   try {
     Type.assertBmpCodePoint(undefined, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+});
+
+Deno.test("Type.isPrivateUseCodePoint()", () => {
+  assertStrictEquals(Type.isPrivateUseCodePoint(0x0), false);
+  assertStrictEquals(Type.isPrivateUseCodePoint(0xDFFF), false);
+  assertStrictEquals(Type.isPrivateUseCodePoint(0xE000), true);
+  assertStrictEquals(Type.isPrivateUseCodePoint(0xF8FF), true);
+  assertStrictEquals(Type.isPrivateUseCodePoint(0xF900), false);
+  assertStrictEquals(Type.isPrivateUseCodePoint(0x10000), false);
+  assertStrictEquals(Type.isPrivateUseCodePoint(0xEFFFF), false);
+  assertStrictEquals(Type.isPrivateUseCodePoint(0xF0000), true);
+  assertStrictEquals(Type.isPrivateUseCodePoint(0x10FFFF), true);
+
+  assertStrictEquals(Type.isPrivateUseCodePoint(-1), false);
+  assertStrictEquals(Type.isPrivateUseCodePoint(0x110000), false);
+});
+
+Deno.test("Type.assertPrivateUseCodePoint()", () => {
+  try {
+    Type.assertPrivateUseCodePoint(0xE000, "test-1");
+    Type.assertPrivateUseCodePoint(0xF8FF, "test-1");
+    Type.assertPrivateUseCodePoint(0xF0000, "test-1");
+    Type.assertPrivateUseCodePoint(0x10FFFF, "test-1");
+  } catch (exception) {
+    fail((exception as Error).toString());
+  }
+
+  try {
+    Type.assertPrivateUseCodePoint(0xDFFF, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+  try {
+    Type.assertPrivateUseCodePoint(0xF900, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    Type.assertPrivateUseCodePoint(-1, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+  try {
+    Type.assertPrivateUseCodePoint(0x110000, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+  try {
+    Type.assertPrivateUseCodePoint(undefined, "test-1");
     unreachable();
   } catch {
     //
