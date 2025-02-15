@@ -135,7 +135,7 @@ export function assertCodePointInRange(
 //
 //   let range: SafeIntegerRange.Struct<codepoint>;
 //   //for (const rangeSource of ranges) {
-//   for (let i = NUMBER_ZERO; i < ranges.length; i++) {
+//   for (let i = 0; i < ranges.length; i++) {
 //     try {
 //       range = IntegerRange.Struct.fromRangeLike(ranges[i]);
 //     } catch {

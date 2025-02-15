@@ -43,7 +43,7 @@ export async function fromUint8AsyncIterable(
 
   //XXX resizable ArrayBufferが広く実装されたらそちらに変更する
   const gb = new GrowableBuffer();
-  let index = NUMBER_ZERO;
+  let index = 0;
   for await (const byte of value) {
     Uint8.assert(byte, `value[${index}]`);
     gb.put(byte as uint8);
@@ -87,7 +87,7 @@ function _fromUint8xIterable<T extends int>(
   const tmp = new ArrayBuffer(uint8xArrayCtor.BYTES_PER_ELEMENT);
   const tmpView = new DataView(tmp);
 
-  let index = NUMBER_ZERO;
+  let index = 0;
   for (const i of value) {
     assertElement(i, `value[${index}]`);
     viewSetter(tmpView, i, isLittleEndian);
@@ -109,7 +109,7 @@ async function _fromUint8xAsyncIterable<T extends int>(
   const tmp = new ArrayBuffer(uint8xArrayCtor.BYTES_PER_ELEMENT);
   const tmpView = new DataView(tmp);
 
-  let index = NUMBER_ZERO;
+  let index = 0;
   for await (const i of value) {
     assertElement(i, `value[${index}]`);
     viewSetter(tmpView, i, isLittleEndian);
@@ -141,12 +141,12 @@ function _toUint8xIterable<T extends int>(
   }
 
   if (byteOrder !== env.BYTE_ORDER) {
-    const clone = value.slice(NUMBER_ZERO);
+    const clone = value.slice(0);
     const reader = new DataView(clone);
     const isLittleEndian = byteOrder === ByteOrder.LITTLE_ENDIAN;
 
     return (function* () {
-      for (let i = NUMBER_ZERO; i < (clone.byteLength / bytesPerElement); i++) {
+      for (let i = 0; i < (clone.byteLength / bytesPerElement); i++) {
         yield viewGetter(reader, i * bytesPerElement, isLittleEndian);
       }
     })() as Iterable<T>;
@@ -175,7 +175,7 @@ export function fromUint16Iterable(
       value,
       Uint16Array,
       (t, l) => Uint16.assert(t, l),
-      (v, i, e) => v.setUint16(NUMBER_ZERO, i, e),
+      (v, i, e) => v.setUint16(0, i, e),
       byteOrder,
     );
   } else {
@@ -201,7 +201,7 @@ export async function fromUint16AsyncIterable(
       value,
       Uint16Array,
       (t, l) => Uint16.assert(t, l),
-      (v, i, e) => v.setUint16(NUMBER_ZERO, i, e),
+      (v, i, e) => v.setUint16(0, i, e),
       byteOrder,
     );
   } else {
@@ -210,10 +210,10 @@ export async function fromUint16AsyncIterable(
     //XXX resizable ArrayBufferが広く実装されたらそちらに変更する
     const gb = new GrowableBuffer();
     const tmpView = new Uint16Array(1);
-    let index = NUMBER_ZERO;
+    let index = 0;
     for await (const i of value) {
       Uint16.assert(i, `value[${index}]`);
-      tmpView[NUMBER_ZERO] = i;
+      tmpView[0] = i;
       gb.putRange(tmpView);
       index++;
     }
@@ -248,7 +248,7 @@ export function fromUint32Iterable(
       value,
       Uint32Array,
       (t, l) => Uint32.assert(t, l),
-      (v, i, e) => v.setUint32(NUMBER_ZERO, i, e),
+      (v, i, e) => v.setUint32(0, i, e),
       byteOrder,
     );
   } else {
@@ -274,7 +274,7 @@ export async function fromUint32AsyncIterable(
       value,
       Uint32Array,
       (t, l) => Uint32.assert(t, l),
-      (v, i, e) => v.setUint32(NUMBER_ZERO, i, e),
+      (v, i, e) => v.setUint32(0, i, e),
       byteOrder,
     );
   } else {
@@ -282,10 +282,10 @@ export async function fromUint32AsyncIterable(
 
     const gb = new GrowableBuffer();
     const tmpView = new Uint32Array(1);
-    let index = NUMBER_ZERO;
+    let index = 0;
     for await (const i of value) {
       Uint32.assert(i, `value[${index}]`);
-      tmpView[NUMBER_ZERO] = i;
+      tmpView[0] = i;
       gb.putRange(tmpView);
       index++;
     }
@@ -316,7 +316,7 @@ export function fromBigUint64Iterable(
       value,
       BigUint64Array,
       (t, l) => BigUint64.assert(t, l),
-      (v, i, e) => v.setBigUint64(NUMBER_ZERO, i, e),
+      (v, i, e) => v.setBigUint64(0, i, e),
       byteOrder,
     );
   } else {
@@ -346,7 +346,7 @@ export async function fromBigUint64AsyncIterable(
       value,
       BigUint64Array,
       (t, l) => BigUint64.assert(t, l),
-      (v, i, e) => v.setBigUint64(NUMBER_ZERO, i, e),
+      (v, i, e) => v.setBigUint64(0, i, e),
       byteOrder,
     );
   } else {
@@ -354,10 +354,10 @@ export async function fromBigUint64AsyncIterable(
 
     const gb = new GrowableBuffer();
     const tmpView = new BigUint64Array(1);
-    let index = NUMBER_ZERO;
+    let index = 0;
     for await (const i of value) {
       BigUint64.assert(i, `value[${index}]`);
-      tmpView[NUMBER_ZERO] = i;
+      tmpView[0] = i;
       gb.putRange(tmpView);
       index++;
     }

@@ -1,5 +1,4 @@
 import { type char, type rune, type usvstring } from "../type.ts";
-import { ZERO as NUMBER_ZERO } from "../const/number.ts";
 
 export function isString(test: unknown): test is string {
   return (typeof test === "string");
@@ -12,7 +11,7 @@ export function assertString(test: unknown, label: string): void {
 }
 
 export function isEmptyString(test: unknown): test is string {
-  return isString(test) && (test.length === NUMBER_ZERO);
+  return isString(test) && (test.length === 0);
 }
 
 export function assertEmptyString(test: unknown, label: string): void {
@@ -22,7 +21,7 @@ export function assertEmptyString(test: unknown, label: string): void {
 }
 
 export function isNonEmptyString(test: unknown): test is string {
-  return isString(test) && (test.length > NUMBER_ZERO);
+  return isString(test) && (test.length > 0);
 }
 
 export function assertNonEmptyString(test: unknown, label: string): void {
@@ -63,7 +62,7 @@ export function assertUSVString(test: unknown, label: string): void {
 }
 
 export function isNonEmptyUSVString(test: unknown): test is usvstring {
-  return isUSVString(test) && (test.length > NUMBER_ZERO);
+  return isUSVString(test) && (test.length > 0);
 }
 
 export function assertNonEmptyUSVString(test: unknown, label: string): void {

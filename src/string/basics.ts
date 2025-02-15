@@ -1,6 +1,5 @@
 import { assertString } from "../type/string.ts";
 import { type char, type safeint, type uint16 } from "../type.ts";
-import { ZERO as NUMBER_ZERO } from "../const/number.ts";
 
 export function charCountOf(value: string): safeint {
   assertString(value, "value");
@@ -14,7 +13,7 @@ export function toChars(value: string): IterableIterator<char, void, void> {
   assertString(value, "value");
 
   return (function* (s) {
-    for (let i = NUMBER_ZERO; i < s.length; i++) {
+    for (let i = 0; i < s.length; i++) {
       yield value.charAt(i);
     }
   })(value);
@@ -28,7 +27,7 @@ export function toCharCodes(
   assertString(value, "value");
 
   return (function* (s) {
-    for (let i = NUMBER_ZERO; i < s.length; i++) {
+    for (let i = 0; i < s.length; i++) {
       yield value.charCodeAt(i);
     }
   })(value);

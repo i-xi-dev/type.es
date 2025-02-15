@@ -19,14 +19,13 @@ import { type BigIntRange, type safeint } from "../type.ts";
 import { EMPTY as EMPTY_STRING } from "../const/string.ts";
 import { round as roundFromNumber } from "../safe_integer/basics.ts";
 import { RoundingMode } from "../numerics/rounding_mode.ts";
-import { ZERO as NUMBER_ZERO } from "../const/number.ts";
 
 export function min<T extends bigint>(value0: T, ...values: T[]): T {
   assertBigInt(value0, `value0`);
 
   let provMin = value0;
   let value: T;
-  for (let i = NUMBER_ZERO; i < values.length; i++) {
+  for (let i = 0; i < values.length; i++) {
     value = values[i];
     assertBigInt(value, `values[${i}]`);
 
@@ -42,7 +41,7 @@ export function max<T extends bigint>(value0: T, ...values: T[]): T {
 
   let provMax = value0;
   let value: T;
-  for (let i = NUMBER_ZERO; i < values.length; i++) {
+  for (let i = 0; i < values.length; i++) {
     value = values[i];
     assertBigInt(value, `values[${i}]`);
 

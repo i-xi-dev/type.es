@@ -1,6 +1,6 @@
 import { assertStrictEquals } from "@std/assert";
-import { I18n } from "../../mod.ts";
-const { Script } = I18n;
+import { xI18n } from "../../mod.ts";
+const { Script } = xI18n;
 
 Deno.test("Script.of()", () => {
   const l = Script.of("Latn");

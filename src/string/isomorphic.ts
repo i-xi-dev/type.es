@@ -1,6 +1,5 @@
 import { assertString } from "../type/string.ts";
 import { EMPTY as EMPTY_STRING } from "../const/string.ts";
-import { ZERO as NUMBER_ZERO } from "../const/number.ts";
 
 /**
  * Implementation of [isomorphic decode](https://infra.spec.whatwg.org/#isomorphic-decode) defined in WHATWG Infra Standard.
@@ -49,7 +48,7 @@ export function encode(input: string): Uint8Array {
   }
 
   const bytes = new Uint8Array(input.length);
-  for (let i = NUMBER_ZERO; i < input.length; i++) {
+  for (let i = 0; i < input.length; i++) {
     bytes[i] = input.charCodeAt(i);
   }
   return bytes;

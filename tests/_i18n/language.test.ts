@@ -1,6 +1,6 @@
 import { assertStrictEquals, fail, unreachable } from "@std/assert";
-import { I18n } from "../../mod.ts";
-const { Language } = I18n;
+import { xI18n } from "../../mod.ts";
+const { Language } = xI18n;
 
 Deno.test("Language.is()", () => {
   assertStrictEquals(Language.is("en"), true);

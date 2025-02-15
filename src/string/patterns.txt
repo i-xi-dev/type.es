@@ -1,6 +1,5 @@
 import { assertString, isEmptyString, isString } from "../type/string.ts";
 import { EMPTY as EMPTY_STRING } from "../const/string.ts";
-import { ZERO as NUMBER_ZERO } from "../const/number.ts";
 
 // export type PatternOptions = {
 //   noUnicodeSets?: boolean;
@@ -82,7 +81,7 @@ export function collectStart(value: string, collectPattern: string): string {
   if (results === null) {
     return EMPTY_STRING;
   }
-  return results[NUMBER_ZERO];
+  return results[0];
 }
 
 export function collectEnd(value: string, collectPattern: string): string {
@@ -97,5 +96,5 @@ export function collectEnd(value: string, collectPattern: string): string {
   if (results === null) {
     return EMPTY_STRING;
   }
-  return results[NUMBER_ZERO];
+  return results[0];
 }

@@ -1,5 +1,5 @@
 import { EMPTY as EMPTY_STRING } from "../const/string.ts";
-import { type language, type region, type script } from "../type.ts";
+import { type language, type script } from "../type.ts";
 import { isString } from "../type/string.ts";
 
 const _FALLBACK = "en";
@@ -50,29 +50,6 @@ export function getScriptName(
   }
 
   return scriptNames!.of(script) ?? EMPTY_STRING;
-}
-
-let _regionNamesRef: WeakRef<Intl.DisplayNames> | null = null;
-
-export function getRegionName(
-  region: region,
-  nameLocale: Intl.UnicodeBCP47LocaleIdentifier | Intl.Locale = _FALLBACK,
-): string {
-  let regionNames = _regionNamesRef?.deref();
-  const reuse = regionNames &&
-    regionNames.resolvedOptions().locale ===
-      (isString(nameLocale) ? nameLocale : nameLocale.baseName);
-
-  if (reuse !== true) {
-    regionNames = new Intl.DisplayNames(nameLocale, {
-      fallback: "none",
-      //XXX style,
-      type: "region",
-    });
-    _regionNamesRef = new WeakRef(regionNames);
-  }
-
-  return regionNames!.of(region) ?? EMPTY_STRING;
 }
 
 let _segmenterRef: WeakRef<Intl.Segmenter> | null = null;
