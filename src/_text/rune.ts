@@ -1,8 +1,10 @@
 import { assertRune, isRune } from "../type/string.ts";
-import { assertUnicodeGeneralCategory } from "../type/unicode.ts";
+import {
+  assertUnicodeGeneralCategory,
+  assertUnicodeScript,
+} from "../type/unicode.ts";
 import { type gc, type plane, type rune, type script } from "../type.ts";
 import { isBmpCodePoint } from "../type/code_point.ts";
-import { Script } from "../_i18n/script.ts";
 import { ZERO as NUMBER_ZERO } from "../const/number.ts";
 
 export function planeOf(rune: rune): plane {
@@ -31,7 +33,7 @@ export function matchesScript(
   script: script,
   options?: MatchesScriptOptions,
 ): test is rune {
-  Script.assertUnicodePropertyValue(script, script);
+  assertUnicodeScript(script, script);
 
   const or = [];
   or.push(`\\p{sc=${script}}`);

@@ -88,3 +88,35 @@ Deno.test("Type.assertUnicodeGeneralCategory()", () => {
     //
   }
 });
+
+Deno.test("Type.isUnicodeScript()", () => {
+  assertStrictEquals(Type.isUnicodeScript("Latn"), true);
+
+  assertStrictEquals(Type.isUnicodeScript("Aaaaa"), false);
+  assertStrictEquals(Type.isUnicodeScript("Aaa"), false);
+  assertStrictEquals(Type.isUnicodeScript("AAAA"), false);
+  assertStrictEquals(Type.isUnicodeScript(""), false);
+
+  assertStrictEquals(Type.isUnicodeScript(null), false);
+});
+
+Deno.test("Type.assertUnicodeScript()", () => {
+  try {
+    Type.assertUnicodeScript("Latn", "test-1");
+  } catch (exception) {
+    fail((exception as Error).toString());
+  }
+
+  try {
+    Type.assertUnicodeScript("Zxxx", "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+  try {
+    Type.assertUnicodeScript("Aaaaa", "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+});

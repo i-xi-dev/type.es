@@ -1,6 +1,7 @@
 import { assertCodePoint } from "../type/code_point.ts";
 import { assertIterable } from "../type/iterable.ts";
 import { assertString, assertUSVString, isUSVString } from "../type/string.ts";
+import { assertUnicodeScript } from "../type/unicode.ts";
 import {
   type codepoint,
   type rune,
@@ -10,7 +11,6 @@ import {
 } from "../type.ts";
 import { EMPTY as EMPTY_STRING } from "../const/string.ts";
 import { Rune } from "./mod.ts";
-import { Script } from "../_i18n/script.ts";
 import { ZERO as NUMBER_ZERO } from "../const/number.ts";
 
 export type AllowMalformedOptions = {
@@ -116,7 +116,7 @@ export function belongsToScripts(
   if (Array.isArray(scripts) && (scripts.length > NUMBER_ZERO)) {
     scriptSet = [...new Set(scripts)];
     for (const script of scriptSet) {
-      Script.assertUnicodePropertyValue(script, script);
+      assertUnicodeScript(script, script);
     }
   } else {
     throw new TypeError("`scripts` must be an Array of script.");

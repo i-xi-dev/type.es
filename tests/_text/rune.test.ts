@@ -1,8 +1,6 @@
 import {
   assertStrictEquals,
   assertThrows,
-  fail,
-  unreachable,
 } from "@std/assert";
 import { Text } from "../../mod.ts";
 
@@ -146,7 +144,7 @@ Deno.test("Rune.matchesScript()", () => {
     },
     TypeError,
     // "`script` must be an ISO 15924 script alpha-4 code.",
-    "`Aaaaa` is not supported in Unicode property.",
+    "`Aaaaa` is not supported script in Unicode property.",
   );
 
   assertThrows(
@@ -154,7 +152,7 @@ Deno.test("Rune.matchesScript()", () => {
       Rune.matchesScript("a", "Zsym");
     },
     TypeError,
-    "`Zsym` is not supported in Unicode property.",
+    "`Zsym` is not supported script in Unicode property.",
   );
 
   assertStrictEquals(Rune.matchesScript("", "Latn"), false);
