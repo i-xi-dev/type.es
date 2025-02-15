@@ -76,3 +76,11 @@ Deno.test("Unicode.GeneralCategorySet.prototype.includes()", () => {
     "`value` must be an Unicode scalar value.",
   );
 });
+
+Deno.test("Unicode.GeneralCategorySet.prototype.toArray()", () => {
+  const gcs4 = new Unicode.GeneralCategorySet(["Lu", "Ll"]);
+  assertStrictEquals(JSON.stringify(gcs4.toArray()), `["Ll","Lu"]`);
+
+  const gcs5 = new Unicode.GeneralCategorySet([]);
+  assertStrictEquals(JSON.stringify(gcs5.toArray()), `[]`);
+});

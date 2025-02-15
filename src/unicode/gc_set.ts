@@ -16,6 +16,7 @@ export class GeneralCategorySet {
       assertUnicodeGeneralCategory(gc, "gcs[*]");
       this.#gcs.push(gc);
     }
+    this.#gcs.sort();
 
     const pattern = this.#gcs.map((gc) => `\\p{gc=${gc}}`).join();
     this.#regex = new RegExp(`^[${pattern}]$`, "v");
@@ -27,7 +28,7 @@ export class GeneralCategorySet {
   }
 
   //TODO
-  // matches(value: usvstring) {
+  // findRunes(value: usvstring): Array<{  rune: rune, runeIndexes: safeint[], }> {
   // }
 
   toArray(): Array<gc> {
