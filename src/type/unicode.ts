@@ -3,7 +3,7 @@ import { isSafeIntegerInRange } from "../type/number.ts";
 import { type plane } from "../type.ts";
 
 export function isUnicodePlane(test: unknown): test is plane {
-  return isSafeIntegerInRange(test, Plane.BMP, Plane.SPUA_B);
+  return isSafeIntegerInRange(test, [Plane.BMP, Plane.SPUA_B]);
 }
 
 export function assertUnicodePlane(test: unknown, label: string): void {

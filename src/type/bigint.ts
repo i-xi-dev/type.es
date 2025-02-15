@@ -1,3 +1,5 @@
+import { assertBigIntRange } from "./numeric_range.ts";
+import { type BigIntRange } from "../type.ts";
 import { ZERO as BIGINT_ZERO } from "../const/bigint.ts";
 
 export function isBigInt(test: unknown): test is bigint {
@@ -72,24 +74,22 @@ export function assertEvenBigInt(test: unknown, label: string): void {
 
 export function isBigIntInRange(
   test: unknown,
-  min: bigint,
-  max: bigint,
+  range: BigIntRange,
 ): test is bigint {
-  assertBigInt(min, "min");
-  assertBigInt(max, "max");
+  assertBigIntRange(range, "range");
 
+  const [min, max] = range;
   return isBigInt(test) && (min <= test) && (max >= test);
 }
 
 export function assertBigIntInRange(
   test: unknown,
   label: string,
-  min: bigint,
-  max: bigint,
+  range: BigIntRange,
 ): void {
-  if (isBigIntInRange(test, min, max) !== true) {
+  if (isBigIntInRange(test, range) !== true) {
     throw new TypeError(
-      `\`${label}\` must be a \`bigint\` in the range ${min}-${max}.`,
+      `\`${label}\` must be a \`bigint\` in the range ${range[0]}-${range[1]}.`,
     );
   }
 }

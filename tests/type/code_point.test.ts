@@ -247,67 +247,67 @@ Deno.test("Type.assertVariationSelectorCodePoint()", () => {
 });
 
 Deno.test("Type.isCodePointInRange()", () => {
-  assertStrictEquals(Type.isCodePointInRange(0, 0, 10), true);
-  assertStrictEquals(Type.isCodePointInRange(10, 0, 10), true);
-  assertStrictEquals(Type.isCodePointInRange(9, 10, 11), false);
-  assertStrictEquals(Type.isCodePointInRange(12, 10, 11), false);
+  assertStrictEquals(Type.isCodePointInRange(0, [0, 10]), true);
+  assertStrictEquals(Type.isCodePointInRange(10, [0, 10]), true);
+  assertStrictEquals(Type.isCodePointInRange(9, [10, 11]), false);
+  assertStrictEquals(Type.isCodePointInRange(12, [10, 11]), false);
   assertStrictEquals(
-    Type.isCodePointInRange(0x10FFFF, 0x10FFF0, 0x10FFFF),
+    Type.isCodePointInRange(0x10FFFF, [0x10FFF0, 0x10FFFF]),
     true,
   );
   assertStrictEquals(
-    Type.isCodePointInRange(0x10FFF0, 0x10FFF0, 0x10FFFF),
+    Type.isCodePointInRange(0x10FFF0, [0x10FFF0, 0x10FFFF]),
     true,
   );
   assertStrictEquals(
-    Type.isCodePointInRange(0x10FFEF, 0x10FFF0, 0x10FFFF),
+    Type.isCodePointInRange(0x10FFEF, [0x10FFF0, 0x10FFFF]),
     false,
   );
-  assertStrictEquals(Type.isCodePointInRange(-1, 0, 0x10FFFF), false);
-  assertStrictEquals(Type.isCodePointInRange(0x110000, 0, 0x10FFFF), false);
+  assertStrictEquals(Type.isCodePointInRange(-1, [0, 0x10FFFF]), false);
+  assertStrictEquals(Type.isCodePointInRange(0x110000, [0, 0x10FFFF]), false);
 
   assertThrows(
     () => {
-      Type.isCodePointInRange(0, 0, 0x110000);
+      Type.isCodePointInRange(0, [0, 0x110000]);
     },
     TypeError,
-    "`max` must be a code point.",
+    "`range.max` must be a code point.",
   );
 
   assertThrows(
     () => {
-      Type.isCodePointInRange(0, -1, 0x10FFFF);
+      Type.isCodePointInRange(0, [-1, 0x10FFFF]);
     },
     TypeError,
-    "`min` must be a code point.",
+    "`range.min` must be a code point.",
   );
 
-  assertStrictEquals(Type.isCodePointInRange(0, 0x10FFFF, 0), false); //XXX 負のレンジはエラーにすべき？
+  assertStrictEquals(Type.isCodePointInRange(0, [0x10FFFF, 0]), false); //XXX 負のレンジはエラーにすべき？
 });
 
 Deno.test("Type.assertCodePointInRange()", () => {
   try {
-    Type.assertCodePointInRange(0, "test-1", 0, 0);
-    Type.assertCodePointInRange(0, "test-1", 0, 1);
-    Type.assertCodePointInRange(1, "test-1", 0, 1);
+    Type.assertCodePointInRange(0, "test-1", [0, 0]);
+    Type.assertCodePointInRange(0, "test-1", [0, 1]);
+    Type.assertCodePointInRange(1, "test-1", [0, 1]);
   } catch (exception) {
     fail((exception as Error).toString());
   }
 
   try {
-    Type.assertCodePointInRange(1, "test-1", 2, 3);
+    Type.assertCodePointInRange(1, "test-1", [2, 3]);
     unreachable();
   } catch {
     //
   }
   try {
-    Type.assertCodePointInRange(1, "test-1", 3, 0);
+    Type.assertCodePointInRange(1, "test-1", [3, 0]);
     unreachable();
   } catch {
     //
   }
   try {
-    Type.assertCodePointInRange(undefined, "test-1", 0, 0x10FFFF);
+    Type.assertCodePointInRange(undefined, "test-1", [0, 0x10FFFF]);
     unreachable();
   } catch {
     //

@@ -1,4 +1,9 @@
-import { type safeint } from "../type.ts";
+import { assertNumberRange, assertSafeIntegerRange } from "./numeric_range.ts";
+import {
+  type NumberRange,
+  type safeint,
+  type SafeIntegerRange,
+} from "../type.ts";
 import { ZERO as NUMBER_ZERO } from "../const/number.ts";
 
 export function isNumber(test: unknown): test is number {
@@ -63,24 +68,22 @@ export function assertNegativeNumber(test: unknown, label: string): void {
 
 export function isNumberInRange(
   test: unknown,
-  min: number,
-  max: number,
+  range: NumberRange,
 ): test is number {
-  assertFiniteNumber(min, "min");
-  assertFiniteNumber(max, "max");
+  assertNumberRange(range, "range");
 
+  const [min, max] = range;
   return isNumber(test) && (min <= test) && (max >= test);
 }
 
 export function assertNumberInRange(
   test: unknown,
   label: string,
-  min: number,
-  max: number,
+  range: NumberRange,
 ): void {
-  if (isNumberInRange(test, min, max) !== true) {
+  if (isNumberInRange(test, range) !== true) {
     throw new TypeError(
-      `\`${label}\` must be a \`number\` in the range ${min}-${max}.`,
+      `\`${label}\` must be a \`number\` in the range ${range[0]}-${range[1]}.`,
     );
   }
 }
@@ -163,24 +166,24 @@ export function assertEvenSafeInteger(test: unknown, label: string): void {
 
 export function isSafeIntegerInRange(
   test: unknown,
-  min: safeint,
-  max: safeint,
+  range: SafeIntegerRange,
 ): test is safeint {
-  assertSafeInteger(min, "min");
-  assertSafeInteger(max, "max");
+  assertSafeIntegerRange(range, "range");
 
+  const [min, max] = range;
   return isSafeInteger(test) && (min <= test) && (max >= test);
 }
 
 export function assertSafeIntegerInRange(
   test: unknown,
   label: string,
-  min: safeint,
-  max: safeint,
+  range: SafeIntegerRange,
 ): void {
-  if (isSafeIntegerInRange(test, min, max) !== true) {
+  if (isSafeIntegerInRange(test, range) !== true) {
     throw new TypeError(
-      `\`${label}\` must be a safe integer in the range ${min}-${max}.`,
+      `\`${label}\` must be a safe integer in the range ${range[0]}-${
+        range[1]
+      }.`,
     );
   }
 }

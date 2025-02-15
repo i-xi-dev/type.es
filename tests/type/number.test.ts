@@ -450,100 +450,100 @@ Deno.test("Type.assertNegativeNumber()", () => {
 });
 
 Deno.test("Type.isNumberInRange()", () => {
-  assertStrictEquals(Type.isNumberInRange(0, 0, 0), true);
-  assertStrictEquals(Type.isNumberInRange(0, 1, 0), false); // 負のrange
-  assertStrictEquals(Type.isNumberInRange(0, 0, 1), true);
-  assertStrictEquals(Type.isNumberInRange(0, -1, 0), true);
-  assertStrictEquals(Type.isNumberInRange(0, 0, -1), false); // 負のrange
-  assertStrictEquals(Type.isNumberInRange(0, 1, 1), false);
-  assertStrictEquals(Type.isNumberInRange(0, -1, -1), false);
+  assertStrictEquals(Type.isNumberInRange(0, [0, 0]), true);
+  assertStrictEquals(Type.isNumberInRange(0, [1, 0]), false); // 負のrange
+  assertStrictEquals(Type.isNumberInRange(0, [0, 1]), true);
+  assertStrictEquals(Type.isNumberInRange(0, [-1, 0]), true);
+  assertStrictEquals(Type.isNumberInRange(0, [0, -1]), false); // 負のrange
+  assertStrictEquals(Type.isNumberInRange(0, [1, 1]), false);
+  assertStrictEquals(Type.isNumberInRange(0, [-1, -1]), false);
 
-  assertStrictEquals(Type.isNumberInRange(0.5, 0, 0), false);
-  assertStrictEquals(Type.isNumberInRange(0.5, 1, 0), false); // 負のrange
-  assertStrictEquals(Type.isNumberInRange(0.5, 0, 1), true);
-  assertStrictEquals(Type.isNumberInRange(0.5, -1, 0), false);
-  assertStrictEquals(Type.isNumberInRange(0.5, 0, -1), false); // 負のrange
-  assertStrictEquals(Type.isNumberInRange(0.5, 1, 1), false);
-  assertStrictEquals(Type.isNumberInRange(0.5, -1, -1), false);
+  assertStrictEquals(Type.isNumberInRange(0.5, [0, 0]), false);
+  assertStrictEquals(Type.isNumberInRange(0.5, [1, 0]), false); // 負のrange
+  assertStrictEquals(Type.isNumberInRange(0.5, [0, 1]), true);
+  assertStrictEquals(Type.isNumberInRange(0.5, [-1, 0]), false);
+  assertStrictEquals(Type.isNumberInRange(0.5, [0, -1]), false); // 負のrange
+  assertStrictEquals(Type.isNumberInRange(0.5, [1, 1]), false);
+  assertStrictEquals(Type.isNumberInRange(0.5, [-1, -1]), false);
 
-  assertStrictEquals(Type.isNumberInRange(1, 0, 0), false);
-  assertStrictEquals(Type.isNumberInRange(1, 1, 0), false); // 負のrange
-  assertStrictEquals(Type.isNumberInRange(1, 0, 1), true);
-  assertStrictEquals(Type.isNumberInRange(1, -1, 0), false);
-  assertStrictEquals(Type.isNumberInRange(1, 0, -1), false); // 負のrange
-  assertStrictEquals(Type.isNumberInRange(1, 1, 1), true);
-  assertStrictEquals(Type.isNumberInRange(1, -1, -1), false);
+  assertStrictEquals(Type.isNumberInRange(1, [0, 0]), false);
+  assertStrictEquals(Type.isNumberInRange(1, [1, 0]), false); // 負のrange
+  assertStrictEquals(Type.isNumberInRange(1, [0, 1]), true);
+  assertStrictEquals(Type.isNumberInRange(1, [-1, 0]), false);
+  assertStrictEquals(Type.isNumberInRange(1, [0, -1]), false); // 負のrange
+  assertStrictEquals(Type.isNumberInRange(1, [1, 1]), true);
+  assertStrictEquals(Type.isNumberInRange(1, [-1, -1]), false);
 
-  assertStrictEquals(Type.isNumberInRange(-0.5, 0, 0), false);
-  assertStrictEquals(Type.isNumberInRange(-0.5, 1, 0), false); // 負のrange
-  assertStrictEquals(Type.isNumberInRange(-0.5, 0, 1), false);
-  assertStrictEquals(Type.isNumberInRange(-0.5, -1, 0), true);
-  assertStrictEquals(Type.isNumberInRange(-0.5, 0, -1), false); // 負のrange
-  assertStrictEquals(Type.isNumberInRange(-0.5, 1, 1), false);
-  assertStrictEquals(Type.isNumberInRange(-0.5, -1, -1), false);
+  assertStrictEquals(Type.isNumberInRange(-0.5, [0, 0]), false);
+  assertStrictEquals(Type.isNumberInRange(-0.5, [1, 0]), false); // 負のrange
+  assertStrictEquals(Type.isNumberInRange(-0.5, [0, 1]), false);
+  assertStrictEquals(Type.isNumberInRange(-0.5, [-1, 0]), true);
+  assertStrictEquals(Type.isNumberInRange(-0.5, [0, -1]), false); // 負のrange
+  assertStrictEquals(Type.isNumberInRange(-0.5, [1, 1]), false);
+  assertStrictEquals(Type.isNumberInRange(-0.5, [-1, -1]), false);
 
-  assertStrictEquals(Type.isNumberInRange(-1, 0, 0), false);
-  assertStrictEquals(Type.isNumberInRange(-1, 1, 0), false); // 負のrange
-  assertStrictEquals(Type.isNumberInRange(-1, 0, 1), false);
-  assertStrictEquals(Type.isNumberInRange(-1, -1, 0), true);
-  assertStrictEquals(Type.isNumberInRange(-1, 0, -1), false); // 負のrange
-  assertStrictEquals(Type.isNumberInRange(-1, 1, 1), false);
-  assertStrictEquals(Type.isNumberInRange(-1, -1, -1), true);
+  assertStrictEquals(Type.isNumberInRange(-1, [0, 0]), false);
+  assertStrictEquals(Type.isNumberInRange(-1, [1, 0]), false); // 負のrange
+  assertStrictEquals(Type.isNumberInRange(-1, [0, 1]), false);
+  assertStrictEquals(Type.isNumberInRange(-1, [-1, 0]), true);
+  assertStrictEquals(Type.isNumberInRange(-1, [0, -1]), false); // 負のrange
+  assertStrictEquals(Type.isNumberInRange(-1, [1, 1]), false);
+  assertStrictEquals(Type.isNumberInRange(-1, [-1, -1]), true);
 
-  assertStrictEquals(Type.isNumberInRange(0n, 0, 0), false);
-  assertStrictEquals(Type.isNumberInRange(0, -0.5, 0.5), true);
+  assertStrictEquals(Type.isNumberInRange(0n, [0, 0]), false);
+  assertStrictEquals(Type.isNumberInRange(0, [-0.5, 0.5]), true);
 
   assertStrictEquals(
-    Type.isNumberInRange(0, 0, Number.MAX_SAFE_INTEGER),
+    Type.isNumberInRange(0, [0, Number.MAX_SAFE_INTEGER]),
     true,
   );
 
-  const emax = "`max` must be a finite `number`.";
+  const emax = "`range` must be a range of `number`.";
   assertThrows(
     () => {
-      Type.isNumberInRange(0, 0, Number.POSITIVE_INFINITY);
+      Type.isNumberInRange(0, [0, Number.POSITIVE_INFINITY]);
     },
     TypeError,
     emax,
   );
 
   assertStrictEquals(
-    Type.isNumberInRange(0, Number.MIN_SAFE_INTEGER, 0),
+    Type.isNumberInRange(0, [Number.MIN_SAFE_INTEGER, 0]),
     true,
   );
 
-  const emin = "`min` must be a finite `number`.";
+  const emin = "`range` must be a range of `number`.";
   assertThrows(
     () => {
-      Type.isNumberInRange(0, Number.NEGATIVE_INFINITY, 0);
+      Type.isNumberInRange(0, [Number.NEGATIVE_INFINITY, 0]);
     },
     TypeError,
     emin,
   );
 
   assertStrictEquals(
-    Type.isNumberInRange(0, 1, Number.MAX_SAFE_INTEGER),
+    Type.isNumberInRange(0, [1, Number.MAX_SAFE_INTEGER]),
     false,
   );
 
   assertStrictEquals(
-    Type.isNumberInRange(0, Number.MIN_SAFE_INTEGER, 1),
+    Type.isNumberInRange(0, [Number.MIN_SAFE_INTEGER, 1]),
     true,
   );
 
   assertStrictEquals(
-    Type.isNumberInRange(0, -1, Number.MAX_SAFE_INTEGER),
+    Type.isNumberInRange(0, [-1, Number.MAX_SAFE_INTEGER]),
     true,
   );
 
   assertStrictEquals(
-    Type.isNumberInRange(0, Number.MIN_SAFE_INTEGER, -1),
+    Type.isNumberInRange(0, [Number.MIN_SAFE_INTEGER, -1]),
     false,
   );
 
   assertThrows(
     () => {
-      Type.isNumberInRange(0, undefined as unknown as number, 0);
+      Type.isNumberInRange(0, [undefined as unknown as number, 0]);
     },
     TypeError,
     emin,
@@ -551,7 +551,7 @@ Deno.test("Type.isNumberInRange()", () => {
 
   assertThrows(
     () => {
-      Type.isNumberInRange(0, 0, undefined as unknown as number);
+      Type.isNumberInRange(0, [0, undefined as unknown as number]);
     },
     TypeError,
     emax,
@@ -559,7 +559,7 @@ Deno.test("Type.isNumberInRange()", () => {
 
   assertThrows(
     () => {
-      Type.isNumberInRange(0, Number.NaN, 0);
+      Type.isNumberInRange(0, [Number.NaN, 0]);
     },
     TypeError,
     emin,
@@ -567,7 +567,7 @@ Deno.test("Type.isNumberInRange()", () => {
 
   assertThrows(
     () => {
-      Type.isNumberInRange(0, 0, Number.NaN);
+      Type.isNumberInRange(0, [0, Number.NaN]);
     },
     TypeError,
     emax,
@@ -576,23 +576,23 @@ Deno.test("Type.isNumberInRange()", () => {
 
 Deno.test("Type.assertNumberInRange()", () => {
   try {
-    Type.assertNumberInRange(0, "test-1", 0, 0);
-    Type.assertNumberInRange(0.5, "test-1", -1, 1);
-    Type.assertNumberInRange(-0.5, "test-1", -1, 1);
-    Type.assertNumberInRange(1, "test-1", -1, 1);
-    Type.assertNumberInRange(-1, "test-1", -1, 1);
+    Type.assertNumberInRange(0, "test-1", [0, 0]);
+    Type.assertNumberInRange(0.5, "test-1", [-1, 1]);
+    Type.assertNumberInRange(-0.5, "test-1", [-1, 1]);
+    Type.assertNumberInRange(1, "test-1", [-1, 1]);
+    Type.assertNumberInRange(-1, "test-1", [-1, 1]);
   } catch (exception) {
     fail((exception as Error).toString());
   }
 
   try {
-    Type.assertNumberInRange(0, "test-1", 1, 1);
+    Type.assertNumberInRange(0, "test-1", [1, 1]);
     unreachable();
   } catch {
     //
   }
   try {
-    Type.assertNumberInRange(1, "test-1", 0, 0);
+    Type.assertNumberInRange(1, "test-1", [0, 0]);
     unreachable();
   } catch {
     //
@@ -1174,83 +1174,83 @@ Deno.test("Type.assertEvenSafeInteger()", () => {
 });
 
 Deno.test("Type.isSafeIntegerInRange()", () => {
-  assertStrictEquals(Type.isSafeIntegerInRange(0, 0, 0), true);
-  assertStrictEquals(Type.isSafeIntegerInRange(0, 1, 0), false); // 負のrange
-  assertStrictEquals(Type.isSafeIntegerInRange(0, 0, 1), true);
-  assertStrictEquals(Type.isSafeIntegerInRange(0, -1, 0), true);
-  assertStrictEquals(Type.isSafeIntegerInRange(0, 0, -1), false); // 負のrange
-  assertStrictEquals(Type.isSafeIntegerInRange(0, 1, 1), false);
-  assertStrictEquals(Type.isSafeIntegerInRange(0, -1, -1), false);
+  assertStrictEquals(Type.isSafeIntegerInRange(0, [0, 0]), true);
+  assertStrictEquals(Type.isSafeIntegerInRange(0, [1, 0]), false); // 負のrange
+  assertStrictEquals(Type.isSafeIntegerInRange(0, [0, 1]), true);
+  assertStrictEquals(Type.isSafeIntegerInRange(0, [-1, 0]), true);
+  assertStrictEquals(Type.isSafeIntegerInRange(0, [0, -1]), false); // 負のrange
+  assertStrictEquals(Type.isSafeIntegerInRange(0, [1, 1]), false);
+  assertStrictEquals(Type.isSafeIntegerInRange(0, [-1, -1]), false);
 
-  assertStrictEquals(Type.isSafeIntegerInRange(1, 0, 0), false);
-  assertStrictEquals(Type.isSafeIntegerInRange(1, 1, 0), false); // 負のrange
-  assertStrictEquals(Type.isSafeIntegerInRange(1, 0, 1), true);
-  assertStrictEquals(Type.isSafeIntegerInRange(1, -1, 0), false);
-  assertStrictEquals(Type.isSafeIntegerInRange(1, 0, -1), false); // 負のrange
-  assertStrictEquals(Type.isSafeIntegerInRange(1, 1, 1), true);
-  assertStrictEquals(Type.isSafeIntegerInRange(1, -1, -1), false);
+  assertStrictEquals(Type.isSafeIntegerInRange(1, [0, 0]), false);
+  assertStrictEquals(Type.isSafeIntegerInRange(1, [1, 0]), false); // 負のrange
+  assertStrictEquals(Type.isSafeIntegerInRange(1, [0, 1]), true);
+  assertStrictEquals(Type.isSafeIntegerInRange(1, [-1, 0]), false);
+  assertStrictEquals(Type.isSafeIntegerInRange(1, [0, -1]), false); // 負のrange
+  assertStrictEquals(Type.isSafeIntegerInRange(1, [1, 1]), true);
+  assertStrictEquals(Type.isSafeIntegerInRange(1, [-1, -1]), false);
 
-  assertStrictEquals(Type.isSafeIntegerInRange(-1, 0, 0), false);
-  assertStrictEquals(Type.isSafeIntegerInRange(-1, 1, 0), false); // 負のrange
-  assertStrictEquals(Type.isSafeIntegerInRange(-1, 0, 1), false);
-  assertStrictEquals(Type.isSafeIntegerInRange(-1, -1, 0), true);
-  assertStrictEquals(Type.isSafeIntegerInRange(-1, 0, -1), false); // 負のrange
-  assertStrictEquals(Type.isSafeIntegerInRange(-1, 1, 1), false);
-  assertStrictEquals(Type.isSafeIntegerInRange(-1, -1, -1), true);
+  assertStrictEquals(Type.isSafeIntegerInRange(-1, [0, 0]), false);
+  assertStrictEquals(Type.isSafeIntegerInRange(-1, [1, 0]), false); // 負のrange
+  assertStrictEquals(Type.isSafeIntegerInRange(-1, [0, 1]), false);
+  assertStrictEquals(Type.isSafeIntegerInRange(-1, [-1, 0]), true);
+  assertStrictEquals(Type.isSafeIntegerInRange(-1, [0, -1]), false); // 負のrange
+  assertStrictEquals(Type.isSafeIntegerInRange(-1, [1, 1]), false);
+  assertStrictEquals(Type.isSafeIntegerInRange(-1, [-1, -1]), true);
 
-  assertStrictEquals(Type.isSafeIntegerInRange(0n, 0, 0), false);
-  assertStrictEquals(Type.isSafeIntegerInRange(0.5, -1, 1), false);
+  assertStrictEquals(Type.isSafeIntegerInRange(0n, [0, 0]), false);
+  assertStrictEquals(Type.isSafeIntegerInRange(0.5, [-1, 1]), false);
 
-  assertStrictEquals(Type.isSafeIntegerInRange(0, 0, MAX), true);
-  assertStrictEquals(Type.isSafeIntegerInRange(0, MIN, 0), true);
+  assertStrictEquals(Type.isSafeIntegerInRange(0, [0, MAX]), true);
+  assertStrictEquals(Type.isSafeIntegerInRange(0, [MIN, 0]), true);
 
-  assertStrictEquals(Type.isSafeIntegerInRange(0, 1, MAX), false);
-  assertStrictEquals(Type.isSafeIntegerInRange(0, MIN, 1), true);
+  assertStrictEquals(Type.isSafeIntegerInRange(0, [1, MAX]), false);
+  assertStrictEquals(Type.isSafeIntegerInRange(0, [MIN, 1]), true);
 
-  assertStrictEquals(Type.isSafeIntegerInRange(0, -1, MAX), true);
-  assertStrictEquals(Type.isSafeIntegerInRange(0, MIN, -1), false);
+  assertStrictEquals(Type.isSafeIntegerInRange(0, [-1, MAX]), true);
+  assertStrictEquals(Type.isSafeIntegerInRange(0, [MIN, -1]), false);
 
-  const e1 = "`min` must be a safe integer.";
+  const e1 = "`range` must be a range of safe integer.";
   assertThrows(
     () => {
-      Type.isSafeIntegerInRange(0, Number.NEGATIVE_INFINITY, 0);
+      Type.isSafeIntegerInRange(0, [Number.NEGATIVE_INFINITY, 0]);
     },
     TypeError,
     e1,
   );
   assertThrows(
     () => {
-      Type.isSafeIntegerInRange(0, Number.NaN, 0);
+      Type.isSafeIntegerInRange(0, [Number.NaN, 0]);
     },
     TypeError,
     e1,
   );
   assertThrows(
     () => {
-      Type.isSafeIntegerInRange(0, undefined as unknown as number, 0);
+      Type.isSafeIntegerInRange(0, [undefined as unknown as number, 0]);
     },
     TypeError,
     e1,
   );
 
-  const e2 = "`max` must be a safe integer.";
+  const e2 = "`range` must be a range of safe integer.";
   assertThrows(
     () => {
-      Type.isSafeIntegerInRange(0, 0, Number.POSITIVE_INFINITY);
+      Type.isSafeIntegerInRange(0, [0, Number.POSITIVE_INFINITY]);
     },
     TypeError,
     e2,
   );
   assertThrows(
     () => {
-      Type.isSafeIntegerInRange(0, 0, Number.NaN);
+      Type.isSafeIntegerInRange(0, [0, Number.NaN]);
     },
     TypeError,
     e2,
   );
   assertThrows(
     () => {
-      Type.isSafeIntegerInRange(0, 0, "0" as unknown as number);
+      Type.isSafeIntegerInRange(0, [0, "0" as unknown as number]);
     },
     TypeError,
     e2,
@@ -1259,21 +1259,21 @@ Deno.test("Type.isSafeIntegerInRange()", () => {
 
 Deno.test("Type.assertSafeIntegerInRange()", () => {
   try {
-    Type.assertSafeIntegerInRange(0, "test-1", 0, 0);
-    Type.assertSafeIntegerInRange(1, "test-1", -1, 1);
-    Type.assertSafeIntegerInRange(-1, "test-1", -1, 1);
+    Type.assertSafeIntegerInRange(0, "test-1", [0, 0]);
+    Type.assertSafeIntegerInRange(1, "test-1", [-1, 1]);
+    Type.assertSafeIntegerInRange(-1, "test-1", [-1, 1]);
   } catch (exception) {
     fail((exception as Error).toString());
   }
 
   try {
-    Type.assertSafeIntegerInRange(0, "test-1", 1, 1);
+    Type.assertSafeIntegerInRange(0, "test-1", [1, 1]);
     unreachable();
   } catch {
     //
   }
   try {
-    Type.assertSafeIntegerInRange(1, "test-1", 0, 0);
+    Type.assertSafeIntegerInRange(1, "test-1", [0, 0]);
     unreachable();
   } catch {
     //

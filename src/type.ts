@@ -380,3 +380,9 @@ export type uint32 = number;
  * A rune sequence.
  */
 export type usvstring = string;
+
+export type BigIntRange<T extends bigint = bigint> = [min: T, max: T];
+
+export type NumberRange<T extends number = number> = [min: T, max: T];
+
+export type SafeIntegerRange<T extends safeint = safeint> = [min: T, max: T];
