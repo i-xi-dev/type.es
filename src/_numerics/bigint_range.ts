@@ -89,6 +89,7 @@ export class BigIntRange<T extends bigint> implements IntegerRange<T> {
     }
   }
 
+  /** @deprecated */
   includes(test: bigint): test is T {
     return isBigInt(test) && (test >= this.#min) && (test <= this.#max);
   }

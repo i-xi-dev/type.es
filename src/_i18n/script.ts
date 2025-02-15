@@ -1,6 +1,7 @@
 import scriptMap from "../../dat/i18n/script_map.json" with { type: "json" };
 import { getScriptName } from "./utils.ts";
 import { isNonEmptyString } from "../type/string.ts";
+import { isScript } from "../type/i18n.ts";
 import { type script } from "../type.ts";
 import { ZERO as NUMBER_ZERO } from "../const/number.ts";
 
@@ -25,20 +26,8 @@ export type Script = {
 //XXX dir,type,...
 
 export namespace Script {
-  export function is(test: unknown): test is script {
-    return Object.keys(scriptMap).includes(test as string);
-  }
-
-  export function assert(test: unknown, label: string): void {
-    if (is(test) !== true) {
-      throw new TypeError(
-        `\`${label}\` must be an ISO 15924 script alpha-4 code.`,
-      );
-    }
-  }
-
   export function isUnicodePropertyValue(test: unknown): test is script {
-    if (is(test)) {
+    if (isScript(test)) {
       const info = scriptMap[test as _script];
       return isNonEmptyString(info[1]);
     }
@@ -60,7 +49,7 @@ export namespace Script {
     script: script,
     nameLocale?: Intl.UnicodeBCP47LocaleIdentifier | Intl.Locale,
   ): Script | null {
-    if (is(script)) {
+    if (isScript(script)) {
       const info = scriptMap[script as _script];
 
       return Object.freeze({

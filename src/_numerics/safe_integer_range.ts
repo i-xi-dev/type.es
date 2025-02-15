@@ -92,6 +92,7 @@ export class SafeIntegerRange<T extends number> implements IntegerRange<T> {
     }
   }
 
+  /** @deprecated */
   includes(test: number): test is T {
     return isSafeInteger(test) && (test >= this.#min) &&
       (test <= this.#max);

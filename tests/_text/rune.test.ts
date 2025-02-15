@@ -142,7 +142,7 @@ Deno.test("Rune.matchesScript()", () => {
 
   assertThrows(
     () => {
-      Rune.matchesScript("a", "Aaaaa");
+      Rune.matchesScript("a", "Aaaaa" as "Latn");
     },
     TypeError,
     // "`script` must be an ISO 15924 script alpha-4 code.",

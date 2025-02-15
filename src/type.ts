@@ -1,3 +1,5 @@
+import _scripts from "../dat/i18n/script_map.json" with { type: "json" };
+
 export type biguint64 = bigint;
 
 /**
@@ -55,8 +57,11 @@ export type rune = string;
  */
 export type safeint = number;
 
-/** `/^[A-Z][a-z]{3}$/` */
-export type script = string;
+/**
+ * A BCP47 script code.
+ */
+// export type script = string;
+export type script = keyof typeof _scripts;
 
 /**
  * An 1-bit unsigned integer.
