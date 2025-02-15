@@ -1,27 +1,5 @@
 import { isRune } from "../type/string.ts";
-import { assertUnicodeScript } from "../type/unicode.ts";
-import { type rune, type script } from "../type.ts";
-
-export type MatchesScriptOptions = {
-  excludeScx?: boolean;
-};
-
-export function matchesScript(
-  test: unknown,
-  script: script,
-  options?: MatchesScriptOptions,
-): test is rune {
-  assertUnicodeScript(script, script);
-
-  const or = [];
-  or.push(`\\p{sc=${script}}`);
-  if (options?.excludeScx !== true) {
-    or.push(`\\p{scx=${script}}`);
-  }
-  const pattern = or.join("|");
-
-  return isRune(test) && (new RegExp(`^(?:${pattern})$`, "v")).test(test);
-}
+import { type rune } from "../type.ts";
 
 let _commonSc: WeakRef<RegExp> | null = null;
 
