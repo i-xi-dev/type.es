@@ -360,44 +360,6 @@ Deno.test("BigIntRange.prototype.includes()", () => {
   assertStrictEquals(range32.includes(0n), false);
 });
 
-Deno.test("BigIntRange.prototype.clamp()", () => {
-  const em1 = "`input` must be a `bigint`.";
-
-  assertThrows(
-    () => {
-      range00.clamp(undefined as unknown as bigint);
-    },
-    TypeError,
-    em1,
-  );
-
-  assertThrows(
-    () => {
-      range00.clamp(0 as unknown as bigint);
-    },
-    TypeError,
-    em1,
-  );
-
-  assertStrictEquals(range00.clamp(-1n), 0n);
-  assertStrictEquals(range00.clamp(-0n), 0n);
-  assertStrictEquals(Object.is(range00.clamp(-0n), 0n), true);
-  assertStrictEquals(range00.clamp(0n), 0n);
-  assertStrictEquals(range00.clamp(1n), 0n);
-
-  assertStrictEquals(range01.clamp(-2n), 0n);
-  assertStrictEquals(range01.clamp(-1n), 0n);
-  assertStrictEquals(range01.clamp(0n), 0n);
-  assertStrictEquals(range01.clamp(1n), 1n);
-  assertStrictEquals(range01.clamp(2n), 1n);
-
-  assertStrictEquals(range10.clamp(-2n), -1n);
-  assertStrictEquals(range10.clamp(-1n), -1n);
-  assertStrictEquals(range10.clamp(0n), 0n);
-  assertStrictEquals(range10.clamp(1n), 0n);
-  assertStrictEquals(range10.clamp(2n), 0n);
-});
-
 Deno.test("BigIntRange.prototype.equals()", () => {
   assertStrictEquals(range00.equals(range00), true);
   assertStrictEquals(range00.equals([0n]), false);

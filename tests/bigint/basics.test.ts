@@ -86,29 +86,29 @@ Deno.test("ExBigInt.max()", () => {
   );
 });
 
-Deno.test("ExBigInt.clamp()", () => {
+Deno.test("ExBigInt.clampToRange()", () => {
   const ex1 = "`value` must be a `bigint`.";
   assertThrows(
     () => {
-      ExBigInt.clamp(undefined as unknown as bigint, 0n, 0n);
+      ExBigInt.clampToRange(undefined as unknown as bigint, [0n, 0n]);
     },
     TypeError,
     ex1,
   );
 
-  const ex2 = "`min` must be a `bigint`.";
+  const ex2 = "`range` must be a range of `bigint`.";
   assertThrows(
     () => {
-      ExBigInt.clamp(0n, undefined as unknown as bigint, 0n);
+      ExBigInt.clampToRange(0n, [undefined as unknown as bigint, 0n]);
     },
     TypeError,
     ex2,
   );
 
-  const ex3 = "`max` must be a `bigint`.";
+  const ex3 = "`range` must be a range of `bigint`.";
   assertThrows(
     () => {
-      ExBigInt.clamp(0n, 0n, undefined as unknown as bigint);
+      ExBigInt.clampToRange(0n, [0n, undefined as unknown as bigint]);
     },
     TypeError,
     ex3,
@@ -116,64 +116,64 @@ Deno.test("ExBigInt.clamp()", () => {
 
   const e1 = "`max` must be greater than or equal to `min`.";
 
-  assertStrictEquals(ExBigInt.clamp(0n, 0n, 0n), 0n);
-  assertStrictEquals(ExBigInt.clamp(0n, 0n, 1n), 0n);
-  assertStrictEquals(ExBigInt.clamp(0n, -1n, 0n), 0n);
-  assertStrictEquals(ExBigInt.clamp(0n, 1n, 1n), 1n);
-  assertStrictEquals(ExBigInt.clamp(0n, -1n, -1n), -1n);
+  assertStrictEquals(ExBigInt.clampToRange(0n, [0n, 0n]), 0n);
+  assertStrictEquals(ExBigInt.clampToRange(0n, [0n, 1n]), 0n);
+  assertStrictEquals(ExBigInt.clampToRange(0n, [-1n, 0n]), 0n);
+  assertStrictEquals(ExBigInt.clampToRange(0n, [1n, 1n]), 1n);
+  assertStrictEquals(ExBigInt.clampToRange(0n, [-1n, -1n]), -1n);
 
   assertThrows(
     () => {
-      ExBigInt.clamp(0n, 1n, 0n); // 負のrange
+      ExBigInt.clampToRange(0n, [1n, 0n]); // 負のrange
     },
     RangeError,
     e1,
   );
   assertThrows(
     () => {
-      ExBigInt.clamp(0n, 0n, -1n); // 負のrange
+      ExBigInt.clampToRange(0n, [0n, -1n]); // 負のrange
     },
     RangeError,
     e1,
   );
 
-  assertStrictEquals(ExBigInt.clamp(1n, 0n, 0n), 0n);
-  assertStrictEquals(ExBigInt.clamp(1n, 0n, 1n), 1n);
-  assertStrictEquals(ExBigInt.clamp(1n, -1n, 0n), 0n);
-  assertStrictEquals(ExBigInt.clamp(1n, 1n, 1n), 1n);
-  assertStrictEquals(ExBigInt.clamp(1n, -1n, -1n), -1n);
+  assertStrictEquals(ExBigInt.clampToRange(1n, [0n, 0n]), 0n);
+  assertStrictEquals(ExBigInt.clampToRange(1n, [0n, 1n]), 1n);
+  assertStrictEquals(ExBigInt.clampToRange(1n, [-1n, 0n]), 0n);
+  assertStrictEquals(ExBigInt.clampToRange(1n, [1n, 1n]), 1n);
+  assertStrictEquals(ExBigInt.clampToRange(1n, [-1n, -1n]), -1n);
 
   assertThrows(
     () => {
-      ExBigInt.clamp(1n, 1n, 0n); // 負のrange
-    },
-    RangeError,
-    e1,
-  );
-  assertThrows(
-    () => {
-      ExBigInt.clamp(1n, 0n, -1n); // 負のrange
-    },
-    RangeError,
-    e1,
-  );
-
-  assertStrictEquals(ExBigInt.clamp(-1n, 0n, 0n), 0n);
-  assertStrictEquals(ExBigInt.clamp(-1n, 0n, 1n), 0n);
-  assertStrictEquals(ExBigInt.clamp(-1n, -1n, 0n), -1n);
-  assertStrictEquals(ExBigInt.clamp(-1n, 1n, 1n), 1n);
-  assertStrictEquals(ExBigInt.clamp(-1n, -1n, -1n), -1n);
-
-  assertThrows(
-    () => {
-      ExBigInt.clamp(-1n, 1n, 0n); // 負のrange
+      ExBigInt.clampToRange(1n, [1n, 0n]); // 負のrange
     },
     RangeError,
     e1,
   );
   assertThrows(
     () => {
-      ExBigInt.clamp(-1n, 0n, -1n); // 負のrange
+      ExBigInt.clampToRange(1n, [0n, -1n]); // 負のrange
+    },
+    RangeError,
+    e1,
+  );
+
+  assertStrictEquals(ExBigInt.clampToRange(-1n, [0n, 0n]), 0n);
+  assertStrictEquals(ExBigInt.clampToRange(-1n, [0n, 1n]), 0n);
+  assertStrictEquals(ExBigInt.clampToRange(-1n, [-1n, 0n]), -1n);
+  assertStrictEquals(ExBigInt.clampToRange(-1n, [1n, 1n]), 1n);
+  assertStrictEquals(ExBigInt.clampToRange(-1n, [-1n, -1n]), -1n);
+
+  assertThrows(
+    () => {
+      ExBigInt.clampToRange(-1n, [1n, 0n]); // 負のrange
+    },
+    RangeError,
+    e1,
+  );
+  assertThrows(
+    () => {
+      ExBigInt.clampToRange(-1n, [0n, -1n]); // 負のrange
     },
     RangeError,
     e1,

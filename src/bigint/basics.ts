@@ -2,6 +2,7 @@ import {
   assertBigInt,
   assertBigIntInSafeIntegerRange,
 } from "../type/bigint.ts";
+import { assertBigIntRange } from "../type/numeric_range.ts";
 import {
   assertFiniteNumber,
   isPositiveSafeInteger,
@@ -14,10 +15,10 @@ import {
   prefixOf,
   type radix,
 } from "../numerics/radix.ts";
+import { type BigIntRange, type safeint } from "../type.ts";
 import { EMPTY as EMPTY_STRING } from "../const/string.ts";
 import { round as roundFromNumber } from "../safe_integer/basics.ts";
 import { RoundingMode } from "../numerics/rounding_mode.ts";
-import { type safeint } from "../type.ts";
 import { ZERO as NUMBER_ZERO } from "../const/number.ts";
 
 export function min<T extends bigint>(value0: T, ...values: T[]): T {
@@ -55,11 +56,14 @@ export function max<T extends bigint>(value0: T, ...values: T[]): T {
 const _min = min;
 const _max = max;
 
-export function clamp<T extends bigint>(value: bigint, min: T, max: T): T {
+export function clampToRange<T extends bigint>(
+  value: bigint,
+  range: BigIntRange<T>,
+): T {
   assertBigInt(value, "value");
-  assertBigInt(min, "min");
-  assertBigInt(max, "max");
+  assertBigIntRange(range, "range");
 
+  const [min, max] = range;
   if (min > max) {
     throw new RangeError("`max` must be greater than or equal to `min`.");
   }

@@ -34,29 +34,29 @@ Deno.test("ExNumber.normalize()", () => {
   );
 });
 
-Deno.test("ExNumber.clamp()", () => {
+Deno.test("ExNumber.clampToRange()", () => {
   const ex1 = "`value` must be a `number`.";
   assertThrows(
     () => {
-      ExNumber.clamp(undefined as unknown as number, 0, 0);
+      ExNumber.clampToRange(undefined as unknown as number, [0, 0]);
     },
     TypeError,
     ex1,
   );
 
-  const ex2 = "`min` must be a `number`.";
+  const ex2 = "`range` must be a range of `number`.";
   assertThrows(
     () => {
-      ExNumber.clamp(0, undefined as unknown as number, 0);
+      ExNumber.clampToRange(0, [undefined as unknown as number, 0]);
     },
     TypeError,
     ex2,
   );
 
-  const ex3 = "`max` must be a `number`.";
+  const ex3 = "`range` must be a range of `number`.";
   assertThrows(
     () => {
-      ExNumber.clamp(0, 0, undefined as unknown as number);
+      ExNumber.clampToRange(0, [0, undefined as unknown as number]);
     },
     TypeError,
     ex3,
@@ -64,76 +64,76 @@ Deno.test("ExNumber.clamp()", () => {
 
   const e1 = "`max` must be greater than or equal to `min`.";
 
-  assertStrictEquals(ExNumber.clamp(0, 0, 0), 0);
-  assertStrictEquals(ExNumber.clamp(0, 0, 1), 0);
-  assertStrictEquals(ExNumber.clamp(0, -1, 0), 0);
-  assertStrictEquals(ExNumber.clamp(0, 1, 1), 1);
-  assertStrictEquals(ExNumber.clamp(0, -1, -1), -1);
+  assertStrictEquals(ExNumber.clampToRange(0, [0, 0]), 0);
+  assertStrictEquals(ExNumber.clampToRange(0, [0, 1]), 0);
+  assertStrictEquals(ExNumber.clampToRange(0, [-1, 0]), 0);
+  assertStrictEquals(ExNumber.clampToRange(0, [1, 1]), 1);
+  assertStrictEquals(ExNumber.clampToRange(0, [-1, -1]), -1);
 
   assertThrows(
     () => {
-      ExNumber.clamp(0, 1, 0); // 負のrange
+      ExNumber.clampToRange(0, [1, 0]); // 負のrange
     },
     RangeError,
     e1,
   );
   assertThrows(
     () => {
-      ExNumber.clamp(0, 0, -1); // 負のrange
+      ExNumber.clampToRange(0, [0, -1]); // 負のrange
     },
     RangeError,
     e1,
   );
 
-  assertStrictEquals(ExNumber.clamp(0.5, 0, 0), 0);
-  assertStrictEquals(ExNumber.clamp(0.5, 0, 1), 0.5);
-  assertStrictEquals(ExNumber.clamp(0.5, -1, 0), 0);
-  assertStrictEquals(ExNumber.clamp(0.5, 1, 1), 1);
-  assertStrictEquals(ExNumber.clamp(0.5, -1, -1), -1);
+  assertStrictEquals(ExNumber.clampToRange(0.5, [0, 0]), 0);
+  assertStrictEquals(ExNumber.clampToRange(0.5, [0, 1]), 0.5);
+  assertStrictEquals(ExNumber.clampToRange(0.5, [-1, 0]), 0);
+  assertStrictEquals(ExNumber.clampToRange(0.5, [1, 1]), 1);
+  assertStrictEquals(ExNumber.clampToRange(0.5, [-1, -1]), -1);
 
-  assertStrictEquals(ExNumber.clamp(1, 0, 0), 0);
-  assertStrictEquals(ExNumber.clamp(1, 0, 1), 1);
-  assertStrictEquals(ExNumber.clamp(1, -1, 0), 0);
-  assertStrictEquals(ExNumber.clamp(1, 1, 1), 1);
-  assertStrictEquals(ExNumber.clamp(1, -1, -1), -1);
-
-  assertThrows(
-    () => {
-      ExNumber.clamp(1, 1, 0); // 負のrange
-    },
-    RangeError,
-    e1,
-  );
-  assertThrows(
-    () => {
-      ExNumber.clamp(1, 0, -1); // 負のrange
-    },
-    RangeError,
-    e1,
-  );
-
-  assertStrictEquals(ExNumber.clamp(-0.5, 0, 0), 0);
-  assertStrictEquals(ExNumber.clamp(-0.5, 0, 1), 0);
-  assertStrictEquals(ExNumber.clamp(-0.5, -1, 0), -0.5);
-  assertStrictEquals(ExNumber.clamp(-0.5, 1, 1), 1);
-  assertStrictEquals(ExNumber.clamp(-0.5, -1, -1), -1);
-
-  assertStrictEquals(ExNumber.clamp(-1, 0, 0), 0);
-  assertStrictEquals(ExNumber.clamp(-1, 0, 1), 0);
-  assertStrictEquals(ExNumber.clamp(-1, -1, 0), -1);
-  assertStrictEquals(ExNumber.clamp(-1, 1, 1), 1);
-  assertStrictEquals(ExNumber.clamp(-1, -1, -1), -1);
+  assertStrictEquals(ExNumber.clampToRange(1, [0, 0]), 0);
+  assertStrictEquals(ExNumber.clampToRange(1, [0, 1]), 1);
+  assertStrictEquals(ExNumber.clampToRange(1, [-1, 0]), 0);
+  assertStrictEquals(ExNumber.clampToRange(1, [1, 1]), 1);
+  assertStrictEquals(ExNumber.clampToRange(1, [-1, -1]), -1);
 
   assertThrows(
     () => {
-      ExNumber.clamp(-1, 1, 0); // 負のrange
+      ExNumber.clampToRange(1, [1, 0]); // 負のrange
     },
     RangeError,
     e1,
   );
   assertThrows(
     () => {
-      ExNumber.clamp(-1, 0, -1); // 負のrange
+      ExNumber.clampToRange(1, [0, -1]); // 負のrange
+    },
+    RangeError,
+    e1,
+  );
+
+  assertStrictEquals(ExNumber.clampToRange(-0.5, [0, 0]), 0);
+  assertStrictEquals(ExNumber.clampToRange(-0.5, [0, 1]), 0);
+  assertStrictEquals(ExNumber.clampToRange(-0.5, [-1, 0]), -0.5);
+  assertStrictEquals(ExNumber.clampToRange(-0.5, [1, 1]), 1);
+  assertStrictEquals(ExNumber.clampToRange(-0.5, [-1, -1]), -1);
+
+  assertStrictEquals(ExNumber.clampToRange(-1, [0, 0]), 0);
+  assertStrictEquals(ExNumber.clampToRange(-1, [0, 1]), 0);
+  assertStrictEquals(ExNumber.clampToRange(-1, [-1, 0]), -1);
+  assertStrictEquals(ExNumber.clampToRange(-1, [1, 1]), 1);
+  assertStrictEquals(ExNumber.clampToRange(-1, [-1, -1]), -1);
+
+  assertThrows(
+    () => {
+      ExNumber.clampToRange(-1, [1, 0]); // 負のrange
+    },
+    RangeError,
+    e1,
+  );
+  assertThrows(
+    () => {
+      ExNumber.clampToRange(-1, [0, -1]); // 負のrange
     },
     RangeError,
     e1,

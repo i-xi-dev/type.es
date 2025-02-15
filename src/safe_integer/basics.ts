@@ -3,6 +3,7 @@ import {
   isEvenSafeInteger,
   isPositiveNumber,
 } from "../type/number.ts";
+import { assertSafeIntegerRange } from "../type/numeric_range.ts";
 import {
   assertSupportedRadix,
   DECIMAL as DECIMAL_RADIX,
@@ -14,14 +15,17 @@ import {
 } from "../bigint/basics.ts";
 import { normalize as normalizeNumber } from "../number/basics.ts";
 import { RoundingMode } from "../numerics/rounding_mode.ts";
-import { type safeint } from "../type.ts";
+import { type safeint, type SafeIntegerRange } from "../type.ts";
 import { ZERO as NUMBER_ZERO } from "../const/number.ts";
 
-export function clamp<T extends safeint>(value: safeint, min: T, max: T): T {
+export function clampToRange<T extends safeint>(
+  value: safeint,
+  range: SafeIntegerRange<T>,
+): T {
   assertSafeInteger(value, "value");
-  assertSafeInteger(min, "min");
-  assertSafeInteger(max, "max");
+  assertSafeIntegerRange(range, "range");
 
+  const [min, max] = range;
   if (min > max) {
     throw new RangeError("`max` must be greater than or equal to `min`.");
   }

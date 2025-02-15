@@ -381,8 +381,13 @@ export type uint32 = number;
  */
 export type usvstring = string;
 
-export type BigIntRange<T extends bigint = bigint> = [min: T, max: T];
+type _ClosedNumericRange<T> = [min: T, max: T];
+type _ClosedIntegerRange<T> = _ClosedNumericRange<T>;
 
-export type NumberRange<T extends number = number> = [min: T, max: T];
+export type BigIntRange<T extends bigint = bigint> = _ClosedIntegerRange<T>;
 
-export type SafeIntegerRange<T extends safeint = safeint> = [min: T, max: T];
+export type NumberRange<T extends number = number> = _ClosedNumericRange<T>;
+
+export type SafeIntegerRange<T extends safeint = safeint> = _ClosedIntegerRange<
+  T
+>;

@@ -97,6 +97,7 @@ export class SafeIntegerRange<T extends number> implements IntegerRange<T> {
       (test <= this.#max);
   }
 
+  /** @deprecated */
   clamp(input: number): T {
     assertSafeInteger(input, "input");
 

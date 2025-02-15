@@ -360,44 +360,6 @@ Deno.test("SafeIntegerRange.prototype.includes()", () => {
   assertStrictEquals(range32.includes(0), false);
 });
 
-Deno.test("SafeIntegerRange.prototype.clamp()", () => {
-  const em1 = "`input` must be a safe integer.";
-
-  assertThrows(
-    () => {
-      range00.clamp(undefined as unknown as number);
-    },
-    TypeError,
-    em1,
-  );
-
-  assertThrows(
-    () => {
-      range00.clamp(0n as unknown as number);
-    },
-    TypeError,
-    em1,
-  );
-
-  assertStrictEquals(range00.clamp(-1), 0);
-  assertStrictEquals(range00.clamp(-0), 0);
-  assertStrictEquals(Object.is(range00.clamp(-0), 0), true);
-  assertStrictEquals(range00.clamp(0), 0);
-  assertStrictEquals(range00.clamp(1), 0);
-
-  assertStrictEquals(range01.clamp(-2), 0);
-  assertStrictEquals(range01.clamp(-1), 0);
-  assertStrictEquals(range01.clamp(0), 0);
-  assertStrictEquals(range01.clamp(1), 1);
-  assertStrictEquals(range01.clamp(2), 1);
-
-  assertStrictEquals(range10.clamp(-2), -1);
-  assertStrictEquals(range10.clamp(-1), -1);
-  assertStrictEquals(range10.clamp(0), 0);
-  assertStrictEquals(range10.clamp(1), 0);
-  assertStrictEquals(range10.clamp(2), 0);
-});
-
 Deno.test("SafeIntegerRange.prototype.equals()", () => {
   assertStrictEquals(range00.equals(range00), true);
   assertStrictEquals(range00.equals([0]), false);
