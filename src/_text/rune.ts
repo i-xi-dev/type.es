@@ -1,20 +1,9 @@
-import { assertRune, isRune } from "../type/string.ts";
+import { isRune } from "../type/string.ts";
 import {
   assertUnicodeGeneralCategory,
   assertUnicodeScript,
 } from "../type/unicode.ts";
-import { type gc, type plane, type rune, type script } from "../type.ts";
-import { isBmpCodePoint } from "../type/code_point.ts";
-import { ZERO as NUMBER_ZERO } from "../const/number.ts";
-
-export function planeOf(rune: rune): plane {
-  assertRune(rune, "rune");
-  return Math.trunc(rune.codePointAt(NUMBER_ZERO)! / 0x10000) as plane;
-}
-
-export function isBmp(test: unknown): test is rune {
-  return isRune(test) && isBmpCodePoint(test.codePointAt(NUMBER_ZERO)!);
-}
+import { type gc, type rune, type script } from "../type.ts";
 
 export function matchesGeneralCategory(
   test: unknown,

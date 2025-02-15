@@ -3,69 +3,6 @@ import { Text } from "../../mod.ts";
 
 const { Rune } = Text;
 
-Deno.test("Rune.planeOf(string)", () => {
-  assertStrictEquals(Rune.planeOf("\u{0}"), 0);
-  assertStrictEquals(Rune.planeOf("\u{FFFF}"), 0);
-  assertStrictEquals(Rune.planeOf("\u{10000}"), 1);
-  assertStrictEquals(Rune.planeOf("\u{1FFFF}"), 1);
-  assertStrictEquals(Rune.planeOf("\u{20000}"), 2);
-  assertStrictEquals(Rune.planeOf("\u{2FFFF}"), 2);
-  assertStrictEquals(Rune.planeOf("\u{30000}"), 3);
-  assertStrictEquals(Rune.planeOf("\u{3FFFF}"), 3);
-  assertStrictEquals(Rune.planeOf("\u{40000}"), 4);
-  assertStrictEquals(Rune.planeOf("\u{4FFFF}"), 4);
-  assertStrictEquals(Rune.planeOf("\u{50000}"), 5);
-  assertStrictEquals(Rune.planeOf("\u{5FFFF}"), 5);
-  assertStrictEquals(Rune.planeOf("\u{60000}"), 6);
-  assertStrictEquals(Rune.planeOf("\u{6FFFF}"), 6);
-  assertStrictEquals(Rune.planeOf("\u{70000}"), 7);
-  assertStrictEquals(Rune.planeOf("\u{7FFFF}"), 7);
-  assertStrictEquals(Rune.planeOf("\u{80000}"), 8);
-  assertStrictEquals(Rune.planeOf("\u{8FFFF}"), 8);
-  assertStrictEquals(Rune.planeOf("\u{90000}"), 9);
-  assertStrictEquals(Rune.planeOf("\u{9FFFF}"), 9);
-  assertStrictEquals(Rune.planeOf("\u{A0000}"), 10);
-  assertStrictEquals(Rune.planeOf("\u{AFFFF}"), 10);
-  assertStrictEquals(Rune.planeOf("\u{B0000}"), 11);
-  assertStrictEquals(Rune.planeOf("\u{BFFFF}"), 11);
-  assertStrictEquals(Rune.planeOf("\u{C0000}"), 12);
-  assertStrictEquals(Rune.planeOf("\u{CFFFF}"), 12);
-  assertStrictEquals(Rune.planeOf("\u{D0000}"), 13);
-  assertStrictEquals(Rune.planeOf("\u{DFFFF}"), 13);
-  assertStrictEquals(Rune.planeOf("\u{E0000}"), 14);
-  assertStrictEquals(Rune.planeOf("\u{EFFFF}"), 14);
-  assertStrictEquals(Rune.planeOf("\u{F0000}"), 15);
-  assertStrictEquals(Rune.planeOf("\u{FFFFF}"), 15);
-  assertStrictEquals(Rune.planeOf("\u{100000}"), 16);
-  assertStrictEquals(Rune.planeOf("\u{10FFFF}"), 16);
-
-  assertThrows(
-    () => {
-      Rune.planeOf("");
-    },
-    TypeError,
-    "`rune` must be an Unicode scalar value.",
-  );
-
-  assertThrows(
-    () => {
-      Rune.planeOf("11");
-    },
-    TypeError,
-    "`rune` must be an Unicode scalar value.",
-  );
-});
-
-Deno.test("Rune.isBmp(string)", () => {
-  assertStrictEquals(Rune.isBmp("\u{0}"), true);
-  assertStrictEquals(Rune.isBmp("\u{FFFF}"), true);
-  assertStrictEquals(Rune.isBmp("\u{10000}"), false);
-  assertStrictEquals(Rune.isBmp("\u{10FFFF}"), false);
-
-  assertStrictEquals(Rune.isBmp(""), false);
-  assertStrictEquals(Rune.isBmp("11"), false);
-});
-
 Deno.test("Rune.matchesGeneralCategory()", () => {
   assertStrictEquals(Rune.matchesGeneralCategory("\u{2029}", "Lu"), false);
   assertStrictEquals(Rune.matchesGeneralCategory("\u{2029}", "Ll"), false);
