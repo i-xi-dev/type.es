@@ -5,7 +5,7 @@
   "@id": "https://raw.githubusercontent.com/i-xi-dev/type.es/refs/heads/main/dat/meta.jsonld",
   "@graph": [
     {
-      "@id": "https://raw.githubusercontent.com/i-xi-dev/type.es/refs/heads/main/dat/i18n/language_map.json",
+      "@id": "https://raw.githubusercontent.com/i-xi-dev/type.es/refs/heads/main/dat/i18n/lang_map.json",
       "prov:generatedAt": "2024-12-31T16:36:00Z"
     },
     {

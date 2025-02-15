@@ -1,5 +1,5 @@
 import { EMPTY as EMPTY_STRING } from "../const/string.ts";
-import { type language } from "../type.ts";
+import { type lang } from "../type.ts";
 import { isString } from "../type/string.ts";
 
 const _FALLBACK = "en";
@@ -8,7 +8,7 @@ let _languageNamesRef: WeakRef<Intl.DisplayNames> | null = null;
 
 // `nameLocale`省略時は`language`で良いのでは → getScriptName,getRegionNameと整合性が取れないのでやめる
 export function getLanguageName(
-  language: language,
+  language: lang,
   nameLocale: Intl.UnicodeBCP47LocaleIdentifier | Intl.Locale = _FALLBACK,
 ): string {
   let languageNames = _languageNamesRef?.deref();

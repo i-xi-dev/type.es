@@ -1,4 +1,5 @@
 import _gcs from "../dat/unicode/gc_map.ts";
+import _langs from "../dat/i18n/lang_map.json" with { type: "json" };
 import _regions from "../dat/i18n/region_map.json" with { type: "json" };
 import _scripts from "../dat/i18n/script_map.json" with { type: "json" };
 
@@ -25,8 +26,11 @@ export type grapheme = usvstring;
 
 export type int = safeint | bigint;
 
-/** `/^[a-z]{2,3}$/` */
-export type language = string;
+/**
+ * A BCP47 language code.
+ * (ISO 639 language alpha-2 code if alpha-2 code is exist, or alpha-3(T) code if alpha-2 code is not exist)
+ */
+export type lang = keyof typeof _langs;
 
 export type numeric = number | bigint;
 

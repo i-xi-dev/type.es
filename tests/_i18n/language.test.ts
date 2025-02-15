@@ -1,32 +1,6 @@
-import { assertStrictEquals, fail, unreachable } from "@std/assert";
+import { assertStrictEquals } from "@std/assert";
 import { xI18n } from "../../mod.ts";
 const { Language } = xI18n;
-
-Deno.test("Language.is()", () => {
-  assertStrictEquals(Language.is("en"), true);
-
-  assertStrictEquals(Language.is("EN"), false);
-  assertStrictEquals(Language.is("En"), false);
-  assertStrictEquals(Language.is("eN"), false);
-  assertStrictEquals(Language.is(""), false);
-
-  assertStrictEquals(Language.is(null), false);
-});
-
-Deno.test("Language.assert()", () => {
-  try {
-    Language.assert("en", "test-1");
-  } catch (exception) {
-    fail((exception as Error).toString());
-  }
-
-  try {
-    Language.assert("EN", "test-1");
-    unreachable();
-  } catch {
-    //
-  }
-});
 
 Deno.test("Language.of()", () => {
   const e = Language.of("en");

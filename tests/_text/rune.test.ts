@@ -1,7 +1,4 @@
-import {
-  assertStrictEquals,
-  assertThrows,
-} from "@std/assert";
+import { assertStrictEquals, assertThrows } from "@std/assert";
 import { Text } from "../../mod.ts";
 
 const { Rune } = Text;

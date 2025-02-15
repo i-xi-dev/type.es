@@ -1,6 +1,32 @@
 import { assertStrictEquals, fail, unreachable } from "@std/assert";
 import { Type } from "../../mod.ts";
 
+Deno.test("Type.isLanguage()", () => {
+  assertStrictEquals(Type.isLanguage("en"), true);
+
+  assertStrictEquals(Type.isLanguage("EN"), false);
+  assertStrictEquals(Type.isLanguage("En"), false);
+  assertStrictEquals(Type.isLanguage("eN"), false);
+  assertStrictEquals(Type.isLanguage(""), false);
+
+  assertStrictEquals(Type.isLanguage(null), false);
+});
+
+Deno.test("Type.assertLanguage()", () => {
+  try {
+    Type.assertLanguage("en", "test-1");
+  } catch (exception) {
+    fail((exception as Error).toString());
+  }
+
+  try {
+    Type.assertLanguage("EN", "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+});
+
 Deno.test("Type.isScript()", () => {
   assertStrictEquals(Type.isScript("Latn"), true);
 

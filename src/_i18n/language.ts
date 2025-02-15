@@ -1,9 +1,10 @@
 import { EMPTY as EMPTY_STRING } from "../const/string.ts";
-import languageMap from "../../dat/i18n/language_map.json" with {
+import languageMap from "../../dat/i18n/lang_map.json" with {
   type: "json",
 };
 import { getLanguageName } from "./utils.ts";
-import { type language } from "../type.ts";
+import { isLanguage } from "../type/i18n.ts";
+import { type lang } from "../type.ts";
 import { ZERO as NUMBER_ZERO } from "../const/number.ts";
 
 type _lang = keyof typeof languageMap;
@@ -56,7 +57,7 @@ function _scope(scopeCode: string): Language.Scope {
       return _Scope.SPECIAL;
 
     default:
-      throw new Error("`language_map.json` is broken.");
+      throw new Error("`lang_map.json` is broken.");
   }
 }
 
@@ -104,27 +105,12 @@ function _type(typeCode: string): Language.Type {
 }
 
 export namespace Language {
-  // RFC 5646の言語サブタグであるか否か
-  export function is(test: unknown): test is language {
-    // RFC 5646の言語サブタグは、ISO 639-1 alpha2があればそれ。ISO 639-2 alpha3があればそれ。B/Tが異なる場合Tがそれ。
-    // よってここでは、is("eng")はfalseとなる
-    return Object.keys(languageMap).includes(test as string);
-  }
-
-  export function assert(test: unknown, label: string): void {
-    if (is(test) !== true) {
-      throw new TypeError(
-        `\`${label}\` must be an ISO 639-1 language alpha-2 code or ISO 639-2 language alpha-3 code.`,
-      );
-    }
-  }
-
   export type Scope = typeof _Scope[keyof typeof _Scope];
 
   export type Type = typeof _Type[keyof typeof _Type];
 
-  export function of(language: language): Language | null {
-    if (is(language)) {
+  export function of(language: lang): Language | null {
+    if (isLanguage(language)) {
       const info = languageMap[language as _lang];
       const alpha3 = info[1] as string;
       const alpha3b = info[2] as string;
