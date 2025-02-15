@@ -368,21 +368,3 @@ Deno.test("SafeIntegerRange.prototype.equals()", () => {
   assertStrictEquals(range00.equals(range00b), true);
   assertStrictEquals(range00.equals(range01), false);
 });
-
-Deno.test("SafeIntegerRange.prototype[Symbol.iterator]()", () => {
-  assertStrictEquals(JSON.stringify([...range00[Symbol.iterator]()]), "[0]");
-  assertStrictEquals(JSON.stringify([...range01[Symbol.iterator]()]), "[0,1]");
-  assertStrictEquals(JSON.stringify([...range10[Symbol.iterator]()]), "[-1,0]");
-});
-
-Deno.test("SafeIntegerRange.prototype.toArray()", () => {
-  assertStrictEquals(JSON.stringify(range00.toArray()), "[0]");
-  assertStrictEquals(JSON.stringify(range01.toArray()), "[0,1]");
-  assertStrictEquals(JSON.stringify(range10.toArray()), "[-1,0]");
-});
-
-Deno.test("SafeIntegerRange.prototype.toSet()", () => {
-  assertStrictEquals(JSON.stringify([...range00.toSet()]), "[0]");
-  assertStrictEquals(JSON.stringify([...range01.toSet()]), "[0,1]");
-  assertStrictEquals(JSON.stringify([...range10.toSet()]), "[-1,0]");
-});

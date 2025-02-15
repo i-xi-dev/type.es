@@ -14,4 +14,22 @@ export function sizeOf<T extends bigint>(range: BigIntRange<T>): bigint {
 //XXX fromXxx<T extends bigint>(xxx: { min: T, max: T }): BigIntRange<T>
 //XXX toXxx<T extends bigint>(range: BigIntRange<T>): { min: T, max: T }
 
-// toArray<T extends bigint>(): Array<T> → 実装しない（要素数が多いと配列を作れないので。（要素数上限はECMAの仕様上はMAX_SAFE_INTEGERだが、実装はそれよりはるかに小さい））
+export function toIterable<T extends bigint>(
+  range: BigIntRange<T>,
+): IterableIterator<T> {
+  assertBigIntRange(range, "range");
+
+  const [min, max] = range;
+  if (min > max) {
+    throw new RangeError("The size of `range` is non-positive.");
+  }
+
+  return (function* () {
+    for (let i = min; i <= max; i++) {
+      yield i;
+    }
+  })();
+}
+
+// toArray<T extends bigint>(): Array<T> → 実装しない（要素数が多いと配列を作れないので。（要素数上限はECMAの仕様上はMAX_SAFE_INTEGERだが、実装はそれよりはるかに小さいっぽい））
+// toSet<T extends bigint>(): Set<T> → 同上

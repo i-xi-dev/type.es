@@ -23,8 +23,6 @@ export interface IntegerRange<T extends int> {
   clamp(input: T): T;
   equals(other: unknown): boolean;
   [Symbol.iterator](): IterableIterator<T>;
-  toArray(): Array<T>;
-  toSet(): Set<T>;
 }
 
 export namespace IntegerRange {

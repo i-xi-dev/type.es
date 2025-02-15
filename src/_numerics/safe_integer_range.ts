@@ -123,7 +123,7 @@ export class SafeIntegerRange<T extends number> implements IntegerRange<T> {
     return false;
   }
 
-  // もし超巨大なレンジでも特に警告等しないので注意
+  /** @deprecated */
   [Symbol.iterator](): IterableIterator<T> {
     const min = this.min;
     const max = this.max;
@@ -132,16 +132,6 @@ export class SafeIntegerRange<T extends number> implements IntegerRange<T> {
         yield i;
       }
     })();
-  }
-
-  // もし超巨大なレンジでも特に警告等しないので注意
-  toArray(): Array<T> {
-    return [...this[Symbol.iterator]()];
-  }
-
-  // もし超巨大なレンジでも特に警告等しないので注意
-  toSet(): Set<T> {
-    return new Set(this[Symbol.iterator]());
   }
 }
 
