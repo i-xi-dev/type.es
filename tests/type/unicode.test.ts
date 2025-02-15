@@ -1,4 +1,9 @@
-import { assertStrictEquals, fail, unreachable } from "@std/assert";
+import {
+  assertStrictEquals,
+  assertThrows,
+  fail,
+  unreachable,
+} from "@std/assert";
 import { Type } from "../../mod.ts";
 
 Deno.test("Type.isPlane()", () => {
@@ -119,4 +124,53 @@ Deno.test("Type.assertUnicodeScript()", () => {
   } catch {
     //
   }
+});
+
+Deno.test("Type.isRuneInGeneralCategory()", () => {
+  assertStrictEquals(Type.isRuneInGeneralCategory("\u{2029}", "Lu"), false);
+  assertStrictEquals(Type.isRuneInGeneralCategory("\u{2029}", "Ll"), false);
+  assertStrictEquals(Type.isRuneInGeneralCategory("\u{2029}", "Lt"), false);
+  assertStrictEquals(Type.isRuneInGeneralCategory("\u{2029}", "LC"), false);
+  assertStrictEquals(Type.isRuneInGeneralCategory("\u{2029}", "Lm"), false);
+  assertStrictEquals(Type.isRuneInGeneralCategory("\u{2029}", "Lo"), false);
+  assertStrictEquals(Type.isRuneInGeneralCategory("\u{2029}", "L"), false);
+  assertStrictEquals(Type.isRuneInGeneralCategory("\u{2029}", "Mn"), false);
+  assertStrictEquals(Type.isRuneInGeneralCategory("\u{2029}", "Mc"), false);
+  assertStrictEquals(Type.isRuneInGeneralCategory("\u{2029}", "Me"), false);
+  assertStrictEquals(Type.isRuneInGeneralCategory("\u{2029}", "M"), false);
+  assertStrictEquals(Type.isRuneInGeneralCategory("\u{2029}", "Nd"), false);
+  assertStrictEquals(Type.isRuneInGeneralCategory("\u{2029}", "Nl"), false);
+  assertStrictEquals(Type.isRuneInGeneralCategory("\u{2029}", "No"), false);
+  assertStrictEquals(Type.isRuneInGeneralCategory("\u{2029}", "N"), false);
+  assertStrictEquals(Type.isRuneInGeneralCategory("\u{2029}", "Pc"), false);
+  assertStrictEquals(Type.isRuneInGeneralCategory("\u{2029}", "Pd"), false);
+  assertStrictEquals(Type.isRuneInGeneralCategory("\u{2029}", "Ps"), false);
+  assertStrictEquals(Type.isRuneInGeneralCategory("\u{2029}", "Pe"), false);
+  assertStrictEquals(Type.isRuneInGeneralCategory("\u{2029}", "Pi"), false);
+  assertStrictEquals(Type.isRuneInGeneralCategory("\u{2029}", "Pf"), false);
+  assertStrictEquals(Type.isRuneInGeneralCategory("\u{2029}", "Po"), false);
+  assertStrictEquals(Type.isRuneInGeneralCategory("\u{2029}", "P"), false);
+  assertStrictEquals(Type.isRuneInGeneralCategory("\u{2029}", "Sm"), false);
+  assertStrictEquals(Type.isRuneInGeneralCategory("\u{2029}", "Sc"), false);
+  assertStrictEquals(Type.isRuneInGeneralCategory("\u{2029}", "Sk"), false);
+  assertStrictEquals(Type.isRuneInGeneralCategory("\u{2029}", "So"), false);
+  assertStrictEquals(Type.isRuneInGeneralCategory("\u{2029}", "S"), false);
+  assertStrictEquals(Type.isRuneInGeneralCategory("\u{2029}", "Zs"), false);
+  assertStrictEquals(Type.isRuneInGeneralCategory("\u{2029}", "Zl"), false);
+  assertStrictEquals(Type.isRuneInGeneralCategory("\u{2029}", "Zp"), true);
+  assertStrictEquals(Type.isRuneInGeneralCategory("\u{2029}", "Z"), true);
+  assertStrictEquals(Type.isRuneInGeneralCategory("\u{2029}", "Cc"), false);
+  assertStrictEquals(Type.isRuneInGeneralCategory("\u{2029}", "Cf"), false);
+  assertStrictEquals(Type.isRuneInGeneralCategory("\u{2029}", "Cs"), false);
+  assertStrictEquals(Type.isRuneInGeneralCategory("\u{2029}", "Co"), false);
+  assertStrictEquals(Type.isRuneInGeneralCategory("\u{2029}", "Cn"), false);
+  assertStrictEquals(Type.isRuneInGeneralCategory("\u{2029}", "C"), false);
+
+  assertThrows(
+    () => {
+      Type.isRuneInGeneralCategory("\u{2029}", "" as "C");
+    },
+    TypeError,
+    "`category` must be an Unicode `General_Category` value.",
+  );
 });

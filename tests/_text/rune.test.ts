@@ -3,55 +3,6 @@ import { Text } from "../../mod.ts";
 
 const { Rune } = Text;
 
-Deno.test("Rune.matchesGeneralCategory()", () => {
-  assertStrictEquals(Rune.matchesGeneralCategory("\u{2029}", "Lu"), false);
-  assertStrictEquals(Rune.matchesGeneralCategory("\u{2029}", "Ll"), false);
-  assertStrictEquals(Rune.matchesGeneralCategory("\u{2029}", "Lt"), false);
-  assertStrictEquals(Rune.matchesGeneralCategory("\u{2029}", "LC"), false);
-  assertStrictEquals(Rune.matchesGeneralCategory("\u{2029}", "Lm"), false);
-  assertStrictEquals(Rune.matchesGeneralCategory("\u{2029}", "Lo"), false);
-  assertStrictEquals(Rune.matchesGeneralCategory("\u{2029}", "L"), false);
-  assertStrictEquals(Rune.matchesGeneralCategory("\u{2029}", "Mn"), false);
-  assertStrictEquals(Rune.matchesGeneralCategory("\u{2029}", "Mc"), false);
-  assertStrictEquals(Rune.matchesGeneralCategory("\u{2029}", "Me"), false);
-  assertStrictEquals(Rune.matchesGeneralCategory("\u{2029}", "M"), false);
-  assertStrictEquals(Rune.matchesGeneralCategory("\u{2029}", "Nd"), false);
-  assertStrictEquals(Rune.matchesGeneralCategory("\u{2029}", "Nl"), false);
-  assertStrictEquals(Rune.matchesGeneralCategory("\u{2029}", "No"), false);
-  assertStrictEquals(Rune.matchesGeneralCategory("\u{2029}", "N"), false);
-  assertStrictEquals(Rune.matchesGeneralCategory("\u{2029}", "Pc"), false);
-  assertStrictEquals(Rune.matchesGeneralCategory("\u{2029}", "Pd"), false);
-  assertStrictEquals(Rune.matchesGeneralCategory("\u{2029}", "Ps"), false);
-  assertStrictEquals(Rune.matchesGeneralCategory("\u{2029}", "Pe"), false);
-  assertStrictEquals(Rune.matchesGeneralCategory("\u{2029}", "Pi"), false);
-  assertStrictEquals(Rune.matchesGeneralCategory("\u{2029}", "Pf"), false);
-  assertStrictEquals(Rune.matchesGeneralCategory("\u{2029}", "Po"), false);
-  assertStrictEquals(Rune.matchesGeneralCategory("\u{2029}", "P"), false);
-  assertStrictEquals(Rune.matchesGeneralCategory("\u{2029}", "Sm"), false);
-  assertStrictEquals(Rune.matchesGeneralCategory("\u{2029}", "Sc"), false);
-  assertStrictEquals(Rune.matchesGeneralCategory("\u{2029}", "Sk"), false);
-  assertStrictEquals(Rune.matchesGeneralCategory("\u{2029}", "So"), false);
-  assertStrictEquals(Rune.matchesGeneralCategory("\u{2029}", "S"), false);
-  assertStrictEquals(Rune.matchesGeneralCategory("\u{2029}", "Zs"), false);
-  assertStrictEquals(Rune.matchesGeneralCategory("\u{2029}", "Zl"), false);
-  assertStrictEquals(Rune.matchesGeneralCategory("\u{2029}", "Zp"), true);
-  assertStrictEquals(Rune.matchesGeneralCategory("\u{2029}", "Z"), true);
-  assertStrictEquals(Rune.matchesGeneralCategory("\u{2029}", "Cc"), false);
-  assertStrictEquals(Rune.matchesGeneralCategory("\u{2029}", "Cf"), false);
-  assertStrictEquals(Rune.matchesGeneralCategory("\u{2029}", "Cs"), false);
-  assertStrictEquals(Rune.matchesGeneralCategory("\u{2029}", "Co"), false);
-  assertStrictEquals(Rune.matchesGeneralCategory("\u{2029}", "Cn"), false);
-  assertStrictEquals(Rune.matchesGeneralCategory("\u{2029}", "C"), false);
-
-  assertThrows(
-    () => {
-      Rune.matchesGeneralCategory("\u{2029}", "" as "C");
-    },
-    TypeError,
-    "`category` must be an Unicode `General_Category` value.",
-  );
-});
-
 Deno.test("Rune.matchesScript()", () => {
   assertStrictEquals(Rune.matchesScript("ア", "Kana"), true);
   assertStrictEquals(Rune.matchesScript("ア", "Hira"), false);

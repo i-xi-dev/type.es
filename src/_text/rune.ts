@@ -1,17 +1,6 @@
 import { isRune } from "../type/string.ts";
-import {
-  assertUnicodeGeneralCategory,
-  assertUnicodeScript,
-} from "../type/unicode.ts";
-import { type gc, type rune, type script } from "../type.ts";
-
-export function matchesGeneralCategory(
-  test: unknown,
-  category: gc,
-): test is rune {
-  assertUnicodeGeneralCategory(category, "category");
-  return isRune(test) && (new RegExp(`^\\p{gc=${category}}$`, "v")).test(test);
-}
+import { assertUnicodeScript } from "../type/unicode.ts";
+import { type rune, type script } from "../type.ts";
 
 export type MatchesScriptOptions = {
   excludeScx?: boolean;

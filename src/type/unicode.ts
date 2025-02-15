@@ -1,7 +1,7 @@
 import _gcs from "../../dat/unicode/gc_map.ts";
 import _scripts from "../../dat/i18n/script_map.json" with { type: "json" };
-import { type gc, type script } from "../type.ts";
-import { isNonEmptyString } from "../type/string.ts";
+import { type gc, type rune, type script } from "../type.ts";
+import { isNonEmptyString, isRune } from "../type/string.ts";
 
 export function isUnicodeGeneralCategory(test: unknown): test is gc {
   return Object.values(_gcs).includes(test as gc);
@@ -34,4 +34,12 @@ export function assertUnicodeScript(test: unknown, label: string): void {
       `\`${label}\` is not supported script in Unicode property.`,
     );
   }
+}
+
+export function isRuneInGeneralCategory(
+  test: unknown,
+  category: gc,
+): test is rune {
+  assertUnicodeGeneralCategory(category, "category");
+  return isRune(test) && (new RegExp(`^\\p{gc=${category}}$`, "v")).test(test);
 }
