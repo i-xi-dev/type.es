@@ -35,6 +35,12 @@ Deno.test("Unicode.PlaneSet.prototype.includes()", () => {
   assertStrictEquals(ps1.includes("\u{F0000}"), false);
   assertStrictEquals(ps1.includes("\u{100000}"), false);
   assertStrictEquals(ps1.includes("\u{10FFFF}"), false);
+  assertStrictEquals(ps1.includes(0), true);
+  assertStrictEquals(ps1.includes(0xFFFF), true);
+  assertStrictEquals(ps1.includes(0x10000), false);
+  assertStrictEquals(ps1.includes(0xF0000), false);
+  assertStrictEquals(ps1.includes(0x100000), false);
+  assertStrictEquals(ps1.includes(0x10FFFF), false);
 
   const ps2 = new Unicode.PlaneSet([16]);
   assertStrictEquals(ps2.includes("\u0000"), false);
@@ -65,7 +71,22 @@ Deno.test("Unicode.PlaneSet.prototype.includes()", () => {
       ps1.includes("");
     },
     TypeError,
-    "`rune` must be an Unicode scalar value.",
+    "`codePointOrRune` must be a code point or a string representing a single code point.",
+  );
+
+  assertThrows(
+    () => {
+      ps1.includes(-1);
+    },
+    TypeError,
+    "`codePointOrRune` must be a code point or a string representing a single code point.",
+  );
+  assertThrows(
+    () => {
+      ps1.includes(0x110000);
+    },
+    TypeError,
+    "`codePointOrRune` must be a code point or a string representing a single code point.",
   );
 });
 

@@ -1,7 +1,9 @@
 import { assertPlane } from "../type/plane.ts";
+import { type codepoint, type plane, type rune } from "../type.ts";
+import { isCodePoint } from "../type/code_point.ts";
+import { isRune } from "../type/string.ts";
 import { planeOf as planeOfCodePoint } from "../code_point/basics.ts";
 import { toCodePoint as runeToCodePoint } from "../rune/basics.ts";
-import { type plane, type rune } from "../type.ts";
 
 export class PlaneSet {
   readonly #planes: Array<plane>;
@@ -19,9 +21,19 @@ export class PlaneSet {
     this.#planes.sort();
   }
 
-  includes(rune: rune): boolean {
-    // assertRune(rune, "rune");
-    const testPlane = planeOfCodePoint(runeToCodePoint(rune));
+  includes(codePointOrRune: codepoint | rune): boolean {
+    let codePoint: codepoint;
+    if (isRune(codePointOrRune)) {
+      codePoint = runeToCodePoint(codePointOrRune);
+    } else if (isCodePoint(codePointOrRune)) {
+      codePoint = codePointOrRune;
+    } else {
+      throw new TypeError(
+        "`codePointOrRune` must be a code point or a string representing a single code point.",
+      );
+    }
+
+    const testPlane = planeOfCodePoint(codePoint);
 
     return (this.#planes.length > 0) ? this.#planes.includes(testPlane) : false;
   }

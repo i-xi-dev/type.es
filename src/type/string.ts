@@ -47,7 +47,9 @@ export function isRune(test: unknown): test is rune {
 
 export function assertRune(test: unknown, label: string): void {
   if (isRune(test) !== true) {
-    throw new TypeError(`\`${label}\` must be an Unicode scalar value.`);
+    throw new TypeError(
+      `\`${label}\` must be a string representing a single code point.`,
+    );
   }
 }
 

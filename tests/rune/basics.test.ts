@@ -52,7 +52,7 @@ Deno.test("Rune.toCodePoint()", () => {
       Rune.toCodePoint("\uD800");
     },
     TypeError,
-    "`rune` must be an Unicode scalar value.",
+    "`rune` must be a string representing a single code point.",
   );
 
   assertThrows(
@@ -60,7 +60,7 @@ Deno.test("Rune.toCodePoint()", () => {
       Rune.toCodePoint("");
     },
     TypeError,
-    "`rune` must be an Unicode scalar value.",
+    "`rune` must be a string representing a single code point.",
   );
 
   assertThrows(
@@ -68,7 +68,7 @@ Deno.test("Rune.toCodePoint()", () => {
       Rune.toCodePoint("00");
     },
     TypeError,
-    "`rune` must be an Unicode scalar value.",
+    "`rune` must be a string representing a single code point.",
   );
 
   assertThrows(
@@ -76,6 +76,6 @@ Deno.test("Rune.toCodePoint()", () => {
       Rune.toCodePoint(0 as unknown as string);
     },
     TypeError,
-    "`rune` must be an Unicode scalar value.",
+    "`rune` must be a string representing a single code point.",
   );
 });

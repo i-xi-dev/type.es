@@ -69,14 +69,14 @@ Deno.test("Unicode.ScriptSet.prototype.includes()", () => {
       scs10.includes("");
     },
     TypeError,
-    "`rune` must be an Unicode scalar value.",
+    "`rune` must be a string representing a single code point.",
   );
   assertThrows(
     () => {
       scs10.includes("aa");
     },
     TypeError,
-    "`rune` must be an Unicode scalar value.",
+    "`rune` must be a string representing a single code point.",
   );
 
   const scs11 = new Unicode.ScriptSet(["Latn", "Kana"]);
