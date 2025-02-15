@@ -1,6 +1,5 @@
-import { assertCodePoint, isSurrogateCodePoint } from "../type/code_point.ts";
-import { assertRune } from "../type/string.ts";
-import { type codepoint, type plane, type rune } from "../type.ts";
+import { assertCodePoint } from "../type/code_point.ts";
+import { type codepoint, type plane } from "../type.ts";
 import { HEXADECIMAL } from "../numerics/radix.ts";
 import {
   toString as safeIntegerToString,
@@ -18,18 +17,20 @@ export function toString(codePoint: codepoint): string {
   return `U+${safeIntegerToString(codePoint, _toStringOptions)}`;
 }
 
-export function fromRune(rune: rune): codepoint {
-  assertRune(rune, "rune");
-  return rune.codePointAt(0) as codepoint;
-}
+// /** @deprecated */
+// export function fromRune(rune: rune): codepoint {
+//   assertRune(rune, "rune");
+//   return rune.codePointAt(0) as codepoint;
+// }
 
-export function toRune(codePoint: codepoint): rune {
-  assertCodePoint(codePoint, "codePoint");
-  if (isSurrogateCodePoint(codePoint)) {
-    throw new RangeError(`\`codePoint\` is a lone surrogate code point.`);
-  }
-  return String.fromCodePoint(codePoint);
-}
+// /** @deprecated */
+// export function toRune(codePoint: codepoint): rune {
+//   assertCodePoint(codePoint, "codePoint");
+//   if (isSurrogateCodePoint(codePoint)) {
+//     throw new RangeError(`\`codePoint\` is a lone surrogate code point.`);
+//   }
+//   return String.fromCodePoint(codePoint);
+// }
 
 export function planeOf(codePoint: codepoint): plane {
   assertCodePoint(codePoint, "codePoint");
