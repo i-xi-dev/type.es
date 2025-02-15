@@ -37,7 +37,7 @@ export function infoFor(
   return Object.freeze({
     alpha4: script,
     number: info[_NUMBER_INDEX] as number,
-    name: getScriptName(script, nameLocale),
+    name: _getScriptName(script, nameLocale),
     pva: info[_PVA_INDEX] as string,
     private: info[_PRIVATE_INDEX] as boolean,
   });
@@ -45,7 +45,7 @@ export function infoFor(
 
 let _scriptNamesRef: WeakRef<Intl.DisplayNames> | null = null;
 
-export function getScriptName(
+export function _getScriptName(
   script: script,
   nameLocale: Intl.UnicodeBCP47LocaleIdentifier | Intl.Locale = "en",
 ): string {
