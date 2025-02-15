@@ -24,10 +24,12 @@ export class SafeIntegerRange<T extends number> implements IntegerRange<T> {
     return this.#max;
   }
 
+  /** @deprecated */
   get size(): number {
     return (this.#max - this.#min) + 1;
   }
 
+  /** @deprecated */
   static from<T extends number>(
     rangeLike: SafeIntegerRange.Like<T>,
   ): SafeIntegerRange<T> {
@@ -35,6 +37,7 @@ export class SafeIntegerRange<T extends number> implements IntegerRange<T> {
     return new SafeIntegerRange(min, max);
   }
 
+  /** @deprecated */
   static of<T extends number>(...args: Array<T>): SafeIntegerRange<T> {
     return this.from(args as SafeIntegerRange.Tuple<T>);
   }

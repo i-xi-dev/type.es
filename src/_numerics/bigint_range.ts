@@ -23,6 +23,7 @@ export class BigIntRange<T extends bigint> implements IntegerRange<T> {
     return this.#max;
   }
 
+  /** @deprecated */
   get size(): number {
     const d = this.#max - this.#min;
     // if (d > Number.MAX_SAFE_INTEGER) {
@@ -31,6 +32,7 @@ export class BigIntRange<T extends bigint> implements IntegerRange<T> {
     return Number(d) + 1;
   }
 
+  /** @deprecated */
   static from<T extends bigint>(
     rangeLike: BigIntRange.Like<T>,
   ): BigIntRange<T> {
@@ -38,6 +40,7 @@ export class BigIntRange<T extends bigint> implements IntegerRange<T> {
     return new BigIntRange(min, max);
   }
 
+  /** @deprecated */
   static of<T extends bigint>(...args: Array<T>): BigIntRange<T> {
     return this.from(args as BigIntRange.Tuple<T>);
   }
