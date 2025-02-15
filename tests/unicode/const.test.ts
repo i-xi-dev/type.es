@@ -1,7 +1,7 @@
 import { assertStrictEquals } from "@std/assert";
 import { Unicode } from "../../mod.ts";
 
-Deno.test("Unicode.Plane", () => {
+Deno.test("Unicode.Plane.*", () => {
   assertStrictEquals(Unicode.Plane.BMP, 0);
   assertStrictEquals(Unicode.Plane.SMP, 1);
   assertStrictEquals(Unicode.Plane.SIP, 2);
@@ -11,11 +11,11 @@ Deno.test("Unicode.Plane", () => {
   assertStrictEquals(Unicode.Plane.SPUA_B, 16);
 });
 
-Deno.test("Unicode.GeneralCategory", () => {
+Deno.test("Unicode.GeneralCategory.*", () => {
   assertStrictEquals(Unicode.GeneralCategory.SPACE_SEPARATOR, "Zs");
 });
 
-Deno.test("Unicode.Block", () => {
+Deno.test("Unicode.Block.*", () => {
   assertStrictEquals(
     Unicode.Block.SUPPLEMENTARY_PRIVATE_USE_AREA_A[0],
     0xF0000,

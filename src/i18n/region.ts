@@ -17,7 +17,7 @@ export type RegionInfo = {
   /** Localized name. */
   name: string;
 
-  /** User-assigned code */
+  /** User-assigned code. */
   private: boolean;
 };
 //XXX Administrative languages / Local name

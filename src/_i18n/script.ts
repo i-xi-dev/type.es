@@ -1,29 +1,9 @@
 import scriptMap from "../../dat/i18n/script_map.json" with { type: "json" };
-import { getScriptName } from "./utils.ts";
 import { isNonEmptyString } from "../type/string.ts";
 import { isScript } from "../type/i18n.ts";
 import { type script } from "../type.ts";
-import { ZERO as NUMBER_ZERO } from "../const/number.ts";
 
 type _script = keyof typeof scriptMap;
-
-export type Script = {
-  /** ISO 15924 Alpha-4 code. */
-  alpha4: string;
-
-  /** ISO 15924 Numeric code. */
-  number: number;
-
-  /** Localized name. */
-  name: string;
-
-  /** UCD alias. */
-  pva: string;
-
-  /** Reserved for private use */
-  private: boolean;
-};
-//XXX dir,type,...
 
 export namespace Script {
   export function isUnicodePropertyValue(test: unknown): test is script {
@@ -43,24 +23,5 @@ export namespace Script {
         `\`${label}\` is not supported in Unicode property.`,
       );
     }
-  }
-
-  export function of(
-    script: script,
-    nameLocale?: Intl.UnicodeBCP47LocaleIdentifier | Intl.Locale,
-  ): Script | null {
-    if (isScript(script)) {
-      const info = scriptMap[script as _script];
-
-      return Object.freeze({
-        alpha4: script,
-        number: info[NUMBER_ZERO] as number,
-        name: getScriptName(script, nameLocale),
-        pva: info[1] as string,
-        private: info[2] as boolean,
-      });
-    }
-
-    return null;
   }
 }

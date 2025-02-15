@@ -1,5 +1,5 @@
 import { EMPTY as EMPTY_STRING } from "../const/string.ts";
-import { type language, type script } from "../type.ts";
+import { type language } from "../type.ts";
 import { isString } from "../type/string.ts";
 
 const _FALLBACK = "en";
@@ -27,29 +27,6 @@ export function getLanguageName(
   }
 
   return languageNames!.of(language) ?? EMPTY_STRING;
-}
-
-let _scriptNamesRef: WeakRef<Intl.DisplayNames> | null = null;
-
-export function getScriptName(
-  script: script,
-  nameLocale: Intl.UnicodeBCP47LocaleIdentifier | Intl.Locale = _FALLBACK,
-): string {
-  let scriptNames = _scriptNamesRef?.deref();
-  const reuse = scriptNames &&
-    scriptNames.resolvedOptions().locale ===
-      (isString(nameLocale) ? nameLocale : nameLocale.baseName);
-
-  if (reuse !== true) {
-    scriptNames = new Intl.DisplayNames(nameLocale, {
-      fallback: "none",
-      //XXX style,
-      type: "script",
-    });
-    _scriptNamesRef = new WeakRef(scriptNames);
-  }
-
-  return scriptNames!.of(script) ?? EMPTY_STRING;
 }
 
 let _segmenterRef: WeakRef<Intl.Segmenter> | null = null;
