@@ -3,6 +3,8 @@ import { isBigInt } from "../type/bigint.ts";
 import { isSafeInteger } from "../type/number.ts";
 import { ZERO as NUMBER_ZERO } from "../const/number.ts";
 
+//TODO 離散範囲にする
+
 export interface IntegerRange<T extends int> {
   get min(): T;
   get max(): T;
