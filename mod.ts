@@ -15,3 +15,4 @@ export * as SafeInteger from "./src/safe_integer/mod.ts";
 export * as Text from "./src/_text/mod.ts";
 export * as Type from "./src/type/mod.ts";
 export type * from "./src/type.ts";
+export * as Unicode from "./src/unicode/mod.ts";

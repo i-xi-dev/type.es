@@ -15,6 +15,14 @@
     {
       "@id": "https://raw.githubusercontent.com/i-xi-dev/type.es/refs/heads/main/dat/i18n/script_map.json",
       "prov:generatedAt": "2024-12-26T12:28:00Z"
+    },
+    {
+      "@id": "https://raw.githubusercontent.com/i-xi-dev/type.es/refs/heads/main/dat/unicode/block_map.ts",
+      "prov:generatedAt": "2025-02-15T10:48:00Z"
+    },
+    {
+      "@id": "https://raw.githubusercontent.com/i-xi-dev/type.es/refs/heads/main/dat/unicode/gc_map.ts",
+      "prov:generatedAt": "2025-02-15T09:49:00Z"
     }
   ]
 }

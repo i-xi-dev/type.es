@@ -1,8 +1,7 @@
 import { assertRune, isRune } from "../type/string.ts";
 import { assertUnicodeGeneralCategory } from "../type/unicode.ts";
-import { type GeneralCategory } from "../const/unicode.ts";
+import { type gc, type plane, type rune, type script } from "../type.ts";
 import { isBmpCodePoint } from "../type/code_point.ts";
-import { type plane, type rune, type script } from "../type.ts";
 import { Script } from "../_i18n/script.ts";
 import { ZERO as NUMBER_ZERO } from "../const/number.ts";
 
@@ -17,7 +16,7 @@ export function isBmp(test: unknown): test is rune {
 
 export function matchesGeneralCategory(
   test: unknown,
-  category: GeneralCategory,
+  category: gc,
 ): test is rune {
   assertUnicodeGeneralCategory(category, "category");
   return isRune(test) && (new RegExp(`^\\p{gc=${category}}$`, "v")).test(test);

@@ -1,21 +1,8 @@
-import { GeneralCategory, Plane } from "../const/unicode.ts";
-import { isSafeIntegerInRange } from "../type/number.ts";
-import { type plane } from "../type.ts";
+import _gcs from "../../dat/unicode/gc_map.ts";
+import { type gc } from "../type.ts";
 
-export function isUnicodePlane(test: unknown): test is plane {
-  return isSafeIntegerInRange(test, [Plane.BMP, Plane.SPUA_B]);
-}
-
-export function assertUnicodePlane(test: unknown, label: string): void {
-  if (isUnicodePlane(test) !== true) {
-    throw new TypeError(`\`${label}\` must be an Unicode plane value.`);
-  }
-}
-
-export function isUnicodeGeneralCategory(
-  test: unknown,
-): test is GeneralCategory {
-  return Object.values(GeneralCategory).includes(test as GeneralCategory);
+export function isUnicodeGeneralCategory(test: unknown): test is gc {
+  return Object.values(_gcs).includes(test as gc);
 }
 
 export function assertUnicodeGeneralCategory(

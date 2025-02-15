@@ -1,5 +1,6 @@
 import regionMap from "../../dat/i18n/region_map.json" with { type: "json" };
 import { getRegionName } from "./utils.ts";
+import { isRegion } from "../type/i18n.ts";
 import { type region } from "../type.ts";
 import { ZERO as NUMBER_ZERO } from "../const/number.ts";
 
@@ -24,23 +25,11 @@ export type Region = {
 //XXX Administrative languages / Local name
 
 export namespace Region {
-  export function is(test: unknown): test is region {
-    return Object.keys(regionMap).includes(test as string);
-  }
-
-  export function assert(test: unknown, label: string): void {
-    if (is(test) !== true) {
-      throw new TypeError(
-        `\`${label}\` must be an ISO 3166-1 country alpha-2 code.`,
-      );
-    }
-  }
-
   export function of(
     region: region,
     nameLocale?: Intl.UnicodeBCP47LocaleIdentifier | Intl.Locale,
   ): Region | null {
-    if (is(region)) {
+    if (isRegion(region)) {
       const info = regionMap[region as _region];
       const num = info[NUMBER_ZERO] as number;
 

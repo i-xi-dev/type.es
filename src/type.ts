@@ -1,3 +1,5 @@
+import _gcs from "../dat/unicode/gc_map.ts";
+import _regions from "../dat/i18n/region_map.json" with { type: "json" };
 import _scripts from "../dat/i18n/script_map.json" with { type: "json" };
 
 export type biguint64 = bigint;
@@ -12,6 +14,11 @@ export type char = string;
 export type codepoint = safeint;
 
 /**
+ * An Unicode General_Category value.
+ */
+export type gc = typeof _gcs[keyof typeof _gcs];
+
+/**
  * A grapheme cluster.
  */
 export type grapheme = usvstring;
@@ -23,7 +30,9 @@ export type language = string;
 
 export type numeric = number | bigint;
 
-/** Unicode plane */
+/**
+ * A group of code points.
+ */
 export type plane =
   | 0
   | 1
@@ -43,8 +52,11 @@ export type plane =
   | 15
   | 16;
 
-/** `/^[A-Z]{2}$/` */
-export type region = string;
+/**
+ * A BCP47 region code.
+ * (ISO 3166-1 country alpha-2 code)
+ */
+export type region = keyof typeof _regions;
 
 /**
  * String matching regular expression `/^[\u{0}-\u{10FFFF}]{1}$/u`.
@@ -59,8 +71,8 @@ export type safeint = number;
 
 /**
  * A BCP47 script code.
+ * (ISO 15924 script alpha-4 code)
  */
-// export type script = string;
 export type script = keyof typeof _scripts;
 
 /**

@@ -27,3 +27,30 @@ Deno.test("Type.assertScript()", () => {
     //
   }
 });
+
+Deno.test("Type.isRegion()", () => {
+  assertStrictEquals(Type.isRegion("US"), true);
+
+  assertStrictEquals(Type.isRegion("us"), false);
+  assertStrictEquals(Type.isRegion("USS"), false);
+  assertStrictEquals(Type.isRegion("Us"), false);
+  assertStrictEquals(Type.isRegion("uS"), false);
+  assertStrictEquals(Type.isRegion(""), false);
+
+  assertStrictEquals(Type.isRegion(null), false);
+});
+
+Deno.test("Type.assertRegion()", () => {
+  try {
+    Type.assertRegion("US", "test-1");
+  } catch (exception) {
+    fail((exception as Error).toString());
+  }
+
+  try {
+    Type.assertRegion("us", "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+});
