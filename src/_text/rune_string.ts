@@ -106,7 +106,7 @@ export type BelongsToScriptsOptions = {
   //XXX 1つめのruneのscがInheritまたはgcがMe|Mnの場合 okにするか否か
 };
 
-//TODO
+//TODO ScriptSetにふくめる
 export function belongsToScripts(
   test: unknown,
   scripts: script[],

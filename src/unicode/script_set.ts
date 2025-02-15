@@ -30,9 +30,9 @@ export class ScriptSet {
     this.#regex = new RegExp(`^[${pattern}]$`, "v");
   }
 
-  includes(value: rune): boolean {
-    assertRune(value, "value");
-    return (this.#scripts.length > 0) ? this.#regex.test(value) : false;
+  includes(rune: rune): boolean {
+    assertRune(rune, "rune");
+    return (this.#scripts.length > 0) ? this.#regex.test(rune) : false;
   }
 
   //TODO

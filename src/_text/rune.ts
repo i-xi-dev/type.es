@@ -45,28 +45,6 @@ export function isPatternMatched(
   return true;
 }
 
-function _planeMatches(
-  test: codepoint,
-  options?: {
-    planes?: plane[];
-    bmp?: boolean;
-  },
-): boolean {
-  if (isNullOrUndefined(options?.planes) && (options?.bmp !== true)) {
-    return true;
-  }
-
-  const planeSet = new Set(options?.planes ?? []);
-  if (options?.bmp === true) {
-    planeSet.add(NUMBER_ZERO);
-  }
-
-  if (planeSet.size > NUMBER_ZERO) {
-    return isInPlanes(test, [...planeSet]);
-  }
-
-  return true;
-}
 
 function _codePointRangeMatches(
   test: codepoint,
@@ -82,7 +60,4 @@ function _codePointRangeMatches(
   return (test >= min) && (test <= max);
 }
 
-function _scriptMatches(test: rune, scripts?: script[]): boolean {
-
-}
 */

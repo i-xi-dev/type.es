@@ -120,7 +120,36 @@ export function assertCodePointInRange(
   }
 }
 
-//XXX
+const _MAX_BMP = 0xFFFF;
+
+export function isBmpCodePoint(test: unknown): test is codepoint {
+  return isSafeIntegerInRange(test, [MIN_CODE_POINT, _MAX_BMP]);
+}
+
+export function assertBmpCodePoint(test: unknown, label: string): void {
+  if (isBmpCodePoint(test) !== true) {
+    throw new TypeError(`\`${label}\` must be a code point in the BMP.`);
+  }
+}
+
+const _MIN_PUA = 0xE000;
+const _MAX_PUA = 0xF8FF;
+const _MIN_SPUA = 0xF0000;
+const _MAX_SPUA = 0x10FFFF;
+
+export function isPrivateUseCodePoint(test: unknown): test is codepoint {
+  return isSafeIntegerInRange(test, [_MIN_PUA, _MAX_PUA]) ||
+    isSafeIntegerInRange(test, [_MIN_SPUA, _MAX_SPUA]);
+  //XXX isSafeIntegerInRanges(test, [[_MIN_PUA, _MAX_PUA], [_MIN_SPUA, _MAX_SPUA]]);
+}
+
+export function assertPrivateUseCodePoint(test: unknown, label: string): void {
+  if (isPrivateUseCodePoint(test) !== true) {
+    throw new TypeError(`\`${label}\` must be a private use code point.`);
+  }
+}
+
+//TODO CodePointInRanges？に移す（extends SafeIntegerRanges）
 // export function isCodePointInRanges(
 //   test: unknown,
 //   ranges: SafeIntegerRange.Like<codepoint>[],
@@ -153,32 +182,3 @@ export function assertCodePointInRange(
 //
 //   return false;
 // }
-
-const _MAX_BMP = 0xFFFF;
-
-export function isBmpCodePoint(test: unknown): test is codepoint {
-  return isSafeIntegerInRange(test, [MIN_CODE_POINT, _MAX_BMP]);
-}
-
-export function assertBmpCodePoint(test: unknown, label: string): void {
-  if (isBmpCodePoint(test) !== true) {
-    throw new TypeError(`\`${label}\` must be a code point in the BMP.`);
-  }
-}
-
-const _MIN_PUA = 0xE000;
-const _MAX_PUA = 0xF8FF;
-const _MIN_SPUA = 0xF0000;
-const _MAX_SPUA = 0x10FFFF;
-
-export function isPrivateUseCodePoint(test: unknown): test is codepoint {
-  return isSafeIntegerInRange(test, [_MIN_PUA, _MAX_PUA]) ||
-    isSafeIntegerInRange(test, [_MIN_SPUA, _MAX_SPUA]);
-  //XXX isSafeIntegerInRanges(test, [[_MIN_PUA, _MAX_PUA], [_MIN_SPUA, _MAX_SPUA]]);
-}
-
-export function assertPrivateUseCodePoint(test: unknown, label: string): void {
-  if (isPrivateUseCodePoint(test) !== true) {
-    throw new TypeError(`\`${label}\` must be a private use code point.`);
-  }
-}

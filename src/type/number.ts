@@ -188,4 +188,4 @@ export function assertSafeIntegerInRange(
   }
 }
 
-//XXX isSafeIntegerInRanges
+//TODO isSafeIntegerInRanges → 別ファイル

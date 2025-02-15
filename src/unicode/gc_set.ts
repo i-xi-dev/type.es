@@ -22,9 +22,9 @@ export class GeneralCategorySet {
     this.#regex = new RegExp(`^[${pattern}]$`, "v");
   }
 
-  includes(value: rune): boolean {
-    assertRune(value, "value");
-    return (this.#gcs.length > 0) ? this.#regex.test(value) : false;
+  includes(rune: rune): boolean {
+    assertRune(rune, "rune");
+    return (this.#gcs.length > 0) ? this.#regex.test(rune) : false;
   }
 
   //TODO

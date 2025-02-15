@@ -73,7 +73,7 @@ Deno.test("Unicode.GeneralCategorySet.prototype.includes()", () => {
       gcs1.includes("");
     },
     TypeError,
-    "`value` must be an Unicode scalar value.",
+    "`rune` must be an Unicode scalar value.",
   );
 });
 

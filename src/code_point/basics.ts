@@ -17,20 +17,9 @@ export function toString(codePoint: codepoint): string {
   return `U+${safeIntegerToString(codePoint, _toStringOptions)}`;
 }
 
-// /** @deprecated */
-// export function fromRune(rune: rune): codepoint {
-//   assertRune(rune, "rune");
-//   return rune.codePointAt(0) as codepoint;
-// }
+// fromRune(rune: rune): codepoint → CodePoint.toRune
 
-// /** @deprecated */
-// export function toRune(codePoint: codepoint): rune {
-//   assertCodePoint(codePoint, "codePoint");
-//   if (isSurrogateCodePoint(codePoint)) {
-//     throw new RangeError(`\`codePoint\` is a lone surrogate code point.`);
-//   }
-//   return String.fromCodePoint(codePoint);
-// }
+// toRune(codePoint: codepoint): rune → CodePoint.fromRune
 
 export function planeOf(codePoint: codepoint): plane {
   assertCodePoint(codePoint, "codePoint");
