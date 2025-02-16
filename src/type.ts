@@ -402,6 +402,8 @@ export type uint32 = number;
  */
 export type usvstring = string;
 
+export type ArrayOrSet<T> = Array<T> | Set<T>;
+
 type _ClosedNumericRange<T> = [min: T, max: T];
 type _ClosedIntegerRange<T> = _ClosedNumericRange<T>;
 

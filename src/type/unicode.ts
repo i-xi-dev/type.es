@@ -31,7 +31,7 @@ export function isUnicodeScript(test: unknown): test is script {
 export function assertUnicodeScript(test: unknown, label: string): void {
   if (isUnicodeScript(test) !== true) {
     throw new TypeError(
-      `\`${label}\` is not supported script in Unicode property.`,
+      `\`${label}\` must be a supported script in Unicode property.`,
     );
   }
 }

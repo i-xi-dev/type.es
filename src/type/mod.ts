@@ -3,6 +3,7 @@ export * from "./bigint.ts";
 export * from "./boolean.ts";
 export * from "./buffer_source.ts";
 export * from "./code_point.ts";
+export * from "./collection.ts";
 export * from "./i18n.ts";
 export * from "./integer.ts";
 export * from "./integer_string.ts";
