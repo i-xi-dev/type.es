@@ -44,18 +44,6 @@ export class SafeIntegerRange<T extends number> implements IntegerRange<T> {
     return this.from(args as SafeIntegerRange.Tuple<T>);
   }
 
-  /** @deprecated */
-  rangeEquals<U extends number>(
-    otherRangeLike: SafeIntegerRange.Like<U>,
-  ): boolean {
-    try {
-      const otherRange = IntegerRange.Struct.fromRangeLike(otherRangeLike);
-      return IntegerRange.rangeEquals(this, otherRange);
-    } catch {
-      return false;
-    }
-  }
-
   isAdjacentTo<U extends number>(
     otherRangeLike: SafeIntegerRange.Like<U>,
   ): boolean {

@@ -94,53 +94,6 @@ Deno.test("BigIntRange.of()", () => {
   assertStrictEquals(t1.size, 5);
 });
 
-Deno.test("BigIntRange.prototype.rangeEquals()", () => {
-  assertStrictEquals(range00.rangeEquals(range00), true);
-  assertStrictEquals(range00.rangeEquals([0n]), true);
-  assertStrictEquals(range00.rangeEquals([0n, 0n]), true);
-  assertStrictEquals(range00.rangeEquals({ min: 0n, max: 0n }), true);
-  assertStrictEquals(range00.rangeEquals(range01), false);
-  assertStrictEquals(range00.rangeEquals(range10), false);
-
-  assertStrictEquals(range00.rangeEquals(range00b), true);
-  assertStrictEquals(range00.rangeEquals(range01b), false);
-  assertStrictEquals(range00.rangeEquals(range10b), false);
-
-  assertStrictEquals(range01.rangeEquals(range00), false);
-  assertStrictEquals(range01.rangeEquals([0n, 1n]), true);
-  assertStrictEquals(range01.rangeEquals({ min: 0n, max: 1n }), true);
-  assertStrictEquals(range01.rangeEquals(range01), true);
-  assertStrictEquals(range01.rangeEquals(range10), false);
-
-  assertStrictEquals(range01.rangeEquals(range00b), false);
-  assertStrictEquals(range01.rangeEquals(range01b), true);
-  assertStrictEquals(range01.rangeEquals(range10b), false);
-
-  assertStrictEquals(range10.rangeEquals(range00), false);
-  assertStrictEquals(range10.rangeEquals(range01), false);
-  assertStrictEquals(range10.rangeEquals(range10), true);
-
-  assertStrictEquals(range10.rangeEquals(range00b), false);
-  assertStrictEquals(range10.rangeEquals(range01b), false);
-  assertStrictEquals(range10.rangeEquals(range10b), true);
-
-  assertStrictEquals(range23.rangeEquals(range00), false);
-  assertStrictEquals(range23.rangeEquals(range01), false);
-  assertStrictEquals(range23.rangeEquals(range10), false);
-
-  assertStrictEquals(range23.rangeEquals(range00b), false);
-  assertStrictEquals(range23.rangeEquals(range01b), false);
-  assertStrictEquals(range23.rangeEquals(range10b), false);
-
-  assertStrictEquals(range32.rangeEquals(range00), false);
-  assertStrictEquals(range32.rangeEquals(range01), false);
-  assertStrictEquals(range32.rangeEquals(range10), false);
-
-  assertStrictEquals(range32.rangeEquals(range00b), false);
-  assertStrictEquals(range32.rangeEquals(range01b), false);
-  assertStrictEquals(range32.rangeEquals(range10b), false);
-});
-
 Deno.test("BigIntRange.prototype.isAdjacentTo()", () => {
   assertStrictEquals(range00.isAdjacentTo(range00), false);
   assertStrictEquals(range00.isAdjacentTo([0n]), false);
