@@ -41,54 +41,6 @@ Deno.test("IntegerRange.rangeEquals() - number", () => {
   assertStrictEquals(IntegerRange.rangeEquals(minmax2m, minmax0), false);
 });
 
-Deno.test("IntegerRange.rangeIsDisjointFrom() - number", () => {
-  assertStrictEquals(IntegerRange.rangeIsDisjointFrom(minmax0, minmax0), false);
-
-  assertStrictEquals(
-    IntegerRange.rangeIsDisjointFrom(min0max1, minmax2m),
-    true,
-  );
-  assertStrictEquals(
-    IntegerRange.rangeIsDisjointFrom(min0max1, minmax1m),
-    true,
-  );
-  assertStrictEquals(
-    IntegerRange.rangeIsDisjointFrom(min0max1, minmax0),
-    false,
-  );
-  assertStrictEquals(
-    IntegerRange.rangeIsDisjointFrom(min0max1, minmax1),
-    false,
-  );
-  assertStrictEquals(
-    IntegerRange.rangeIsDisjointFrom(min0max1, minmax2m),
-    true,
-  );
-
-  assertStrictEquals(
-    IntegerRange.rangeIsDisjointFrom(minmax0, min0max1),
-    false,
-  );
-  assertStrictEquals(
-    IntegerRange.rangeIsDisjointFrom({ min: -1, max: 0 }, minmax0),
-    false,
-  );
-  assertStrictEquals(
-    IntegerRange.rangeIsDisjointFrom(minmax0, { min: -1, max: 0 }),
-    false,
-  );
-
-  assertStrictEquals(IntegerRange.rangeIsDisjointFrom(minmax0, minmax1), true);
-  assertStrictEquals(IntegerRange.rangeIsDisjointFrom(minmax1, minmax0), true);
-  assertStrictEquals(IntegerRange.rangeIsDisjointFrom(minmax0, minmax1m), true);
-  assertStrictEquals(IntegerRange.rangeIsDisjointFrom(minmax1m, minmax0), true);
-
-  assertStrictEquals(IntegerRange.rangeIsDisjointFrom(minmax0, minmax2), true);
-  assertStrictEquals(IntegerRange.rangeIsDisjointFrom(minmax2, minmax0), true);
-  assertStrictEquals(IntegerRange.rangeIsDisjointFrom(minmax0, minmax2m), true);
-  assertStrictEquals(IntegerRange.rangeIsDisjointFrom(minmax2m, minmax0), true);
-});
-
 Deno.test("IntegerRange.rangeIsAdjacentTo() - number", () => {
   assertStrictEquals(IntegerRange.rangeIsAdjacentTo(minmax0, minmax0), false);
 

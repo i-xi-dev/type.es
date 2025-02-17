@@ -43,21 +43,16 @@ export namespace IntegerRange {
       ((self.max as int) === (other.max as int));
   }
 
-  /** @deprecated */
-  export function rangeIsDisjointFrom<T extends int, U extends int>(
-    self: Struct<T>,
-    other: Struct<U>,
-  ) {
-    return !(((typeof self.min) === (typeof self.max)) &&
-      (self.min <= other.max) && (self.max >= other.min));
-  }
-
   // 図形のtouchesとは意味が異なる。disjointかつ隣接
   export function rangeIsAdjacentTo<T extends int, U extends int>(
     self: Struct<T>,
     other: Struct<U>,
   ) {
-    if (rangeIsDisjointFrom(self, other) !== true) {
+    if (
+      (((typeof self.min) === (typeof self.max)) &&
+        (self.min <= other.max) && (self.max >= other.min))
+    ) {
+      // overlapsなら
       return false;
     }
 
