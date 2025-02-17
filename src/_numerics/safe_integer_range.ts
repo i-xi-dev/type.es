@@ -78,18 +78,6 @@ export class SafeIntegerRange<T extends number> implements IntegerRange<T> {
     }
   }
 
-  /** @deprecated */
-  isDisjointFrom<U extends number>(
-    otherRangeLike: SafeIntegerRange.Like<U>,
-  ): boolean {
-    try {
-      const otherRange = IntegerRange.Struct.fromRangeLike(otherRangeLike);
-      return IntegerRange.rangeIsDisjointFrom(this, otherRange);
-    } catch {
-      return false;
-    }
-  }
-
   isAdjacentTo<U extends number>(
     otherRangeLike: SafeIntegerRange.Like<U>,
   ): boolean {

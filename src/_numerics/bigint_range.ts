@@ -77,18 +77,6 @@ export class BigIntRange<T extends bigint> implements IntegerRange<T> {
     }
   }
 
-  /** @deprecated */
-  isDisjointFrom<U extends bigint>(
-    otherRangeLike: BigIntRange.Like<U>,
-  ): boolean {
-    try {
-      const otherRange = IntegerRange.Struct.fromRangeLike(otherRangeLike);
-      return IntegerRange.rangeIsDisjointFrom(this, otherRange);
-    } catch {
-      return false;
-    }
-  }
-
   isAdjacentTo<U extends bigint>(otherRangeLike: BigIntRange.Like<U>): boolean {
     try {
       const otherRange = IntegerRange.Struct.fromRangeLike(otherRangeLike);

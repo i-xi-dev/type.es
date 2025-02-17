@@ -13,7 +13,6 @@ export interface IntegerRange<T extends int> {
   overlaps(otherRangeLike: IntegerRange.Like<T>): boolean;
   covers(otherRangeLike: IntegerRange.Like<T>): boolean; // isSuperrangeOf
   //XXX isCoveredBy(otherRangeLike: IntegerRange.Like<T>): boolean; // isSubrangeOf
-  isDisjointFrom(otherRangeLike: IntegerRange.Like<T>): boolean;
   isAdjacentTo(otherRangeLike: IntegerRange.Like<T>): boolean;
   //XXX exceptWith(otherRangeLike: IntegerRange.Like<T>): IntegerRange;
   //XXX intersectWith(otherRangeLike: IntegerRange.Like<T>): IntegerRange;

@@ -235,53 +235,6 @@ Deno.test("SafeIntegerRange.prototype.covers()", () => {
   assertStrictEquals(range32.covers(range10b), false);
 });
 
-Deno.test("SafeIntegerRange.prototype.isDisjointFrom()", () => {
-  assertStrictEquals(range00.isDisjointFrom(range00), false);
-  assertStrictEquals(range00.isDisjointFrom([0]), false);
-  assertStrictEquals(range00.isDisjointFrom([0, 0]), false);
-  assertStrictEquals(range00.isDisjointFrom({ min: 0, max: 0 }), false);
-  assertStrictEquals(range00.isDisjointFrom(range01), false);
-  assertStrictEquals(range00.isDisjointFrom(range10), false);
-
-  assertStrictEquals(range00.isDisjointFrom(range00b), false);
-  assertStrictEquals(range00.isDisjointFrom(range01b), false);
-  assertStrictEquals(range00.isDisjointFrom(range10b), false);
-
-  assertStrictEquals(range01.isDisjointFrom(range00), false);
-  assertStrictEquals(range01.isDisjointFrom([0, 1]), false);
-  assertStrictEquals(range01.isDisjointFrom({ min: 0, max: 1 }), false);
-  assertStrictEquals(range01.isDisjointFrom(range01), false);
-  assertStrictEquals(range01.isDisjointFrom(range10), false);
-
-  assertStrictEquals(range01.isDisjointFrom(range00b), false);
-  assertStrictEquals(range01.isDisjointFrom(range01b), false);
-  assertStrictEquals(range01.isDisjointFrom(range10b), false);
-
-  assertStrictEquals(range10.isDisjointFrom(range00), false);
-  assertStrictEquals(range10.isDisjointFrom(range01), false);
-  assertStrictEquals(range10.isDisjointFrom(range10), false);
-
-  assertStrictEquals(range10.isDisjointFrom(range00b), false);
-  assertStrictEquals(range10.isDisjointFrom(range01b), false);
-  assertStrictEquals(range10.isDisjointFrom(range10b), false);
-
-  assertStrictEquals(range23.isDisjointFrom(range00), true);
-  assertStrictEquals(range23.isDisjointFrom(range01), true);
-  assertStrictEquals(range23.isDisjointFrom(range10), true);
-
-  assertStrictEquals(range23.isDisjointFrom(range00b), true);
-  assertStrictEquals(range23.isDisjointFrom(range01b), true);
-  assertStrictEquals(range23.isDisjointFrom(range10b), true);
-
-  assertStrictEquals(range32.isDisjointFrom(range00), true);
-  assertStrictEquals(range32.isDisjointFrom(range01), true);
-  assertStrictEquals(range32.isDisjointFrom(range10), true);
-
-  assertStrictEquals(range32.isDisjointFrom(range00b), true);
-  assertStrictEquals(range32.isDisjointFrom(range01b), true);
-  assertStrictEquals(range32.isDisjointFrom(range10b), true);
-});
-
 Deno.test("SafeIntegerRange.prototype.isAdjacentTo()", () => {
   assertStrictEquals(range00.isAdjacentTo(range00), false);
   assertStrictEquals(range00.isAdjacentTo([0]), false);
