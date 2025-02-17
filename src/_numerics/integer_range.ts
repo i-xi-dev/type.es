@@ -10,7 +10,6 @@ export interface IntegerRange<T extends int> {
   get max(): T;
   get size(): safeint;
   rangeEquals(otherRangeLike: IntegerRange.Like<T>): boolean;
-  covers(otherRangeLike: IntegerRange.Like<T>): boolean; // isSuperrangeOf
   //XXX isCoveredBy(otherRangeLike: IntegerRange.Like<T>): boolean; // isSubrangeOf
   isAdjacentTo(otherRangeLike: IntegerRange.Like<T>): boolean;
   //XXX exceptWith(otherRangeLike: IntegerRange.Like<T>): IntegerRange;
@@ -51,15 +50,6 @@ export namespace IntegerRange {
   ) {
     return ((typeof self.min) === (typeof self.max)) &&
       (self.min <= other.max) && (self.max >= other.min);
-  }
-
-  /** @deprecated */
-  export function rangeCovers<T extends int, U extends int>(
-    self: Struct<T>,
-    other: Struct<U>,
-  ) {
-    return ((typeof self.min) === (typeof self.max)) &&
-      (self.min <= other.min) && (self.max >= other.max);
   }
 
   /** @deprecated */

@@ -57,16 +57,6 @@ export class BigIntRange<T extends bigint> implements IntegerRange<T> {
     }
   }
 
-  /** @deprecated */
-  covers<U extends bigint>(otherRangeLike: BigIntRange.Like<U>): boolean {
-    try {
-      const otherRange = IntegerRange.Struct.fromRangeLike(otherRangeLike);
-      return IntegerRange.rangeCovers(this, otherRange);
-    } catch {
-      return false;
-    }
-  }
-
   isAdjacentTo<U extends bigint>(otherRangeLike: BigIntRange.Like<U>): boolean {
     try {
       const otherRange = IntegerRange.Struct.fromRangeLike(otherRangeLike);
