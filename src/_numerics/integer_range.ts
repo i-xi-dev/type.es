@@ -44,20 +44,12 @@ export namespace IntegerRange {
   }
 
   /** @deprecated */
-  export function rangeOverlaps<T extends int, U extends int>(
-    self: Struct<T>,
-    other: Struct<U>,
-  ) {
-    return ((typeof self.min) === (typeof self.max)) &&
-      (self.min <= other.max) && (self.max >= other.min);
-  }
-
-  /** @deprecated */
   export function rangeIsDisjointFrom<T extends int, U extends int>(
     self: Struct<T>,
     other: Struct<U>,
   ) {
-    return (rangeOverlaps(self, other) !== true);
+    return !(((typeof self.min) === (typeof self.max)) &&
+      (self.min <= other.max) && (self.max >= other.min));
   }
 
   // 図形のtouchesとは意味が異なる。disjointかつ隣接

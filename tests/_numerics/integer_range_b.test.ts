@@ -41,36 +41,6 @@ Deno.test("IntegerRange.rangeEquals() - bigint", () => {
   assertStrictEquals(IntegerRange.rangeEquals(minmax2m, minmax0), false);
 });
 
-Deno.test("IntegerRange.rangeOverlaps() - bigint", () => {
-  assertStrictEquals(IntegerRange.rangeOverlaps(minmax0, minmax0), true);
-
-  assertStrictEquals(IntegerRange.rangeOverlaps(min0max1, minmax2m), false);
-  assertStrictEquals(IntegerRange.rangeOverlaps(min0max1, minmax1m), false);
-  assertStrictEquals(IntegerRange.rangeOverlaps(min0max1, minmax0), true);
-  assertStrictEquals(IntegerRange.rangeOverlaps(min0max1, minmax1), true);
-  assertStrictEquals(IntegerRange.rangeOverlaps(min0max1, minmax2m), false);
-
-  assertStrictEquals(IntegerRange.rangeOverlaps(minmax0, min0max1), true);
-  assertStrictEquals(
-    IntegerRange.rangeOverlaps({ min: -1n, max: 0n }, minmax0),
-    true,
-  );
-  assertStrictEquals(
-    IntegerRange.rangeOverlaps(minmax0, { min: -1n, max: 0n }),
-    true,
-  );
-
-  assertStrictEquals(IntegerRange.rangeOverlaps(minmax0, minmax1), false);
-  assertStrictEquals(IntegerRange.rangeOverlaps(minmax1, minmax0), false);
-  assertStrictEquals(IntegerRange.rangeOverlaps(minmax0, minmax1m), false);
-  assertStrictEquals(IntegerRange.rangeOverlaps(minmax1m, minmax0), false);
-
-  assertStrictEquals(IntegerRange.rangeOverlaps(minmax0, minmax2), false);
-  assertStrictEquals(IntegerRange.rangeOverlaps(minmax2, minmax0), false);
-  assertStrictEquals(IntegerRange.rangeOverlaps(minmax0, minmax2m), false);
-  assertStrictEquals(IntegerRange.rangeOverlaps(minmax2m, minmax0), false);
-});
-
 Deno.test("IntegerRange.rangeIsDisjointFrom() - bigint", () => {
   assertStrictEquals(IntegerRange.rangeIsDisjointFrom(minmax0, minmax0), false);
 
