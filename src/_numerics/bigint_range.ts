@@ -15,10 +15,12 @@ export class BigIntRange<T extends bigint> implements IntegerRange<T> {
     this.#max = max;
   }
 
+  /** @deprecated */
   get min(): T {
     return this.#min;
   }
 
+  /** @deprecated */
   get max(): T {
     return this.#max;
   }

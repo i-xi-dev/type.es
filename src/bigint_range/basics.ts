@@ -11,6 +11,16 @@ export function sizeOf<T extends bigint>(range: BigIntRange<T>): bigint {
   return size;
 }
 
+export function minOf<T extends bigint>(range: BigIntRange<T>): T {
+  assertBigIntRange(range, "range");
+  return range[0];
+}
+
+export function maxOf<T extends bigint>(range: BigIntRange<T>): T {
+  assertBigIntRange(range, "range");
+  return range[1];
+}
+
 //XXX fromXxx<T extends bigint>(xxx: { min: T, max: T }): BigIntRange<T>
 //XXX toXxx<T extends bigint>(range: BigIntRange<T>): { min: T, max: T }
 

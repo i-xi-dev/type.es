@@ -23,6 +23,44 @@ Deno.test("BigIntRange.sizeOf()", () => {
   );
 });
 
+Deno.test("BigIntRange.minOf()", () => {
+  assertStrictEquals(BigIntRange.minOf([0n, 0n]), 0n);
+  assertStrictEquals(BigIntRange.minOf([0n, 0x7FFFFFFFn]), 0n);
+  assertStrictEquals(BigIntRange.minOf([0n, _MAX - 1n]), 0n);
+  assertStrictEquals(BigIntRange.minOf([1n, _MAX]), 1n);
+
+  assertStrictEquals(BigIntRange.minOf([0n, _MAX]), 0n);
+  assertStrictEquals(BigIntRange.minOf([_MIN, _MAX]), _MIN);
+
+  const e1 = "`range` must be a range of `bigint`.";
+  assertThrows(
+    () => {
+      BigIntRange.minOf(undefined as unknown as [0n, 0n]);
+    },
+    TypeError,
+    e1,
+  );
+});
+
+Deno.test("BigIntRange.maxOf()", () => {
+  assertStrictEquals(BigIntRange.maxOf([0n, 0n]), 0n);
+  assertStrictEquals(BigIntRange.maxOf([0n, 0x7FFFFFFFn]), 0x7FFFFFFFn);
+  assertStrictEquals(BigIntRange.maxOf([0n, _MAX - 1n]), _MAX - 1n);
+  assertStrictEquals(BigIntRange.maxOf([1n, _MAX]), _MAX);
+
+  assertStrictEquals(BigIntRange.maxOf([0n, _MAX]), _MAX);
+  assertStrictEquals(BigIntRange.maxOf([_MIN, _MAX]), _MAX);
+
+  const e1 = "`range` must be a range of `bigint`.";
+  assertThrows(
+    () => {
+      BigIntRange.maxOf(undefined as unknown as [0n, 0n]);
+    },
+    TypeError,
+    e1,
+  );
+});
+
 Deno.test("BigIntRange.toIterable()", () => {
   const i1 = BigIntRange.toIterable([0n, 0n]);
   assertStrictEquals(JSON.stringify([...i1].map((i) => Number(i))), "[0]");

@@ -27,6 +27,38 @@ Deno.test("SafeIntegerRange.sizeOf()", () => {
   );
 });
 
+Deno.test("SafeIntegerRange.minOf()", () => {
+  assertStrictEquals(SafeIntegerRange.minOf([0, 0]), 0);
+  assertStrictEquals(SafeIntegerRange.minOf([0, 0x7FFFFFFF]), 0);
+  assertStrictEquals(SafeIntegerRange.minOf([0, _MAX - 1]), 0);
+  assertStrictEquals(SafeIntegerRange.minOf([1, _MAX]), 1);
+
+  const e1 = "`range` must be a range of safe integer.";
+  assertThrows(
+    () => {
+      SafeIntegerRange.minOf(undefined as unknown as [0, 0]);
+    },
+    TypeError,
+    e1,
+  );
+});
+
+Deno.test("SafeIntegerRange.maxOf()", () => {
+  assertStrictEquals(SafeIntegerRange.maxOf([0, 0]), 0);
+  assertStrictEquals(SafeIntegerRange.maxOf([0, 0x7FFFFFFF]), 0x7FFFFFFF);
+  assertStrictEquals(SafeIntegerRange.maxOf([0, _MAX - 1]), _MAX - 1);
+  assertStrictEquals(SafeIntegerRange.maxOf([1, _MAX]), _MAX);
+
+  const e1 = "`range` must be a range of safe integer.";
+  assertThrows(
+    () => {
+      SafeIntegerRange.maxOf(undefined as unknown as [0, 0]);
+    },
+    TypeError,
+    e1,
+  );
+});
+
 Deno.test("SafeIntegerRange.toIterable()", () => {
   const i1 = SafeIntegerRange.toIterable([0, 0]);
   assertStrictEquals(JSON.stringify([...i1]), "[0]");

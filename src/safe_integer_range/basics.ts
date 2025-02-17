@@ -14,6 +14,16 @@ export function sizeOf<T extends safeint>(range: SafeIntegerRange<T>): safeint {
   return size;
 }
 
+export function minOf<T extends safeint>(range: SafeIntegerRange<T>): T {
+  assertSafeIntegerRange(range, "range");
+  return range[0];
+}
+
+export function maxOf<T extends safeint>(range: SafeIntegerRange<T>): T {
+  assertSafeIntegerRange(range, "range");
+  return range[1];
+}
+
 //XXX fromXxx<T extends safeint>(xxx: { min: T, max: T }): SafeIntegerRange<T>
 //XXX toXxx<T extends safeint>(range: SafeIntegerRange<T>): { min: T, max: T }
 

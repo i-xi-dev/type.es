@@ -16,10 +16,12 @@ export class SafeIntegerRange<T extends number> implements IntegerRange<T> {
     this.#max = normalizeNumber(max);
   }
 
+  /** @deprecated */
   get min(): T {
     return this.#min;
   }
 
+  /** @deprecated */
   get max(): T {
     return this.#max;
   }
