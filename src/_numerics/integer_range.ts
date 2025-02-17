@@ -9,7 +9,6 @@ export interface IntegerRange<T extends int> {
   get min(): T;
   get max(): T;
   get size(): safeint;
-  //XXX isCoveredBy(otherRangeLike: IntegerRange.Like<T>): boolean; // isSubrangeOf
   isAdjacentTo(otherRangeLike: IntegerRange.Like<T>): boolean;
   //XXX exceptWith(otherRangeLike: IntegerRange.Like<T>): IntegerRange;
   //XXX intersectWith(otherRangeLike: IntegerRange.Like<T>): IntegerRange;
@@ -17,7 +16,6 @@ export interface IntegerRange<T extends int> {
   // normalize(ranges)
   includes(test: T): boolean;
   clamp(input: T): T;
-  equals(other: unknown): boolean;
   [Symbol.iterator](): IterableIterator<T>;
 }
 

@@ -171,12 +171,3 @@ Deno.test("BigIntRange.prototype.includes()", () => {
   assertStrictEquals(range32.includes(-1n), false);
   assertStrictEquals(range32.includes(0n), false);
 });
-
-Deno.test("BigIntRange.prototype.equals()", () => {
-  assertStrictEquals(range00.equals(range00), true);
-  assertStrictEquals(range00.equals([0n]), false);
-  assertStrictEquals(range00.equals([0n, 0n]), false);
-  assertStrictEquals(range00.equals({ min: 0n, max: 0n }), false);
-  assertStrictEquals(range00.equals(range00b), true);
-  assertStrictEquals(range00.equals(range01), false);
-});

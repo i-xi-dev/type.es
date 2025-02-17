@@ -76,13 +76,6 @@ export class BigIntRange<T extends bigint> implements IntegerRange<T> {
     }
   }
 
-  equals(other: unknown): boolean {
-    if (other instanceof BigIntRange) {
-      return IntegerRange.rangeEquals(this, other);
-    }
-    return false;
-  }
-
   /** @deprecated */
   [Symbol.iterator](): IterableIterator<T> {
     const min = this.min;

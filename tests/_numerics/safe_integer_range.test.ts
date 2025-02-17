@@ -171,12 +171,3 @@ Deno.test("SafeIntegerRange.prototype.includes()", () => {
   assertStrictEquals(range32.includes(-1), false);
   assertStrictEquals(range32.includes(0), false);
 });
-
-Deno.test("SafeIntegerRange.prototype.equals()", () => {
-  assertStrictEquals(range00.equals(range00), true);
-  assertStrictEquals(range00.equals([0]), false);
-  assertStrictEquals(range00.equals([0, 0]), false);
-  assertStrictEquals(range00.equals({ min: 0, max: 0 }), false);
-  assertStrictEquals(range00.equals(range00b), true);
-  assertStrictEquals(range00.equals(range01), false);
-});

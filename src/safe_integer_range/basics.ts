@@ -73,7 +73,7 @@ export function overlaps<T extends safeint>(
   return (aMin <= bMax) && (aMax >= bMin);
 }
 
-// a covers b (b isCoveredBy a) (a isSuperrangeOf b)
+// a covers b (b isCoveredBy a) (a isSuperrangeOf b) (b isSubrangeOf a)
 export function covers<T extends safeint>(
   a: SafeIntegerRange<T>,
   b: SafeIntegerRange<T>,

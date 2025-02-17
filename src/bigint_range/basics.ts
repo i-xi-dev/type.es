@@ -70,7 +70,7 @@ export function overlaps<T extends bigint>(
   return (aMin <= bMax) && (aMax >= bMin);
 }
 
-// a covers b (b isCoveredBy a) (a isSuperrangeOf b)
+// a covers b (b isCoveredBy a) (a isSuperrangeOf b) (b isSubrangeOf a)
 export function covers<T extends bigint>(
   a: BigIntRange<T>,
   b: BigIntRange<T>,

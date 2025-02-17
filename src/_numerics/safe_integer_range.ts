@@ -76,13 +76,6 @@ export class SafeIntegerRange<T extends number> implements IntegerRange<T> {
     }
   }
 
-  equals(other: unknown): boolean {
-    if (other instanceof SafeIntegerRange) {
-      return IntegerRange.rangeEquals(this, other);
-    }
-    return false;
-  }
-
   /** @deprecated */
   [Symbol.iterator](): IterableIterator<T> {
     const min = this.min;
