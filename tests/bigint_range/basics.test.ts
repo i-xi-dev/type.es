@@ -94,3 +94,813 @@ Deno.test("BigIntRange.toIterable()", () => {
     "The size of `range` is non-positive.",
   );
 });
+
+const r_0_0: [bigint, bigint] = [0n, 0n];
+const r_0_p1: [bigint, bigint] = [0n, 1n];
+const r_p1_p1: [bigint, bigint] = [1n, 1n];
+const r_0_p2: [bigint, bigint] = [0n, 2n];
+const r_p1_p2: [bigint, bigint] = [1n, 2n];
+const r_p2_p2: [bigint, bigint] = [2n, 2n];
+const r_m1_0: [bigint, bigint] = [-1n, 0n];
+const r_m1_m1: [bigint, bigint] = [-1n, -1n];
+const r_m2_0: [bigint, bigint] = [-2n, 0n];
+const r_m2_m1: [bigint, bigint] = [-2n, -1n];
+const r_m2_m2: [bigint, bigint] = [-2n, -2n];
+const r_m1_p1: [bigint, bigint] = [-1n, 1n];
+const r_m2_p2: [bigint, bigint] = [-2n, 2n];
+
+Deno.test("BigIntRange.equals()", () => {
+  assertStrictEquals(BigIntRange.equals(r_0_0, r_0_0), true);
+  assertStrictEquals(BigIntRange.equals(r_0_0, r_0_p1), false);
+  assertStrictEquals(BigIntRange.equals(r_0_0, r_p1_p1), false);
+  assertStrictEquals(BigIntRange.equals(r_0_0, r_0_p2), false);
+  assertStrictEquals(BigIntRange.equals(r_0_0, r_p1_p2), false);
+  assertStrictEquals(BigIntRange.equals(r_0_0, r_p2_p2), false);
+  assertStrictEquals(BigIntRange.equals(r_0_0, r_m1_0), false);
+  assertStrictEquals(BigIntRange.equals(r_0_0, r_m1_m1), false);
+  assertStrictEquals(BigIntRange.equals(r_0_0, r_m2_0), false);
+  assertStrictEquals(BigIntRange.equals(r_0_0, r_m2_m1), false);
+  assertStrictEquals(BigIntRange.equals(r_0_0, r_m2_m2), false);
+  assertStrictEquals(BigIntRange.equals(r_0_0, r_m1_p1), false);
+  assertStrictEquals(BigIntRange.equals(r_0_0, r_m2_p2), false);
+
+  assertStrictEquals(BigIntRange.equals(r_0_p1, r_0_0), false);
+  assertStrictEquals(BigIntRange.equals(r_0_p1, r_0_p1), true);
+  assertStrictEquals(BigIntRange.equals(r_0_p1, r_p1_p1), false);
+  assertStrictEquals(BigIntRange.equals(r_0_p1, r_0_p2), false);
+  assertStrictEquals(BigIntRange.equals(r_0_p1, r_p1_p2), false);
+  assertStrictEquals(BigIntRange.equals(r_0_p1, r_p2_p2), false);
+  assertStrictEquals(BigIntRange.equals(r_0_p1, r_m1_0), false);
+  assertStrictEquals(BigIntRange.equals(r_0_p1, r_m1_m1), false);
+  assertStrictEquals(BigIntRange.equals(r_0_p1, r_m2_0), false);
+  assertStrictEquals(BigIntRange.equals(r_0_p1, r_m2_m1), false);
+  assertStrictEquals(BigIntRange.equals(r_0_p1, r_m2_m2), false);
+  assertStrictEquals(BigIntRange.equals(r_0_p1, r_m1_p1), false);
+  assertStrictEquals(BigIntRange.equals(r_0_p1, r_m2_p2), false);
+
+  assertStrictEquals(BigIntRange.equals(r_p1_p1, r_0_0), false);
+  assertStrictEquals(BigIntRange.equals(r_p1_p1, r_0_p1), false);
+  assertStrictEquals(BigIntRange.equals(r_p1_p1, r_p1_p1), true);
+  assertStrictEquals(BigIntRange.equals(r_p1_p1, r_0_p2), false);
+  assertStrictEquals(BigIntRange.equals(r_p1_p1, r_p1_p2), false);
+  assertStrictEquals(BigIntRange.equals(r_p1_p1, r_p2_p2), false);
+  assertStrictEquals(BigIntRange.equals(r_p1_p1, r_m1_0), false);
+  assertStrictEquals(BigIntRange.equals(r_p1_p1, r_m1_m1), false);
+  assertStrictEquals(BigIntRange.equals(r_p1_p1, r_m2_0), false);
+  assertStrictEquals(BigIntRange.equals(r_p1_p1, r_m2_m1), false);
+  assertStrictEquals(BigIntRange.equals(r_p1_p1, r_m2_m2), false);
+  assertStrictEquals(BigIntRange.equals(r_p1_p1, r_m1_p1), false);
+  assertStrictEquals(BigIntRange.equals(r_p1_p1, r_m2_p2), false);
+
+  assertStrictEquals(BigIntRange.equals(r_0_p2, r_0_0), false);
+  assertStrictEquals(BigIntRange.equals(r_0_p2, r_0_p1), false);
+  assertStrictEquals(BigIntRange.equals(r_0_p2, r_p1_p1), false);
+  assertStrictEquals(BigIntRange.equals(r_0_p2, r_0_p2), true);
+  assertStrictEquals(BigIntRange.equals(r_0_p2, r_p1_p2), false);
+  assertStrictEquals(BigIntRange.equals(r_0_p2, r_p2_p2), false);
+  assertStrictEquals(BigIntRange.equals(r_0_p2, r_m1_0), false);
+  assertStrictEquals(BigIntRange.equals(r_0_p2, r_m1_m1), false);
+  assertStrictEquals(BigIntRange.equals(r_0_p2, r_m2_0), false);
+  assertStrictEquals(BigIntRange.equals(r_0_p2, r_m2_m1), false);
+  assertStrictEquals(BigIntRange.equals(r_0_p2, r_m2_m2), false);
+  assertStrictEquals(BigIntRange.equals(r_0_p2, r_m1_p1), false);
+  assertStrictEquals(BigIntRange.equals(r_0_p2, r_m2_p2), false);
+
+  assertStrictEquals(BigIntRange.equals(r_p1_p2, r_0_0), false);
+  assertStrictEquals(BigIntRange.equals(r_p1_p2, r_0_p1), false);
+  assertStrictEquals(BigIntRange.equals(r_p1_p2, r_p1_p1), false);
+  assertStrictEquals(BigIntRange.equals(r_p1_p2, r_0_p2), false);
+  assertStrictEquals(BigIntRange.equals(r_p1_p2, r_p1_p2), true);
+  assertStrictEquals(BigIntRange.equals(r_p1_p2, r_p2_p2), false);
+  assertStrictEquals(BigIntRange.equals(r_p1_p2, r_m1_0), false);
+  assertStrictEquals(BigIntRange.equals(r_p1_p2, r_m1_m1), false);
+  assertStrictEquals(BigIntRange.equals(r_p1_p2, r_m2_0), false);
+  assertStrictEquals(BigIntRange.equals(r_p1_p2, r_m2_m1), false);
+  assertStrictEquals(BigIntRange.equals(r_p1_p2, r_m2_m2), false);
+  assertStrictEquals(BigIntRange.equals(r_p1_p2, r_m1_p1), false);
+  assertStrictEquals(BigIntRange.equals(r_p1_p2, r_m2_p2), false);
+
+  assertStrictEquals(BigIntRange.equals(r_p2_p2, r_0_0), false);
+  assertStrictEquals(BigIntRange.equals(r_p2_p2, r_0_p1), false);
+  assertStrictEquals(BigIntRange.equals(r_p2_p2, r_p1_p1), false);
+  assertStrictEquals(BigIntRange.equals(r_p2_p2, r_0_p2), false);
+  assertStrictEquals(BigIntRange.equals(r_p2_p2, r_p1_p2), false);
+  assertStrictEquals(BigIntRange.equals(r_p2_p2, r_p2_p2), true);
+  assertStrictEquals(BigIntRange.equals(r_p2_p2, r_m1_0), false);
+  assertStrictEquals(BigIntRange.equals(r_p2_p2, r_m1_m1), false);
+  assertStrictEquals(BigIntRange.equals(r_p2_p2, r_m2_0), false);
+  assertStrictEquals(BigIntRange.equals(r_p2_p2, r_m2_m1), false);
+  assertStrictEquals(BigIntRange.equals(r_p2_p2, r_m2_m2), false);
+  assertStrictEquals(BigIntRange.equals(r_p2_p2, r_m1_p1), false);
+  assertStrictEquals(BigIntRange.equals(r_p2_p2, r_m2_p2), false);
+
+  assertStrictEquals(BigIntRange.equals(r_m1_0, r_0_0), false);
+  assertStrictEquals(BigIntRange.equals(r_m1_0, r_0_p1), false);
+  assertStrictEquals(BigIntRange.equals(r_m1_0, r_p1_p1), false);
+  assertStrictEquals(BigIntRange.equals(r_m1_0, r_0_p2), false);
+  assertStrictEquals(BigIntRange.equals(r_m1_0, r_p1_p2), false);
+  assertStrictEquals(BigIntRange.equals(r_m1_0, r_p2_p2), false);
+  assertStrictEquals(BigIntRange.equals(r_m1_0, r_m1_0), true);
+  assertStrictEquals(BigIntRange.equals(r_m1_0, r_m1_m1), false);
+  assertStrictEquals(BigIntRange.equals(r_m1_0, r_m2_0), false);
+  assertStrictEquals(BigIntRange.equals(r_m1_0, r_m2_m1), false);
+  assertStrictEquals(BigIntRange.equals(r_m1_0, r_m2_m2), false);
+  assertStrictEquals(BigIntRange.equals(r_m1_0, r_m1_p1), false);
+  assertStrictEquals(BigIntRange.equals(r_m1_0, r_m2_p2), false);
+
+  assertStrictEquals(BigIntRange.equals(r_m1_m1, r_0_0), false);
+  assertStrictEquals(BigIntRange.equals(r_m1_m1, r_0_p1), false);
+  assertStrictEquals(BigIntRange.equals(r_m1_m1, r_p1_p1), false);
+  assertStrictEquals(BigIntRange.equals(r_m1_m1, r_0_p2), false);
+  assertStrictEquals(BigIntRange.equals(r_m1_m1, r_p1_p2), false);
+  assertStrictEquals(BigIntRange.equals(r_m1_m1, r_p2_p2), false);
+  assertStrictEquals(BigIntRange.equals(r_m1_m1, r_m1_0), false);
+  assertStrictEquals(BigIntRange.equals(r_m1_m1, r_m1_m1), true);
+  assertStrictEquals(BigIntRange.equals(r_m1_m1, r_m2_0), false);
+  assertStrictEquals(BigIntRange.equals(r_m1_m1, r_m2_m1), false);
+  assertStrictEquals(BigIntRange.equals(r_m1_m1, r_m2_m2), false);
+  assertStrictEquals(BigIntRange.equals(r_m1_m1, r_m1_p1), false);
+  assertStrictEquals(BigIntRange.equals(r_m1_m1, r_m2_p2), false);
+
+  assertStrictEquals(BigIntRange.equals(r_m2_0, r_0_0), false);
+  assertStrictEquals(BigIntRange.equals(r_m2_0, r_0_p1), false);
+  assertStrictEquals(BigIntRange.equals(r_m2_0, r_p1_p1), false);
+  assertStrictEquals(BigIntRange.equals(r_m2_0, r_0_p2), false);
+  assertStrictEquals(BigIntRange.equals(r_m2_0, r_p1_p2), false);
+  assertStrictEquals(BigIntRange.equals(r_m2_0, r_p2_p2), false);
+  assertStrictEquals(BigIntRange.equals(r_m2_0, r_m1_0), false);
+  assertStrictEquals(BigIntRange.equals(r_m2_0, r_m1_m1), false);
+  assertStrictEquals(BigIntRange.equals(r_m2_0, r_m2_0), true);
+  assertStrictEquals(BigIntRange.equals(r_m2_0, r_m2_m1), false);
+  assertStrictEquals(BigIntRange.equals(r_m2_0, r_m2_m2), false);
+  assertStrictEquals(BigIntRange.equals(r_m2_0, r_m1_p1), false);
+  assertStrictEquals(BigIntRange.equals(r_m2_0, r_m2_p2), false);
+
+  assertStrictEquals(BigIntRange.equals(r_m2_m1, r_0_0), false);
+  assertStrictEquals(BigIntRange.equals(r_m2_m1, r_0_p1), false);
+  assertStrictEquals(BigIntRange.equals(r_m2_m1, r_p1_p1), false);
+  assertStrictEquals(BigIntRange.equals(r_m2_m1, r_0_p2), false);
+  assertStrictEquals(BigIntRange.equals(r_m2_m1, r_p1_p2), false);
+  assertStrictEquals(BigIntRange.equals(r_m2_m1, r_p2_p2), false);
+  assertStrictEquals(BigIntRange.equals(r_m2_m1, r_m1_0), false);
+  assertStrictEquals(BigIntRange.equals(r_m2_m1, r_m1_m1), false);
+  assertStrictEquals(BigIntRange.equals(r_m2_m1, r_m2_0), false);
+  assertStrictEquals(BigIntRange.equals(r_m2_m1, r_m2_m1), true);
+  assertStrictEquals(BigIntRange.equals(r_m2_m1, r_m2_m2), false);
+  assertStrictEquals(BigIntRange.equals(r_m2_m1, r_m1_p1), false);
+  assertStrictEquals(BigIntRange.equals(r_m2_m1, r_m2_p2), false);
+
+  assertStrictEquals(BigIntRange.equals(r_m2_m2, r_0_0), false);
+  assertStrictEquals(BigIntRange.equals(r_m2_m2, r_0_p1), false);
+  assertStrictEquals(BigIntRange.equals(r_m2_m2, r_p1_p1), false);
+  assertStrictEquals(BigIntRange.equals(r_m2_m2, r_0_p2), false);
+  assertStrictEquals(BigIntRange.equals(r_m2_m2, r_p1_p2), false);
+  assertStrictEquals(BigIntRange.equals(r_m2_m2, r_p2_p2), false);
+  assertStrictEquals(BigIntRange.equals(r_m2_m2, r_m1_0), false);
+  assertStrictEquals(BigIntRange.equals(r_m2_m2, r_m1_m1), false);
+  assertStrictEquals(BigIntRange.equals(r_m2_m2, r_m2_0), false);
+  assertStrictEquals(BigIntRange.equals(r_m2_m2, r_m2_m1), false);
+  assertStrictEquals(BigIntRange.equals(r_m2_m2, r_m2_m2), true);
+  assertStrictEquals(BigIntRange.equals(r_m2_m2, r_m1_p1), false);
+  assertStrictEquals(BigIntRange.equals(r_m2_m2, r_m2_p2), false);
+
+  assertStrictEquals(BigIntRange.equals(r_m1_p1, r_0_0), false);
+  assertStrictEquals(BigIntRange.equals(r_m1_p1, r_0_p1), false);
+  assertStrictEquals(BigIntRange.equals(r_m1_p1, r_p1_p1), false);
+  assertStrictEquals(BigIntRange.equals(r_m1_p1, r_0_p2), false);
+  assertStrictEquals(BigIntRange.equals(r_m1_p1, r_p1_p2), false);
+  assertStrictEquals(BigIntRange.equals(r_m1_p1, r_p2_p2), false);
+  assertStrictEquals(BigIntRange.equals(r_m1_p1, r_m1_0), false);
+  assertStrictEquals(BigIntRange.equals(r_m1_p1, r_m1_m1), false);
+  assertStrictEquals(BigIntRange.equals(r_m1_p1, r_m2_0), false);
+  assertStrictEquals(BigIntRange.equals(r_m1_p1, r_m2_m1), false);
+  assertStrictEquals(BigIntRange.equals(r_m1_p1, r_m2_m2), false);
+  assertStrictEquals(BigIntRange.equals(r_m1_p1, r_m1_p1), true);
+  assertStrictEquals(BigIntRange.equals(r_m1_p1, r_m2_p2), false);
+
+  assertStrictEquals(BigIntRange.equals(r_m2_p2, r_0_0), false);
+  assertStrictEquals(BigIntRange.equals(r_m2_p2, r_0_p1), false);
+  assertStrictEquals(BigIntRange.equals(r_m2_p2, r_p1_p1), false);
+  assertStrictEquals(BigIntRange.equals(r_m2_p2, r_0_p2), false);
+  assertStrictEquals(BigIntRange.equals(r_m2_p2, r_p1_p2), false);
+  assertStrictEquals(BigIntRange.equals(r_m2_p2, r_p2_p2), false);
+  assertStrictEquals(BigIntRange.equals(r_m2_p2, r_m1_0), false);
+  assertStrictEquals(BigIntRange.equals(r_m2_p2, r_m1_m1), false);
+  assertStrictEquals(BigIntRange.equals(r_m2_p2, r_m2_0), false);
+  assertStrictEquals(BigIntRange.equals(r_m2_p2, r_m2_m1), false);
+  assertStrictEquals(BigIntRange.equals(r_m2_p2, r_m2_m2), false);
+  assertStrictEquals(BigIntRange.equals(r_m2_p2, r_m1_p1), false);
+  assertStrictEquals(BigIntRange.equals(r_m2_p2, r_m2_p2), true);
+
+  assertThrows(
+    () => {
+      BigIntRange.equals(undefined as unknown as [0n, 0n], [0n, 0n]);
+    },
+    TypeError,
+    "`a` must be a range of `bigint`.",
+  );
+  assertThrows(
+    () => {
+      BigIntRange.equals([0n, 0n], undefined as unknown as [0n, 0n]);
+    },
+    TypeError,
+    "`b` must be a range of `bigint`.",
+  );
+});
+
+Deno.test("BigIntRange.overlaps()", () => {
+  assertStrictEquals(BigIntRange.overlaps(r_0_0, r_0_0), true);
+  assertStrictEquals(BigIntRange.overlaps(r_0_0, r_0_p1), true);
+  assertStrictEquals(BigIntRange.overlaps(r_0_0, r_p1_p1), false);
+  assertStrictEquals(BigIntRange.overlaps(r_0_0, r_0_p2), true);
+  assertStrictEquals(BigIntRange.overlaps(r_0_0, r_p1_p2), false);
+  assertStrictEquals(BigIntRange.overlaps(r_0_0, r_p2_p2), false);
+  assertStrictEquals(BigIntRange.overlaps(r_0_0, r_m1_0), true);
+  assertStrictEquals(BigIntRange.overlaps(r_0_0, r_m1_m1), false);
+  assertStrictEquals(BigIntRange.overlaps(r_0_0, r_m2_0), true);
+  assertStrictEquals(BigIntRange.overlaps(r_0_0, r_m2_m1), false);
+  assertStrictEquals(BigIntRange.overlaps(r_0_0, r_m2_m2), false);
+  assertStrictEquals(BigIntRange.overlaps(r_0_0, r_m1_p1), true);
+  assertStrictEquals(BigIntRange.overlaps(r_0_0, r_m2_p2), true);
+
+  assertStrictEquals(BigIntRange.overlaps(r_0_p1, r_0_0), true);
+  assertStrictEquals(BigIntRange.overlaps(r_0_p1, r_0_p1), true);
+  assertStrictEquals(BigIntRange.overlaps(r_0_p1, r_p1_p1), true);
+  assertStrictEquals(BigIntRange.overlaps(r_0_p1, r_0_p2), true);
+  assertStrictEquals(BigIntRange.overlaps(r_0_p1, r_p1_p2), true);
+  assertStrictEquals(BigIntRange.overlaps(r_0_p1, r_p2_p2), false);
+  assertStrictEquals(BigIntRange.overlaps(r_0_p1, r_m1_0), true);
+  assertStrictEquals(BigIntRange.overlaps(r_0_p1, r_m1_m1), false);
+  assertStrictEquals(BigIntRange.overlaps(r_0_p1, r_m2_0), true);
+  assertStrictEquals(BigIntRange.overlaps(r_0_p1, r_m2_m1), false);
+  assertStrictEquals(BigIntRange.overlaps(r_0_p1, r_m2_m2), false);
+  assertStrictEquals(BigIntRange.overlaps(r_0_p1, r_m1_p1), true);
+  assertStrictEquals(BigIntRange.overlaps(r_0_p1, r_m2_p2), true);
+
+  assertStrictEquals(BigIntRange.overlaps(r_p1_p1, r_0_0), false);
+  assertStrictEquals(BigIntRange.overlaps(r_p1_p1, r_0_p1), true);
+  assertStrictEquals(BigIntRange.overlaps(r_p1_p1, r_p1_p1), true);
+  assertStrictEquals(BigIntRange.overlaps(r_p1_p1, r_0_p2), true);
+  assertStrictEquals(BigIntRange.overlaps(r_p1_p1, r_p1_p2), true);
+  assertStrictEquals(BigIntRange.overlaps(r_p1_p1, r_p2_p2), false);
+  assertStrictEquals(BigIntRange.overlaps(r_p1_p1, r_m1_0), false);
+  assertStrictEquals(BigIntRange.overlaps(r_p1_p1, r_m1_m1), false);
+  assertStrictEquals(BigIntRange.overlaps(r_p1_p1, r_m2_0), false);
+  assertStrictEquals(BigIntRange.overlaps(r_p1_p1, r_m2_m1), false);
+  assertStrictEquals(BigIntRange.overlaps(r_p1_p1, r_m2_m2), false);
+  assertStrictEquals(BigIntRange.overlaps(r_p1_p1, r_m1_p1), true);
+  assertStrictEquals(BigIntRange.overlaps(r_p1_p1, r_m2_p2), true);
+
+  assertStrictEquals(BigIntRange.overlaps(r_0_p2, r_0_0), true);
+  assertStrictEquals(BigIntRange.overlaps(r_0_p2, r_0_p1), true);
+  assertStrictEquals(BigIntRange.overlaps(r_0_p2, r_p1_p1), true);
+  assertStrictEquals(BigIntRange.overlaps(r_0_p2, r_0_p2), true);
+  assertStrictEquals(BigIntRange.overlaps(r_0_p2, r_p1_p2), true);
+  assertStrictEquals(BigIntRange.overlaps(r_0_p2, r_p2_p2), true);
+  assertStrictEquals(BigIntRange.overlaps(r_0_p2, r_m1_0), true);
+  assertStrictEquals(BigIntRange.overlaps(r_0_p2, r_m1_m1), false);
+  assertStrictEquals(BigIntRange.overlaps(r_0_p2, r_m2_0), true);
+  assertStrictEquals(BigIntRange.overlaps(r_0_p2, r_m2_m1), false);
+  assertStrictEquals(BigIntRange.overlaps(r_0_p2, r_m2_m2), false);
+  assertStrictEquals(BigIntRange.overlaps(r_0_p2, r_m1_p1), true);
+  assertStrictEquals(BigIntRange.overlaps(r_0_p2, r_m2_p2), true);
+
+  assertStrictEquals(BigIntRange.overlaps(r_p1_p2, r_0_0), false);
+  assertStrictEquals(BigIntRange.overlaps(r_p1_p2, r_0_p1), true);
+  assertStrictEquals(BigIntRange.overlaps(r_p1_p2, r_p1_p1), true);
+  assertStrictEquals(BigIntRange.overlaps(r_p1_p2, r_0_p2), true);
+  assertStrictEquals(BigIntRange.overlaps(r_p1_p2, r_p1_p2), true);
+  assertStrictEquals(BigIntRange.overlaps(r_p1_p2, r_p2_p2), true);
+  assertStrictEquals(BigIntRange.overlaps(r_p1_p2, r_m1_0), false);
+  assertStrictEquals(BigIntRange.overlaps(r_p1_p2, r_m1_m1), false);
+  assertStrictEquals(BigIntRange.overlaps(r_p1_p2, r_m2_0), false);
+  assertStrictEquals(BigIntRange.overlaps(r_p1_p2, r_m2_m1), false);
+  assertStrictEquals(BigIntRange.overlaps(r_p1_p2, r_m2_m2), false);
+  assertStrictEquals(BigIntRange.overlaps(r_p1_p2, r_m1_p1), true);
+  assertStrictEquals(BigIntRange.overlaps(r_p1_p2, r_m2_p2), true);
+
+  assertStrictEquals(BigIntRange.overlaps(r_p2_p2, r_0_0), false);
+  assertStrictEquals(BigIntRange.overlaps(r_p2_p2, r_0_p1), false);
+  assertStrictEquals(BigIntRange.overlaps(r_p2_p2, r_p1_p1), false);
+  assertStrictEquals(BigIntRange.overlaps(r_p2_p2, r_0_p2), true);
+  assertStrictEquals(BigIntRange.overlaps(r_p2_p2, r_p1_p2), true);
+  assertStrictEquals(BigIntRange.overlaps(r_p2_p2, r_p2_p2), true);
+  assertStrictEquals(BigIntRange.overlaps(r_p2_p2, r_m1_0), false);
+  assertStrictEquals(BigIntRange.overlaps(r_p2_p2, r_m1_m1), false);
+  assertStrictEquals(BigIntRange.overlaps(r_p2_p2, r_m2_0), false);
+  assertStrictEquals(BigIntRange.overlaps(r_p2_p2, r_m2_m1), false);
+  assertStrictEquals(BigIntRange.overlaps(r_p2_p2, r_m2_m2), false);
+  assertStrictEquals(BigIntRange.overlaps(r_p2_p2, r_m1_p1), false);
+  assertStrictEquals(BigIntRange.overlaps(r_p2_p2, r_m2_p2), true);
+
+  assertStrictEquals(BigIntRange.overlaps(r_m1_0, r_0_0), true);
+  assertStrictEquals(BigIntRange.overlaps(r_m1_0, r_0_p1), true);
+  assertStrictEquals(BigIntRange.overlaps(r_m1_0, r_p1_p1), false);
+  assertStrictEquals(BigIntRange.overlaps(r_m1_0, r_0_p2), true);
+  assertStrictEquals(BigIntRange.overlaps(r_m1_0, r_p1_p2), false);
+  assertStrictEquals(BigIntRange.overlaps(r_m1_0, r_p2_p2), false);
+  assertStrictEquals(BigIntRange.overlaps(r_m1_0, r_m1_0), true);
+  assertStrictEquals(BigIntRange.overlaps(r_m1_0, r_m1_m1), true);
+  assertStrictEquals(BigIntRange.overlaps(r_m1_0, r_m2_0), true);
+  assertStrictEquals(BigIntRange.overlaps(r_m1_0, r_m2_m1), true);
+  assertStrictEquals(BigIntRange.overlaps(r_m1_0, r_m2_m2), false);
+  assertStrictEquals(BigIntRange.overlaps(r_m1_0, r_m1_p1), true);
+  assertStrictEquals(BigIntRange.overlaps(r_m1_0, r_m2_p2), true);
+
+  assertStrictEquals(BigIntRange.overlaps(r_m1_m1, r_0_0), false);
+  assertStrictEquals(BigIntRange.overlaps(r_m1_m1, r_0_p1), false);
+  assertStrictEquals(BigIntRange.overlaps(r_m1_m1, r_p1_p1), false);
+  assertStrictEquals(BigIntRange.overlaps(r_m1_m1, r_0_p2), false);
+  assertStrictEquals(BigIntRange.overlaps(r_m1_m1, r_p1_p2), false);
+  assertStrictEquals(BigIntRange.overlaps(r_m1_m1, r_p2_p2), false);
+  assertStrictEquals(BigIntRange.overlaps(r_m1_m1, r_m1_0), true);
+  assertStrictEquals(BigIntRange.overlaps(r_m1_m1, r_m1_m1), true);
+  assertStrictEquals(BigIntRange.overlaps(r_m1_m1, r_m2_0), true);
+  assertStrictEquals(BigIntRange.overlaps(r_m1_m1, r_m2_m1), true);
+  assertStrictEquals(BigIntRange.overlaps(r_m1_m1, r_m2_m2), false);
+  assertStrictEquals(BigIntRange.overlaps(r_m1_m1, r_m1_p1), true);
+  assertStrictEquals(BigIntRange.overlaps(r_m1_m1, r_m2_p2), true);
+
+  assertStrictEquals(BigIntRange.overlaps(r_m2_0, r_0_0), true);
+  assertStrictEquals(BigIntRange.overlaps(r_m2_0, r_0_p1), true);
+  assertStrictEquals(BigIntRange.overlaps(r_m2_0, r_p1_p1), false);
+  assertStrictEquals(BigIntRange.overlaps(r_m2_0, r_0_p2), true);
+  assertStrictEquals(BigIntRange.overlaps(r_m2_0, r_p1_p2), false);
+  assertStrictEquals(BigIntRange.overlaps(r_m2_0, r_p2_p2), false);
+  assertStrictEquals(BigIntRange.overlaps(r_m2_0, r_m1_0), true);
+  assertStrictEquals(BigIntRange.overlaps(r_m2_0, r_m1_m1), true);
+  assertStrictEquals(BigIntRange.overlaps(r_m2_0, r_m2_0), true);
+  assertStrictEquals(BigIntRange.overlaps(r_m2_0, r_m2_m1), true);
+  assertStrictEquals(BigIntRange.overlaps(r_m2_0, r_m2_m2), true);
+  assertStrictEquals(BigIntRange.overlaps(r_m2_0, r_m1_p1), true);
+  assertStrictEquals(BigIntRange.overlaps(r_m2_0, r_m2_p2), true);
+
+  assertStrictEquals(BigIntRange.overlaps(r_m2_m1, r_0_0), false);
+  assertStrictEquals(BigIntRange.overlaps(r_m2_m1, r_0_p1), false);
+  assertStrictEquals(BigIntRange.overlaps(r_m2_m1, r_p1_p1), false);
+  assertStrictEquals(BigIntRange.overlaps(r_m2_m1, r_0_p2), false);
+  assertStrictEquals(BigIntRange.overlaps(r_m2_m1, r_p1_p2), false);
+  assertStrictEquals(BigIntRange.overlaps(r_m2_m1, r_p2_p2), false);
+  assertStrictEquals(BigIntRange.overlaps(r_m2_m1, r_m1_0), true);
+  assertStrictEquals(BigIntRange.overlaps(r_m2_m1, r_m1_m1), true);
+  assertStrictEquals(BigIntRange.overlaps(r_m2_m1, r_m2_0), true);
+  assertStrictEquals(BigIntRange.overlaps(r_m2_m1, r_m2_m1), true);
+  assertStrictEquals(BigIntRange.overlaps(r_m2_m1, r_m2_m2), true);
+  assertStrictEquals(BigIntRange.overlaps(r_m2_m1, r_m1_p1), true);
+  assertStrictEquals(BigIntRange.overlaps(r_m2_m1, r_m2_p2), true);
+
+  assertStrictEquals(BigIntRange.overlaps(r_m2_m2, r_0_0), false);
+  assertStrictEquals(BigIntRange.overlaps(r_m2_m2, r_0_p1), false);
+  assertStrictEquals(BigIntRange.overlaps(r_m2_m2, r_p1_p1), false);
+  assertStrictEquals(BigIntRange.overlaps(r_m2_m2, r_0_p2), false);
+  assertStrictEquals(BigIntRange.overlaps(r_m2_m2, r_p1_p2), false);
+  assertStrictEquals(BigIntRange.overlaps(r_m2_m2, r_p2_p2), false);
+  assertStrictEquals(BigIntRange.overlaps(r_m2_m2, r_m1_0), false);
+  assertStrictEquals(BigIntRange.overlaps(r_m2_m2, r_m1_m1), false);
+  assertStrictEquals(BigIntRange.overlaps(r_m2_m2, r_m2_0), true);
+  assertStrictEquals(BigIntRange.overlaps(r_m2_m2, r_m2_m1), true);
+  assertStrictEquals(BigIntRange.overlaps(r_m2_m2, r_m2_m2), true);
+  assertStrictEquals(BigIntRange.overlaps(r_m2_m2, r_m1_p1), false);
+  assertStrictEquals(BigIntRange.overlaps(r_m2_m2, r_m2_p2), true);
+
+  assertStrictEquals(BigIntRange.overlaps(r_m1_p1, r_0_0), true);
+  assertStrictEquals(BigIntRange.overlaps(r_m1_p1, r_0_p1), true);
+  assertStrictEquals(BigIntRange.overlaps(r_m1_p1, r_p1_p1), true);
+  assertStrictEquals(BigIntRange.overlaps(r_m1_p1, r_0_p2), true);
+  assertStrictEquals(BigIntRange.overlaps(r_m1_p1, r_p1_p2), true);
+  assertStrictEquals(BigIntRange.overlaps(r_m1_p1, r_p2_p2), false);
+  assertStrictEquals(BigIntRange.overlaps(r_m1_p1, r_m1_0), true);
+  assertStrictEquals(BigIntRange.overlaps(r_m1_p1, r_m1_m1), true);
+  assertStrictEquals(BigIntRange.overlaps(r_m1_p1, r_m2_0), true);
+  assertStrictEquals(BigIntRange.overlaps(r_m1_p1, r_m2_m1), true);
+  assertStrictEquals(BigIntRange.overlaps(r_m1_p1, r_m2_m2), false);
+  assertStrictEquals(BigIntRange.overlaps(r_m1_p1, r_m1_p1), true);
+  assertStrictEquals(BigIntRange.overlaps(r_m1_p1, r_m2_p2), true);
+
+  assertStrictEquals(BigIntRange.overlaps(r_m2_p2, r_0_0), true);
+  assertStrictEquals(BigIntRange.overlaps(r_m2_p2, r_0_p1), true);
+  assertStrictEquals(BigIntRange.overlaps(r_m2_p2, r_p1_p1), true);
+  assertStrictEquals(BigIntRange.overlaps(r_m2_p2, r_0_p2), true);
+  assertStrictEquals(BigIntRange.overlaps(r_m2_p2, r_p1_p2), true);
+  assertStrictEquals(BigIntRange.overlaps(r_m2_p2, r_p2_p2), true);
+  assertStrictEquals(BigIntRange.overlaps(r_m2_p2, r_m1_0), true);
+  assertStrictEquals(BigIntRange.overlaps(r_m2_p2, r_m1_m1), true);
+  assertStrictEquals(BigIntRange.overlaps(r_m2_p2, r_m2_0), true);
+  assertStrictEquals(BigIntRange.overlaps(r_m2_p2, r_m2_m1), true);
+  assertStrictEquals(BigIntRange.overlaps(r_m2_p2, r_m2_m2), true);
+  assertStrictEquals(BigIntRange.overlaps(r_m2_p2, r_m1_p1), true);
+  assertStrictEquals(BigIntRange.overlaps(r_m2_p2, r_m2_p2), true);
+
+  assertThrows(
+    () => {
+      BigIntRange.overlaps(undefined as unknown as [0n, 0n], [0n, 0n]);
+    },
+    TypeError,
+    "`a` must be a range of `bigint`.",
+  );
+  assertThrows(
+    () => {
+      BigIntRange.overlaps([0n, 0n], undefined as unknown as [0n, 0n]);
+    },
+    TypeError,
+    "`b` must be a range of `bigint`.",
+  );
+});
+
+Deno.test("BigIntRange.covers()", () => {
+  assertStrictEquals(BigIntRange.covers(r_0_0, r_0_0), true);
+  assertStrictEquals(BigIntRange.covers(r_0_0, r_0_p1), false);
+  assertStrictEquals(BigIntRange.covers(r_0_0, r_p1_p1), false);
+  assertStrictEquals(BigIntRange.covers(r_0_0, r_0_p2), false);
+  assertStrictEquals(BigIntRange.covers(r_0_0, r_p1_p2), false);
+  assertStrictEquals(BigIntRange.covers(r_0_0, r_p2_p2), false);
+  assertStrictEquals(BigIntRange.covers(r_0_0, r_m1_0), false);
+  assertStrictEquals(BigIntRange.covers(r_0_0, r_m1_m1), false);
+  assertStrictEquals(BigIntRange.covers(r_0_0, r_m2_0), false);
+  assertStrictEquals(BigIntRange.covers(r_0_0, r_m2_m1), false);
+  assertStrictEquals(BigIntRange.covers(r_0_0, r_m2_m2), false);
+  assertStrictEquals(BigIntRange.covers(r_0_0, r_m1_p1), false);
+  assertStrictEquals(BigIntRange.covers(r_0_0, r_m2_p2), false);
+
+  assertStrictEquals(BigIntRange.covers(r_0_p1, r_0_0), true);
+  assertStrictEquals(BigIntRange.covers(r_0_p1, r_0_p1), true);
+  assertStrictEquals(BigIntRange.covers(r_0_p1, r_p1_p1), true);
+  assertStrictEquals(BigIntRange.covers(r_0_p1, r_0_p2), false);
+  assertStrictEquals(BigIntRange.covers(r_0_p1, r_p1_p2), false);
+  assertStrictEquals(BigIntRange.covers(r_0_p1, r_p2_p2), false);
+  assertStrictEquals(BigIntRange.covers(r_0_p1, r_m1_0), false);
+  assertStrictEquals(BigIntRange.covers(r_0_p1, r_m1_m1), false);
+  assertStrictEquals(BigIntRange.covers(r_0_p1, r_m2_0), false);
+  assertStrictEquals(BigIntRange.covers(r_0_p1, r_m2_m1), false);
+  assertStrictEquals(BigIntRange.covers(r_0_p1, r_m2_m2), false);
+  assertStrictEquals(BigIntRange.covers(r_0_p1, r_m1_p1), false);
+  assertStrictEquals(BigIntRange.covers(r_0_p1, r_m2_p2), false);
+
+  assertStrictEquals(BigIntRange.covers(r_p1_p1, r_0_0), false);
+  assertStrictEquals(BigIntRange.covers(r_p1_p1, r_0_p1), false);
+  assertStrictEquals(BigIntRange.covers(r_p1_p1, r_p1_p1), true);
+  assertStrictEquals(BigIntRange.covers(r_p1_p1, r_0_p2), false);
+  assertStrictEquals(BigIntRange.covers(r_p1_p1, r_p1_p2), false);
+  assertStrictEquals(BigIntRange.covers(r_p1_p1, r_p2_p2), false);
+  assertStrictEquals(BigIntRange.covers(r_p1_p1, r_m1_0), false);
+  assertStrictEquals(BigIntRange.covers(r_p1_p1, r_m1_m1), false);
+  assertStrictEquals(BigIntRange.covers(r_p1_p1, r_m2_0), false);
+  assertStrictEquals(BigIntRange.covers(r_p1_p1, r_m2_m1), false);
+  assertStrictEquals(BigIntRange.covers(r_p1_p1, r_m2_m2), false);
+  assertStrictEquals(BigIntRange.covers(r_p1_p1, r_m1_p1), false);
+  assertStrictEquals(BigIntRange.covers(r_p1_p1, r_m2_p2), false);
+
+  assertStrictEquals(BigIntRange.covers(r_0_p2, r_0_0), true);
+  assertStrictEquals(BigIntRange.covers(r_0_p2, r_0_p1), true);
+  assertStrictEquals(BigIntRange.covers(r_0_p2, r_p1_p1), true);
+  assertStrictEquals(BigIntRange.covers(r_0_p2, r_0_p2), true);
+  assertStrictEquals(BigIntRange.covers(r_0_p2, r_p1_p2), true);
+  assertStrictEquals(BigIntRange.covers(r_0_p2, r_p2_p2), true);
+  assertStrictEquals(BigIntRange.covers(r_0_p2, r_m1_0), false);
+  assertStrictEquals(BigIntRange.covers(r_0_p2, r_m1_m1), false);
+  assertStrictEquals(BigIntRange.covers(r_0_p2, r_m2_0), false);
+  assertStrictEquals(BigIntRange.covers(r_0_p2, r_m2_m1), false);
+  assertStrictEquals(BigIntRange.covers(r_0_p2, r_m2_m2), false);
+  assertStrictEquals(BigIntRange.covers(r_0_p2, r_m1_p1), false);
+  assertStrictEquals(BigIntRange.covers(r_0_p2, r_m2_p2), false);
+
+  assertStrictEquals(BigIntRange.covers(r_p1_p2, r_0_0), false);
+  assertStrictEquals(BigIntRange.covers(r_p1_p2, r_0_p1), false);
+  assertStrictEquals(BigIntRange.covers(r_p1_p2, r_p1_p1), true);
+  assertStrictEquals(BigIntRange.covers(r_p1_p2, r_0_p2), false);
+  assertStrictEquals(BigIntRange.covers(r_p1_p2, r_p1_p2), true);
+  assertStrictEquals(BigIntRange.covers(r_p1_p2, r_p2_p2), true);
+  assertStrictEquals(BigIntRange.covers(r_p1_p2, r_m1_0), false);
+  assertStrictEquals(BigIntRange.covers(r_p1_p2, r_m1_m1), false);
+  assertStrictEquals(BigIntRange.covers(r_p1_p2, r_m2_0), false);
+  assertStrictEquals(BigIntRange.covers(r_p1_p2, r_m2_m1), false);
+  assertStrictEquals(BigIntRange.covers(r_p1_p2, r_m2_m2), false);
+  assertStrictEquals(BigIntRange.covers(r_p1_p2, r_m1_p1), false);
+  assertStrictEquals(BigIntRange.covers(r_p1_p2, r_m2_p2), false);
+
+  assertStrictEquals(BigIntRange.covers(r_p2_p2, r_0_0), false);
+  assertStrictEquals(BigIntRange.covers(r_p2_p2, r_0_p1), false);
+  assertStrictEquals(BigIntRange.covers(r_p2_p2, r_p1_p1), false);
+  assertStrictEquals(BigIntRange.covers(r_p2_p2, r_0_p2), false);
+  assertStrictEquals(BigIntRange.covers(r_p2_p2, r_p1_p2), false);
+  assertStrictEquals(BigIntRange.covers(r_p2_p2, r_p2_p2), true);
+  assertStrictEquals(BigIntRange.covers(r_p2_p2, r_m1_0), false);
+  assertStrictEquals(BigIntRange.covers(r_p2_p2, r_m1_m1), false);
+  assertStrictEquals(BigIntRange.covers(r_p2_p2, r_m2_0), false);
+  assertStrictEquals(BigIntRange.covers(r_p2_p2, r_m2_m1), false);
+  assertStrictEquals(BigIntRange.covers(r_p2_p2, r_m2_m2), false);
+  assertStrictEquals(BigIntRange.covers(r_p2_p2, r_m1_p1), false);
+  assertStrictEquals(BigIntRange.covers(r_p2_p2, r_m2_p2), false);
+
+  assertStrictEquals(BigIntRange.covers(r_m1_0, r_0_0), true);
+  assertStrictEquals(BigIntRange.covers(r_m1_0, r_0_p1), false);
+  assertStrictEquals(BigIntRange.covers(r_m1_0, r_p1_p1), false);
+  assertStrictEquals(BigIntRange.covers(r_m1_0, r_0_p2), false);
+  assertStrictEquals(BigIntRange.covers(r_m1_0, r_p1_p2), false);
+  assertStrictEquals(BigIntRange.covers(r_m1_0, r_p2_p2), false);
+  assertStrictEquals(BigIntRange.covers(r_m1_0, r_m1_0), true);
+  assertStrictEquals(BigIntRange.covers(r_m1_0, r_m1_m1), true);
+  assertStrictEquals(BigIntRange.covers(r_m1_0, r_m2_0), false);
+  assertStrictEquals(BigIntRange.covers(r_m1_0, r_m2_m1), false);
+  assertStrictEquals(BigIntRange.covers(r_m1_0, r_m2_m2), false);
+  assertStrictEquals(BigIntRange.covers(r_m1_0, r_m1_p1), false);
+  assertStrictEquals(BigIntRange.covers(r_m1_0, r_m2_p2), false);
+
+  assertStrictEquals(BigIntRange.covers(r_m1_m1, r_0_0), false);
+  assertStrictEquals(BigIntRange.covers(r_m1_m1, r_0_p1), false);
+  assertStrictEquals(BigIntRange.covers(r_m1_m1, r_p1_p1), false);
+  assertStrictEquals(BigIntRange.covers(r_m1_m1, r_0_p2), false);
+  assertStrictEquals(BigIntRange.covers(r_m1_m1, r_p1_p2), false);
+  assertStrictEquals(BigIntRange.covers(r_m1_m1, r_p2_p2), false);
+  assertStrictEquals(BigIntRange.covers(r_m1_m1, r_m1_0), false);
+  assertStrictEquals(BigIntRange.covers(r_m1_m1, r_m1_m1), true);
+  assertStrictEquals(BigIntRange.covers(r_m1_m1, r_m2_0), false);
+  assertStrictEquals(BigIntRange.covers(r_m1_m1, r_m2_m1), false);
+  assertStrictEquals(BigIntRange.covers(r_m1_m1, r_m2_m2), false);
+  assertStrictEquals(BigIntRange.covers(r_m1_m1, r_m1_p1), false);
+  assertStrictEquals(BigIntRange.covers(r_m1_m1, r_m2_p2), false);
+
+  assertStrictEquals(BigIntRange.covers(r_m2_0, r_0_0), true);
+  assertStrictEquals(BigIntRange.covers(r_m2_0, r_0_p1), false);
+  assertStrictEquals(BigIntRange.covers(r_m2_0, r_p1_p1), false);
+  assertStrictEquals(BigIntRange.covers(r_m2_0, r_0_p2), false);
+  assertStrictEquals(BigIntRange.covers(r_m2_0, r_p1_p2), false);
+  assertStrictEquals(BigIntRange.covers(r_m2_0, r_p2_p2), false);
+  assertStrictEquals(BigIntRange.covers(r_m2_0, r_m1_0), true);
+  assertStrictEquals(BigIntRange.covers(r_m2_0, r_m1_m1), true);
+  assertStrictEquals(BigIntRange.covers(r_m2_0, r_m2_0), true);
+  assertStrictEquals(BigIntRange.covers(r_m2_0, r_m2_m1), true);
+  assertStrictEquals(BigIntRange.covers(r_m2_0, r_m2_m2), true);
+  assertStrictEquals(BigIntRange.covers(r_m2_0, r_m1_p1), false);
+  assertStrictEquals(BigIntRange.covers(r_m2_0, r_m2_p2), false);
+
+  assertStrictEquals(BigIntRange.covers(r_m2_m1, r_0_0), false);
+  assertStrictEquals(BigIntRange.covers(r_m2_m1, r_0_p1), false);
+  assertStrictEquals(BigIntRange.covers(r_m2_m1, r_p1_p1), false);
+  assertStrictEquals(BigIntRange.covers(r_m2_m1, r_0_p2), false);
+  assertStrictEquals(BigIntRange.covers(r_m2_m1, r_p1_p2), false);
+  assertStrictEquals(BigIntRange.covers(r_m2_m1, r_p2_p2), false);
+  assertStrictEquals(BigIntRange.covers(r_m2_m1, r_m1_0), false);
+  assertStrictEquals(BigIntRange.covers(r_m2_m1, r_m1_m1), true);
+  assertStrictEquals(BigIntRange.covers(r_m2_m1, r_m2_0), false);
+  assertStrictEquals(BigIntRange.covers(r_m2_m1, r_m2_m1), true);
+  assertStrictEquals(BigIntRange.covers(r_m2_m1, r_m2_m2), true);
+  assertStrictEquals(BigIntRange.covers(r_m2_m1, r_m1_p1), false);
+  assertStrictEquals(BigIntRange.covers(r_m2_m1, r_m2_p2), false);
+
+  assertStrictEquals(BigIntRange.covers(r_m2_m2, r_0_0), false);
+  assertStrictEquals(BigIntRange.covers(r_m2_m2, r_0_p1), false);
+  assertStrictEquals(BigIntRange.covers(r_m2_m2, r_p1_p1), false);
+  assertStrictEquals(BigIntRange.covers(r_m2_m2, r_0_p2), false);
+  assertStrictEquals(BigIntRange.covers(r_m2_m2, r_p1_p2), false);
+  assertStrictEquals(BigIntRange.covers(r_m2_m2, r_p2_p2), false);
+  assertStrictEquals(BigIntRange.covers(r_m2_m2, r_m1_0), false);
+  assertStrictEquals(BigIntRange.covers(r_m2_m2, r_m1_m1), false);
+  assertStrictEquals(BigIntRange.covers(r_m2_m2, r_m2_0), false);
+  assertStrictEquals(BigIntRange.covers(r_m2_m2, r_m2_m1), false);
+  assertStrictEquals(BigIntRange.covers(r_m2_m2, r_m2_m2), true);
+  assertStrictEquals(BigIntRange.covers(r_m2_m2, r_m1_p1), false);
+  assertStrictEquals(BigIntRange.covers(r_m2_m2, r_m2_p2), false);
+
+  assertStrictEquals(BigIntRange.covers(r_m1_p1, r_0_0), true);
+  assertStrictEquals(BigIntRange.covers(r_m1_p1, r_0_p1), true);
+  assertStrictEquals(BigIntRange.covers(r_m1_p1, r_p1_p1), true);
+  assertStrictEquals(BigIntRange.covers(r_m1_p1, r_0_p2), false);
+  assertStrictEquals(BigIntRange.covers(r_m1_p1, r_p1_p2), false);
+  assertStrictEquals(BigIntRange.covers(r_m1_p1, r_p2_p2), false);
+  assertStrictEquals(BigIntRange.covers(r_m1_p1, r_m1_0), true);
+  assertStrictEquals(BigIntRange.covers(r_m1_p1, r_m1_m1), true);
+  assertStrictEquals(BigIntRange.covers(r_m1_p1, r_m2_0), false);
+  assertStrictEquals(BigIntRange.covers(r_m1_p1, r_m2_m1), false);
+  assertStrictEquals(BigIntRange.covers(r_m1_p1, r_m2_m2), false);
+  assertStrictEquals(BigIntRange.covers(r_m1_p1, r_m1_p1), true);
+  assertStrictEquals(BigIntRange.covers(r_m1_p1, r_m2_p2), false);
+
+  assertStrictEquals(BigIntRange.covers(r_m2_p2, r_0_0), true);
+  assertStrictEquals(BigIntRange.covers(r_m2_p2, r_0_p1), true);
+  assertStrictEquals(BigIntRange.covers(r_m2_p2, r_p1_p1), true);
+  assertStrictEquals(BigIntRange.covers(r_m2_p2, r_0_p2), true);
+  assertStrictEquals(BigIntRange.covers(r_m2_p2, r_p1_p2), true);
+  assertStrictEquals(BigIntRange.covers(r_m2_p2, r_p2_p2), true);
+  assertStrictEquals(BigIntRange.covers(r_m2_p2, r_m1_0), true);
+  assertStrictEquals(BigIntRange.covers(r_m2_p2, r_m1_m1), true);
+  assertStrictEquals(BigIntRange.covers(r_m2_p2, r_m2_0), true);
+  assertStrictEquals(BigIntRange.covers(r_m2_p2, r_m2_m1), true);
+  assertStrictEquals(BigIntRange.covers(r_m2_p2, r_m2_m2), true);
+  assertStrictEquals(BigIntRange.covers(r_m2_p2, r_m1_p1), true);
+  assertStrictEquals(BigIntRange.covers(r_m2_p2, r_m2_p2), true);
+
+  assertThrows(
+    () => {
+      BigIntRange.covers(undefined as unknown as [0n, 0n], [0n, 0n]);
+    },
+    TypeError,
+    "`a` must be a range of `bigint`.",
+  );
+  assertThrows(
+    () => {
+      BigIntRange.covers([0n, 0n], undefined as unknown as [0n, 0n]);
+    },
+    TypeError,
+    "`b` must be a range of `bigint`.",
+  );
+});
+
+Deno.test("BigIntRange.isDisjoint()", () => {
+  assertStrictEquals(BigIntRange.isDisjoint(r_0_0, r_0_0), false);
+  assertStrictEquals(BigIntRange.isDisjoint(r_0_0, r_0_p1), false);
+  assertStrictEquals(BigIntRange.isDisjoint(r_0_0, r_p1_p1), true);
+  assertStrictEquals(BigIntRange.isDisjoint(r_0_0, r_0_p2), false);
+  assertStrictEquals(BigIntRange.isDisjoint(r_0_0, r_p1_p2), true);
+  assertStrictEquals(BigIntRange.isDisjoint(r_0_0, r_p2_p2), true);
+  assertStrictEquals(BigIntRange.isDisjoint(r_0_0, r_m1_0), false);
+  assertStrictEquals(BigIntRange.isDisjoint(r_0_0, r_m1_m1), true);
+  assertStrictEquals(BigIntRange.isDisjoint(r_0_0, r_m2_0), false);
+  assertStrictEquals(BigIntRange.isDisjoint(r_0_0, r_m2_m1), true);
+  assertStrictEquals(BigIntRange.isDisjoint(r_0_0, r_m2_m2), true);
+  assertStrictEquals(BigIntRange.isDisjoint(r_0_0, r_m1_p1), false);
+  assertStrictEquals(BigIntRange.isDisjoint(r_0_0, r_m2_p2), false);
+
+  assertStrictEquals(BigIntRange.isDisjoint(r_0_p1, r_0_0), false);
+  assertStrictEquals(BigIntRange.isDisjoint(r_0_p1, r_0_p1), false);
+  assertStrictEquals(BigIntRange.isDisjoint(r_0_p1, r_p1_p1), false);
+  assertStrictEquals(BigIntRange.isDisjoint(r_0_p1, r_0_p2), false);
+  assertStrictEquals(BigIntRange.isDisjoint(r_0_p1, r_p1_p2), false);
+  assertStrictEquals(BigIntRange.isDisjoint(r_0_p1, r_p2_p2), true);
+  assertStrictEquals(BigIntRange.isDisjoint(r_0_p1, r_m1_0), false);
+  assertStrictEquals(BigIntRange.isDisjoint(r_0_p1, r_m1_m1), true);
+  assertStrictEquals(BigIntRange.isDisjoint(r_0_p1, r_m2_0), false);
+  assertStrictEquals(BigIntRange.isDisjoint(r_0_p1, r_m2_m1), true);
+  assertStrictEquals(BigIntRange.isDisjoint(r_0_p1, r_m2_m2), true);
+  assertStrictEquals(BigIntRange.isDisjoint(r_0_p1, r_m1_p1), false);
+  assertStrictEquals(BigIntRange.isDisjoint(r_0_p1, r_m2_p2), false);
+
+  assertStrictEquals(BigIntRange.isDisjoint(r_p1_p1, r_0_0), true);
+  assertStrictEquals(BigIntRange.isDisjoint(r_p1_p1, r_0_p1), false);
+  assertStrictEquals(BigIntRange.isDisjoint(r_p1_p1, r_p1_p1), false);
+  assertStrictEquals(BigIntRange.isDisjoint(r_p1_p1, r_0_p2), false);
+  assertStrictEquals(BigIntRange.isDisjoint(r_p1_p1, r_p1_p2), false);
+  assertStrictEquals(BigIntRange.isDisjoint(r_p1_p1, r_p2_p2), true);
+  assertStrictEquals(BigIntRange.isDisjoint(r_p1_p1, r_m1_0), true);
+  assertStrictEquals(BigIntRange.isDisjoint(r_p1_p1, r_m1_m1), true);
+  assertStrictEquals(BigIntRange.isDisjoint(r_p1_p1, r_m2_0), true);
+  assertStrictEquals(BigIntRange.isDisjoint(r_p1_p1, r_m2_m1), true);
+  assertStrictEquals(BigIntRange.isDisjoint(r_p1_p1, r_m2_m2), true);
+  assertStrictEquals(BigIntRange.isDisjoint(r_p1_p1, r_m1_p1), false);
+  assertStrictEquals(BigIntRange.isDisjoint(r_p1_p1, r_m2_p2), false);
+
+  assertStrictEquals(BigIntRange.isDisjoint(r_0_p2, r_0_0), false);
+  assertStrictEquals(BigIntRange.isDisjoint(r_0_p2, r_0_p1), false);
+  assertStrictEquals(BigIntRange.isDisjoint(r_0_p2, r_p1_p1), false);
+  assertStrictEquals(BigIntRange.isDisjoint(r_0_p2, r_0_p2), false);
+  assertStrictEquals(BigIntRange.isDisjoint(r_0_p2, r_p1_p2), false);
+  assertStrictEquals(BigIntRange.isDisjoint(r_0_p2, r_p2_p2), false);
+  assertStrictEquals(BigIntRange.isDisjoint(r_0_p2, r_m1_0), false);
+  assertStrictEquals(BigIntRange.isDisjoint(r_0_p2, r_m1_m1), true);
+  assertStrictEquals(BigIntRange.isDisjoint(r_0_p2, r_m2_0), false);
+  assertStrictEquals(BigIntRange.isDisjoint(r_0_p2, r_m2_m1), true);
+  assertStrictEquals(BigIntRange.isDisjoint(r_0_p2, r_m2_m2), true);
+  assertStrictEquals(BigIntRange.isDisjoint(r_0_p2, r_m1_p1), false);
+  assertStrictEquals(BigIntRange.isDisjoint(r_0_p2, r_m2_p2), false);
+
+  assertStrictEquals(BigIntRange.isDisjoint(r_p1_p2, r_0_0), true);
+  assertStrictEquals(BigIntRange.isDisjoint(r_p1_p2, r_0_p1), false);
+  assertStrictEquals(BigIntRange.isDisjoint(r_p1_p2, r_p1_p1), false);
+  assertStrictEquals(BigIntRange.isDisjoint(r_p1_p2, r_0_p2), false);
+  assertStrictEquals(BigIntRange.isDisjoint(r_p1_p2, r_p1_p2), false);
+  assertStrictEquals(BigIntRange.isDisjoint(r_p1_p2, r_p2_p2), false);
+  assertStrictEquals(BigIntRange.isDisjoint(r_p1_p2, r_m1_0), true);
+  assertStrictEquals(BigIntRange.isDisjoint(r_p1_p2, r_m1_m1), true);
+  assertStrictEquals(BigIntRange.isDisjoint(r_p1_p2, r_m2_0), true);
+  assertStrictEquals(BigIntRange.isDisjoint(r_p1_p2, r_m2_m1), true);
+  assertStrictEquals(BigIntRange.isDisjoint(r_p1_p2, r_m2_m2), true);
+  assertStrictEquals(BigIntRange.isDisjoint(r_p1_p2, r_m1_p1), false);
+  assertStrictEquals(BigIntRange.isDisjoint(r_p1_p2, r_m2_p2), false);
+
+  assertStrictEquals(BigIntRange.isDisjoint(r_p2_p2, r_0_0), true);
+  assertStrictEquals(BigIntRange.isDisjoint(r_p2_p2, r_0_p1), true);
+  assertStrictEquals(BigIntRange.isDisjoint(r_p2_p2, r_p1_p1), true);
+  assertStrictEquals(BigIntRange.isDisjoint(r_p2_p2, r_0_p2), false);
+  assertStrictEquals(BigIntRange.isDisjoint(r_p2_p2, r_p1_p2), false);
+  assertStrictEquals(BigIntRange.isDisjoint(r_p2_p2, r_p2_p2), false);
+  assertStrictEquals(BigIntRange.isDisjoint(r_p2_p2, r_m1_0), true);
+  assertStrictEquals(BigIntRange.isDisjoint(r_p2_p2, r_m1_m1), true);
+  assertStrictEquals(BigIntRange.isDisjoint(r_p2_p2, r_m2_0), true);
+  assertStrictEquals(BigIntRange.isDisjoint(r_p2_p2, r_m2_m1), true);
+  assertStrictEquals(BigIntRange.isDisjoint(r_p2_p2, r_m2_m2), true);
+  assertStrictEquals(BigIntRange.isDisjoint(r_p2_p2, r_m1_p1), true);
+  assertStrictEquals(BigIntRange.isDisjoint(r_p2_p2, r_m2_p2), false);
+
+  assertStrictEquals(BigIntRange.isDisjoint(r_m1_0, r_0_0), false);
+  assertStrictEquals(BigIntRange.isDisjoint(r_m1_0, r_0_p1), false);
+  assertStrictEquals(BigIntRange.isDisjoint(r_m1_0, r_p1_p1), true);
+  assertStrictEquals(BigIntRange.isDisjoint(r_m1_0, r_0_p2), false);
+  assertStrictEquals(BigIntRange.isDisjoint(r_m1_0, r_p1_p2), true);
+  assertStrictEquals(BigIntRange.isDisjoint(r_m1_0, r_p2_p2), true);
+  assertStrictEquals(BigIntRange.isDisjoint(r_m1_0, r_m1_0), false);
+  assertStrictEquals(BigIntRange.isDisjoint(r_m1_0, r_m1_m1), false);
+  assertStrictEquals(BigIntRange.isDisjoint(r_m1_0, r_m2_0), false);
+  assertStrictEquals(BigIntRange.isDisjoint(r_m1_0, r_m2_m1), false);
+  assertStrictEquals(BigIntRange.isDisjoint(r_m1_0, r_m2_m2), true);
+  assertStrictEquals(BigIntRange.isDisjoint(r_m1_0, r_m1_p1), false);
+  assertStrictEquals(BigIntRange.isDisjoint(r_m1_0, r_m2_p2), false);
+
+  assertStrictEquals(BigIntRange.isDisjoint(r_m1_m1, r_0_0), true);
+  assertStrictEquals(BigIntRange.isDisjoint(r_m1_m1, r_0_p1), true);
+  assertStrictEquals(BigIntRange.isDisjoint(r_m1_m1, r_p1_p1), true);
+  assertStrictEquals(BigIntRange.isDisjoint(r_m1_m1, r_0_p2), true);
+  assertStrictEquals(BigIntRange.isDisjoint(r_m1_m1, r_p1_p2), true);
+  assertStrictEquals(BigIntRange.isDisjoint(r_m1_m1, r_p2_p2), true);
+  assertStrictEquals(BigIntRange.isDisjoint(r_m1_m1, r_m1_0), false);
+  assertStrictEquals(BigIntRange.isDisjoint(r_m1_m1, r_m1_m1), false);
+  assertStrictEquals(BigIntRange.isDisjoint(r_m1_m1, r_m2_0), false);
+  assertStrictEquals(BigIntRange.isDisjoint(r_m1_m1, r_m2_m1), false);
+  assertStrictEquals(BigIntRange.isDisjoint(r_m1_m1, r_m2_m2), true);
+  assertStrictEquals(BigIntRange.isDisjoint(r_m1_m1, r_m1_p1), false);
+  assertStrictEquals(BigIntRange.isDisjoint(r_m1_m1, r_m2_p2), false);
+
+  assertStrictEquals(BigIntRange.isDisjoint(r_m2_0, r_0_0), false);
+  assertStrictEquals(BigIntRange.isDisjoint(r_m2_0, r_0_p1), false);
+  assertStrictEquals(BigIntRange.isDisjoint(r_m2_0, r_p1_p1), true);
+  assertStrictEquals(BigIntRange.isDisjoint(r_m2_0, r_0_p2), false);
+  assertStrictEquals(BigIntRange.isDisjoint(r_m2_0, r_p1_p2), true);
+  assertStrictEquals(BigIntRange.isDisjoint(r_m2_0, r_p2_p2), true);
+  assertStrictEquals(BigIntRange.isDisjoint(r_m2_0, r_m1_0), false);
+  assertStrictEquals(BigIntRange.isDisjoint(r_m2_0, r_m1_m1), false);
+  assertStrictEquals(BigIntRange.isDisjoint(r_m2_0, r_m2_0), false);
+  assertStrictEquals(BigIntRange.isDisjoint(r_m2_0, r_m2_m1), false);
+  assertStrictEquals(BigIntRange.isDisjoint(r_m2_0, r_m2_m2), false);
+  assertStrictEquals(BigIntRange.isDisjoint(r_m2_0, r_m1_p1), false);
+  assertStrictEquals(BigIntRange.isDisjoint(r_m2_0, r_m2_p2), false);
+
+  assertStrictEquals(BigIntRange.isDisjoint(r_m2_m1, r_0_0), true);
+  assertStrictEquals(BigIntRange.isDisjoint(r_m2_m1, r_0_p1), true);
+  assertStrictEquals(BigIntRange.isDisjoint(r_m2_m1, r_p1_p1), true);
+  assertStrictEquals(BigIntRange.isDisjoint(r_m2_m1, r_0_p2), true);
+  assertStrictEquals(BigIntRange.isDisjoint(r_m2_m1, r_p1_p2), true);
+  assertStrictEquals(BigIntRange.isDisjoint(r_m2_m1, r_p2_p2), true);
+  assertStrictEquals(BigIntRange.isDisjoint(r_m2_m1, r_m1_0), false);
+  assertStrictEquals(BigIntRange.isDisjoint(r_m2_m1, r_m1_m1), false);
+  assertStrictEquals(BigIntRange.isDisjoint(r_m2_m1, r_m2_0), false);
+  assertStrictEquals(BigIntRange.isDisjoint(r_m2_m1, r_m2_m1), false);
+  assertStrictEquals(BigIntRange.isDisjoint(r_m2_m1, r_m2_m2), false);
+  assertStrictEquals(BigIntRange.isDisjoint(r_m2_m1, r_m1_p1), false);
+  assertStrictEquals(BigIntRange.isDisjoint(r_m2_m1, r_m2_p2), false);
+
+  assertStrictEquals(BigIntRange.isDisjoint(r_m2_m2, r_0_0), true);
+  assertStrictEquals(BigIntRange.isDisjoint(r_m2_m2, r_0_p1), true);
+  assertStrictEquals(BigIntRange.isDisjoint(r_m2_m2, r_p1_p1), true);
+  assertStrictEquals(BigIntRange.isDisjoint(r_m2_m2, r_0_p2), true);
+  assertStrictEquals(BigIntRange.isDisjoint(r_m2_m2, r_p1_p2), true);
+  assertStrictEquals(BigIntRange.isDisjoint(r_m2_m2, r_p2_p2), true);
+  assertStrictEquals(BigIntRange.isDisjoint(r_m2_m2, r_m1_0), true);
+  assertStrictEquals(BigIntRange.isDisjoint(r_m2_m2, r_m1_m1), true);
+  assertStrictEquals(BigIntRange.isDisjoint(r_m2_m2, r_m2_0), false);
+  assertStrictEquals(BigIntRange.isDisjoint(r_m2_m2, r_m2_m1), false);
+  assertStrictEquals(BigIntRange.isDisjoint(r_m2_m2, r_m2_m2), false);
+  assertStrictEquals(BigIntRange.isDisjoint(r_m2_m2, r_m1_p1), true);
+  assertStrictEquals(BigIntRange.isDisjoint(r_m2_m2, r_m2_p2), false);
+
+  assertStrictEquals(BigIntRange.isDisjoint(r_m1_p1, r_0_0), false);
+  assertStrictEquals(BigIntRange.isDisjoint(r_m1_p1, r_0_p1), false);
+  assertStrictEquals(BigIntRange.isDisjoint(r_m1_p1, r_p1_p1), false);
+  assertStrictEquals(BigIntRange.isDisjoint(r_m1_p1, r_0_p2), false);
+  assertStrictEquals(BigIntRange.isDisjoint(r_m1_p1, r_p1_p2), false);
+  assertStrictEquals(BigIntRange.isDisjoint(r_m1_p1, r_p2_p2), true);
+  assertStrictEquals(BigIntRange.isDisjoint(r_m1_p1, r_m1_0), false);
+  assertStrictEquals(BigIntRange.isDisjoint(r_m1_p1, r_m1_m1), false);
+  assertStrictEquals(BigIntRange.isDisjoint(r_m1_p1, r_m2_0), false);
+  assertStrictEquals(BigIntRange.isDisjoint(r_m1_p1, r_m2_m1), false);
+  assertStrictEquals(BigIntRange.isDisjoint(r_m1_p1, r_m2_m2), true);
+  assertStrictEquals(BigIntRange.isDisjoint(r_m1_p1, r_m1_p1), false);
+  assertStrictEquals(BigIntRange.isDisjoint(r_m1_p1, r_m2_p2), false);
+
+  assertStrictEquals(BigIntRange.isDisjoint(r_m2_p2, r_0_0), false);
+  assertStrictEquals(BigIntRange.isDisjoint(r_m2_p2, r_0_p1), false);
+  assertStrictEquals(BigIntRange.isDisjoint(r_m2_p2, r_p1_p1), false);
+  assertStrictEquals(BigIntRange.isDisjoint(r_m2_p2, r_0_p2), false);
+  assertStrictEquals(BigIntRange.isDisjoint(r_m2_p2, r_p1_p2), false);
+  assertStrictEquals(BigIntRange.isDisjoint(r_m2_p2, r_p2_p2), false);
+  assertStrictEquals(BigIntRange.isDisjoint(r_m2_p2, r_m1_0), false);
+  assertStrictEquals(BigIntRange.isDisjoint(r_m2_p2, r_m1_m1), false);
+  assertStrictEquals(BigIntRange.isDisjoint(r_m2_p2, r_m2_0), false);
+  assertStrictEquals(BigIntRange.isDisjoint(r_m2_p2, r_m2_m1), false);
+  assertStrictEquals(BigIntRange.isDisjoint(r_m2_p2, r_m2_m2), false);
+  assertStrictEquals(BigIntRange.isDisjoint(r_m2_p2, r_m1_p1), false);
+  assertStrictEquals(BigIntRange.isDisjoint(r_m2_p2, r_m2_p2), false);
+
+  assertThrows(
+    () => {
+      BigIntRange.isDisjoint(undefined as unknown as [0n, 0n], [0n, 0n]);
+    },
+    TypeError,
+    "`a` must be a range of `bigint`.",
+  );
+  assertThrows(
+    () => {
+      BigIntRange.isDisjoint([0n, 0n], undefined as unknown as [0n, 0n]);
+    },
+    TypeError,
+    "`b` must be a range of `bigint`.",
+  );
+});

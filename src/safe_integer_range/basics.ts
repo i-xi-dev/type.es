@@ -46,3 +46,50 @@ export function toIterable<T extends safeint>(
 
 // toArray<T extends safeint>(): Array<T> → 実装しない（要素数が多いと配列を作れないので。（要素数上限はECMAの仕様上はMAX_SAFE_INTEGERだが、実装はそれよりはるかに小さいっぽい））
 // toSet<T extends safeint>(): Set<T> → 同上
+
+// a equals b (b equals a)
+export function equals<T extends safeint>(
+  a: SafeIntegerRange<T>,
+  b: SafeIntegerRange<T>,
+): boolean {
+  assertSafeIntegerRange(a, "a");
+  assertSafeIntegerRange(b, "b");
+
+  const [aMin, aMax] = a;
+  const [bMin, bMax] = b;
+  return (aMin === bMin) && (aMax === bMax);
+}
+
+// a overlaps b (b overlaps a)
+export function overlaps<T extends safeint>(
+  a: SafeIntegerRange<T>,
+  b: SafeIntegerRange<T>,
+): boolean {
+  assertSafeIntegerRange(a, "a");
+  assertSafeIntegerRange(b, "b");
+
+  const [aMin, aMax] = a;
+  const [bMin, bMax] = b;
+  return (aMin <= bMax) && (aMax >= bMin);
+}
+
+// a covers b (b isCoveredBy a)
+export function covers<T extends safeint>(
+  a: SafeIntegerRange<T>,
+  b: SafeIntegerRange<T>,
+): boolean {
+  assertSafeIntegerRange(a, "a");
+  assertSafeIntegerRange(b, "b");
+
+  const [aMin, aMax] = a;
+  const [bMin, bMax] = b;
+  return (aMin <= bMin) && (aMax >= bMax);
+}
+
+// a isDisjointFrom b (b isDisjointFrom a)
+export function isDisjoint<T extends safeint>(
+  a: SafeIntegerRange<T>,
+  b: SafeIntegerRange<T>,
+): boolean {
+  return !overlaps(a, b);
+}

@@ -47,6 +47,7 @@ export class BigIntRange<T extends bigint> implements IntegerRange<T> {
     return this.from(args as BigIntRange.Tuple<T>);
   }
 
+  /** @deprecated */
   rangeEquals<U extends bigint>(otherRangeLike: BigIntRange.Like<U>): boolean {
     try {
       const otherRange = IntegerRange.Struct.fromRangeLike(otherRangeLike);
@@ -56,6 +57,7 @@ export class BigIntRange<T extends bigint> implements IntegerRange<T> {
     }
   }
 
+  /** @deprecated */
   overlaps<U extends bigint>(otherRangeLike: BigIntRange.Like<U>): boolean {
     try {
       const otherRange = IntegerRange.Struct.fromRangeLike(otherRangeLike);
@@ -65,6 +67,7 @@ export class BigIntRange<T extends bigint> implements IntegerRange<T> {
     }
   }
 
+  /** @deprecated */
   covers<U extends bigint>(otherRangeLike: BigIntRange.Like<U>): boolean {
     try {
       const otherRange = IntegerRange.Struct.fromRangeLike(otherRangeLike);
@@ -74,6 +77,7 @@ export class BigIntRange<T extends bigint> implements IntegerRange<T> {
     }
   }
 
+  /** @deprecated */
   isDisjointFrom<U extends bigint>(
     otherRangeLike: BigIntRange.Like<U>,
   ): boolean {

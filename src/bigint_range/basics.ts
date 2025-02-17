@@ -43,3 +43,50 @@ export function toIterable<T extends bigint>(
 
 // toArray<T extends bigint>(): Array<T> → 実装しない（要素数が多いと配列を作れないので。（要素数上限はECMAの仕様上はMAX_SAFE_INTEGERだが、実装はそれよりはるかに小さいっぽい））
 // toSet<T extends bigint>(): Set<T> → 同上
+
+// a equals b (b equals a)
+export function equals<T extends bigint>(
+  a: BigIntRange<T>,
+  b: BigIntRange<T>,
+): boolean {
+  assertBigIntRange(a, "a");
+  assertBigIntRange(b, "b");
+
+  const [aMin, aMax] = a;
+  const [bMin, bMax] = b;
+  return (aMin === bMin) && (aMax === bMax);
+}
+
+// a overlaps b (b overlaps a)
+export function overlaps<T extends bigint>(
+  a: BigIntRange<T>,
+  b: BigIntRange<T>,
+): boolean {
+  assertBigIntRange(a, "a");
+  assertBigIntRange(b, "b");
+
+  const [aMin, aMax] = a;
+  const [bMin, bMax] = b;
+  return (aMin <= bMax) && (aMax >= bMin);
+}
+
+// a covers b (b isCoveredBy a)
+export function covers<T extends bigint>(
+  a: BigIntRange<T>,
+  b: BigIntRange<T>,
+): boolean {
+  assertBigIntRange(a, "a");
+  assertBigIntRange(b, "b");
+
+  const [aMin, aMax] = a;
+  const [bMin, bMax] = b;
+  return (aMin <= bMin) && (aMax >= bMax);
+}
+
+// a isDisjointFrom b (b isDisjointFrom a)
+export function isDisjoint<T extends bigint>(
+  a: BigIntRange<T>,
+  b: BigIntRange<T>,
+): boolean {
+  return !overlaps(a, b);
+}

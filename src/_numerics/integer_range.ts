@@ -37,6 +37,7 @@ export namespace IntegerRange {
 
   export type Like<T extends int> = Tuple<T> | Struct<T>;
 
+  /** @deprecated */
   export function rangeEquals<T extends int, U extends int>(
     self: Struct<T>,
     other: Struct<U>,
@@ -45,6 +46,7 @@ export namespace IntegerRange {
       ((self.max as int) === (other.max as int));
   }
 
+  /** @deprecated */
   export function rangeOverlaps<T extends int, U extends int>(
     self: Struct<T>,
     other: Struct<U>,
@@ -53,6 +55,7 @@ export namespace IntegerRange {
       (self.min <= other.max) && (self.max >= other.min);
   }
 
+  /** @deprecated */
   export function rangeCovers<T extends int, U extends int>(
     self: Struct<T>,
     other: Struct<U>,
@@ -61,6 +64,7 @@ export namespace IntegerRange {
       (self.min <= other.min) && (self.max >= other.max);
   }
 
+  /** @deprecated */
   export function rangeIsDisjointFrom<T extends int, U extends int>(
     self: Struct<T>,
     other: Struct<U>,
