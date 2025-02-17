@@ -1,3 +1,4 @@
+import { _PropertyValueSetBase } from "./_propval_set_base.ts";
 import {
   type ArrayOrSet,
   type codepoint,
@@ -20,11 +21,9 @@ function _toPlaneSet(planes: ArrayOrSet<plane>): Set<plane> {
   return new Set(planes);
 }
 
-export class PlaneSet {
-  readonly #planes: Set<plane>;
-
+export class PlaneSet extends _PropertyValueSetBase<plane> {
   constructor(planes: ArrayOrSet<plane>) {
-    this.#planes = new Set([..._toPlaneSet(planes)].sort());
+    super([..._toPlaneSet(planes)].sort());
   }
 
   includesRune(rune: rune): boolean {
@@ -38,14 +37,10 @@ export class PlaneSet {
     assertCodePoint(codePoint, "codePoint");
 
     const testPlane = planeOfCodePoint(codePoint);
-    return (this.#planes.size > 0) ? this.#planes.has(testPlane) : false;
+    return (this.size > 0) ? this.has(testPlane) : false;
   }
 
-  //TODO
-  // findRunes(value: usvstring): Array<{  rune: rune, runeIndexes: safeint[], }> {
-  // }
-
-  unionWith(other: PlaneSet | ArrayOrSet<plane>): PlaneSet {
+  unionWith(other: this | ArrayOrSet<plane>): this {
     let otherPlanes: Set<plane>;
     if (other instanceof PlaneSet) {
       otherPlanes = new Set(other.toArray());
@@ -53,13 +48,7 @@ export class PlaneSet {
       otherPlanes = _toPlaneSet(other);
     }
 
-    const unionedPlanes = otherPlanes.union(this.#planes);
-    return new PlaneSet(unionedPlanes);
+    const unionedPlanes = otherPlanes.union(this);
+    return Reflect.construct(this.constructor, [unionedPlanes]);
   }
-
-  toArray(): Array<plane> {
-    return [...this.#planes];
-  }
-
-  // [Symbol.iterator]()
 }

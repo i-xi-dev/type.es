@@ -1,3 +1,4 @@
+import { _PropertyValueSetBase } from "./_propval_set_base.ts";
 import {
   type ArrayOrSet,
   type codepoint,
@@ -26,15 +27,17 @@ export type ScriptSetMatchingOptions = {
   excludeScx?: boolean;
 };
 
-export class ScriptSet {
-  readonly #scripts: Set<script>;
+export class ScriptSet extends _PropertyValueSetBase<script> {
+  readonly #excludeScx: boolean;
   readonly #regex: RegExp;
 
   constructor(scripts: ArrayOrSet<script>, options?: ScriptSetMatchingOptions) {
-    this.#scripts = new Set([..._toScriptSet(scripts)].sort());
+    super([..._toScriptSet(scripts)].sort());
 
-    const pattern = [...this.#scripts].map((script) => {
-      return (options?.excludeScx === true)
+    this.#excludeScx = options?.excludeScx === true;
+
+    const pattern = [...this].map((script) => {
+      return this.#excludeScx
         ? `\\p{sc=${script}}`
         : `\\p{sc=${script}}\\p{scx=${script}}`;
     }).join();
@@ -43,7 +46,7 @@ export class ScriptSet {
 
   includesRune(rune: rune): boolean {
     assertRune(rune, "rune");
-    return (this.#scripts.size > 0) ? this.#regex.test(rune) : false;
+    return (this.size > 0) ? this.#regex.test(rune) : false;
   }
 
   includesCodePoint(codePoint: codepoint): boolean {
@@ -53,11 +56,7 @@ export class ScriptSet {
     return this.includesRune(rune);
   }
 
-  //TODO
-  // findRunes(value: usvstring): Array<{  rune: rune, runeIndexes: safeint[], }> {
-  // }
-
-  unionWith(other: ScriptSet | ArrayOrSet<script>): ScriptSet {
+  unionWith(other: this | ArrayOrSet<script>): this {
     let otherScripts: Set<script>;
     if (other instanceof ScriptSet) {
       otherScripts = new Set(other.toArray());
@@ -65,13 +64,9 @@ export class ScriptSet {
       otherScripts = _toScriptSet(other);
     }
 
-    const unionedScripts = otherScripts.union(this.#scripts);
-    return new ScriptSet(unionedScripts);
+    const unionedScripts = otherScripts.union(this);
+    return Reflect.construct(this.constructor, [unionedScripts, {
+      excludeScx: this.#excludeScx,
+    }]);
   }
-
-  toArray(): Array<script> {
-    return [...this.#scripts];
-  }
-
-  // [Symbol.iterator]()
 }

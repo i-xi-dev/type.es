@@ -1,3 +1,4 @@
+import { _PropertyValueSetBase } from "./_propval_set_base.ts";
 import {
   type ArrayOrSet,
   type codepoint,
@@ -22,20 +23,19 @@ function _toGcSet(gcs: ArrayOrSet<gc>): Set<gc> {
   return new Set(gcs);
 }
 
-export class GeneralCategorySet {
-  readonly #gcs: Set<gc>;
+export class GeneralCategorySet extends _PropertyValueSetBase<gc> {
   readonly #regex: RegExp;
 
   constructor(gcs: ArrayOrSet<gc>) {
-    this.#gcs = new Set([..._toGcSet(gcs)].sort());
+    super([..._toGcSet(gcs)].sort());
 
-    const pattern = [...this.#gcs].map((gc) => `\\p{gc=${gc}}`).join();
+    const pattern = [...this].map((gc) => `\\p{gc=${gc}}`).join();
     this.#regex = new RegExp(`^[${pattern}]$`, "v");
   }
 
   includesRune(rune: rune): boolean {
     assertRune(rune, "rune");
-    return (this.#gcs.size > 0) ? this.#regex.test(rune) : false;
+    return (this.size > 0) ? this.#regex.test(rune) : false;
   }
 
   includesCodePoint(codePoint: codepoint): boolean {
@@ -45,11 +45,7 @@ export class GeneralCategorySet {
     return this.includesRune(rune);
   }
 
-  //TODO
-  // findRunes(value: usvstring): Array<{  rune: rune, runeIndexes: safeint[], }> {
-  // }
-
-  unionWith(other: GeneralCategorySet | ArrayOrSet<gc>): GeneralCategorySet {
+  unionWith(other: this | ArrayOrSet<gc>): this {
     let otherGcs: Set<gc>;
     if (other instanceof GeneralCategorySet) {
       otherGcs = new Set(other.toArray());
@@ -57,13 +53,7 @@ export class GeneralCategorySet {
       otherGcs = _toGcSet(other);
     }
 
-    const unionedGcs = otherGcs.union(this.#gcs);
-    return new GeneralCategorySet(unionedGcs);
+    const unionedGcs = otherGcs.union(this);
+    return Reflect.construct(this.constructor, [unionedGcs]);
   }
-
-  toArray(): Array<gc> {
-    return [...this.#gcs];
-  }
-
-  // [Symbol.iterator]()
 }

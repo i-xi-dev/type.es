@@ -35,6 +35,15 @@ Deno.test("new Unicode.GeneralCategorySet()", () => {
   );
 });
 
+Deno.test("Unicode.GeneralCategorySet.prototype.size", () => {
+  const gcs0 = new Unicode.GeneralCategorySet([]);
+  assertStrictEquals(gcs0.size, 0);
+  const gcs1 = new Unicode.GeneralCategorySet(["Lu"]);
+  assertStrictEquals(gcs1.size, 1);
+  const gcs2 = new Unicode.GeneralCategorySet(["Lu", "Ll", "Lu"]);
+  assertStrictEquals(gcs2.size, 2);
+});
+
 Deno.test("Unicode.GeneralCategorySet.prototype.includesRune()", () => {
   const gcs1 = new Unicode.GeneralCategorySet(["Lu"]);
   assertStrictEquals(gcs1.includesRune("L"), true);
@@ -110,9 +119,21 @@ Deno.test("Unicode.GeneralCategorySet.prototype.includesCodePoint()", () => {
   );
 });
 
+Deno.test("Unicode.GeneralCategorySet.prototype.findMatches()", () => {
+  const s1 = new Unicode.GeneralCategorySet(["Lu"]);
+  const r1a = s1.findMatches("123DE6GhijE");
+  assertStrictEquals(
+    JSON.stringify([...r1a.entries()]),
+    `[["D",[3]],["E",[4,10]],["G",[6]]]`,
+  );
+  const r1b = s1.findMatches("");
+  assertStrictEquals(JSON.stringify([...r1b.entries()]), `[]`);
+});
+
 Deno.test("Unicode.GeneralCategorySet.prototype.unionWith()", () => {
   const gcs4 = new Unicode.GeneralCategorySet(["Lu", "Ll"]).unionWith([]);
   assertStrictEquals(JSON.stringify(gcs4.toArray()), `["Ll","Lu"]`);
+  assertStrictEquals(gcs4 instanceof Unicode.GeneralCategorySet, true);
 
   const gcs4b = new Unicode.GeneralCategorySet(["Lu", "Ll", "Lu"]).unionWith([
     "Lu",
@@ -145,6 +166,30 @@ Deno.test("Unicode.GeneralCategorySet.prototype.unionWith()", () => {
   assertStrictEquals(JSON.stringify(gcs6y.toArray()), `[]`);
 });
 
+Deno.test("Unicode.GeneralCategorySet.prototype.has()", () => {
+  const gcs0 = new Unicode.GeneralCategorySet([]);
+  assertStrictEquals(gcs0.has("Lu"), false);
+  assertStrictEquals(gcs0.has("Ll"), false);
+  assertStrictEquals(gcs0.has("L"), false);
+  const gcs1 = new Unicode.GeneralCategorySet(["Lu"]);
+  assertStrictEquals(gcs1.has("Lu"), true);
+  assertStrictEquals(gcs1.has("Ll"), false);
+  assertStrictEquals(gcs1.has("L"), false);
+  const gcs2 = new Unicode.GeneralCategorySet(["Lu", "Ll", "Lu"]);
+  assertStrictEquals(gcs2.has("Lu"), true);
+  assertStrictEquals(gcs2.has("Ll"), true);
+  assertStrictEquals(gcs2.has("L"), false);
+});
+
+Deno.test("Unicode.GeneralCategorySet.prototype.keys()", () => {
+  const gcs0 = new Unicode.GeneralCategorySet([]);
+  assertStrictEquals(JSON.stringify([...gcs0.keys()]), `[]`);
+  const gcs1 = new Unicode.GeneralCategorySet(["Lu"]);
+  assertStrictEquals(JSON.stringify([...gcs1.keys()]), `["Lu"]`);
+  const gcs2 = new Unicode.GeneralCategorySet(["Lu", "Ll", "Lu"]);
+  assertStrictEquals(JSON.stringify([...gcs2.keys()]), `["Ll","Lu"]`);
+});
+
 Deno.test("Unicode.GeneralCategorySet.prototype.toArray()", () => {
   const gcs4 = new Unicode.GeneralCategorySet(["Lu", "Ll"]);
   assertStrictEquals(JSON.stringify(gcs4.toArray()), `["Ll","Lu"]`);
@@ -154,4 +199,15 @@ Deno.test("Unicode.GeneralCategorySet.prototype.toArray()", () => {
 
   const gcs5 = new Unicode.GeneralCategorySet([]);
   assertStrictEquals(JSON.stringify(gcs5.toArray()), `[]`);
+});
+
+Deno.test("Unicode.GeneralCategorySet.prototype.toSet()", () => {
+  const gcs4 = new Unicode.GeneralCategorySet(["Lu", "Ll"]);
+  assertStrictEquals(JSON.stringify([...gcs4.toSet()]), `["Ll","Lu"]`);
+
+  const gcs4b = new Unicode.GeneralCategorySet(["Lu", "Ll", "Lu"]);
+  assertStrictEquals(JSON.stringify([...gcs4b.toSet()]), `["Ll","Lu"]`);
+
+  const gcs5 = new Unicode.GeneralCategorySet([]);
+  assertStrictEquals(JSON.stringify([...gcs5.toSet()]), `[]`);
 });
