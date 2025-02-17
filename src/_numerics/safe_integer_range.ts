@@ -57,18 +57,6 @@ export class SafeIntegerRange<T extends number> implements IntegerRange<T> {
   }
 
   /** @deprecated */
-  overlaps<U extends number>(
-    otherRangeLike: SafeIntegerRange.Like<U>,
-  ): boolean {
-    try {
-      const otherRange = IntegerRange.Struct.fromRangeLike(otherRangeLike);
-      return IntegerRange.rangeOverlaps(this, otherRange);
-    } catch {
-      return false;
-    }
-  }
-
-  /** @deprecated */
   covers<U extends number>(otherRangeLike: SafeIntegerRange.Like<U>): boolean {
     try {
       const otherRange = IntegerRange.Struct.fromRangeLike(otherRangeLike);

@@ -141,53 +141,6 @@ Deno.test("BigIntRange.prototype.rangeEquals()", () => {
   assertStrictEquals(range32.rangeEquals(range10b), false);
 });
 
-Deno.test("BigIntRange.prototype.overlaps()", () => {
-  assertStrictEquals(range00.overlaps(range00), true);
-  assertStrictEquals(range00.overlaps([0n]), true);
-  assertStrictEquals(range00.overlaps([0n, 0n]), true);
-  assertStrictEquals(range00.overlaps({ min: 0n, max: 0n }), true);
-  assertStrictEquals(range00.overlaps(range01), true);
-  assertStrictEquals(range00.overlaps(range10), true);
-
-  assertStrictEquals(range00.overlaps(range00b), true);
-  assertStrictEquals(range00.overlaps(range01b), true);
-  assertStrictEquals(range00.overlaps(range10b), true);
-
-  assertStrictEquals(range01.overlaps(range00), true);
-  assertStrictEquals(range01.overlaps([0n, 1n]), true);
-  assertStrictEquals(range01.overlaps({ min: 0n, max: 1n }), true);
-  assertStrictEquals(range01.overlaps(range01), true);
-  assertStrictEquals(range01.overlaps(range10), true);
-
-  assertStrictEquals(range01.overlaps(range00b), true);
-  assertStrictEquals(range01.overlaps(range01b), true);
-  assertStrictEquals(range01.overlaps(range10b), true);
-
-  assertStrictEquals(range10.overlaps(range00), true);
-  assertStrictEquals(range10.overlaps(range01), true);
-  assertStrictEquals(range10.overlaps(range10), true);
-
-  assertStrictEquals(range10.overlaps(range00b), true);
-  assertStrictEquals(range10.overlaps(range01b), true);
-  assertStrictEquals(range10.overlaps(range10b), true);
-
-  assertStrictEquals(range23.overlaps(range00), false);
-  assertStrictEquals(range23.overlaps(range01), false);
-  assertStrictEquals(range23.overlaps(range10), false);
-
-  assertStrictEquals(range23.overlaps(range00b), false);
-  assertStrictEquals(range23.overlaps(range01b), false);
-  assertStrictEquals(range23.overlaps(range10b), false);
-
-  assertStrictEquals(range32.overlaps(range00), false);
-  assertStrictEquals(range32.overlaps(range01), false);
-  assertStrictEquals(range32.overlaps(range10), false);
-
-  assertStrictEquals(range32.overlaps(range00b), false);
-  assertStrictEquals(range32.overlaps(range01b), false);
-  assertStrictEquals(range32.overlaps(range10b), false);
-});
-
 Deno.test("BigIntRange.prototype.covers()", () => {
   assertStrictEquals(range00.covers(range00), true);
   assertStrictEquals(range00.covers([0n]), true);

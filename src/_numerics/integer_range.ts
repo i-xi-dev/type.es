@@ -10,7 +10,6 @@ export interface IntegerRange<T extends int> {
   get max(): T;
   get size(): safeint;
   rangeEquals(otherRangeLike: IntegerRange.Like<T>): boolean;
-  overlaps(otherRangeLike: IntegerRange.Like<T>): boolean;
   covers(otherRangeLike: IntegerRange.Like<T>): boolean; // isSuperrangeOf
   //XXX isCoveredBy(otherRangeLike: IntegerRange.Like<T>): boolean; // isSubrangeOf
   isAdjacentTo(otherRangeLike: IntegerRange.Like<T>): boolean;

@@ -58,16 +58,6 @@ export class BigIntRange<T extends bigint> implements IntegerRange<T> {
   }
 
   /** @deprecated */
-  overlaps<U extends bigint>(otherRangeLike: BigIntRange.Like<U>): boolean {
-    try {
-      const otherRange = IntegerRange.Struct.fromRangeLike(otherRangeLike);
-      return IntegerRange.rangeOverlaps(this, otherRange);
-    } catch {
-      return false;
-    }
-  }
-
-  /** @deprecated */
   covers<U extends bigint>(otherRangeLike: BigIntRange.Like<U>): boolean {
     try {
       const otherRange = IntegerRange.Struct.fromRangeLike(otherRangeLike);
