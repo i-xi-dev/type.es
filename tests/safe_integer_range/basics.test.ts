@@ -896,3 +896,202 @@ Deno.test("SafeIntegerRange.isDisjoint()", () => {
     "`b` must be a range of safe integer.",
   );
 });
+
+Deno.test("SafeIntegerRange.isAdjacent()", () => {
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_0_0, r_0_0), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_0_0, r_0_p1), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_0_0, r_p1_p1), true);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_0_0, r_0_p2), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_0_0, r_p1_p2), true);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_0_0, r_p2_p2), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_0_0, r_m1_0), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_0_0, r_m1_m1), true);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_0_0, r_m2_0), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_0_0, r_m2_m1), true);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_0_0, r_m2_m2), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_0_0, r_m1_p1), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_0_0, r_m2_p2), false);
+
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_0_p1, r_0_0), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_0_p1, r_0_p1), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_0_p1, r_p1_p1), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_0_p1, r_0_p2), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_0_p1, r_p1_p2), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_0_p1, r_p2_p2), true);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_0_p1, r_m1_0), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_0_p1, r_m1_m1), true);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_0_p1, r_m2_0), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_0_p1, r_m2_m1), true);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_0_p1, r_m2_m2), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_0_p1, r_m1_p1), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_0_p1, r_m2_p2), false);
+
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_p1_p1, r_0_0), true);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_p1_p1, r_0_p1), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_p1_p1, r_p1_p1), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_p1_p1, r_0_p2), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_p1_p1, r_p1_p2), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_p1_p1, r_p2_p2), true);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_p1_p1, r_m1_0), true);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_p1_p1, r_m1_m1), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_p1_p1, r_m2_0), true);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_p1_p1, r_m2_m1), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_p1_p1, r_m2_m2), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_p1_p1, r_m1_p1), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_p1_p1, r_m2_p2), false);
+
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_0_p2, r_0_0), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_0_p2, r_0_p1), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_0_p2, r_p1_p1), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_0_p2, r_0_p2), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_0_p2, r_p1_p2), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_0_p2, r_p2_p2), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_0_p2, r_m1_0), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_0_p2, r_m1_m1), true);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_0_p2, r_m2_0), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_0_p2, r_m2_m1), true);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_0_p2, r_m2_m2), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_0_p2, r_m1_p1), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_0_p2, r_m2_p2), false);
+
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_p1_p2, r_0_0), true);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_p1_p2, r_0_p1), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_p1_p2, r_p1_p1), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_p1_p2, r_0_p2), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_p1_p2, r_p1_p2), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_p1_p2, r_p2_p2), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_p1_p2, r_m1_0), true);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_p1_p2, r_m1_m1), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_p1_p2, r_m2_0), true);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_p1_p2, r_m2_m1), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_p1_p2, r_m2_m2), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_p1_p2, r_m1_p1), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_p1_p2, r_m2_p2), false);
+
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_p2_p2, r_0_0), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_p2_p2, r_0_p1), true);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_p2_p2, r_p1_p1), true);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_p2_p2, r_0_p2), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_p2_p2, r_p1_p2), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_p2_p2, r_p2_p2), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_p2_p2, r_m1_0), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_p2_p2, r_m1_m1), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_p2_p2, r_m2_0), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_p2_p2, r_m2_m1), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_p2_p2, r_m2_m2), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_p2_p2, r_m1_p1), true);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_p2_p2, r_m2_p2), false);
+
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_m1_0, r_0_0), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_m1_0, r_0_p1), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_m1_0, r_p1_p1), true);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_m1_0, r_0_p2), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_m1_0, r_p1_p2), true);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_m1_0, r_p2_p2), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_m1_0, r_m1_0), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_m1_0, r_m1_m1), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_m1_0, r_m2_0), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_m1_0, r_m2_m1), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_m1_0, r_m2_m2), true);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_m1_0, r_m1_p1), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_m1_0, r_m2_p2), false);
+
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_m1_m1, r_0_0), true);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_m1_m1, r_0_p1), true);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_m1_m1, r_p1_p1), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_m1_m1, r_0_p2), true);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_m1_m1, r_p1_p2), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_m1_m1, r_p2_p2), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_m1_m1, r_m1_0), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_m1_m1, r_m1_m1), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_m1_m1, r_m2_0), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_m1_m1, r_m2_m1), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_m1_m1, r_m2_m2), true);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_m1_m1, r_m1_p1), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_m1_m1, r_m2_p2), false);
+
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_m2_0, r_0_0), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_m2_0, r_0_p1), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_m2_0, r_p1_p1), true);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_m2_0, r_0_p2), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_m2_0, r_p1_p2), true);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_m2_0, r_p2_p2), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_m2_0, r_m1_0), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_m2_0, r_m1_m1), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_m2_0, r_m2_0), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_m2_0, r_m2_m1), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_m2_0, r_m2_m2), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_m2_0, r_m1_p1), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_m2_0, r_m2_p2), false);
+
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_m2_m1, r_0_0), true);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_m2_m1, r_0_p1), true);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_m2_m1, r_p1_p1), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_m2_m1, r_0_p2), true);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_m2_m1, r_p1_p2), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_m2_m1, r_p2_p2), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_m2_m1, r_m1_0), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_m2_m1, r_m1_m1), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_m2_m1, r_m2_0), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_m2_m1, r_m2_m1), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_m2_m1, r_m2_m2), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_m2_m1, r_m1_p1), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_m2_m1, r_m2_p2), false);
+
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_m2_m2, r_0_0), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_m2_m2, r_0_p1), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_m2_m2, r_p1_p1), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_m2_m2, r_0_p2), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_m2_m2, r_p1_p2), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_m2_m2, r_p2_p2), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_m2_m2, r_m1_0), true);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_m2_m2, r_m1_m1), true);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_m2_m2, r_m2_0), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_m2_m2, r_m2_m1), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_m2_m2, r_m2_m2), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_m2_m2, r_m1_p1), true);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_m2_m2, r_m2_p2), false);
+
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_m1_p1, r_0_0), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_m1_p1, r_0_p1), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_m1_p1, r_p1_p1), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_m1_p1, r_0_p2), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_m1_p1, r_p1_p2), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_m1_p1, r_p2_p2), true);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_m1_p1, r_m1_0), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_m1_p1, r_m1_m1), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_m1_p1, r_m2_0), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_m1_p1, r_m2_m1), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_m1_p1, r_m2_m2), true);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_m1_p1, r_m1_p1), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_m1_p1, r_m2_p2), false);
+
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_m2_p2, r_0_0), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_m2_p2, r_0_p1), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_m2_p2, r_p1_p1), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_m2_p2, r_0_p2), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_m2_p2, r_p1_p2), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_m2_p2, r_p2_p2), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_m2_p2, r_m1_0), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_m2_p2, r_m1_m1), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_m2_p2, r_m2_0), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_m2_p2, r_m2_m1), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_m2_p2, r_m2_m2), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_m2_p2, r_m1_p1), false);
+  assertStrictEquals(SafeIntegerRange.isAdjacent(r_m2_p2, r_m2_p2), false);
+
+  assertThrows(
+    () => {
+      SafeIntegerRange.isAdjacent(undefined as unknown as [0, 0], [0, 0]);
+    },
+    TypeError,
+    "`a` must be a range of safe integer.",
+  );
+  assertThrows(
+    () => {
+      SafeIntegerRange.isAdjacent([0, 0], undefined as unknown as [0, 0]);
+    },
+    TypeError,
+    "`b` must be a range of safe integer.",
+  );
+});

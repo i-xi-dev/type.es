@@ -18,8 +18,10 @@ export abstract class _PropertyValueSetBase<T> implements ReadonlySetLike<T> {
     return this.#set.size;
   }
 
+  //TODO 命名 includesか？
   abstract includesRune(rune: rune): boolean;
 
+  //TODO 命名 includesか？
   abstract includesCodePoint(codePoint: codepoint): boolean;
 
   findMatches(text: usvstring): Map<rune, Array<safeint>> {

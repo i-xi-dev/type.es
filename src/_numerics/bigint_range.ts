@@ -47,15 +47,6 @@ export class BigIntRange<T extends bigint> implements IntegerRange<T> {
     return this.from(args as BigIntRange.Tuple<T>);
   }
 
-  isAdjacentTo<U extends bigint>(otherRangeLike: BigIntRange.Like<U>): boolean {
-    try {
-      const otherRange = IntegerRange.Struct.fromRangeLike(otherRangeLike);
-      return IntegerRange.rangeIsAdjacentTo(this, otherRange);
-    } catch {
-      return false;
-    }
-  }
-
   /** @deprecated */
   includes(test: bigint): test is T {
     return isBigInt(test) && (test >= this.#min) && (test <= this.#max);

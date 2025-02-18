@@ -904,3 +904,202 @@ Deno.test("BigIntRange.isDisjoint()", () => {
     "`b` must be a range of `bigint`.",
   );
 });
+
+Deno.test("BigIntRange.isAdjacent()", () => {
+  assertStrictEquals(BigIntRange.isAdjacent(r_0_0, r_0_0), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_0_0, r_0_p1), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_0_0, r_p1_p1), true);
+  assertStrictEquals(BigIntRange.isAdjacent(r_0_0, r_0_p2), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_0_0, r_p1_p2), true);
+  assertStrictEquals(BigIntRange.isAdjacent(r_0_0, r_p2_p2), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_0_0, r_m1_0), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_0_0, r_m1_m1), true);
+  assertStrictEquals(BigIntRange.isAdjacent(r_0_0, r_m2_0), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_0_0, r_m2_m1), true);
+  assertStrictEquals(BigIntRange.isAdjacent(r_0_0, r_m2_m2), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_0_0, r_m1_p1), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_0_0, r_m2_p2), false);
+
+  assertStrictEquals(BigIntRange.isAdjacent(r_0_p1, r_0_0), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_0_p1, r_0_p1), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_0_p1, r_p1_p1), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_0_p1, r_0_p2), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_0_p1, r_p1_p2), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_0_p1, r_p2_p2), true);
+  assertStrictEquals(BigIntRange.isAdjacent(r_0_p1, r_m1_0), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_0_p1, r_m1_m1), true);
+  assertStrictEquals(BigIntRange.isAdjacent(r_0_p1, r_m2_0), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_0_p1, r_m2_m1), true);
+  assertStrictEquals(BigIntRange.isAdjacent(r_0_p1, r_m2_m2), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_0_p1, r_m1_p1), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_0_p1, r_m2_p2), false);
+
+  assertStrictEquals(BigIntRange.isAdjacent(r_p1_p1, r_0_0), true);
+  assertStrictEquals(BigIntRange.isAdjacent(r_p1_p1, r_0_p1), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_p1_p1, r_p1_p1), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_p1_p1, r_0_p2), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_p1_p1, r_p1_p2), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_p1_p1, r_p2_p2), true);
+  assertStrictEquals(BigIntRange.isAdjacent(r_p1_p1, r_m1_0), true);
+  assertStrictEquals(BigIntRange.isAdjacent(r_p1_p1, r_m1_m1), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_p1_p1, r_m2_0), true);
+  assertStrictEquals(BigIntRange.isAdjacent(r_p1_p1, r_m2_m1), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_p1_p1, r_m2_m2), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_p1_p1, r_m1_p1), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_p1_p1, r_m2_p2), false);
+
+  assertStrictEquals(BigIntRange.isAdjacent(r_0_p2, r_0_0), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_0_p2, r_0_p1), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_0_p2, r_p1_p1), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_0_p2, r_0_p2), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_0_p2, r_p1_p2), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_0_p2, r_p2_p2), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_0_p2, r_m1_0), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_0_p2, r_m1_m1), true);
+  assertStrictEquals(BigIntRange.isAdjacent(r_0_p2, r_m2_0), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_0_p2, r_m2_m1), true);
+  assertStrictEquals(BigIntRange.isAdjacent(r_0_p2, r_m2_m2), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_0_p2, r_m1_p1), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_0_p2, r_m2_p2), false);
+
+  assertStrictEquals(BigIntRange.isAdjacent(r_p1_p2, r_0_0), true);
+  assertStrictEquals(BigIntRange.isAdjacent(r_p1_p2, r_0_p1), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_p1_p2, r_p1_p1), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_p1_p2, r_0_p2), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_p1_p2, r_p1_p2), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_p1_p2, r_p2_p2), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_p1_p2, r_m1_0), true);
+  assertStrictEquals(BigIntRange.isAdjacent(r_p1_p2, r_m1_m1), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_p1_p2, r_m2_0), true);
+  assertStrictEquals(BigIntRange.isAdjacent(r_p1_p2, r_m2_m1), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_p1_p2, r_m2_m2), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_p1_p2, r_m1_p1), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_p1_p2, r_m2_p2), false);
+
+  assertStrictEquals(BigIntRange.isAdjacent(r_p2_p2, r_0_0), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_p2_p2, r_0_p1), true);
+  assertStrictEquals(BigIntRange.isAdjacent(r_p2_p2, r_p1_p1), true);
+  assertStrictEquals(BigIntRange.isAdjacent(r_p2_p2, r_0_p2), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_p2_p2, r_p1_p2), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_p2_p2, r_p2_p2), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_p2_p2, r_m1_0), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_p2_p2, r_m1_m1), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_p2_p2, r_m2_0), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_p2_p2, r_m2_m1), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_p2_p2, r_m2_m2), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_p2_p2, r_m1_p1), true);
+  assertStrictEquals(BigIntRange.isAdjacent(r_p2_p2, r_m2_p2), false);
+
+  assertStrictEquals(BigIntRange.isAdjacent(r_m1_0, r_0_0), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_m1_0, r_0_p1), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_m1_0, r_p1_p1), true);
+  assertStrictEquals(BigIntRange.isAdjacent(r_m1_0, r_0_p2), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_m1_0, r_p1_p2), true);
+  assertStrictEquals(BigIntRange.isAdjacent(r_m1_0, r_p2_p2), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_m1_0, r_m1_0), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_m1_0, r_m1_m1), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_m1_0, r_m2_0), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_m1_0, r_m2_m1), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_m1_0, r_m2_m2), true);
+  assertStrictEquals(BigIntRange.isAdjacent(r_m1_0, r_m1_p1), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_m1_0, r_m2_p2), false);
+
+  assertStrictEquals(BigIntRange.isAdjacent(r_m1_m1, r_0_0), true);
+  assertStrictEquals(BigIntRange.isAdjacent(r_m1_m1, r_0_p1), true);
+  assertStrictEquals(BigIntRange.isAdjacent(r_m1_m1, r_p1_p1), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_m1_m1, r_0_p2), true);
+  assertStrictEquals(BigIntRange.isAdjacent(r_m1_m1, r_p1_p2), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_m1_m1, r_p2_p2), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_m1_m1, r_m1_0), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_m1_m1, r_m1_m1), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_m1_m1, r_m2_0), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_m1_m1, r_m2_m1), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_m1_m1, r_m2_m2), true);
+  assertStrictEquals(BigIntRange.isAdjacent(r_m1_m1, r_m1_p1), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_m1_m1, r_m2_p2), false);
+
+  assertStrictEquals(BigIntRange.isAdjacent(r_m2_0, r_0_0), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_m2_0, r_0_p1), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_m2_0, r_p1_p1), true);
+  assertStrictEquals(BigIntRange.isAdjacent(r_m2_0, r_0_p2), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_m2_0, r_p1_p2), true);
+  assertStrictEquals(BigIntRange.isAdjacent(r_m2_0, r_p2_p2), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_m2_0, r_m1_0), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_m2_0, r_m1_m1), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_m2_0, r_m2_0), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_m2_0, r_m2_m1), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_m2_0, r_m2_m2), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_m2_0, r_m1_p1), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_m2_0, r_m2_p2), false);
+
+  assertStrictEquals(BigIntRange.isAdjacent(r_m2_m1, r_0_0), true);
+  assertStrictEquals(BigIntRange.isAdjacent(r_m2_m1, r_0_p1), true);
+  assertStrictEquals(BigIntRange.isAdjacent(r_m2_m1, r_p1_p1), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_m2_m1, r_0_p2), true);
+  assertStrictEquals(BigIntRange.isAdjacent(r_m2_m1, r_p1_p2), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_m2_m1, r_p2_p2), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_m2_m1, r_m1_0), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_m2_m1, r_m1_m1), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_m2_m1, r_m2_0), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_m2_m1, r_m2_m1), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_m2_m1, r_m2_m2), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_m2_m1, r_m1_p1), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_m2_m1, r_m2_p2), false);
+
+  assertStrictEquals(BigIntRange.isAdjacent(r_m2_m2, r_0_0), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_m2_m2, r_0_p1), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_m2_m2, r_p1_p1), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_m2_m2, r_0_p2), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_m2_m2, r_p1_p2), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_m2_m2, r_p2_p2), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_m2_m2, r_m1_0), true);
+  assertStrictEquals(BigIntRange.isAdjacent(r_m2_m2, r_m1_m1), true);
+  assertStrictEquals(BigIntRange.isAdjacent(r_m2_m2, r_m2_0), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_m2_m2, r_m2_m1), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_m2_m2, r_m2_m2), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_m2_m2, r_m1_p1), true);
+  assertStrictEquals(BigIntRange.isAdjacent(r_m2_m2, r_m2_p2), false);
+
+  assertStrictEquals(BigIntRange.isAdjacent(r_m1_p1, r_0_0), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_m1_p1, r_0_p1), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_m1_p1, r_p1_p1), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_m1_p1, r_0_p2), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_m1_p1, r_p1_p2), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_m1_p1, r_p2_p2), true);
+  assertStrictEquals(BigIntRange.isAdjacent(r_m1_p1, r_m1_0), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_m1_p1, r_m1_m1), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_m1_p1, r_m2_0), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_m1_p1, r_m2_m1), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_m1_p1, r_m2_m2), true);
+  assertStrictEquals(BigIntRange.isAdjacent(r_m1_p1, r_m1_p1), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_m1_p1, r_m2_p2), false);
+
+  assertStrictEquals(BigIntRange.isAdjacent(r_m2_p2, r_0_0), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_m2_p2, r_0_p1), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_m2_p2, r_p1_p1), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_m2_p2, r_0_p2), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_m2_p2, r_p1_p2), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_m2_p2, r_p2_p2), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_m2_p2, r_m1_0), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_m2_p2, r_m1_m1), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_m2_p2, r_m2_0), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_m2_p2, r_m2_m1), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_m2_p2, r_m2_m2), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_m2_p2, r_m1_p1), false);
+  assertStrictEquals(BigIntRange.isAdjacent(r_m2_p2, r_m2_p2), false);
+
+  assertThrows(
+    () => {
+      BigIntRange.isAdjacent(undefined as unknown as [0n, 0n], [0n, 0n]);
+    },
+    TypeError,
+    "`a` must be a range of `bigint`.",
+  );
+  assertThrows(
+    () => {
+      BigIntRange.isAdjacent([0n, 0n], undefined as unknown as [0n, 0n]);
+    },
+    TypeError,
+    "`b` must be a range of `bigint`.",
+  );
+});

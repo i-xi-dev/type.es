@@ -41,54 +41,6 @@ Deno.test("IntegerRange.rangeEquals() - number", () => {
   assertStrictEquals(IntegerRange.rangeEquals(minmax2m, minmax0), false);
 });
 
-Deno.test("IntegerRange.rangeIsAdjacentTo() - number", () => {
-  assertStrictEquals(IntegerRange.rangeIsAdjacentTo(minmax0, minmax0), false);
-
-  assertStrictEquals(
-    IntegerRange.rangeIsAdjacentTo(min0max1, minmax2m),
-    false,
-  );
-  assertStrictEquals(
-    IntegerRange.rangeIsAdjacentTo(min0max1, minmax1m),
-    true,
-  );
-  assertStrictEquals(
-    IntegerRange.rangeIsAdjacentTo(min0max1, minmax0),
-    false,
-  );
-  assertStrictEquals(
-    IntegerRange.rangeIsAdjacentTo(min0max1, minmax1),
-    false,
-  );
-  assertStrictEquals(
-    IntegerRange.rangeIsAdjacentTo(min0max1, minmax2m),
-    false,
-  );
-
-  assertStrictEquals(
-    IntegerRange.rangeIsAdjacentTo(minmax0, min0max1),
-    false,
-  );
-  assertStrictEquals(
-    IntegerRange.rangeIsAdjacentTo({ min: -1, max: 0 }, minmax0),
-    false,
-  );
-  assertStrictEquals(
-    IntegerRange.rangeIsAdjacentTo(minmax0, { min: -1, max: 0 }),
-    false,
-  );
-
-  assertStrictEquals(IntegerRange.rangeIsAdjacentTo(minmax0, minmax1), true);
-  assertStrictEquals(IntegerRange.rangeIsAdjacentTo(minmax1, minmax0), true);
-  assertStrictEquals(IntegerRange.rangeIsAdjacentTo(minmax0, minmax1m), true);
-  assertStrictEquals(IntegerRange.rangeIsAdjacentTo(minmax1m, minmax0), true);
-
-  assertStrictEquals(IntegerRange.rangeIsAdjacentTo(minmax0, minmax2), false);
-  assertStrictEquals(IntegerRange.rangeIsAdjacentTo(minmax2, minmax0), false);
-  assertStrictEquals(IntegerRange.rangeIsAdjacentTo(minmax0, minmax2m), false);
-  assertStrictEquals(IntegerRange.rangeIsAdjacentTo(minmax2m, minmax0), false);
-});
-
 Deno.test("IntegerRange.Struct.fromRangeLike() - number", () => {
   const a00 = IntegerRange.Struct.fromRangeLike({ min: 0, max: 0 });
   assertStrictEquals(a00.min, 0);

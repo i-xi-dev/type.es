@@ -9,7 +9,6 @@ export interface IntegerRange<T extends int> {
   get min(): T;
   get max(): T;
   get size(): safeint;
-  isAdjacentTo(otherRangeLike: IntegerRange.Like<T>): boolean;
   //XXX exceptWith(otherRangeLike: IntegerRange.Like<T>): IntegerRange;
   //XXX intersectWith(otherRangeLike: IntegerRange.Like<T>): IntegerRange;
   //XXX unionWith(otherRangeLike: IntegerRange.Like<T>): IntegerRange;
@@ -38,29 +37,6 @@ export namespace IntegerRange {
   ) {
     return ((self.min as int) === (other.min as int)) &&
       ((self.max as int) === (other.max as int));
-  }
-
-  // 図形のtouchesとは意味が異なる。disjointかつ隣接
-  export function rangeIsAdjacentTo<T extends int, U extends int>(
-    self: Struct<T>,
-    other: Struct<U>,
-  ) {
-    if (
-      (((typeof self.min) === (typeof self.max)) &&
-        (self.min <= other.max) && (self.max >= other.min))
-    ) {
-      // overlapsなら
-      return false;
-    }
-
-    const one = (isBigInt(self.min) ? 1n : 1) as T;
-    if ((other.min - self.max) === one) {
-      return true;
-    } else if ((self.min - other.max) === one) {
-      return true;
-    }
-
-    return false;
   }
 
   export namespace Tuple {

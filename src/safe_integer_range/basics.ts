@@ -93,3 +93,25 @@ export function isDisjoint<T extends safeint>(
 ): boolean {
   return !overlaps(a, b);
 }
+
+// a isAdjacentTo b (b isAdjacent a)
+// disjointかつ隣接（図形のtouchesとは意味が異なる）
+export function isAdjacent<T extends safeint>(
+  a: SafeIntegerRange<T>,
+  b: SafeIntegerRange<T>,
+): boolean {
+  // assertBigIntRange(a, "a");
+  // assertBigIntRange(b, "b");
+  if (overlaps(a, b)) {
+    return false;
+  }
+
+  const [aMin, aMax] = a;
+  const [bMin, bMax] = b;
+  if ((bMin - aMax) === 1) {
+    return true;
+  } else if ((aMin - bMax) === 1) {
+    return true;
+  }
+  return false;
+}

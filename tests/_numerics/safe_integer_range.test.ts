@@ -94,53 +94,6 @@ Deno.test("SafeIntegerRange.of()", () => {
   assertStrictEquals(t1.size, 5);
 });
 
-Deno.test("SafeIntegerRange.prototype.isAdjacentTo()", () => {
-  assertStrictEquals(range00.isAdjacentTo(range00), false);
-  assertStrictEquals(range00.isAdjacentTo([0]), false);
-  assertStrictEquals(range00.isAdjacentTo([0, 0]), false);
-  assertStrictEquals(range00.isAdjacentTo({ min: 0, max: 0 }), false);
-  assertStrictEquals(range00.isAdjacentTo(range01), false);
-  assertStrictEquals(range00.isAdjacentTo(range10), false);
-
-  assertStrictEquals(range00.isAdjacentTo(range00b), false);
-  assertStrictEquals(range00.isAdjacentTo(range01b), false);
-  assertStrictEquals(range00.isAdjacentTo(range10b), false);
-
-  assertStrictEquals(range01.isAdjacentTo(range00), false);
-  assertStrictEquals(range01.isAdjacentTo([0, 1]), false);
-  assertStrictEquals(range01.isAdjacentTo({ min: 0, max: 1 }), false);
-  assertStrictEquals(range01.isAdjacentTo(range01), false);
-  assertStrictEquals(range01.isAdjacentTo(range10), false);
-
-  assertStrictEquals(range01.isAdjacentTo(range00b), false);
-  assertStrictEquals(range01.isAdjacentTo(range01b), false);
-  assertStrictEquals(range01.isAdjacentTo(range10b), false);
-
-  assertStrictEquals(range10.isAdjacentTo(range00), false);
-  assertStrictEquals(range10.isAdjacentTo(range01), false);
-  assertStrictEquals(range10.isAdjacentTo(range10), false);
-
-  assertStrictEquals(range10.isAdjacentTo(range00b), false);
-  assertStrictEquals(range10.isAdjacentTo(range01b), false);
-  assertStrictEquals(range10.isAdjacentTo(range10b), false);
-
-  assertStrictEquals(range23.isAdjacentTo(range00), false);
-  assertStrictEquals(range23.isAdjacentTo(range01), true);
-  assertStrictEquals(range23.isAdjacentTo(range10), false);
-
-  assertStrictEquals(range23.isAdjacentTo(range00b), false);
-  assertStrictEquals(range23.isAdjacentTo(range01b), true);
-  assertStrictEquals(range23.isAdjacentTo(range10b), false);
-
-  assertStrictEquals(range32.isAdjacentTo(range00), false);
-  assertStrictEquals(range32.isAdjacentTo(range01), false);
-  assertStrictEquals(range32.isAdjacentTo(range10), true);
-
-  assertStrictEquals(range32.isAdjacentTo(range00b), false);
-  assertStrictEquals(range32.isAdjacentTo(range01b), false);
-  assertStrictEquals(range32.isAdjacentTo(range10b), true);
-});
-
 Deno.test("SafeIntegerRange.prototype.includes()", () => {
   assertStrictEquals(range00.includes(-1), false);
   assertStrictEquals(range00.includes(-0), true);

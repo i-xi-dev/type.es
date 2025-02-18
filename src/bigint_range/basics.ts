@@ -90,3 +90,25 @@ export function isDisjoint<T extends bigint>(
 ): boolean {
   return !overlaps(a, b);
 }
+
+// a isAdjacentTo b (b isAdjacent a)
+// disjointかつ隣接（図形のtouchesとは意味が異なる）
+export function isAdjacent<T extends bigint>(
+  a: BigIntRange<T>,
+  b: BigIntRange<T>,
+): boolean {
+  // assertBigIntRange(a, "a");
+  // assertBigIntRange(b, "b");
+  if (overlaps(a, b)) {
+    return false;
+  }
+
+  const [aMin, aMax] = a;
+  const [bMin, bMax] = b;
+  if ((bMin - aMax) as unknown as T === 1n) {
+    return true;
+  } else if ((aMin - bMax) as unknown as T === 1n) {
+    return true;
+  }
+  return false;
+}
