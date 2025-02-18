@@ -1103,3 +1103,22 @@ Deno.test("BigIntRange.isAdjacent()", () => {
     "`b` must be a range of `bigint`.",
   );
 });
+
+Deno.test("BigIntRange.includes()", () => {
+  assertStrictEquals(BigIntRange.includes(r_0_0, -1n), false);
+  assertStrictEquals(BigIntRange.includes(r_0_0, -0n), true);
+  assertStrictEquals(BigIntRange.includes(r_0_0, 0n), true);
+  assertStrictEquals(BigIntRange.includes(r_0_0, 1n), false);
+
+  assertStrictEquals(BigIntRange.includes(r_0_p1, -1n), false);
+  assertStrictEquals(BigIntRange.includes(r_0_p1, -0n), true);
+  assertStrictEquals(BigIntRange.includes(r_0_p1, 0n), true);
+  assertStrictEquals(BigIntRange.includes(r_0_p1, 1n), true);
+  assertStrictEquals(BigIntRange.includes(r_0_p1, 2n), false);
+
+  assertStrictEquals(BigIntRange.includes(r_m1_0, -2n), false);
+  assertStrictEquals(BigIntRange.includes(r_m1_0, -1n), true);
+  assertStrictEquals(BigIntRange.includes(r_m1_0, -0n), true);
+  assertStrictEquals(BigIntRange.includes(r_m1_0, 0n), true);
+  assertStrictEquals(BigIntRange.includes(r_m1_0, 1n), false);
+});

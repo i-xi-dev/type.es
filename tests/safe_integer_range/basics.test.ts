@@ -1095,3 +1095,22 @@ Deno.test("SafeIntegerRange.isAdjacent()", () => {
     "`b` must be a range of safe integer.",
   );
 });
+
+Deno.test("SafeIntegerRange.includes()", () => {
+  assertStrictEquals(SafeIntegerRange.includes(r_0_0, -1), false);
+  assertStrictEquals(SafeIntegerRange.includes(r_0_0, -0), true);
+  assertStrictEquals(SafeIntegerRange.includes(r_0_0, 0), true);
+  assertStrictEquals(SafeIntegerRange.includes(r_0_0, 1), false);
+
+  assertStrictEquals(SafeIntegerRange.includes(r_0_p1, -1), false);
+  assertStrictEquals(SafeIntegerRange.includes(r_0_p1, -0), true);
+  assertStrictEquals(SafeIntegerRange.includes(r_0_p1, 0), true);
+  assertStrictEquals(SafeIntegerRange.includes(r_0_p1, 1), true);
+  assertStrictEquals(SafeIntegerRange.includes(r_0_p1, 2), false);
+
+  assertStrictEquals(SafeIntegerRange.includes(r_m1_0, -2), false);
+  assertStrictEquals(SafeIntegerRange.includes(r_m1_0, -1), true);
+  assertStrictEquals(SafeIntegerRange.includes(r_m1_0, -0), true);
+  assertStrictEquals(SafeIntegerRange.includes(r_m1_0, 0), true);
+  assertStrictEquals(SafeIntegerRange.includes(r_m1_0, 1), false);
+});

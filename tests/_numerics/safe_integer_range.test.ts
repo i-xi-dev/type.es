@@ -93,34 +93,3 @@ Deno.test("SafeIntegerRange.of()", () => {
   assertStrictEquals(t1.max, 8);
   assertStrictEquals(t1.size, 5);
 });
-
-Deno.test("SafeIntegerRange.prototype.includes()", () => {
-  assertStrictEquals(range00.includes(-1), false);
-  assertStrictEquals(range00.includes(-0), true);
-  assertStrictEquals(range00.includes(0), true);
-  assertStrictEquals(range00.includes(1), false);
-
-  assertStrictEquals(range01.includes(-1), false);
-  assertStrictEquals(range01.includes(-0), true);
-  assertStrictEquals(range01.includes(0), true);
-  assertStrictEquals(range01.includes(1), true);
-  assertStrictEquals(range01.includes(2), false);
-
-  assertStrictEquals(range10.includes(-2), false);
-  assertStrictEquals(range10.includes(-1), true);
-  assertStrictEquals(range10.includes(-0), true);
-  assertStrictEquals(range10.includes(0), true);
-  assertStrictEquals(range10.includes(1), false);
-
-  assertStrictEquals(range23.includes(0), false);
-  assertStrictEquals(range23.includes(1), false);
-  assertStrictEquals(range23.includes(2), true);
-  assertStrictEquals(range23.includes(3), true);
-  assertStrictEquals(range23.includes(4), false);
-
-  assertStrictEquals(range32.includes(-4), false);
-  assertStrictEquals(range32.includes(-3), true);
-  assertStrictEquals(range32.includes(-2), true);
-  assertStrictEquals(range32.includes(-1), false);
-  assertStrictEquals(range32.includes(0), false);
-});

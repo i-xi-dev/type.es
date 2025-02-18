@@ -1,4 +1,5 @@
 import { assertBigIntRange } from "../type/numeric_range.ts";
+import { isBigInt } from "../type/bigint.ts";
 import { type bigintrange } from "../type.ts";
 
 export function sizeOf<T extends bigint>(range: bigintrange<T>): bigint {
@@ -111,4 +112,13 @@ export function isAdjacent<T extends bigint>(
     return true;
   }
   return false;
+}
+
+export function includes<T extends bigint>(
+  range: bigintrange<T>,
+  test: T,
+): boolean {
+  assertBigIntRange(range, "range");
+  const [min, max] = range;
+  return isBigInt(test) && (test >= min) && (test <= max);
 }

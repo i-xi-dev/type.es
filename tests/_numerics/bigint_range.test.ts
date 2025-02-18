@@ -93,34 +93,3 @@ Deno.test("BigIntRange.of()", () => {
   assertStrictEquals(t1.max, 8n);
   assertStrictEquals(t1.size, 5);
 });
-
-Deno.test("BigIntRange.prototype.includes()", () => {
-  assertStrictEquals(range00.includes(-1n), false);
-  assertStrictEquals(range00.includes(-0n), true);
-  assertStrictEquals(range00.includes(0n), true);
-  assertStrictEquals(range00.includes(1n), false);
-
-  assertStrictEquals(range01.includes(-1n), false);
-  assertStrictEquals(range01.includes(-0n), true);
-  assertStrictEquals(range01.includes(0n), true);
-  assertStrictEquals(range01.includes(1n), true);
-  assertStrictEquals(range01.includes(2n), false);
-
-  assertStrictEquals(range10.includes(-2n), false);
-  assertStrictEquals(range10.includes(-1n), true);
-  assertStrictEquals(range10.includes(-0n), true);
-  assertStrictEquals(range10.includes(0n), true);
-  assertStrictEquals(range10.includes(1n), false);
-
-  assertStrictEquals(range23.includes(0n), false);
-  assertStrictEquals(range23.includes(1n), false);
-  assertStrictEquals(range23.includes(2n), true);
-  assertStrictEquals(range23.includes(3n), true);
-  assertStrictEquals(range23.includes(4n), false);
-
-  assertStrictEquals(range32.includes(-4n), false);
-  assertStrictEquals(range32.includes(-3n), true);
-  assertStrictEquals(range32.includes(-2n), true);
-  assertStrictEquals(range32.includes(-1n), false);
-  assertStrictEquals(range32.includes(0n), false);
-});

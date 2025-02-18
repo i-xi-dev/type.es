@@ -1,4 +1,5 @@
 import { assertSafeIntegerRange } from "../type/numeric_range.ts";
+import { isSafeInteger } from "../type/number.ts";
 import { type safeint, type safeintrange } from "../type.ts";
 
 export function sizeOf<T extends safeint>(range: safeintrange<T>): safeint {
@@ -100,8 +101,8 @@ export function isAdjacent<T extends safeint>(
   a: safeintrange<T>,
   b: safeintrange<T>,
 ): boolean {
-  // assertBigIntRange(a, "a");
-  // assertBigIntRange(b, "b");
+  // assertSafeIntegerRange(a, "a");
+  // assertSafeIntegerRange(b, "b");
   if (overlaps(a, b)) {
     return false;
   }
@@ -114,4 +115,13 @@ export function isAdjacent<T extends safeint>(
     return true;
   }
   return false;
+}
+
+export function includes<T extends safeint>(
+  range: safeintrange<T>,
+  test: T,
+): boolean {
+  assertSafeIntegerRange(range, "range");
+  const [min, max] = range;
+  return isSafeInteger(test) && (test >= min) && (test <= max);
 }
