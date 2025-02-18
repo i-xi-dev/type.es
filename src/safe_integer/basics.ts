@@ -4,18 +4,15 @@ import {
   isPositiveNumber,
 } from "../type/number.ts";
 import { assertSafeIntegerRange } from "../type/numeric_range.ts";
-import {
-  assertSupportedRadix,
-  DECIMAL as DECIMAL_RADIX,
-  type radix,
-} from "../numerics/radix.ts";
+import { assertSupportedRadix } from "../numerics/radix.ts";
 import {
   fromString as bigintFromString,
   toNumber as bigintToNumber,
 } from "../bigint/basics.ts";
 import { normalize as normalizeNumber } from "../number/basics.ts";
 import { RoundingMode } from "../numerics/rounding_mode.ts";
-import { type safeint, type safeintrange } from "../type.ts";
+import { type radix, type safeint, type safeintrange } from "../type.ts";
+import { Radix } from "../const/radix.ts";
 import { ZERO as NUMBER_ZERO } from "../const/number.ts";
 
 //TODO 命名 toか？
@@ -73,7 +70,7 @@ export type ToStringOptions = {
 
 export function toString(value: safeint, options?: ToStringOptions): string {
   assertSafeInteger(value, "value");
-  const radix = options?.radix ?? DECIMAL_RADIX;
+  const radix = options?.radix ?? Radix.DECIMAL;
   assertSupportedRadix(radix, "radix");
 
   let result = value.toString(radix);

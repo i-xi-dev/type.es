@@ -1,6 +1,6 @@
 import { assertCodePoint } from "../type/code_point.ts";
 import { type codepoint, type plane } from "../type.ts";
-import { HEXADECIMAL } from "../numerics/radix.ts";
+import { Radix } from "../const/radix.ts";
 import {
   toString as safeIntegerToString,
   type ToStringOptions,
@@ -9,7 +9,7 @@ import {
 const _toStringOptions: ToStringOptions = {
   // lowerCase: false,
   minIntegralDigits: 4,
-  radix: HEXADECIMAL,
+  radix: Radix.HEXADECIMAL,
 } as const;
 
 export function toString(codePoint: codepoint): string {

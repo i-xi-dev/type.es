@@ -1,5 +1,5 @@
 import { type codepoint, type safeintrange } from "../type.ts";
-import { HEXADECIMAL as HEXADECIMAL_RADIX } from "../numerics/radix.ts";
+import { Radix } from "../const/radix.ts";
 import { isSafeIntegerInRange } from "./number.ts";
 import {
   MAX_VALUE as MAX_CODE_POINT,
@@ -114,8 +114,8 @@ export function assertCodePointInRange(
   if (isCodePointInRange(test, range) !== true) {
     throw new TypeError(
       `\`${label}\` must be a code point in the range 0x${
-        range[0].toString(HEXADECIMAL_RADIX)
-      }-0x${range[1].toString(HEXADECIMAL_RADIX)}.`,
+        range[0].toString(Radix.HEXADECIMAL)
+      }-0x${range[1].toString(Radix.HEXADECIMAL)}.`,
     );
   }
 }

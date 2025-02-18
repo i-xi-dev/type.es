@@ -1,17 +1,14 @@
 import { EMPTY as EMPTY_STRING } from "../const/string.ts";
-
-export const BINARY = 2;
-
-export const OCTAL = 8;
-
-export const DECIMAL = 10;
-
-export const HEXADECIMAL = 16;
+import { type radix } from "../type.ts";
+import { Radix } from "../const/radix.ts";
 
 // 2,8,10,16にしているのはstringからbigintへのパースが面倒になるからというだけ
-const _radix = [BINARY, OCTAL, DECIMAL, HEXADECIMAL] as const;
-
-export type radix = typeof _radix[number];
+const _radix = [
+  Radix.BINARY,
+  Radix.OCTAL,
+  Radix.DECIMAL,
+  Radix.HEXADECIMAL,
+] as const;
 
 function _isSupportedRadix(test: unknown): test is radix {
   return _radix.includes(test as radix);
@@ -43,16 +40,16 @@ export function integerPatternOf(
   // 2-36でなく2|8|10|16なので算出せずに固定値を返す
   let digitsPattern = EMPTY_STRING;
   switch (radix) {
-    case BINARY:
+    case Radix.BINARY:
       digitsPattern = "[01]+";
       break;
-    case OCTAL:
+    case Radix.OCTAL:
       digitsPattern = "[0-7]+";
       break;
-    case DECIMAL:
+    case Radix.DECIMAL:
       digitsPattern = "[0-9]+";
       break;
-    case HEXADECIMAL:
+    case Radix.HEXADECIMAL:
       digitsPattern = "[0-9a-fA-F]+";
       break;
   }
@@ -64,13 +61,13 @@ export function prefixOf(radix: radix): string {
   assertSupportedRadix(radix, "radix");
 
   switch (radix) {
-    case BINARY:
+    case Radix.BINARY:
       return "0b";
-    case OCTAL:
+    case Radix.OCTAL:
       return "0o";
-    // case DECIMAL:
+    // case Radix.DECIMAL:
     //   return EMPTY_STRING;
-    case HEXADECIMAL:
+    case Radix.HEXADECIMAL:
       return "0x";
     default:
       return EMPTY_STRING;

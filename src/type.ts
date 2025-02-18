@@ -56,6 +56,9 @@ export type plane =
   | 15
   | 16;
 
+// 2,8,10,16にしているのはstringからbigintへのパースが面倒になるからというだけ
+export type radix = 2 | 8 | 10 | 16;
+
 /**
  * A BCP47 region code.
  * (ISO 3166-1 country alpha-2 code)
