@@ -1,22 +1,10 @@
-import { type int, type safeint } from "../type.ts";
+import { type int } from "../type.ts";
 import { isBigInt } from "../type/bigint.ts";
 import { isSafeInteger } from "../type/number.ts";
 import { ZERO as NUMBER_ZERO } from "../const/number.ts";
 
-//TODO 離散範囲にする
-
-export interface IntegerRange<T extends int> {
-  get min(): T;
-  get max(): T;
-  get size(): safeint;
-  //XXX exceptWith(otherRangeLike: IntegerRange.Like<T>): IntegerRange;
-  //XXX intersectWith(otherRangeLike: IntegerRange.Like<T>): IntegerRange;
-  //XXX unionWith(otherRangeLike: IntegerRange.Like<T>): IntegerRange;
-  // normalize(ranges)
-  includes(test: T): boolean;
-  clamp(input: T): T;
-  [Symbol.iterator](): IterableIterator<T>;
-}
+//TODO BigIntRangeSet, SafeIntRangeSet
+// RangeのメソッドとunionWith, exceptWith, intersectWith, ...
 
 export namespace IntegerRange {
   export type Tuple<T extends int> = [min: T, max: T] | [
