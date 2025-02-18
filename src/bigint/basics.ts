@@ -15,7 +15,7 @@ import {
   prefixOf,
   type radix,
 } from "../numerics/radix.ts";
-import { type BigIntRange, type safeint } from "../type.ts";
+import { type bigintrange, type safeint } from "../type.ts";
 import { EMPTY as EMPTY_STRING } from "../const/string.ts";
 import { round as roundFromNumber } from "../safe_integer/basics.ts";
 import { RoundingMode } from "../numerics/rounding_mode.ts";
@@ -57,7 +57,7 @@ const _max = max;
 
 export function clampToRange<T extends bigint>(
   value: bigint,
-  range: BigIntRange<T>,
+  range: bigintrange<T>,
 ): T {
   assertBigInt(value, "value");
   assertBigIntRange(range, "range");

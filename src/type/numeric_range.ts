@@ -1,12 +1,12 @@
 import { isBigInt } from "../type/bigint.ts";
 import {
-  type BigIntRange,
-  type NumberRange,
-  type SafeIntegerRange,
+  type bigintrange,
+  type numberrange,
+  type safeintrange,
 } from "../type.ts";
 
 // min > max については関知しない（マッチする数値は存在しなくなるだけ）
-export function isNumberRange(test: unknown): test is NumberRange {
+export function isNumberRange(test: unknown): test is numberrange {
   return Array.isArray(test) && (test.length === 2) &&
     test.every((i) => Number.isFinite(i));
 }
@@ -18,7 +18,7 @@ export function assertNumberRange(test: unknown, label: string): void {
 }
 
 // min > max については関知しない（マッチする数値は存在しなくなるだけ）
-export function isSafeIntegerRange(test: unknown): test is SafeIntegerRange {
+export function isSafeIntegerRange(test: unknown): test is safeintrange {
   return Array.isArray(test) && (test.length === 2) &&
     test.every((i) => Number.isSafeInteger(i));
 }
@@ -30,7 +30,7 @@ export function assertSafeIntegerRange(test: unknown, label: string): void {
 }
 
 // min > max については関知しない（マッチする数値は存在しなくなるだけ）
-export function isBigIntRange(test: unknown): test is BigIntRange {
+export function isBigIntRange(test: unknown): test is bigintrange {
   return Array.isArray(test) && (test.length === 2) &&
     test.every((i) => isBigInt(i));
 }

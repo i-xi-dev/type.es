@@ -1,4 +1,4 @@
-import { type codepoint, type SafeIntegerRange } from "../type.ts";
+import { type codepoint, type safeintrange } from "../type.ts";
 import { HEXADECIMAL as HEXADECIMAL_RADIX } from "../numerics/radix.ts";
 import { isSafeIntegerInRange } from "./number.ts";
 import {
@@ -98,7 +98,7 @@ export function assertVariationSelectorCodePoint(
 
 export function isCodePointInRange(
   test: unknown,
-  range: SafeIntegerRange<codepoint>,
+  range: safeintrange<codepoint>,
 ): test is codepoint {
   assertCodePoint(range[0], "range.min");
   assertCodePoint(range[1], "range.max");
@@ -109,7 +109,7 @@ export function isCodePointInRange(
 export function assertCodePointInRange(
   test: unknown,
   label: string,
-  range: SafeIntegerRange<codepoint>,
+  range: safeintrange<codepoint>,
 ): void {
   if (isCodePointInRange(test, range) !== true) {
     throw new TypeError(
@@ -152,7 +152,7 @@ export function assertPrivateUseCodePoint(test: unknown, label: string): void {
 //TODO CodePointInRanges？に移す（extends SafeIntegerRanges）
 // export function isCodePointInRanges(
 //   test: unknown,
-//   ranges: SafeIntegerRange.Like<codepoint>[],
+//   ranges: safeintrange.Like<codepoint>[],
 // ): test is codepoint {
 //   if (isCodePoint(test) !== true) {
 //     return false;
@@ -162,14 +162,14 @@ export function assertPrivateUseCodePoint(test: unknown, label: string): void {
 //     throw new TypeError("`ranges` must be an `Array`.");
 //   }
 //
-//   let range: SafeIntegerRange.Struct<codepoint>;
+//   let range: safeintrange.Struct<codepoint>;
 //   //for (const rangeSource of ranges) {
 //   for (let i = 0; i < ranges.length; i++) {
 //     try {
 //       range = IntegerRange.Struct.fromRangeLike(ranges[i]);
 //     } catch {
 //       throw new TypeError(
-//         `\`ranges[${i}]\` must be a \`SafeIntegerRange.Like\`.`,
+//         `\`ranges[${i}]\` must be a \`safeintrange.Like\`.`,
 //       );
 //     }
 //

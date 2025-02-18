@@ -1,6 +1,6 @@
 import { assertNumber } from "../type/number.ts";
 import { assertNumberRange } from "../type/numeric_range.ts";
-import { type NumberRange } from "../type.ts";
+import { type numberrange } from "../type.ts";
 import { ZERO as NUMBER_ZERO } from "../const/number.ts";
 
 export function normalize<T extends number>(value: T): T {
@@ -10,7 +10,7 @@ export function normalize<T extends number>(value: T): T {
 
 export function clampToRange<T extends number>(
   value: number,
-  range: NumberRange<T>,
+  range: numberrange<T>,
 ): T {
   assertNumber(value, "value");
   assertNumberRange(range, "range");

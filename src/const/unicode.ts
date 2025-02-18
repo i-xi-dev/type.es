@@ -4,7 +4,7 @@ import _gcs from "../../dat/unicode/gc_map.ts";
 //   type codepoint,
 //   type gc,
 //   type plane,
-//   type SafeIntegerRange,
+//   type safeintrange,
 // } from "../type.ts";
 
 export const Plane /* : Record<string, plane> */ = {
@@ -19,5 +19,4 @@ export const Plane /* : Record<string, plane> */ = {
 
 export const GeneralCategory /* : Record<string, gc> */ = _gcs;
 
-export const Block /* : Record<string, SafeIntegerRange<codepoint>> */ =
-  _blocks;
+export const Block /* : Record<string, safeintrange<codepoint>> */ = _blocks;

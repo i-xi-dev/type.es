@@ -48,7 +48,7 @@ export function isPatternMatched(
 
 function _codePointRangeMatches(
   test: codepoint,
-  codePointRanges?: SafeIntegerRange.Tuple<codepoint>,
+  codePointRanges?: safeintrange.Tuple<codepoint>,
 ): boolean {
   if ((codePointRanges === null) || (codePointRanges === undefined)) {
     return true;

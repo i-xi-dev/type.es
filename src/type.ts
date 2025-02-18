@@ -404,13 +404,13 @@ export type usvstring = string;
 
 export type ArrayOrSet<T> = Array<T> | Set<T>;
 
-type _ClosedNumericRange<T> = [min: T, max: T];
-type _ClosedIntegerRange<T> = _ClosedNumericRange<T>;
+type _closed_numeric_range<T> = [min: T, max: T];
+type _closed_integer_range<T> = _closed_numeric_range<T>;
 
-export type BigIntRange<T extends bigint = bigint> = _ClosedIntegerRange<T>;
+export type bigintrange<T extends bigint = bigint> = _closed_integer_range<T>;
 
-export type NumberRange<T extends number = number> = _ClosedNumericRange<T>;
+export type numberrange<T extends number = number> = _closed_numeric_range<T>;
 
-export type SafeIntegerRange<T extends safeint = safeint> = _ClosedIntegerRange<
+export type safeintrange<T extends safeint = safeint> = _closed_integer_range<
   T
 >;

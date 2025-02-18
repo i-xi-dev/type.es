@@ -15,12 +15,12 @@ import {
 } from "../bigint/basics.ts";
 import { normalize as normalizeNumber } from "../number/basics.ts";
 import { RoundingMode } from "../numerics/rounding_mode.ts";
-import { type safeint, type SafeIntegerRange } from "../type.ts";
+import { type safeint, type safeintrange } from "../type.ts";
 import { ZERO as NUMBER_ZERO } from "../const/number.ts";
 
 export function clampToRange<T extends safeint>(
   value: safeint,
-  range: SafeIntegerRange<T>,
+  range: safeintrange<T>,
 ): T {
   assertSafeInteger(value, "value");
   assertSafeIntegerRange(range, "range");

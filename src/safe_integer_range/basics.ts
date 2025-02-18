@@ -1,7 +1,7 @@
 import { assertSafeIntegerRange } from "../type/numeric_range.ts";
-import { type safeint, type SafeIntegerRange } from "../type.ts";
+import { type safeint, type safeintrange } from "../type.ts";
 
-export function sizeOf<T extends safeint>(range: SafeIntegerRange<T>): safeint {
+export function sizeOf<T extends safeint>(range: safeintrange<T>): safeint {
   assertSafeIntegerRange(range, "range");
 
   const [min, max] = range;
@@ -14,21 +14,21 @@ export function sizeOf<T extends safeint>(range: SafeIntegerRange<T>): safeint {
   return size;
 }
 
-export function minOf<T extends safeint>(range: SafeIntegerRange<T>): T {
+export function minOf<T extends safeint>(range: safeintrange<T>): T {
   assertSafeIntegerRange(range, "range");
   return range[0];
 }
 
-export function maxOf<T extends safeint>(range: SafeIntegerRange<T>): T {
+export function maxOf<T extends safeint>(range: safeintrange<T>): T {
   assertSafeIntegerRange(range, "range");
   return range[1];
 }
 
-//XXX fromXxx<T extends safeint>(xxx: { min: T, max: T }): SafeIntegerRange<T>
-//XXX toXxx<T extends safeint>(range: SafeIntegerRange<T>): { min: T, max: T }
+//XXX fromXxx<T extends safeint>(xxx: { min: T, max: T }): safeintrange<T>
+//XXX toXxx<T extends safeint>(range: safeintrange<T>): { min: T, max: T }
 
 export function toIterable<T extends safeint>(
-  range: SafeIntegerRange<T>,
+  range: safeintrange<T>,
 ): IterableIterator<T> {
   assertSafeIntegerRange(range, "range");
 
@@ -49,8 +49,8 @@ export function toIterable<T extends safeint>(
 
 // a equals b (b equals a)
 export function equals<T extends safeint>(
-  a: SafeIntegerRange<T>,
-  b: SafeIntegerRange<T>,
+  a: safeintrange<T>,
+  b: safeintrange<T>,
 ): boolean {
   assertSafeIntegerRange(a, "a");
   assertSafeIntegerRange(b, "b");
@@ -62,8 +62,8 @@ export function equals<T extends safeint>(
 
 // a overlaps b (b overlaps a)
 export function overlaps<T extends safeint>(
-  a: SafeIntegerRange<T>,
-  b: SafeIntegerRange<T>,
+  a: safeintrange<T>,
+  b: safeintrange<T>,
 ): boolean {
   assertSafeIntegerRange(a, "a");
   assertSafeIntegerRange(b, "b");
@@ -75,8 +75,8 @@ export function overlaps<T extends safeint>(
 
 // a covers b (b isCoveredBy a) (a isSuperrangeOf b) (b isSubrangeOf a)
 export function covers<T extends safeint>(
-  a: SafeIntegerRange<T>,
-  b: SafeIntegerRange<T>,
+  a: safeintrange<T>,
+  b: safeintrange<T>,
 ): boolean {
   assertSafeIntegerRange(a, "a");
   assertSafeIntegerRange(b, "b");
@@ -88,8 +88,8 @@ export function covers<T extends safeint>(
 
 // a isDisjointFrom b (b isDisjointFrom a)
 export function isDisjoint<T extends safeint>(
-  a: SafeIntegerRange<T>,
-  b: SafeIntegerRange<T>,
+  a: safeintrange<T>,
+  b: safeintrange<T>,
 ): boolean {
   return !overlaps(a, b);
 }
@@ -97,8 +97,8 @@ export function isDisjoint<T extends safeint>(
 // a isAdjacentTo b (b isAdjacent a)
 // disjointかつ隣接（図形のtouchesとは意味が異なる）
 export function isAdjacent<T extends safeint>(
-  a: SafeIntegerRange<T>,
-  b: SafeIntegerRange<T>,
+  a: safeintrange<T>,
+  b: safeintrange<T>,
 ): boolean {
   // assertBigIntRange(a, "a");
   // assertBigIntRange(b, "b");

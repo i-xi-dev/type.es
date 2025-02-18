@@ -1,5 +1,5 @@
 import { assertBigIntRange } from "./numeric_range.ts";
-import { type BigIntRange } from "../type.ts";
+import { type bigintrange } from "../type.ts";
 import { ZERO as BIGINT_ZERO } from "../const/bigint.ts";
 
 export function isBigInt(test: unknown): test is bigint {
@@ -74,7 +74,7 @@ export function assertEvenBigInt(test: unknown, label: string): void {
 
 export function isBigIntInRange(
   test: unknown,
-  range: BigIntRange,
+  range: bigintrange,
 ): test is bigint {
   assertBigIntRange(range, "range");
 
@@ -85,7 +85,7 @@ export function isBigIntInRange(
 export function assertBigIntInRange(
   test: unknown,
   label: string,
-  range: BigIntRange,
+  range: bigintrange,
 ): void {
   if (isBigIntInRange(test, range) !== true) {
     throw new TypeError(

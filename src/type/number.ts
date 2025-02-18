@@ -1,9 +1,5 @@
 import { assertNumberRange, assertSafeIntegerRange } from "./numeric_range.ts";
-import {
-  type NumberRange,
-  type safeint,
-  type SafeIntegerRange,
-} from "../type.ts";
+import { type numberrange, type safeint, type safeintrange } from "../type.ts";
 import { ZERO as NUMBER_ZERO } from "../const/number.ts";
 
 export function isNumber(test: unknown): test is number {
@@ -68,7 +64,7 @@ export function assertNegativeNumber(test: unknown, label: string): void {
 
 export function isNumberInRange(
   test: unknown,
-  range: NumberRange,
+  range: numberrange,
 ): test is number {
   assertNumberRange(range, "range");
 
@@ -79,7 +75,7 @@ export function isNumberInRange(
 export function assertNumberInRange(
   test: unknown,
   label: string,
-  range: NumberRange,
+  range: numberrange,
 ): void {
   if (isNumberInRange(test, range) !== true) {
     throw new TypeError(
@@ -166,7 +162,7 @@ export function assertEvenSafeInteger(test: unknown, label: string): void {
 
 export function isSafeIntegerInRange(
   test: unknown,
-  range: SafeIntegerRange,
+  range: safeintrange,
 ): test is safeint {
   assertSafeIntegerRange(range, "range");
 
@@ -177,7 +173,7 @@ export function isSafeIntegerInRange(
 export function assertSafeIntegerInRange(
   test: unknown,
   label: string,
-  range: SafeIntegerRange,
+  range: safeintrange,
 ): void {
   if (isSafeIntegerInRange(test, range) !== true) {
     throw new TypeError(

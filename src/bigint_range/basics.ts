@@ -1,7 +1,7 @@
 import { assertBigIntRange } from "../type/numeric_range.ts";
-import { type BigIntRange } from "../type.ts";
+import { type bigintrange } from "../type.ts";
 
-export function sizeOf<T extends bigint>(range: BigIntRange<T>): bigint {
+export function sizeOf<T extends bigint>(range: bigintrange<T>): bigint {
   assertBigIntRange(range, "range");
 
   const [min, max] = range;
@@ -11,21 +11,21 @@ export function sizeOf<T extends bigint>(range: BigIntRange<T>): bigint {
   return size;
 }
 
-export function minOf<T extends bigint>(range: BigIntRange<T>): T {
+export function minOf<T extends bigint>(range: bigintrange<T>): T {
   assertBigIntRange(range, "range");
   return range[0];
 }
 
-export function maxOf<T extends bigint>(range: BigIntRange<T>): T {
+export function maxOf<T extends bigint>(range: bigintrange<T>): T {
   assertBigIntRange(range, "range");
   return range[1];
 }
 
-//XXX fromXxx<T extends bigint>(xxx: { min: T, max: T }): BigIntRange<T>
-//XXX toXxx<T extends bigint>(range: BigIntRange<T>): { min: T, max: T }
+//XXX fromXxx<T extends bigint>(xxx: { min: T, max: T }): bigintrange<T>
+//XXX toXxx<T extends bigint>(range: bigintrange<T>): { min: T, max: T }
 
 export function toIterable<T extends bigint>(
-  range: BigIntRange<T>,
+  range: bigintrange<T>,
 ): IterableIterator<T> {
   assertBigIntRange(range, "range");
 
@@ -46,8 +46,8 @@ export function toIterable<T extends bigint>(
 
 // a equals b (b equals a)
 export function equals<T extends bigint>(
-  a: BigIntRange<T>,
-  b: BigIntRange<T>,
+  a: bigintrange<T>,
+  b: bigintrange<T>,
 ): boolean {
   assertBigIntRange(a, "a");
   assertBigIntRange(b, "b");
@@ -59,8 +59,8 @@ export function equals<T extends bigint>(
 
 // a overlaps b (b overlaps a)
 export function overlaps<T extends bigint>(
-  a: BigIntRange<T>,
-  b: BigIntRange<T>,
+  a: bigintrange<T>,
+  b: bigintrange<T>,
 ): boolean {
   assertBigIntRange(a, "a");
   assertBigIntRange(b, "b");
@@ -72,8 +72,8 @@ export function overlaps<T extends bigint>(
 
 // a covers b (b isCoveredBy a) (a isSuperrangeOf b) (b isSubrangeOf a)
 export function covers<T extends bigint>(
-  a: BigIntRange<T>,
-  b: BigIntRange<T>,
+  a: bigintrange<T>,
+  b: bigintrange<T>,
 ): boolean {
   assertBigIntRange(a, "a");
   assertBigIntRange(b, "b");
@@ -85,8 +85,8 @@ export function covers<T extends bigint>(
 
 // a isDisjointFrom b (b isDisjointFrom a)
 export function isDisjoint<T extends bigint>(
-  a: BigIntRange<T>,
-  b: BigIntRange<T>,
+  a: bigintrange<T>,
+  b: bigintrange<T>,
 ): boolean {
   return !overlaps(a, b);
 }
@@ -94,8 +94,8 @@ export function isDisjoint<T extends bigint>(
 // a isAdjacentTo b (b isAdjacent a)
 // disjointかつ隣接（図形のtouchesとは意味が異なる）
 export function isAdjacent<T extends bigint>(
-  a: BigIntRange<T>,
-  b: BigIntRange<T>,
+  a: bigintrange<T>,
+  b: bigintrange<T>,
 ): boolean {
   // assertBigIntRange(a, "a");
   // assertBigIntRange(b, "b");
