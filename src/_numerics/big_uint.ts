@@ -1,10 +1,9 @@
-import {
-  assertBigInt,
-  assertBigIntInSafeIntegerRange,
-} from "../type/bigint.ts";
-import { assertSafeInteger } from "../type/number.ts";
+import * as BigIntRange from "../bigint_range/mod.ts";
+import * as ExBigInt from "../bigint/mod.ts";
+import * as ExNumber from "../number/mod.ts";
+import { assertBigInt, assertBigIntInSafeIntRange } from "../type/bigint.ts";
+import { assertSafeInt } from "../type/number.ts";
 import { type bigintrange, type biguint64, type safeint } from "../type.ts";
-import * as BigIntRange from "../bigint_range/basics.ts";
 import {
   BITS_PER_BYTE,
   FromBigIntOptions,
@@ -14,15 +13,7 @@ import {
   Uint8xOperations,
   UintNOperations,
 } from "./ranged_integer.ts";
-import {
-  clampToRange as clampBigIntToRange,
-  fromNumber as bigintFromNumber,
-  fromString as bigintFromString,
-  toString as bigintToString,
-} from "../bigint/basics.ts";
 import { OverflowMode } from "./overflow_mode.ts";
-import { ZERO as BIGINT_ZERO } from "../const/bigint.ts";
-import { ZERO as NUMBER_ZERO } from "../const/number.ts";
 
 class _UinNOperations<T extends bigint> implements UintNOperations<T> {
   readonly #bitLength: safeint;
@@ -37,7 +28,7 @@ class _UinNOperations<T extends bigint> implements UintNOperations<T> {
     }
 
     this.#bitLength = bitLength;
-    this.#min = BIGINT_ZERO as T;
+    this.#min = ExBigInt.ZERO as T;
     this.#max = (2n ** BigInt(bitLength) - 1n) as T;
     this.#range = [this.#min, this.#max];
     this.#size = BigIntRange.sizeOf(this.#range);
@@ -85,13 +76,13 @@ class _UinNOperations<T extends bigint> implements UintNOperations<T> {
 
   rotateLeft(self: T, offset: safeint): T {
     this.assert(self, "self");
-    assertSafeInteger(offset, "offset");
+    assertSafeInt(offset, "offset");
 
     let normalizedOffset = offset % this.#bitLength;
-    if (normalizedOffset < NUMBER_ZERO) {
+    if (normalizedOffset < ExNumber.ZERO) {
       normalizedOffset = normalizedOffset + this.#bitLength;
     }
-    if (normalizedOffset === NUMBER_ZERO) {
+    if (normalizedOffset === ExNumber.ZERO) {
       return self;
     }
 
@@ -102,7 +93,7 @@ class _UinNOperations<T extends bigint> implements UintNOperations<T> {
   }
 
   fromNumber(value: number, options?: FromNumberOptions): T {
-    const valueAsBigInt = bigintFromNumber(value, options);
+    const valueAsBigInt = ExBigInt.fromNumber(value, options);
 
     if (this.is(valueAsBigInt)) {
       return valueAsBigInt;
@@ -119,16 +110,16 @@ class _UinNOperations<T extends bigint> implements UintNOperations<T> {
         return this.#truncateFromInteger(valueAsBigInt);
 
       default: // case OverflowMode.SATURATE:
-        return clampBigIntToRange(valueAsBigInt, this.#range);
+        return ExBigInt.clampToRange(valueAsBigInt, this.#range);
     }
   }
 
   #truncateFromInteger(value: bigint): T {
-    if (value === BIGINT_ZERO) {
-      return BIGINT_ZERO as T;
+    if (value === ExBigInt.ZERO) {
+      return ExBigInt.ZERO as T;
     }
 
-    if (value > BIGINT_ZERO) {
+    if (value > ExBigInt.ZERO) {
       return (value % this.#size) as T;
     } else {
       return (this.#size + (value % this.#size)) as T;
@@ -137,7 +128,7 @@ class _UinNOperations<T extends bigint> implements UintNOperations<T> {
 
   toNumber(self: T): safeint {
     this.assert(self, "self");
-    assertBigIntInSafeIntegerRange(self, "self");
+    assertBigIntInSafeIntRange(self, "self");
 
     return Number(self);
   }
@@ -160,7 +151,7 @@ class _UinNOperations<T extends bigint> implements UintNOperations<T> {
         return this.#truncateFromInteger(value);
 
       default: // case OverflowMode.SATURATE:
-        return clampBigIntToRange(value, this.#range);
+        return ExBigInt.clampToRange(value, this.#range);
     }
   }
 
@@ -170,13 +161,13 @@ class _UinNOperations<T extends bigint> implements UintNOperations<T> {
   }
 
   fromString(value: string, options?: FromStringOptions): T {
-    const valueAsBigInt = bigintFromString(value, options);
+    const valueAsBigInt = ExBigInt.fromString(value, options);
     return this.fromBigInt(valueAsBigInt, options);
   }
 
   toString(self: T, options?: ToStringOptions): string {
     this.assert(self, "self");
-    return bigintToString(self, options);
+    return ExBigInt.toString(self, options);
   }
 }
 
@@ -191,7 +182,7 @@ class _Uint8xOperations<T extends bigint> extends _UinNOperations<T>
 
   constructor(bitLength: _BITS) {
     super(bitLength);
-    //if ((bitLength % BITS_PER_BYTE) !== NUMBER_ZERO) {
+    //if ((bitLength % BITS_PER_BYTE) !== ExNumber.ZERO) {
     if (_BITS.includes(bitLength) !== true) {
       throw new Error("Unsupprted bit length.");
     }
@@ -208,7 +199,7 @@ class _Uint8xOperations<T extends bigint> extends _UinNOperations<T>
   toBytes(self: T, littleEndian: boolean = false): Uint8Array {
     this.assert(self, "self");
 
-    this.#bufferView.setBigUint64(NUMBER_ZERO, self, littleEndian);
+    this.#bufferView.setBigUint64(ExNumber.ZERO, self, littleEndian);
     return Uint8Array.from(this.#bufferUint8View);
   }
 }

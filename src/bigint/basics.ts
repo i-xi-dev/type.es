@@ -1,19 +1,16 @@
-import {
-  assertBigInt,
-  assertBigIntInSafeIntegerRange,
-} from "../type/bigint.ts";
+import * as SafeInt from "../safeint/mod.ts";
+import { assertBigInt, assertBigIntInSafeIntRange } from "../type/bigint.ts";
 import { assertBigIntRange } from "../type/numeric_range.ts";
 import {
   assertFiniteNumber,
-  isPositiveSafeInteger,
-  isSafeInteger,
+  isPositiveSafeInt,
+  isSafeInt,
 } from "../type/number.ts";
 import { assertIntegerString } from "../type/integer_string.ts";
 import { assertSupportedRadix, prefixOf } from "../numerics/radix.ts";
 import { type bigintrange, type radix, type safeint } from "../type.ts";
 import { EMPTY as EMPTY_STRING } from "../const/string.ts";
 import { Radix } from "../const/radix.ts";
-import { round as roundFromNumber } from "../safe_integer/basics.ts";
 import { RoundingMode } from "../numerics/rounding_mode.ts";
 
 export function min<T extends bigint>(value0: T, ...values: T[]): T {
@@ -104,7 +101,7 @@ export function toString(value: bigint, options?: ToStringOptions): string {
   }
 
   const minIntegralDigits = options?.minIntegralDigits;
-  if (isPositiveSafeInteger(minIntegralDigits)) {
+  if (isPositiveSafeInt(minIntegralDigits)) {
     result = result.padStart(minIntegralDigits, "0");
   }
 
@@ -135,16 +132,16 @@ export function fromNumber(
   }
 
   let valueAsInt: safeint;
-  if (isSafeInteger(adjustedValue)) {
+  if (isSafeInt(adjustedValue)) {
     valueAsInt = adjustedValue;
   } else {
-    valueAsInt = roundFromNumber(adjustedValue, options?.roundingMode);
+    valueAsInt = SafeInt.round(adjustedValue, options?.roundingMode);
   }
 
   return BigInt(valueAsInt);
 }
 
 export function toNumber(value: bigint): safeint {
-  assertBigIntInSafeIntegerRange(value, "value");
+  assertBigIntInSafeIntRange(value, "value");
   return Number(value);
 }

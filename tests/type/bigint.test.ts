@@ -444,42 +444,42 @@ Deno.test("Type.assertBigIntInRange()", () => {
   }
 });
 
-Deno.test("Type.isBigIntInSafeIntegerRange()", () => {
-  assertStrictEquals(Type.isBigIntInSafeIntegerRange(0n), true);
-  assertStrictEquals(Type.isBigIntInSafeIntegerRange(BigInt(SIMIN)), true);
+Deno.test("Type.isBigIntInSafeIntRange()", () => {
+  assertStrictEquals(Type.isBigIntInSafeIntRange(0n), true);
+  assertStrictEquals(Type.isBigIntInSafeIntRange(BigInt(SIMIN)), true);
   assertStrictEquals(
-    Type.isBigIntInSafeIntegerRange(BigInt(SIMIN) - 1n),
+    Type.isBigIntInSafeIntRange(BigInt(SIMIN) - 1n),
     false,
   );
-  assertStrictEquals(Type.isBigIntInSafeIntegerRange(BigInt(SIMAX)), true);
+  assertStrictEquals(Type.isBigIntInSafeIntRange(BigInt(SIMAX)), true);
   assertStrictEquals(
-    Type.isBigIntInSafeIntegerRange(BigInt(SIMAX) + 1n),
+    Type.isBigIntInSafeIntRange(BigInt(SIMAX) + 1n),
     false,
   );
 
-  assertStrictEquals(Type.isBigIntInSafeIntegerRange(0), false);
-  assertStrictEquals(Type.isBigIntInSafeIntegerRange(SIMAX), false);
-  assertStrictEquals(Type.isBigIntInSafeIntegerRange(SIMAX), false);
-  assertStrictEquals(Type.isBigIntInSafeIntegerRange("0"), false);
+  assertStrictEquals(Type.isBigIntInSafeIntRange(0), false);
+  assertStrictEquals(Type.isBigIntInSafeIntRange(SIMAX), false);
+  assertStrictEquals(Type.isBigIntInSafeIntRange(SIMAX), false);
+  assertStrictEquals(Type.isBigIntInSafeIntRange("0"), false);
 });
 
-Deno.test("Type.assertBigIntInSafeIntegerRange()", () => {
+Deno.test("Type.assertBigIntInSafeIntRange()", () => {
   try {
-    Type.assertBigIntInSafeIntegerRange(0n, "test-1");
-    Type.assertBigIntInSafeIntegerRange(BigInt(SIMIN), "test-1");
-    Type.assertBigIntInSafeIntegerRange(BigInt(SIMAX), "test-1");
+    Type.assertBigIntInSafeIntRange(0n, "test-1");
+    Type.assertBigIntInSafeIntRange(BigInt(SIMIN), "test-1");
+    Type.assertBigIntInSafeIntRange(BigInt(SIMAX), "test-1");
   } catch (exception) {
     fail((exception as Error).toString());
   }
 
   try {
-    Type.assertBigIntInSafeIntegerRange(BigInt(SIMIN) - 1n, "test-1");
+    Type.assertBigIntInSafeIntRange(BigInt(SIMIN) - 1n, "test-1");
     unreachable();
   } catch {
     //
   }
   try {
-    Type.assertBigIntInSafeIntegerRange(BigInt(SIMAX) + 1n, "test-1");
+    Type.assertBigIntInSafeIntRange(BigInt(SIMAX) + 1n, "test-1");
     unreachable();
   } catch {
     //

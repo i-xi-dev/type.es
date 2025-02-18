@@ -18,13 +18,13 @@ export function assertNumberRange(test: unknown, label: string): void {
 }
 
 // min > max については関知しない（マッチする数値は存在しなくなるだけ）
-export function isSafeIntegerRange(test: unknown): test is safeintrange {
+export function isSafeIntRange(test: unknown): test is safeintrange {
   return Array.isArray(test) && (test.length === 2) &&
     test.every((i) => Number.isSafeInteger(i));
 }
 
-export function assertSafeIntegerRange(test: unknown, label: string): void {
-  if (isSafeIntegerRange(test) !== true) {
+export function assertSafeIntRange(test: unknown, label: string): void {
+  if (isSafeIntRange(test) !== true) {
     throw new TypeError(`\`${label}\` must be a range of safe integer.`);
   }
 }

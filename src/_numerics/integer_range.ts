@@ -1,6 +1,6 @@
 import { type int } from "../type.ts";
 import { isBigInt } from "../type/bigint.ts";
-import { isSafeInteger } from "../type/number.ts";
+import { isSafeInt } from "../type/number.ts";
 import { ZERO as NUMBER_ZERO } from "../const/number.ts";
 
 //TODO BigIntRangeSet, SafeIntRangeSet
@@ -43,7 +43,7 @@ export namespace IntegerRange {
         parsedMax = test[1];
       }
 
-      if (isSafeInteger(parsedMin) && isSafeInteger(parsedMax)) {
+      if (isSafeInt(parsedMin) && isSafeInt(parsedMax)) {
         return true;
       } else if (isBigInt(parsedMin) && isBigInt(parsedMax)) {
         return true;
@@ -89,7 +89,7 @@ export namespace IntegerRange {
         throw new TypeError("`rangeLike` must be a `IntegerRange.Like`.");
       }
 
-      if (isSafeInteger(parsedMin) && isSafeInteger(parsedMax)) {
+      if (isSafeInt(parsedMin) && isSafeInt(parsedMax)) {
         // ok
       } else if (isBigInt(parsedMin) && isBigInt(parsedMax)) {
         // ok

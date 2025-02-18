@@ -1,13 +1,13 @@
 import { type codepoint, type safeintrange } from "../type.ts";
 import { Radix } from "../const/radix.ts";
-import { isSafeIntegerInRange } from "./number.ts";
+import { isSafeIntInRange } from "./number.ts";
 import {
   MAX_VALUE as MAX_CODE_POINT,
   MIN_VALUE as MIN_CODE_POINT,
 } from "../const/code_point.ts";
 
 export function isCodePoint(test: unknown): test is codepoint {
-  return isSafeIntegerInRange(test, [MIN_CODE_POINT, MAX_CODE_POINT]);
+  return isSafeIntInRange(test, [MIN_CODE_POINT, MAX_CODE_POINT]);
 }
 
 export function assertCodePoint(test: unknown, label: string): void {
@@ -20,7 +20,7 @@ const _MIN_HIGH_SURROGATE: codepoint = 0xD800;
 const _MAX_HIGH_SURROGATE: codepoint = 0xDBFF;
 
 export function isHighSurrogateCodePoint(test: unknown): test is codepoint {
-  return isSafeIntegerInRange(
+  return isSafeIntInRange(
     test,
     [_MIN_HIGH_SURROGATE, _MAX_HIGH_SURROGATE],
   );
@@ -39,7 +39,7 @@ const _MIN_LOW_SURROGATE: codepoint = 0xDC00;
 const _MAX_LOW_SURROGATE: codepoint = 0xDFFF;
 
 export function isLowSurrogateCodePoint(test: unknown): test is codepoint {
-  return isSafeIntegerInRange(
+  return isSafeIntInRange(
     test,
     [_MIN_LOW_SURROGATE, _MAX_LOW_SURROGATE],
   );
@@ -55,7 +55,7 @@ export function assertLowSurrogateCodePoint(
 }
 
 export function isSurrogateCodePoint(test: unknown): test is codepoint {
-  return isSafeIntegerInRange(
+  return isSafeIntInRange(
     test,
     [_MIN_HIGH_SURROGATE, _MAX_LOW_SURROGATE],
   );
@@ -80,9 +80,9 @@ const _MAX_MONGOLIAN_VS: codepoint = 0x180F;
 export function isVariationSelectorCodePoint(
   test: unknown,
 ): test is codepoint {
-  return isSafeIntegerInRange(test, [_MIN_VS, _MAX_VS]) ||
-    isSafeIntegerInRange(test, [_MIN_VSS, _MAX_VSS]) ||
-    isSafeIntegerInRange(test, [_MIN_MONGOLIAN_VS, _MAX_MONGOLIAN_VS]);
+  return isSafeIntInRange(test, [_MIN_VS, _MAX_VS]) ||
+    isSafeIntInRange(test, [_MIN_VSS, _MAX_VSS]) ||
+    isSafeIntInRange(test, [_MIN_MONGOLIAN_VS, _MAX_MONGOLIAN_VS]);
 }
 
 export function assertVariationSelectorCodePoint(
@@ -103,7 +103,7 @@ export function isCodePointInRange(
   assertCodePoint(range[0], "range.min");
   assertCodePoint(range[1], "range.max");
 
-  return isSafeIntegerInRange(test, range);
+  return isSafeIntInRange(test, range);
 }
 
 export function assertCodePointInRange(
@@ -123,7 +123,7 @@ export function assertCodePointInRange(
 const _MAX_BMP = 0xFFFF;
 
 export function isBmpCodePoint(test: unknown): test is codepoint {
-  return isSafeIntegerInRange(test, [MIN_CODE_POINT, _MAX_BMP]);
+  return isSafeIntInRange(test, [MIN_CODE_POINT, _MAX_BMP]);
 }
 
 export function assertBmpCodePoint(test: unknown, label: string): void {
@@ -138,8 +138,8 @@ const _MIN_SPUA = 0xF0000;
 const _MAX_SPUA = 0x10FFFF;
 
 export function isPrivateUseCodePoint(test: unknown): test is codepoint {
-  return isSafeIntegerInRange(test, [_MIN_PUA, _MAX_PUA]) ||
-    isSafeIntegerInRange(test, [_MIN_SPUA, _MAX_SPUA]);
+  return isSafeIntInRange(test, [_MIN_PUA, _MAX_PUA]) ||
+    isSafeIntInRange(test, [_MIN_SPUA, _MAX_SPUA]);
   //XXX isSafeIntegerInRanges(test, [[_MIN_PUA, _MAX_PUA], [_MIN_SPUA, _MAX_SPUA]]);
 }
 

@@ -1,3 +1,4 @@
+import * as Rune from "../rune/mod.ts";
 import { _PropertyValueSetBase } from "./_propval_set_base.ts";
 import {
   type ArrayOrSet,
@@ -8,7 +9,6 @@ import {
 import { assertArrayOrSet } from "../type/collection.ts";
 import { assertCodePoint } from "../type/code_point.ts";
 import { assertRune } from "../type/string.ts";
-import { fromCodePoint as runeFromCodePoint } from "../rune/basics.ts";
 import { isUnicodeGeneralCategory } from "../type/unicode.ts";
 
 function _toGcSet(gcs: ArrayOrSet<gc>): Set<gc> {
@@ -41,7 +41,7 @@ export class GeneralCategorySet extends _PropertyValueSetBase<gc> {
   includesCodePoint(codePoint: codepoint): boolean {
     assertCodePoint(codePoint, "codePoint");
 
-    const rune = runeFromCodePoint(codePoint);
+    const rune = Rune.fromCodePoint(codePoint);
     return this.includesRune(rune);
   }
 
