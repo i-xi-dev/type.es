@@ -55,6 +55,7 @@ export function max<T extends bigint>(value0: T, ...values: T[]): T {
 const _min = min;
 const _max = max;
 
+//TODO 命名 toか？
 export function clampToRange<T extends bigint>(
   value: bigint,
   range: bigintrange<T>,

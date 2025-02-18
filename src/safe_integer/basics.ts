@@ -18,6 +18,7 @@ import { RoundingMode } from "../numerics/rounding_mode.ts";
 import { type safeint, type safeintrange } from "../type.ts";
 import { ZERO as NUMBER_ZERO } from "../const/number.ts";
 
+//TODO 命名 toか？
 export function clampToRange<T extends safeint>(
   value: safeint,
   range: safeintrange<T>,

@@ -14,6 +14,7 @@ import {
   UintNOperations,
 } from "./ranged_integer.ts";
 import {
+  clampToRange as clampSafeIntegerToRange,
   fromBigInt as safeIntegerFromBigInt,
   round as roundFromNumber,
   toString as safeIntegerToString,
@@ -23,6 +24,7 @@ import { normalize as normalizeNumber } from "../number/basics.ts";
 import { OverflowMode } from "./overflow_mode.ts";
 import {
   type safeint,
+  type safeintrange,
   type uint16,
   type uint24,
   type uint32,
@@ -30,12 +32,15 @@ import {
   type uint7,
   type uint8,
 } from "../type.ts";
-import { SafeIntegerRange } from "./safe_integer_range.ts";
+import * as SafeIntegerRange from "../safe_integer_range/basics.ts";
 import { ZERO as NUMBER_ZERO } from "../const/number.ts";
 
 class _UinNOperations<T extends safeint> implements UintNOperations<T> {
   readonly #bitLength: safeint;
-  readonly #range: SafeIntegerRange<T>;
+  readonly #min: T;
+  readonly #max: T;
+  readonly #range: safeintrange<T>;
+  readonly #size: safeint;
 
   readonly #buffer: ArrayBuffer;
   readonly #bufferUint32View: Uint32Array;
@@ -47,10 +52,10 @@ class _UinNOperations<T extends safeint> implements UintNOperations<T> {
     }
 
     this.#bitLength = bitLength;
-    this.#range = SafeIntegerRange.of<T>(
-      NUMBER_ZERO as T,
-      (2 ** bitLength - 1) as T,
-    );
+    this.#min = NUMBER_ZERO as T;
+    this.#max = (2 ** bitLength - 1) as T;
+    this.#range = [this.#min, this.#max];
+    this.#size = SafeIntegerRange.sizeOf(this.#range);
 
     this.#buffer = new ArrayBuffer(96);
     this.#bufferUint32View = new Uint32Array(this.#buffer);
@@ -63,7 +68,7 @@ class _UinNOperations<T extends safeint> implements UintNOperations<T> {
 
   //
   is(value: unknown): value is T {
-    return this.#range.includes(value as safeint);
+    return SafeIntegerRange.includes(this.#range, value as T);
   }
 
   assert(test: unknown, label: string): void {
@@ -89,7 +94,7 @@ class _UinNOperations<T extends safeint> implements UintNOperations<T> {
       this.#bufferUint16View[5] = a2 & b2;
       return this.#bufferUint32View[2] as T;
     } else {
-      return ((self & other) & this.#range.max) as T;
+      return ((self & other) & this.#max) as T;
     }
   }
 
@@ -108,7 +113,7 @@ class _UinNOperations<T extends safeint> implements UintNOperations<T> {
       this.#bufferUint16View[5] = a2 | b2;
       return this.#bufferUint32View[2] as T;
     } else {
-      return ((self | other) & this.#range.max) as T;
+      return ((self | other) & this.#max) as T;
     }
   }
 
@@ -127,7 +132,7 @@ class _UinNOperations<T extends safeint> implements UintNOperations<T> {
       this.#bufferUint16View[5] = a2 ^ b2;
       return this.#bufferUint32View[2] as T;
     } else {
-      return ((self ^ other) & this.#range.max) as T;
+      return ((self ^ other) & this.#max) as T;
     }
   }
 
@@ -149,11 +154,11 @@ class _UinNOperations<T extends safeint> implements UintNOperations<T> {
       return Number(
         ((bs << BigInt(normalizedOffset)) |
           (bs >> BigInt(this.#bitLength - normalizedOffset))) &
-          BigInt(this.#range.max),
+          BigInt(this.#max),
       ) as T;
     } else {
       return (((self << normalizedOffset) |
-        (self >> (this.#bitLength - normalizedOffset))) & this.#range.max) as T;
+        (self >> (this.#bitLength - normalizedOffset))) & this.#max) as T;
     }
   }
 
@@ -196,17 +201,17 @@ class _UinNOperations<T extends safeint> implements UintNOperations<T> {
         return this.#truncateFromInteger(valueAsInt);
 
       default: // case OverflowMode.SATURATE:
-        return this.#range.clamp(valueAsInt);
+        return clampSafeIntegerToRange(valueAsInt, this.#range);
     }
   }
 
   // #saturateFromInteger(value: safeint): T {
   //   // assertSafeInteger(value, "value");
 
-  //   if (value > this.#range.max) {
-  //     return this.#range.max;
-  //   } else if (value < this.#range.min) {
-  //     return this.#range.min;
+  //   if (value > this.#max) {
+  //     return this.#max;
+  //   } else if (value < this.#min) {
+  //     return this.#min;
   //   }
 
   //   return ExNumber.normalize(value as T);
@@ -218,9 +223,9 @@ class _UinNOperations<T extends safeint> implements UintNOperations<T> {
     if (value === NUMBER_ZERO) {
       return NUMBER_ZERO as T;
     } else if (value > NUMBER_ZERO) {
-      return (value % this.#range.size) as T;
+      return (value % this.#size) as T;
     } else {
-      return (this.#range.size + (value % this.#range.size)) as T;
+      return (this.#size + (value % this.#size)) as T;
     }
   }
 
@@ -248,7 +253,7 @@ class _UinNOperations<T extends safeint> implements UintNOperations<T> {
         return this.#truncateFromInteger(valueAsNumber);
 
       default: // case OverflowMode.SATURATE:
-        return this.#range.clamp(valueAsNumber);
+        return clampSafeIntegerToRange(valueAsNumber, this.#range);
     }
   }
 

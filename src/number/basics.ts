@@ -8,6 +8,7 @@ export function normalize<T extends number>(value: T): T {
   return ((value === NUMBER_ZERO) ? (value + NUMBER_ZERO) : value) as T; // -0を0
 }
 
+//TODO 命名 toか？
 export function clampToRange<T extends number>(
   value: number,
   range: numberrange<T>,

@@ -3,8 +3,8 @@ import {
   assertBigIntInSafeIntegerRange,
 } from "../type/bigint.ts";
 import { assertSafeInteger } from "../type/number.ts";
-import { type biguint64, type safeint } from "../type.ts";
-import { BigIntRange } from "./bigint_range.ts";
+import { type bigintrange, type biguint64, type safeint } from "../type.ts";
+import * as BigIntRange from "../bigint_range/basics.ts";
 import {
   BITS_PER_BYTE,
   FromBigIntOptions,
@@ -15,6 +15,7 @@ import {
   UintNOperations,
 } from "./ranged_integer.ts";
 import {
+  clampToRange as clampBigIntToRange,
   fromNumber as bigintFromNumber,
   fromString as bigintFromString,
   toString as bigintToString,
@@ -25,7 +26,10 @@ import { ZERO as NUMBER_ZERO } from "../const/number.ts";
 
 class _UinNOperations<T extends bigint> implements UintNOperations<T> {
   readonly #bitLength: safeint;
-  readonly #range: BigIntRange<T>;
+  readonly #min: T;
+  readonly #max: T;
+  readonly #range: bigintrange<T>;
+  readonly #size: bigint;
 
   constructor(bitLength: safeint) {
     if (bitLength !== 64) {
@@ -33,10 +37,10 @@ class _UinNOperations<T extends bigint> implements UintNOperations<T> {
     }
 
     this.#bitLength = bitLength;
-    this.#range = BigIntRange.of<T>(
-      BIGINT_ZERO as T,
-      (2n ** BigInt(bitLength) - 1n) as T,
-    );
+    this.#min = BIGINT_ZERO as T;
+    this.#max = (2n ** BigInt(bitLength) - 1n) as T;
+    this.#range = [this.#min, this.#max];
+    this.#size = BigIntRange.sizeOf(this.#range);
   }
 
   get bitLength(): safeint {
@@ -44,7 +48,7 @@ class _UinNOperations<T extends bigint> implements UintNOperations<T> {
   }
 
   is(value: unknown): value is T {
-    return this.#range.includes(value as bigint);
+    return BigIntRange.includes(this.#range, value as T);
   }
 
   assert(test: unknown, label: string): void {
@@ -60,7 +64,7 @@ class _UinNOperations<T extends bigint> implements UintNOperations<T> {
     this.assert(other, "other");
 
     const aAndB = (self as bigint) & (other as bigint); //XXX 何故かtypescriptにbigintでなくnumberだと言われる
-    return (aAndB & this.#range.max) as T;
+    return (aAndB & this.#max) as T;
   }
 
   bitwiseOr(self: T, other: T): T {
@@ -68,7 +72,7 @@ class _UinNOperations<T extends bigint> implements UintNOperations<T> {
     this.assert(other, "other");
 
     const aOrB = (self as bigint) | (other as bigint); //XXX 何故かtypescriptにbigintでなくnumberだと言われる
-    return (aOrB & this.#range.max) as T;
+    return (aOrB & this.#max) as T;
   }
 
   bitwiseXOr(self: T, other: T): T {
@@ -76,7 +80,7 @@ class _UinNOperations<T extends bigint> implements UintNOperations<T> {
     this.assert(other, "other");
 
     const aXOrB = (self as bigint) ^ (other as bigint); //XXX 何故かtypescriptにbigintでなくnumberだと言われる
-    return (aXOrB & this.#range.max) as T;
+    return (aXOrB & this.#max) as T;
   }
 
   rotateLeft(self: T, offset: safeint): T {
@@ -94,7 +98,7 @@ class _UinNOperations<T extends bigint> implements UintNOperations<T> {
     const bigIntOffset = BigInt(normalizedOffset);
     return (((self << bigIntOffset) |
       (self >> (BigInt(this.#bitLength) - bigIntOffset))) &
-      this.#range.max) as T;
+      this.#max) as T;
   }
 
   fromNumber(value: number, options?: FromNumberOptions): T {
@@ -115,7 +119,7 @@ class _UinNOperations<T extends bigint> implements UintNOperations<T> {
         return this.#truncateFromInteger(valueAsBigInt);
 
       default: // case OverflowMode.SATURATE:
-        return this.#range.clamp(valueAsBigInt);
+        return clampBigIntToRange(valueAsBigInt, this.#range);
     }
   }
 
@@ -124,11 +128,10 @@ class _UinNOperations<T extends bigint> implements UintNOperations<T> {
       return BIGINT_ZERO as T;
     }
 
-    const sizeAsBigInt = BigInt(this.#range.size);
     if (value > BIGINT_ZERO) {
-      return (value % sizeAsBigInt) as T;
+      return (value % this.#size) as T;
     } else {
-      return (sizeAsBigInt + (value % sizeAsBigInt)) as T;
+      return (this.#size + (value % this.#size)) as T;
     }
   }
 
@@ -157,7 +160,7 @@ class _UinNOperations<T extends bigint> implements UintNOperations<T> {
         return this.#truncateFromInteger(value);
 
       default: // case OverflowMode.SATURATE:
-        return this.#range.clamp(value);
+        return clampBigIntToRange(value, this.#range);
     }
   }
 
