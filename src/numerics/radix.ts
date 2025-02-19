@@ -1,9 +1,8 @@
+import * as Radix from "../const/radix.ts";
 import { EMPTY as EMPTY_STRING } from "../const/string.ts";
 import { type radix } from "../type.ts";
-import { Radix } from "../const/radix.ts";
 
-// 2,8,10,16にしているのはstringからbigintへのパースが面倒になるからというだけ
-const _radix = [
+const _supportedRadixes = [
   Radix.BINARY,
   Radix.OCTAL,
   Radix.DECIMAL,
@@ -11,7 +10,7 @@ const _radix = [
 ] as const;
 
 function _isSupportedRadix(test: unknown): test is radix {
-  return _radix.includes(test as radix);
+  return _supportedRadixes.includes(test as radix);
 }
 
 export function assertSupportedRadix(test: unknown, label: string): void {
@@ -73,3 +72,8 @@ export function prefixOf(radix: radix): string {
       return EMPTY_STRING;
   }
 }
+
+export const BINARY = Radix.BINARY;
+export const OCTAL = Radix.OCTAL;
+export const DECIMAL = Radix.DECIMAL;
+export const HEXADECIMAL = Radix.HEXADECIMAL;

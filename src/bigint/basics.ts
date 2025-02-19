@@ -1,3 +1,4 @@
+import * as Radix from "../numerics/radix.ts";
 import * as SafeInt from "../safeint/mod.ts";
 import { assertBigInt, assertBigIntInSafeIntRange } from "../type/bigint.ts";
 import { assertBigIntRange } from "../type/numeric_range.ts";
@@ -15,7 +16,6 @@ import {
   type safeint,
 } from "../type.ts";
 import { EMPTY as EMPTY_STRING } from "../const/string.ts";
-import { Radix } from "../const/radix.ts";
 
 export function min<T extends bigint>(value0: T, ...values: T[]): T {
   assertBigInt(value0, `value0`);

@@ -1,5 +1,6 @@
 import * as ExBigInt from "../bigint/mod.ts";
 import * as ExNumber from "../number/mod.ts";
+import * as Radix from "../numerics/radix.ts";
 import * as RoundingMode from "../const/rounding_mode.ts";
 import {
   assertSafeInt,
@@ -14,7 +15,6 @@ import {
   type safeint,
   type safeintrange,
 } from "../type.ts";
-import { Radix } from "../const/radix.ts";
 
 //TODO 命名 toか？
 export function clampToRange<T extends safeint>(

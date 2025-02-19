@@ -1,5 +1,5 @@
 import { type codepoint, type safeintrange } from "../type.ts";
-import { Radix } from "../const/radix.ts";
+import * as Radix from "../const/radix.ts";
 import { isSafeIntInRange } from "./number.ts";
 import {
   MAX_VALUE as MAX_CODE_POINT,

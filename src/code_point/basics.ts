@@ -1,7 +1,7 @@
 import * as SafeInt from "../safeint/mod.ts";
 import { assertCodePoint } from "../type/code_point.ts";
 import { type codepoint, type plane } from "../type.ts";
-import { Radix } from "../const/radix.ts";
+import { Radix } from "../numerics/mod.ts";
 
 const _toStringOptions: SafeInt.ToStringOptions = {
   // lowerCase: false,
