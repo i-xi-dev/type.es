@@ -8,10 +8,14 @@ import {
 } from "../type/number.ts";
 import { assertIntegerString } from "../type/integer_string.ts";
 import { assertSupportedRadix, prefixOf } from "../numerics/radix.ts";
-import { type bigintrange, type radix, type safeint } from "../type.ts";
+import {
+  type bigintrange,
+  type radix,
+  type roundingmode,
+  type safeint,
+} from "../type.ts";
 import { EMPTY as EMPTY_STRING } from "../const/string.ts";
 import { Radix } from "../const/radix.ts";
-import { RoundingMode } from "../numerics/rounding_mode.ts";
 
 export function min<T extends bigint>(value0: T, ...values: T[]): T {
   assertBigInt(value0, `value0`);
@@ -109,7 +113,7 @@ export function toString(value: bigint, options?: ToStringOptions): string {
 }
 
 export type FromNumberOptions = {
-  roundingMode?: RoundingMode;
+  roundingMode?: roundingmode;
 };
 
 export function fromNumber(

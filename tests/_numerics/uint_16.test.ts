@@ -1,7 +1,7 @@
 import { assertStrictEquals, assertThrows } from "@std/assert";
-import { Numerics } from "../../mod.ts";
+import { xNumerics } from "../../mod.ts";
 
-const { Uint16 } = Numerics;
+const { Uint16 } = xNumerics;
 
 Deno.test("Uint16.bitLength", () => {
   assertStrictEquals(Uint16.bitLength, 16);

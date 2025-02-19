@@ -65,6 +65,17 @@ export type radix = 2 | 8 | 10 | 16;
  */
 export type region = keyof typeof _regions;
 
+export type roundingmode =
+  | "away-from-zero"
+  | "down"
+  | "half-away-from-zero"
+  | "half-down"
+  | "half-to-even"
+  | "half-toward-zero"
+  | "half-up"
+  | "toward-zero"
+  | "up";
+
 /**
  * String matching regular expression `/^[\u{0}-\u{10FFFF}]{1}$/u`.
  * excluding any lone surrogates.

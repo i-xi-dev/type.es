@@ -4,9 +4,9 @@ import {
   fail,
   unreachable,
 } from "@std/assert";
-import { Numerics } from "../../mod.ts";
+import { xNumerics } from "../../mod.ts";
 
-const { Uint8Iterable } = Numerics;
+const { Uint8Iterable } = xNumerics;
 
 const a3 = [0, 1, 2];
 const a2 = [0, 1];

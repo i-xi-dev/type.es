@@ -1,9 +1,8 @@
-import { type radix } from "../type.ts";
-import { RoundingMode } from "../numerics/rounding_mode.ts";
+import { type radix, type roundingmode } from "../type.ts";
 
 //XXX Integer.FromNumberOptions or IntegerFromNumberOptions
 export type FromNumberOptions = {
-  roundingMode?: RoundingMode;
+  roundingMode?: roundingmode;
 };
 
 export type FromStringOptions = {

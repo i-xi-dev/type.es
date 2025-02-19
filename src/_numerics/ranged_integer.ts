@@ -1,10 +1,14 @@
-import { type int, type radix, type safeint } from "../type.ts";
+import {
+  type int,
+  type radix,
+  type roundingmode,
+  type safeint,
+} from "../type.ts";
 import { OverflowMode } from "./overflow_mode.ts";
-import { RoundingMode } from "../numerics/rounding_mode.ts";
 
 export type FromNumberOptions = {
   overflowMode?: OverflowMode;
-  roundingMode?: RoundingMode;
+  roundingMode?: roundingmode;
 }; // Numerics.FromNumberOptions & { overflowMode }
 
 export type FromBigIntOptions = {

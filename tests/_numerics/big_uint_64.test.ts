@@ -1,7 +1,7 @@
 import { assertStrictEquals, assertThrows } from "@std/assert";
-import { Numerics } from "../../mod.ts";
+import { xNumerics } from "../../mod.ts";
 
-const { BigUint64 } = Numerics;
+const { BigUint64 } = xNumerics;
 
 Deno.test("BigUint64.bitLength", () => {
   assertStrictEquals(BigUint64.bitLength, 64);

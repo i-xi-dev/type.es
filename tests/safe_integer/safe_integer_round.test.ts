@@ -1,6 +1,7 @@
 import { assertStrictEquals, assertThrows } from "@std/assert";
-import { RoundingMode, SafeInt } from "../../mod.ts";
+import { Numerics, SafeInt } from "../../mod.ts";
 
+const { RoundingMode } = Numerics;
 const MIN = Number.MIN_SAFE_INTEGER;
 const MAX = Number.MAX_SAFE_INTEGER;
 

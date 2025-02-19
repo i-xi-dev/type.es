@@ -1,7 +1,7 @@
 import { assertStrictEquals, assertThrows } from "@std/assert";
-import { Numerics, type uint8 } from "../../mod.ts";
+import { xNumerics, type uint8 } from "../../mod.ts";
 
-const { Uint8 } = Numerics;
+const { Uint8 } = xNumerics;
 
 Deno.test("Uint8.bitLength", () => {
   assertStrictEquals(Uint8.bitLength, 8);

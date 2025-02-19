@@ -1,5 +1,6 @@
 import * as ExBigInt from "../bigint/mod.ts";
 import * as ExNumber from "../number/mod.ts";
+import * as RoundingMode from "../const/rounding_mode.ts";
 import {
   assertSafeInt,
   isEvenSafeInt,
@@ -7,8 +8,12 @@ import {
 } from "../type/number.ts";
 import { assertSafeIntRange } from "../type/numeric_range.ts";
 import { assertSupportedRadix } from "../numerics/radix.ts";
-import { RoundingMode } from "../numerics/rounding_mode.ts";
-import { type radix, type safeint, type safeintrange } from "../type.ts";
+import {
+  type radix,
+  type roundingmode,
+  type safeint,
+  type safeintrange,
+} from "../type.ts";
 import { Radix } from "../const/radix.ts";
 
 //TODO 命名 toか？
@@ -93,7 +98,7 @@ export function toBigInt(value: safeint): bigint {
 }
 
 //XXX fromNumberか？
-export function round(value: number, roundingMode?: RoundingMode): safeint {
+export function round(value: number, roundingMode?: roundingmode): safeint {
   if (Number.isFinite(value) !== true) {
     throw new TypeError("`value` must be a finite number.");
   }
@@ -102,7 +107,7 @@ export function round(value: number, roundingMode?: RoundingMode): safeint {
   const integralPartIsEven = isEvenSafeInt(integralPart);
 
   const resolvedRoundingMode =
-    Object.values(RoundingMode).includes(roundingMode as RoundingMode)
+    Object.values(RoundingMode).includes(roundingMode as roundingmode)
       ? roundingMode
       : RoundingMode.TRUNCATE;
 
