@@ -3,44 +3,6 @@ import { Numerics } from "../../mod.ts";
 
 const { IntegerRange } = Numerics;
 
-const minmax2m = { min: -2, max: -2 };
-const minmax1m = { min: -1, max: -1 };
-const minmax0 = { min: 0, max: 0 };
-const minmax1 = { min: 1, max: 1 };
-const minmax2 = { min: 2, max: 2 };
-
-const min0max1 = { min: 0, max: 1 };
-
-Deno.test("IntegerRange.rangeEquals() - number", () => {
-  assertStrictEquals(IntegerRange.rangeEquals(minmax0, minmax0), true);
-
-  assertStrictEquals(IntegerRange.rangeEquals(min0max1, minmax2m), false);
-  assertStrictEquals(IntegerRange.rangeEquals(min0max1, minmax1m), false);
-  assertStrictEquals(IntegerRange.rangeEquals(min0max1, minmax0), false);
-  assertStrictEquals(IntegerRange.rangeEquals(min0max1, minmax1), false);
-  assertStrictEquals(IntegerRange.rangeEquals(min0max1, minmax2m), false);
-
-  assertStrictEquals(IntegerRange.rangeEquals(minmax0, min0max1), false);
-  assertStrictEquals(
-    IntegerRange.rangeEquals({ min: -1, max: 0 }, minmax0),
-    false,
-  );
-  assertStrictEquals(
-    IntegerRange.rangeEquals(minmax0, { min: -1, max: 0 }),
-    false,
-  );
-
-  assertStrictEquals(IntegerRange.rangeEquals(minmax0, minmax1), false);
-  assertStrictEquals(IntegerRange.rangeEquals(minmax1, minmax0), false);
-  assertStrictEquals(IntegerRange.rangeEquals(minmax0, minmax1m), false);
-  assertStrictEquals(IntegerRange.rangeEquals(minmax1m, minmax0), false);
-
-  assertStrictEquals(IntegerRange.rangeEquals(minmax0, minmax2), false);
-  assertStrictEquals(IntegerRange.rangeEquals(minmax2, minmax0), false);
-  assertStrictEquals(IntegerRange.rangeEquals(minmax0, minmax2m), false);
-  assertStrictEquals(IntegerRange.rangeEquals(minmax2m, minmax0), false);
-});
-
 Deno.test("IntegerRange.Struct.fromRangeLike() - number", () => {
   const a00 = IntegerRange.Struct.fromRangeLike({ min: 0, max: 0 });
   assertStrictEquals(a00.min, 0);

@@ -18,15 +18,6 @@ export namespace IntegerRange {
 
   export type Like<T extends int> = Tuple<T> | Struct<T>;
 
-  /** @deprecated */
-  export function rangeEquals<T extends int, U extends int>(
-    self: Struct<T>,
-    other: Struct<U>,
-  ) {
-    return ((self.min as int) === (other.min as int)) &&
-      ((self.max as int) === (other.max as int));
-  }
-
   export namespace Tuple {
     export function is<T extends int>(test: unknown): test is Tuple<T> {
       if (Array.isArray(test) !== true) {
