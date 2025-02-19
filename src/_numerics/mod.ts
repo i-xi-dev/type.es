@@ -1,5 +1,4 @@
 export * from "./big_uint.ts";
-export * from "./integer_range.ts";
 export * from "./main.ts";
 export * from "./overflow_mode.ts";
 export * from "./uint.ts";
