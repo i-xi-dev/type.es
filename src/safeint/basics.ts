@@ -1,5 +1,5 @@
 import * as ExBigInt from "../bigint/mod.ts";
-import * as ExNumber from "../number/mod.ts";
+import { Number as ExNumber } from "../numerics/mod.ts";
 import * as RoundingMode from "../const/rounding_mode.ts";
 import {
   assertSafeInt,

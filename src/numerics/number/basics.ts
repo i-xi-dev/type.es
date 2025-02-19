@@ -1,10 +1,9 @@
-import { assertNumber } from "../type/number.ts";
-import { assertNumberRange } from "../type/numeric_range.ts";
-import { type numberrange } from "../type.ts";
-import { ZERO as NUMBER_ZERO } from "../const/number.ts";
+import * as Type from "../../type/mod.ts";
+import { type numberrange } from "../../type.ts";
+import { ZERO as NUMBER_ZERO } from "../../const/number.ts";
 
 export function normalize<T extends number>(value: T): T {
-  assertNumber(value, "value");
+  Type.assertNumber(value, "value");
   return ((value === NUMBER_ZERO) ? (value + NUMBER_ZERO) : value) as T; // -0を0
 }
 
@@ -13,8 +12,8 @@ export function clampToRange<T extends number>(
   value: number,
   range: numberrange<T>,
 ): T {
-  assertNumber(value, "value");
-  assertNumberRange(range, "range");
+  Type.assertNumber(value, "value");
+  Type.assertNumberRange(range, "range");
 
   const [min, max] = range;
   if (min > max) {

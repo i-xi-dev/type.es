@@ -1,6 +1,5 @@
-import * as ExNumber from "../../number/mod.ts";
+import { Number as ExNumber, RoundingMode } from "../../numerics/mod.ts";
 import * as SafeInt from "../../safeint/mod.ts";
-import { RoundingMode } from "../../numerics/mod.ts";
 import { type safeint } from "../../type.ts";
 
 function _initAmount(value?: number): safeint {

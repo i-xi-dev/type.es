@@ -1,4 +1,4 @@
-import * as ExNumber from "../number/mod.ts";
+import { Number as ExNumber } from "../numerics/mod.ts";
 import { type safeint, type uint8 } from "../type.ts";
 import { Uint8 } from "../_numerics/uint.ts";
 

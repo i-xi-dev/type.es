@@ -10,6 +10,7 @@ export * from "./integer_string.ts";
 export * from "./iterable.ts";
 export * from "./number.ts";
 export * from "./numeric.ts";
+export * from "./numeric_range.ts";
 export * from "./object.ts";
 export * from "./plane.ts";
 export * from "./string.ts";
