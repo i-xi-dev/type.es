@@ -1,4 +1,4 @@
-import { isSafeIntInRange } from "../type/number.ts";
+import { isSafeIntInRange } from "./number.ts";
 import { type plane } from "../type.ts";
 import { Plane } from "../const/unicode.ts";
 

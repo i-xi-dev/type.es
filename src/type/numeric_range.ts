@@ -1,4 +1,4 @@
-import { isBigInt } from "../type/bigint.ts";
+import { isBigInt } from "./bigint.ts";
 import {
   type bigintrange,
   type numberrange,

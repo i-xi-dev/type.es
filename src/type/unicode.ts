@@ -1,7 +1,7 @@
 import _gcs from "../../dat/unicode/gc_map.ts";
 import _scripts from "../../dat/i18n/script_map.json" with { type: "json" };
 import { type gc, type script } from "../type.ts";
-import { isNonEmptyString } from "../type/string.ts";
+import { isNonEmptyString } from "./string.ts";
 
 export function isUnicodeGeneralCategory(test: unknown): test is gc {
   return Object.values(_gcs).includes(test as gc);
