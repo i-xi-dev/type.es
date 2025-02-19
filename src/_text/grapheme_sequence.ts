@@ -1,4 +1,4 @@
-import { assertString, assertUSVString } from "../type/string.ts";
+import * as Type from "../type/mod.ts";
 import { EMPTY as EMPTY_STRING } from "../const/string.ts";
 import { type grapheme } from "../type.ts";
 import { segmentGraphemes } from "./utils.ts";
@@ -31,9 +31,9 @@ export class GraphemeSequence {
     options?: GraphemeSequence.FromOptions,
   ): GraphemeSequence {
     if (options?.allowMalformed === true) {
-      assertString(value, "value");
+      Type.assertString(value, "value");
     } else {
-      assertUSVString(value, "value");
+      Type.assertUSVString(value, "value");
     }
 
     let normalized = value;

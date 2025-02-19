@@ -1,5 +1,5 @@
+import * as Type from "../type/mod.ts";
 import { type ArrayOrSet } from "../type.ts";
-import { isNonEmptyString } from "../type/string.ts";
 import { EMPTY as EMPTY_STRING } from "../const/string.ts";
 
 type _IsT<T> = (i: unknown) => i is T;
@@ -28,7 +28,7 @@ export function assertArray<T>(
   options?: _AssertOptions<T>,
 ): void {
   if (isArray(test, options?.isT) !== true) {
-    const elementDesc = isNonEmptyString(options?.elementDesc)
+    const elementDesc = Type.isNonEmptyString(options?.elementDesc)
       ? ` of ${options?.elementDesc}`
       : EMPTY_STRING;
     throw new TypeError(
@@ -55,7 +55,7 @@ export function assertSet<T>(
   options?: _AssertOptions<T>,
 ): void {
   if (isSet(test, options?.isT) !== true) {
-    const elementDesc = isNonEmptyString(options?.elementDesc)
+    const elementDesc = Type.isNonEmptyString(options?.elementDesc)
       ? ` of ${options?.elementDesc}`
       : EMPTY_STRING;
     throw new TypeError(`\`${label}\` must be a \`Set\`${elementDesc}.`);
@@ -78,7 +78,7 @@ export function assertArrayOrSet<T>(
   options?: _AssertOptions<T>,
 ): void {
   if (isArrayOrSet(test, options?.isT) !== true) {
-    const elementDesc = isNonEmptyString(options?.elementDesc)
+    const elementDesc = Type.isNonEmptyString(options?.elementDesc)
       ? ` of ${options?.elementDesc}`
       : EMPTY_STRING;
     throw new TypeError(

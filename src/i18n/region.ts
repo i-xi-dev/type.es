@@ -1,7 +1,6 @@
+import * as Type from "../type/mod.ts";
 import _regions from "../../dat/i18n/region_map.json" with { type: "json" };
-import { assertRegion } from "../type/i18n.ts";
 import { EMPTY as EMPTY_STRING } from "../const/string.ts";
-import { isString } from "../type/string.ts";
 import { type region } from "../type.ts";
 
 export type RegionInfo = {
@@ -30,7 +29,7 @@ export function infoFor(
   region: region,
   nameLocale?: Intl.UnicodeBCP47LocaleIdentifier | Intl.Locale,
 ): RegionInfo {
-  assertRegion(region, "region");
+  Type.assertRegion(region, "region");
 
   const info = _regions[region];
   const num = info[_NUMBER_INDEX] as number;
@@ -53,7 +52,7 @@ export function _getRegionName(
   let regionNames = _regionNamesRef?.deref();
   const reuse = regionNames &&
     regionNames.resolvedOptions().locale ===
-      (isString(nameLocale) ? nameLocale : nameLocale.baseName);
+      (Type.isString(nameLocale) ? nameLocale : nameLocale.baseName);
 
   if (reuse !== true) {
     regionNames = new Intl.DisplayNames(nameLocale, {

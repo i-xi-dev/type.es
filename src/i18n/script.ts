@@ -1,7 +1,6 @@
+import * as Type from "../type/mod.ts";
 import _scripts from "../../dat/i18n/script_map.json" with { type: "json" };
-import { assertScript } from "../type/i18n.ts";
 import { EMPTY as EMPTY_STRING } from "../const/string.ts";
-import { isString } from "../type/string.ts";
 import { type script } from "../type.ts";
 
 export type ScriptInfo = {
@@ -30,7 +29,7 @@ export function infoFor(
   script: script,
   nameLocale?: Intl.UnicodeBCP47LocaleIdentifier | Intl.Locale,
 ): ScriptInfo {
-  assertScript(script, "script");
+  Type.assertScript(script, "script");
 
   const info = _scripts[script];
 
@@ -52,7 +51,7 @@ export function _getScriptName(
   let scriptNames = _scriptNamesRef?.deref();
   const reuse = scriptNames &&
     scriptNames.resolvedOptions().locale ===
-      (isString(nameLocale) ? nameLocale : nameLocale.baseName);
+      (Type.isString(nameLocale) ? nameLocale : nameLocale.baseName);
 
   if (reuse !== true) {
     scriptNames = new Intl.DisplayNames(nameLocale, {

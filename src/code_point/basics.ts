@@ -1,4 +1,4 @@
-import { assertCodePoint } from "../type/code_point.ts";
+import * as Type from "../type/mod.ts";
 import { type codepoint, type plane } from "../type.ts";
 import { Radix } from "../numerics/mod.ts";
 import { SafeInt } from "../numerics/mod.ts";
@@ -10,7 +10,7 @@ const _toStringOptions: SafeInt.ToStringOptions = {
 } as const;
 
 export function toString(codePoint: codepoint): string {
-  assertCodePoint(codePoint, "codePoint");
+  Type.assertCodePoint(codePoint, "codePoint");
   return `U+${SafeInt.toString(codePoint, _toStringOptions)}`;
 }
 
@@ -19,6 +19,6 @@ export function toString(codePoint: codepoint): string {
 // toRune(codePoint: codepoint): rune → CodePoint.fromRune
 
 export function planeOf(codePoint: codepoint): plane {
-  assertCodePoint(codePoint, "codePoint");
+  Type.assertCodePoint(codePoint, "codePoint");
   return Math.trunc(codePoint / 0x10000) as plane;
 }

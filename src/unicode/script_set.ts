@@ -1,4 +1,5 @@
 import * as Rune from "../rune/mod.ts";
+import * as Type from "../type/mod.ts";
 import { _PropertyValueSetBase } from "./_propval_set_base.ts";
 import {
   type ArrayOrSet,
@@ -6,17 +7,13 @@ import {
   type rune,
   type script,
 } from "../type.ts";
-import { assertArrayOrSet } from "../type/collection.ts";
-import { assertCodePoint } from "../type/code_point.ts";
-import { assertRune } from "../type/string.ts";
-import { isUnicodeScript } from "../type/unicode.ts";
 
 function _toScriptSet(scripts: ArrayOrSet<script>): Set<script> {
-  assertArrayOrSet(
+  Type.assertArrayOrSet(
     scripts,
     "scripts",
     {
-      isT: isUnicodeScript,
+      isT: Type.isUnicodeScript,
       elementDesc: "supported script in Unicode property",
     },
   );
@@ -45,12 +42,12 @@ export class ScriptSet extends _PropertyValueSetBase<script> {
   }
 
   includesRune(rune: rune): boolean {
-    assertRune(rune, "rune");
+    Type.assertRune(rune, "rune");
     return (this.size > 0) ? this.#regex.test(rune) : false;
   }
 
   includesCodePoint(codePoint: codepoint): boolean {
-    assertCodePoint(codePoint, "codePoint");
+    Type.assertCodePoint(codePoint, "codePoint");
 
     const rune = Rune.fromCodePoint(codePoint);
     return this.includesRune(rune);

@@ -1,7 +1,5 @@
-import { assertCodePoint } from "../type/code_point.ts";
-import { assertIterable } from "../type/iterable.ts";
-import { assertString, assertUSVString, isUSVString } from "../type/string.ts";
-import { assertUnicodeScript } from "../type/unicode.ts";
+import * as ExNumber from "../numerics/number/mod.ts";
+import * as Type from "../type/mod.ts";
 import {
   type codepoint,
   type rune,
@@ -11,7 +9,6 @@ import {
 } from "../type.ts";
 import { EMPTY as EMPTY_STRING } from "../const/string.ts";
 import { Rune } from "./mod.ts";
-import { ZERO as NUMBER_ZERO } from "../const/number.ts";
 
 export type AllowMalformedOptions = {
   allowMalformed?: boolean;
@@ -22,9 +19,9 @@ export function runeCountOf(
   options?: AllowMalformedOptions,
 ): safeint {
   if (options?.allowMalformed === true) {
-    assertString(value, "value");
+    Type.assertString(value, "value");
   } else {
-    assertUSVString(value, "value");
+    Type.assertUSVString(value, "value");
   }
   return [...value].length;
 }
@@ -40,9 +37,9 @@ export function toRunes(
   options?: AllowMalformedOptions,
 ): IterableIterator<rune, void, void> {
   if (options?.allowMalformed === true) {
-    assertString(value, "value");
+    Type.assertString(value, "value");
   } else {
-    assertUSVString(value, "value");
+    Type.assertUSVString(value, "value");
   }
 
   return (function* (s) {
@@ -56,15 +53,15 @@ export function fromCodePoints(
   value: Iterable<codepoint>,
   options?: AllowMalformedOptions,
 ): string {
-  assertIterable(value, "value");
+  Type.assertIterable(value, "value");
 
   const disallowMalformed = options?.allowMalformed !== true;
 
   let runes = EMPTY_STRING;
   let rune: rune;
-  let i = NUMBER_ZERO;
+  let i = ExNumber.ZERO;
   for (const codePoint of value) {
-    assertCodePoint(codePoint, `value[${i}]`);
+    Type.assertCodePoint(codePoint, `value[${i}]`);
     rune = String.fromCodePoint(codePoint);
 
     if (disallowMalformed && (rune.isWellFormed() !== true)) {
@@ -86,14 +83,14 @@ export function toCodePoints(
   options?: AllowMalformedOptions,
 ): IterableIterator<codepoint, void, void> {
   if (options?.allowMalformed === true) {
-    assertString(value, "value");
+    Type.assertString(value, "value");
   } else {
-    assertUSVString(value, "value");
+    Type.assertUSVString(value, "value");
   }
 
   return (function* (s) {
     for (const rune of [...s]) {
-      yield rune.codePointAt(NUMBER_ZERO)!;
+      yield rune.codePointAt(ExNumber.ZERO)!;
     }
   })(value);
 }
@@ -113,20 +110,20 @@ export function belongsToScripts(
   options?: BelongsToScriptsOptions,
 ): test is usvstring {
   let scriptSet: script[];
-  if (Array.isArray(scripts) && (scripts.length > NUMBER_ZERO)) {
+  if (Array.isArray(scripts) && (scripts.length > ExNumber.ZERO)) {
     scriptSet = [...new Set(scripts)];
     for (const script of scriptSet) {
-      assertUnicodeScript(script, script);
+      Type.assertUnicodeScript(script, script);
     }
   } else {
     throw new TypeError("`scripts` must be an Array of script.");
   }
 
-  if (isUSVString(test) !== true) {
+  if (Type.isUSVString(test) !== true) {
     return false;
   }
 
-  if (test.length <= NUMBER_ZERO) {
+  if (test.length <= ExNumber.ZERO) {
     // Array#every等に合わせた
     return true;
   }
@@ -144,7 +141,7 @@ export function belongsToScripts(
     "v",
   );
 
-  let runeCount = NUMBER_ZERO;
+  let runeCount = ExNumber.ZERO;
   for (const rune of [...test]) {
     runeCount += 1;
 

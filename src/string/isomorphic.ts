@@ -1,4 +1,4 @@
-import { assertString } from "../type/string.ts";
+import * as Type from "../type/mod.ts";
 import { EMPTY as EMPTY_STRING } from "../const/string.ts";
 
 /**
@@ -38,7 +38,7 @@ export function decode(input: BufferSource): string {
  * @returns A byte sequence of isomorphic encoded `input`.
  */
 export function encode(input: string): Uint8Array {
-  assertString(input, "input");
+  Type.assertString(input, "input");
 
   // deno-lint-ignore no-control-regex
   if (/^[\u{0}-\u{FF}]*$/u.test(input) !== true) {

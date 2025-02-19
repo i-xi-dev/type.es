@@ -1,4 +1,4 @@
-import { isRune } from "../type/string.ts";
+import * as Type from "../type/mod.ts";
 import { type rune } from "../type.ts";
 
 let _commonSc: WeakRef<RegExp> | null = null;
@@ -9,7 +9,7 @@ export function matchesCommonScript(test: unknown): test is rune {
     commonSc = new RegExp(`^\\p{sc=Zyyy}$`, "v");
     _commonSc = new WeakRef(commonSc);
   }
-  return isRune(test) && commonSc.test(test);
+  return Type.isRune(test) && commonSc.test(test);
 }
 
 let _inheritedSc: WeakRef<RegExp> | null = null;
@@ -20,7 +20,7 @@ export function matchesInheritedScript(test: unknown): test is rune {
     inheritedSc = new RegExp(`^(?:\\p{sc=Zinh})$`, "v");
     _inheritedSc = new WeakRef(inheritedSc);
   }
-  return isRune(test) && inheritedSc.test(test);
+  return Type.isRune(test) && inheritedSc.test(test);
 }
 
 /*

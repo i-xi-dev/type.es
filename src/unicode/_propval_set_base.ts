@@ -1,3 +1,4 @@
+import * as Type from "../type/mod.ts";
 import {
   type ArrayOrSet,
   type codepoint,
@@ -5,7 +6,6 @@ import {
   type safeint,
   type usvstring,
 } from "../type.ts";
-import { assertUSVString } from "../type/string.ts";
 
 export abstract class _PropertyValueSetBase<T> implements ReadonlySetLike<T> {
   readonly #set: Set<T>;
@@ -25,7 +25,7 @@ export abstract class _PropertyValueSetBase<T> implements ReadonlySetLike<T> {
   abstract includesCodePoint(codePoint: codepoint): boolean;
 
   findMatches(text: usvstring): Map<rune, Array<safeint>> {
-    assertUSVString(text, "text");
+    Type.assertUSVString(text, "text");
 
     const result = new Map<rune, Array<safeint>>();
     let i = 0;

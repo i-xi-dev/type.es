@@ -1,5 +1,6 @@
 import * as CodePoint from "../code_point/mod.ts";
 import * as Rune from "../rune/mod.ts";
+import * as Type from "../type/mod.ts";
 import { _PropertyValueSetBase } from "./_propval_set_base.ts";
 import {
   type ArrayOrSet,
@@ -7,16 +8,12 @@ import {
   type plane,
   type rune,
 } from "../type.ts";
-import { assertArrayOrSet } from "../type/collection.ts";
-import { assertCodePoint } from "../type/code_point.ts";
-import { assertRune } from "../type/string.ts";
-import { isPlane } from "../type/plane.ts";
 
 function _toPlaneSet(planes: ArrayOrSet<plane>): Set<plane> {
-  assertArrayOrSet(
+  Type.assertArrayOrSet(
     planes,
     "planes",
-    { isT: isPlane, elementDesc: "code point plane value" },
+    { isT: Type.isPlane, elementDesc: "code point plane value" },
   );
   return new Set(planes);
 }
@@ -27,14 +24,14 @@ export class PlaneSet extends _PropertyValueSetBase<plane> {
   }
 
   includesRune(rune: rune): boolean {
-    assertRune(rune, "rune");
+    Type.assertRune(rune, "rune");
 
     const codePoint = Rune.toCodePoint(rune);
     return this.includesCodePoint(codePoint);
   }
 
   includesCodePoint(codePoint: codepoint): boolean {
-    assertCodePoint(codePoint, "codePoint");
+    Type.assertCodePoint(codePoint, "codePoint");
 
     const testPlane = CodePoint.planeOf(codePoint);
     return (this.size > 0) ? this.has(testPlane) : false;

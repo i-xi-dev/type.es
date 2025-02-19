@@ -1,7 +1,6 @@
+import * as Type from "../type/mod.ts";
 import _langs from "../../dat/i18n/lang_map.json" with { type: "json" };
-import { assertLanguage } from "../type/i18n.ts";
 import { EMPTY as EMPTY_STRING } from "../const/string.ts";
-import { isString } from "../type/string.ts";
 import { type lang } from "../type.ts";
 
 export const LanguageScope = {
@@ -60,7 +59,7 @@ export function infoFor(
   language: lang,
   nameLocale?: Intl.UnicodeBCP47LocaleIdentifier | Intl.Locale,
 ): LanguageInfo {
-  assertLanguage(language, "language");
+  Type.assertLanguage(language, "language");
 
   const info = _langs[language];
 
@@ -94,7 +93,7 @@ export function _getLanguageName(
   let languageNames = _languageNamesRef?.deref();
   const reuse = languageNames &&
     languageNames.resolvedOptions().locale ===
-      (isString(nameLocale) ? nameLocale : nameLocale.baseName);
+      (Type.isString(nameLocale) ? nameLocale : nameLocale.baseName);
 
   if (reuse !== true) {
     languageNames = new Intl.DisplayNames(nameLocale, {

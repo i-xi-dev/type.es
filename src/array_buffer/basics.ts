@@ -1,5 +1,4 @@
-import { assertArrayBuffer } from "../type/array_buffer.ts";
-import { assertAsyncIterable, assertIterable } from "../type/iterable.ts";
+import * as Type from "../type/mod.ts";
 import {
   type biguint64,
   type int,
@@ -12,8 +11,8 @@ import { ByteOrder } from "../byte_order.ts";
 import * as env from "../env.ts";
 import { GrowableBuffer } from "../_2/growable_buffer.ts";
 import { BigUint64 } from "../_numerics/big_uint.ts";
+import { Number as ExNumber } from "../numerics/mod.ts";
 import { Uint16, Uint32, Uint8 } from "../_numerics/uint.ts";
-import { ZERO as NUMBER_ZERO } from "../const/number.ts";
 
 // const _DEFAULT_BYTE_LENGTH = 1_024;
 // const _DEFAULT_MAX_BYTE_LENGTH = 1_048_576;
@@ -27,7 +26,7 @@ export function fromUint8Iterable(
   value: Iterable<safeint /* uint8 */>,
   // options?: FromUint8IterableOptions,
 ): ArrayBuffer {
-  assertIterable(value, "value");
+  Type.assertIterable(value, "value");
 
   return Uint8Array.from(value, (byte, index) => {
     Uint8.assert(byte, `value[${index}]`);
@@ -39,7 +38,7 @@ export async function fromUint8AsyncIterable(
   value: AsyncIterable<safeint /* uint8 */>,
   // options?: FromUint8IterableOptions,
 ): Promise<ArrayBuffer> {
-  assertAsyncIterable(value, "value");
+  Type.assertAsyncIterable(value, "value");
 
   //XXX resizable ArrayBufferが広く実装されたらそちらに変更する
   const gb = new GrowableBuffer();
@@ -53,7 +52,7 @@ export async function fromUint8AsyncIterable(
 }
 
 export function toUint8Iterable(value: ArrayBuffer): Iterable<uint8> {
-  assertArrayBuffer(value, "value");
+  Type.assertArrayBuffer(value, "value");
   return (new Uint8Array(value))[Symbol.iterator]() as Iterable<uint8>;
 }
 
@@ -131,10 +130,10 @@ function _toUint8xIterable<T extends int>(
   viewGetter: _Getter<T>,
   byteOrder: ByteOrder,
 ): Iterable<T> {
-  assertArrayBuffer(value, "value");
+  Type.assertArrayBuffer(value, "value");
 
   const bytesPerElement = uint8xArrayCtor.BYTES_PER_ELEMENT;
-  if ((value.byteLength % bytesPerElement) !== NUMBER_ZERO) {
+  if ((value.byteLength % bytesPerElement) !== ExNumber.ZERO) {
     throw new RangeError(
       `The byte length of \`value\` must be divisible by ${bytesPerElement}.`,
     );
@@ -166,7 +165,7 @@ export function fromUint16Iterable(
   value: Iterable<uint16>,
   options?: FromUint8xIterableOptions,
 ): ArrayBuffer {
-  assertIterable(value, "value");
+  Type.assertIterable(value, "value");
 
   const byteOrder = _resolveByteOrder(options?.byteOrder);
 
@@ -192,7 +191,7 @@ export async function fromUint16AsyncIterable(
   value: AsyncIterable<uint16>,
   options?: FromUint8xIterableOptions,
 ): Promise<ArrayBuffer> {
-  assertAsyncIterable(value, "value");
+  Type.assertAsyncIterable(value, "value");
 
   const byteOrder = _resolveByteOrder(options?.byteOrder);
 
@@ -239,7 +238,7 @@ export function fromUint32Iterable(
   value: Iterable<uint32>,
   options?: FromUint8xIterableOptions,
 ): ArrayBuffer {
-  assertIterable(value, "value");
+  Type.assertIterable(value, "value");
 
   const byteOrder = _resolveByteOrder(options?.byteOrder);
 
@@ -265,7 +264,7 @@ export async function fromUint32AsyncIterable(
   value: AsyncIterable<uint32>,
   options?: FromUint8xIterableOptions,
 ): Promise<ArrayBuffer> {
-  assertAsyncIterable(value, "value");
+  Type.assertAsyncIterable(value, "value");
 
   const byteOrder = _resolveByteOrder(options?.byteOrder);
 
@@ -307,7 +306,7 @@ export function fromBigUint64Iterable(
   value: Iterable<biguint64>,
   options?: FromUint8xIterableOptions,
 ): ArrayBuffer {
-  assertIterable(value, "value");
+  Type.assertIterable(value, "value");
 
   const byteOrder = _resolveByteOrder(options?.byteOrder);
 
@@ -337,7 +336,7 @@ export async function fromBigUint64AsyncIterable(
   value: AsyncIterable<biguint64>,
   options?: FromUint8xIterableOptions,
 ): Promise<ArrayBuffer> {
-  assertAsyncIterable(value, "value");
+  Type.assertAsyncIterable(value, "value");
 
   const byteOrder = _resolveByteOrder(options?.byteOrder);
 

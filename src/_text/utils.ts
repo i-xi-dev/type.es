@@ -1,4 +1,4 @@
-import { isString } from "../type/string.ts";
+import * as Type from "../type/mod.ts";
 
 const _FALLBACK = "en";
 
@@ -11,7 +11,7 @@ export function segmentGraphemes(
   let segmenter = _segmenterRef?.deref();
   const reuse = segmenter &&
     (segmenter.resolvedOptions().locale ===
-      (isString(locale) ? locale : locale.baseName));
+      (Type.isString(locale) ? locale : locale.baseName));
 
   if (reuse !== true) {
     segmenter = new Intl.Segmenter(locale, { granularity: "grapheme" });
