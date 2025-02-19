@@ -1,2 +1,2 @@
-export * as Radix from "./radix.ts";
-export * as RoundingMode from "../const/rounding_mode.ts";
+export * as Radix from "./radix/mod.ts";
+export * as RoundingMode from "./rounding_mode/mod.ts";

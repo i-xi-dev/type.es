@@ -11,7 +11,6 @@ export * from "./src/_2/growable_buffer.ts";
 export * as I18n from "./src/i18n/mod.ts";
 export * as xNumerics from "./src/_numerics/mod.ts";
 export * as Numerics from "./src/numerics/mod.ts";
-export * as Radix from "./src/numerics/radix.ts";
 export * as Rune from "./src/rune/mod.ts";
 export * as SafeInt from "./src/safeint/mod.ts";
 export * as SafeIntRange from "./src/safeint_range/mod.ts";

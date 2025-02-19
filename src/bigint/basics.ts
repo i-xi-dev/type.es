@@ -1,4 +1,3 @@
-import * as Radix from "../numerics/radix.ts";
 import * as SafeInt from "../safeint/mod.ts";
 import { assertBigInt, assertBigIntInSafeIntRange } from "../type/bigint.ts";
 import { assertBigIntRange } from "../type/numeric_range.ts";
@@ -8,7 +7,6 @@ import {
   isSafeInt,
 } from "../type/number.ts";
 import { assertIntegerString } from "../type/integer_string.ts";
-import { assertSupportedRadix, prefixOf } from "../numerics/radix.ts";
 import {
   type bigintrange,
   type radix,
@@ -16,6 +14,7 @@ import {
   type safeint,
 } from "../type.ts";
 import { EMPTY as EMPTY_STRING } from "../const/string.ts";
+import { Radix } from "../numerics/mod.ts";
 
 export function min<T extends bigint>(value0: T, ...values: T[]): T {
   assertBigInt(value0, `value0`);
@@ -78,7 +77,7 @@ export function fromString(value: string, options?: FromStringOptions): bigint {
   const negative = value.startsWith("-");
   let adjustedValue = value;
   adjustedValue = adjustedValue.replace(/^[-+]?/, EMPTY_STRING);
-  adjustedValue = prefixOf(radix) + adjustedValue;
+  adjustedValue = Radix.prefixOf(radix) + adjustedValue;
   let valueAsBigInt = BigInt(adjustedValue);
   if (negative === true) {
     valueAsBigInt *= -1n;
@@ -96,7 +95,7 @@ export type ToStringOptions = {
 export function toString(value: bigint, options?: ToStringOptions): string {
   assertBigInt(value, "value");
   const radix = options?.radix ?? Radix.DECIMAL;
-  assertSupportedRadix(radix, "radix");
+  Radix.assertSupportedRadix(radix, "radix");
 
   let result = value.toString(radix);
 

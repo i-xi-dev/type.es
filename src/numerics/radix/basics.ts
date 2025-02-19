@@ -1,6 +1,6 @@
-import * as Radix from "../const/radix.ts";
-import { EMPTY as EMPTY_STRING } from "../const/string.ts";
-import { type radix } from "../type.ts";
+import * as Radix from "../../const/radix.ts";
+import { EMPTY as EMPTY_STRING } from "../../const/string.ts";
+import { type radix } from "../../type.ts";
 
 const _supportedRadixes = [
   Radix.BINARY,
@@ -72,8 +72,3 @@ export function prefixOf(radix: radix): string {
       return EMPTY_STRING;
   }
 }
-
-export const BINARY = Radix.BINARY;
-export const OCTAL = Radix.OCTAL;
-export const DECIMAL = Radix.DECIMAL;
-export const HEXADECIMAL = Radix.HEXADECIMAL;

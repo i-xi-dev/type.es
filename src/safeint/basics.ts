@@ -1,6 +1,5 @@
 import * as ExBigInt from "../bigint/mod.ts";
 import * as ExNumber from "../number/mod.ts";
-import * as Radix from "../numerics/radix.ts";
 import * as RoundingMode from "../const/rounding_mode.ts";
 import {
   assertSafeInt,
@@ -8,13 +7,13 @@ import {
   isPositiveNumber,
 } from "../type/number.ts";
 import { assertSafeIntRange } from "../type/numeric_range.ts";
-import { assertSupportedRadix } from "../numerics/radix.ts";
 import {
   type radix,
   type roundingmode,
   type safeint,
   type safeintrange,
 } from "../type.ts";
+import { Radix } from "../numerics/mod.ts";
 
 //TODO 命名 toか？
 export function clampToRange<T extends safeint>(
@@ -72,7 +71,7 @@ export type ToStringOptions = {
 export function toString(value: safeint, options?: ToStringOptions): string {
   assertSafeInt(value, "value");
   const radix = options?.radix ?? Radix.DECIMAL;
-  assertSupportedRadix(radix, "radix");
+  Radix.assertSupportedRadix(radix, "radix");
 
   let result = value.toString(radix);
 
