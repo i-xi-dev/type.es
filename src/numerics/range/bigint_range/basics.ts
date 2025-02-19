@@ -1,9 +1,8 @@
-import { assertBigIntRange } from "../type/numeric_range.ts";
-import { isBigInt } from "../type/bigint.ts";
-import { type bigintrange } from "../type.ts";
+import * as Type from "../../../type/mod.ts";
+import { type bigintrange } from "../../../type.ts";
 
 export function sizeOf<T extends bigint>(range: bigintrange<T>): bigint {
-  assertBigIntRange(range, "range");
+  Type.assertBigIntRange(range, "range");
 
   const [min, max] = range;
   const d = (max as bigint) - (min as bigint); // typescriptでなぜかnumber扱いになる
@@ -13,12 +12,12 @@ export function sizeOf<T extends bigint>(range: bigintrange<T>): bigint {
 }
 
 export function minOf<T extends bigint>(range: bigintrange<T>): T {
-  assertBigIntRange(range, "range");
+  Type.assertBigIntRange(range, "range");
   return range[0];
 }
 
 export function maxOf<T extends bigint>(range: bigintrange<T>): T {
-  assertBigIntRange(range, "range");
+  Type.assertBigIntRange(range, "range");
   return range[1];
 }
 
@@ -28,7 +27,7 @@ export function maxOf<T extends bigint>(range: bigintrange<T>): T {
 export function toIterable<T extends bigint>(
   range: bigintrange<T>,
 ): IterableIterator<T> {
-  assertBigIntRange(range, "range");
+  Type.assertBigIntRange(range, "range");
 
   const [min, max] = range;
   if (min > max) {
@@ -50,8 +49,8 @@ export function equals<T extends bigint>(
   a: bigintrange<T>,
   b: bigintrange<T>,
 ): boolean {
-  assertBigIntRange(a, "a");
-  assertBigIntRange(b, "b");
+  Type.assertBigIntRange(a, "a");
+  Type.assertBigIntRange(b, "b");
 
   const [aMin, aMax] = a;
   const [bMin, bMax] = b;
@@ -63,8 +62,8 @@ export function overlaps<T extends bigint>(
   a: bigintrange<T>,
   b: bigintrange<T>,
 ): boolean {
-  assertBigIntRange(a, "a");
-  assertBigIntRange(b, "b");
+  Type.assertBigIntRange(a, "a");
+  Type.assertBigIntRange(b, "b");
 
   const [aMin, aMax] = a;
   const [bMin, bMax] = b;
@@ -76,8 +75,8 @@ export function covers<T extends bigint>(
   a: bigintrange<T>,
   b: bigintrange<T>,
 ): boolean {
-  assertBigIntRange(a, "a");
-  assertBigIntRange(b, "b");
+  Type.assertBigIntRange(a, "a");
+  Type.assertBigIntRange(b, "b");
 
   const [aMin, aMax] = a;
   const [bMin, bMax] = b;
@@ -98,8 +97,8 @@ export function isAdjacent<T extends bigint>(
   a: bigintrange<T>,
   b: bigintrange<T>,
 ): boolean {
-  // assertBigIntRange(a, "a");
-  // assertBigIntRange(b, "b");
+  // Type.assertBigIntRange(a, "a");
+  // Type.assertBigIntRange(b, "b");
   if (overlaps(a, b)) {
     return false;
   }
@@ -118,7 +117,7 @@ export function includes<T extends bigint>(
   range: bigintrange<T>,
   test: T,
 ): boolean {
-  assertBigIntRange(range, "range");
+  Type.assertBigIntRange(range, "range");
   const [min, max] = range;
-  return isBigInt(test) && (test >= min) && (test <= max);
+  return Type.isBigInt(test) && (test >= min) && (test <= max);
 }

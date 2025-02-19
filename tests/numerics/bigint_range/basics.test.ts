@@ -1,10 +1,12 @@
 import { assertStrictEquals, assertThrows } from "@std/assert";
-import { BigIntRange } from "../../mod.ts";
+import { Numerics } from "../../../mod.ts";
+
+const { BigIntRange } = Numerics;
 
 const _MIN = BigInt(Number.MIN_SAFE_INTEGER);
 const _MAX = BigInt(Number.MAX_SAFE_INTEGER);
 
-Deno.test("BigIntRange.sizeOf()", () => {
+Deno.test("Numerics.BigIntRange.sizeOf()", () => {
   assertStrictEquals(BigIntRange.sizeOf([0n, 0n]), 1n);
   assertStrictEquals(BigIntRange.sizeOf([0n, 0x7FFFFFFFn]), 0x80000000n);
   assertStrictEquals(BigIntRange.sizeOf([0n, _MAX - 1n]), _MAX);
@@ -23,7 +25,7 @@ Deno.test("BigIntRange.sizeOf()", () => {
   );
 });
 
-Deno.test("BigIntRange.minOf()", () => {
+Deno.test("Numerics.BigIntRange.minOf()", () => {
   assertStrictEquals(BigIntRange.minOf([0n, 0n]), 0n);
   assertStrictEquals(BigIntRange.minOf([0n, 0x7FFFFFFFn]), 0n);
   assertStrictEquals(BigIntRange.minOf([0n, _MAX - 1n]), 0n);
@@ -42,7 +44,7 @@ Deno.test("BigIntRange.minOf()", () => {
   );
 });
 
-Deno.test("BigIntRange.maxOf()", () => {
+Deno.test("Numerics.BigIntRange.maxOf()", () => {
   assertStrictEquals(BigIntRange.maxOf([0n, 0n]), 0n);
   assertStrictEquals(BigIntRange.maxOf([0n, 0x7FFFFFFFn]), 0x7FFFFFFFn);
   assertStrictEquals(BigIntRange.maxOf([0n, _MAX - 1n]), _MAX - 1n);
@@ -61,7 +63,7 @@ Deno.test("BigIntRange.maxOf()", () => {
   );
 });
 
-Deno.test("BigIntRange.toIterable()", () => {
+Deno.test("Numerics.BigIntRange.toIterable()", () => {
   const i1 = BigIntRange.toIterable([0n, 0n]);
   assertStrictEquals(JSON.stringify([...i1].map((i) => Number(i))), "[0]");
 
@@ -109,7 +111,7 @@ const r_m2_m2: [bigint, bigint] = [-2n, -2n];
 const r_m1_p1: [bigint, bigint] = [-1n, 1n];
 const r_m2_p2: [bigint, bigint] = [-2n, 2n];
 
-Deno.test("BigIntRange.equals()", () => {
+Deno.test("Numerics.BigIntRange.equals()", () => {
   assertStrictEquals(BigIntRange.equals(r_0_0, r_0_0), true);
   assertStrictEquals(BigIntRange.equals(r_0_0, r_0_p1), false);
   assertStrictEquals(BigIntRange.equals(r_0_0, r_p1_p1), false);
@@ -308,7 +310,7 @@ Deno.test("BigIntRange.equals()", () => {
   );
 });
 
-Deno.test("BigIntRange.overlaps()", () => {
+Deno.test("Numerics.BigIntRange.overlaps()", () => {
   assertStrictEquals(BigIntRange.overlaps(r_0_0, r_0_0), true);
   assertStrictEquals(BigIntRange.overlaps(r_0_0, r_0_p1), true);
   assertStrictEquals(BigIntRange.overlaps(r_0_0, r_p1_p1), false);
@@ -507,7 +509,7 @@ Deno.test("BigIntRange.overlaps()", () => {
   );
 });
 
-Deno.test("BigIntRange.covers()", () => {
+Deno.test("Numerics.BigIntRange.covers()", () => {
   assertStrictEquals(BigIntRange.covers(r_0_0, r_0_0), true);
   assertStrictEquals(BigIntRange.covers(r_0_0, r_0_p1), false);
   assertStrictEquals(BigIntRange.covers(r_0_0, r_p1_p1), false);
@@ -706,7 +708,7 @@ Deno.test("BigIntRange.covers()", () => {
   );
 });
 
-Deno.test("BigIntRange.isDisjoint()", () => {
+Deno.test("Numerics.BigIntRange.isDisjoint()", () => {
   assertStrictEquals(BigIntRange.isDisjoint(r_0_0, r_0_0), false);
   assertStrictEquals(BigIntRange.isDisjoint(r_0_0, r_0_p1), false);
   assertStrictEquals(BigIntRange.isDisjoint(r_0_0, r_p1_p1), true);
@@ -905,7 +907,7 @@ Deno.test("BigIntRange.isDisjoint()", () => {
   );
 });
 
-Deno.test("BigIntRange.isAdjacent()", () => {
+Deno.test("Numerics.BigIntRange.isAdjacent()", () => {
   assertStrictEquals(BigIntRange.isAdjacent(r_0_0, r_0_0), false);
   assertStrictEquals(BigIntRange.isAdjacent(r_0_0, r_0_p1), false);
   assertStrictEquals(BigIntRange.isAdjacent(r_0_0, r_p1_p1), true);
@@ -1104,7 +1106,7 @@ Deno.test("BigIntRange.isAdjacent()", () => {
   );
 });
 
-Deno.test("BigIntRange.includes()", () => {
+Deno.test("Numerics.BigIntRange.includes()", () => {
   assertStrictEquals(BigIntRange.includes(r_0_0, -1n), false);
   assertStrictEquals(BigIntRange.includes(r_0_0, -0n), true);
   assertStrictEquals(BigIntRange.includes(r_0_0, 0n), true);

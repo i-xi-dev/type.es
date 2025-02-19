@@ -1,4 +1,3 @@
-export * as BigIntRange from "./src/bigint_range/mod.ts";
 export * from "./src/byte_order.ts";
 export * as CodePoint from "./src/code_point/mod.ts";
 export * as Events from "./src/events/mod.ts";
@@ -10,7 +9,6 @@ export * as I18n from "./src/i18n/mod.ts";
 export * as xNumerics from "./src/_numerics/mod.ts";
 export * as Numerics from "./src/numerics/mod.ts";
 export * as Rune from "./src/rune/mod.ts";
-export * as SafeIntRange from "./src/safeint_range/mod.ts";
 export * as Text from "./src/_text/mod.ts";
 export * as Type from "./src/type/mod.ts";
 export type * from "./src/type.ts";

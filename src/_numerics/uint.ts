@@ -1,7 +1,7 @@
 import * as ExBigInt from "../numerics/bigint/mod.ts";
 import { Number as ExNumber } from "../numerics/mod.ts";
 import * as SafeInt from "../numerics/safeint/mod.ts";
-import * as SafeIntRange from "../safeint_range/mod.ts";
+import * as SafeIntRange from "../numerics/range/safeint_range/mod.ts";
 import {
   assertNumber,
   assertSafeInt,

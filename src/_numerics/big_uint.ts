@@ -1,4 +1,4 @@
-import * as BigIntRange from "../bigint_range/mod.ts";
+import * as BigIntRange from "../numerics/range/bigint_range/mod.ts";
 import * as ExBigInt from "../numerics/bigint/mod.ts";
 import { Number as ExNumber } from "../numerics/mod.ts";
 import { assertBigInt, assertBigIntInSafeIntRange } from "../type/bigint.ts";

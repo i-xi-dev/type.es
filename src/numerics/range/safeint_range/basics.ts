@@ -1,9 +1,8 @@
-import { assertSafeIntRange } from "../type/numeric_range.ts";
-import { isSafeInt } from "../type/number.ts";
-import { type safeint, type safeintrange } from "../type.ts";
+import * as Type from "../../../type/mod.ts";
+import { type safeint, type safeintrange } from "../../../type.ts";
 
 export function sizeOf<T extends safeint>(range: safeintrange<T>): safeint {
-  assertSafeIntRange(range, "range");
+  Type.assertSafeIntRange(range, "range");
 
   const [min, max] = range;
   const size = (max - min) + 1;
@@ -16,12 +15,12 @@ export function sizeOf<T extends safeint>(range: safeintrange<T>): safeint {
 }
 
 export function minOf<T extends safeint>(range: safeintrange<T>): T {
-  assertSafeIntRange(range, "range");
+  Type.assertSafeIntRange(range, "range");
   return range[0];
 }
 
 export function maxOf<T extends safeint>(range: safeintrange<T>): T {
-  assertSafeIntRange(range, "range");
+  Type.assertSafeIntRange(range, "range");
   return range[1];
 }
 
@@ -31,7 +30,7 @@ export function maxOf<T extends safeint>(range: safeintrange<T>): T {
 export function toIterable<T extends safeint>(
   range: safeintrange<T>,
 ): IterableIterator<T> {
-  assertSafeIntRange(range, "range");
+  Type.assertSafeIntRange(range, "range");
 
   const [min, max] = range;
   if (min > max) {
@@ -53,8 +52,8 @@ export function equals<T extends safeint>(
   a: safeintrange<T>,
   b: safeintrange<T>,
 ): boolean {
-  assertSafeIntRange(a, "a");
-  assertSafeIntRange(b, "b");
+  Type.assertSafeIntRange(a, "a");
+  Type.assertSafeIntRange(b, "b");
 
   const [aMin, aMax] = a;
   const [bMin, bMax] = b;
@@ -66,8 +65,8 @@ export function overlaps<T extends safeint>(
   a: safeintrange<T>,
   b: safeintrange<T>,
 ): boolean {
-  assertSafeIntRange(a, "a");
-  assertSafeIntRange(b, "b");
+  Type.assertSafeIntRange(a, "a");
+  Type.assertSafeIntRange(b, "b");
 
   const [aMin, aMax] = a;
   const [bMin, bMax] = b;
@@ -79,8 +78,8 @@ export function covers<T extends safeint>(
   a: safeintrange<T>,
   b: safeintrange<T>,
 ): boolean {
-  assertSafeIntRange(a, "a");
-  assertSafeIntRange(b, "b");
+  Type.assertSafeIntRange(a, "a");
+  Type.assertSafeIntRange(b, "b");
 
   const [aMin, aMax] = a;
   const [bMin, bMax] = b;
@@ -101,8 +100,8 @@ export function isAdjacent<T extends safeint>(
   a: safeintrange<T>,
   b: safeintrange<T>,
 ): boolean {
-  // assertSafeIntRange(a, "a");
-  // assertSafeIntRange(b, "b");
+  // Type.assertSafeIntRange(a, "a");
+  // Type.assertSafeIntRange(b, "b");
   if (overlaps(a, b)) {
     return false;
   }
@@ -121,7 +120,7 @@ export function includes<T extends safeint>(
   range: safeintrange<T>,
   test: T,
 ): boolean {
-  assertSafeIntRange(range, "range");
+  Type.assertSafeIntRange(range, "range");
   const [min, max] = range;
-  return isSafeInt(test) && (test >= min) && (test <= max);
+  return Type.isSafeInt(test) && (test >= min) && (test <= max);
 }

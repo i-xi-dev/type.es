@@ -1,9 +1,11 @@
 import { assertStrictEquals, assertThrows } from "@std/assert";
-import { SafeIntRange } from "../../mod.ts";
+import { Numerics } from "../../../mod.ts";
+
+const { SafeIntRange } = Numerics;
 
 const _MAX = Number.MAX_SAFE_INTEGER;
 
-Deno.test("SafeIntRange.sizeOf()", () => {
+Deno.test("Numerics.SafeIntRange.sizeOf()", () => {
   assertStrictEquals(SafeIntRange.sizeOf([0, 0]), 1);
   assertStrictEquals(SafeIntRange.sizeOf([0, 0x7FFFFFFF]), 0x80000000);
   assertStrictEquals(SafeIntRange.sizeOf([0, _MAX - 1]), _MAX);
@@ -27,7 +29,7 @@ Deno.test("SafeIntRange.sizeOf()", () => {
   );
 });
 
-Deno.test("SafeIntRange.minOf()", () => {
+Deno.test("Numerics.SafeIntRange.minOf()", () => {
   assertStrictEquals(SafeIntRange.minOf([0, 0]), 0);
   assertStrictEquals(SafeIntRange.minOf([0, 0x7FFFFFFF]), 0);
   assertStrictEquals(SafeIntRange.minOf([0, _MAX - 1]), 0);
@@ -43,7 +45,7 @@ Deno.test("SafeIntRange.minOf()", () => {
   );
 });
 
-Deno.test("SafeIntRange.maxOf()", () => {
+Deno.test("Numerics.SafeIntRange.maxOf()", () => {
   assertStrictEquals(SafeIntRange.maxOf([0, 0]), 0);
   assertStrictEquals(SafeIntRange.maxOf([0, 0x7FFFFFFF]), 0x7FFFFFFF);
   assertStrictEquals(SafeIntRange.maxOf([0, _MAX - 1]), _MAX - 1);
@@ -59,7 +61,7 @@ Deno.test("SafeIntRange.maxOf()", () => {
   );
 });
 
-Deno.test("SafeIntRange.toIterable()", () => {
+Deno.test("Numerics.SafeIntRange.toIterable()", () => {
   const i1 = SafeIntRange.toIterable([0, 0]);
   assertStrictEquals(JSON.stringify([...i1]), "[0]");
 
@@ -101,7 +103,7 @@ const r_m2_m2: [number, number] = [-2, -2];
 const r_m1_p1: [number, number] = [-1, 1];
 const r_m2_p2: [number, number] = [-2, 2];
 
-Deno.test("SafeIntRange.equals()", () => {
+Deno.test("Numerics.SafeIntRange.equals()", () => {
   assertStrictEquals(SafeIntRange.equals(r_0_0, r_0_0), true);
   assertStrictEquals(SafeIntRange.equals(r_0_0, r_0_p1), false);
   assertStrictEquals(SafeIntRange.equals(r_0_0, r_p1_p1), false);
@@ -300,7 +302,7 @@ Deno.test("SafeIntRange.equals()", () => {
   );
 });
 
-Deno.test("SafeIntRange.overlaps()", () => {
+Deno.test("Numerics.SafeIntRange.overlaps()", () => {
   assertStrictEquals(SafeIntRange.overlaps(r_0_0, r_0_0), true);
   assertStrictEquals(SafeIntRange.overlaps(r_0_0, r_0_p1), true);
   assertStrictEquals(SafeIntRange.overlaps(r_0_0, r_p1_p1), false);
@@ -499,7 +501,7 @@ Deno.test("SafeIntRange.overlaps()", () => {
   );
 });
 
-Deno.test("SafeIntRange.covers()", () => {
+Deno.test("Numerics.SafeIntRange.covers()", () => {
   assertStrictEquals(SafeIntRange.covers(r_0_0, r_0_0), true);
   assertStrictEquals(SafeIntRange.covers(r_0_0, r_0_p1), false);
   assertStrictEquals(SafeIntRange.covers(r_0_0, r_p1_p1), false);
@@ -698,7 +700,7 @@ Deno.test("SafeIntRange.covers()", () => {
   );
 });
 
-Deno.test("SafeIntRange.isDisjoint()", () => {
+Deno.test("Numerics.SafeIntRange.isDisjoint()", () => {
   assertStrictEquals(SafeIntRange.isDisjoint(r_0_0, r_0_0), false);
   assertStrictEquals(SafeIntRange.isDisjoint(r_0_0, r_0_p1), false);
   assertStrictEquals(SafeIntRange.isDisjoint(r_0_0, r_p1_p1), true);
@@ -897,7 +899,7 @@ Deno.test("SafeIntRange.isDisjoint()", () => {
   );
 });
 
-Deno.test("SafeIntRange.isAdjacent()", () => {
+Deno.test("Numerics.SafeIntRange.isAdjacent()", () => {
   assertStrictEquals(SafeIntRange.isAdjacent(r_0_0, r_0_0), false);
   assertStrictEquals(SafeIntRange.isAdjacent(r_0_0, r_0_p1), false);
   assertStrictEquals(SafeIntRange.isAdjacent(r_0_0, r_p1_p1), true);
@@ -1096,7 +1098,7 @@ Deno.test("SafeIntRange.isAdjacent()", () => {
   );
 });
 
-Deno.test("SafeIntRange.includes()", () => {
+Deno.test("Numerics.SafeIntRange.includes()", () => {
   assertStrictEquals(SafeIntRange.includes(r_0_0, -1), false);
   assertStrictEquals(SafeIntRange.includes(r_0_0, -0), true);
   assertStrictEquals(SafeIntRange.includes(r_0_0, 0), true);

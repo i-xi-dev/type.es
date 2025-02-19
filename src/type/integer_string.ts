@@ -8,6 +8,7 @@ export function isIntegerString(
 ): test is string {
   if (isString(test)) {
     const pattern = Radix.integerPatternOf(radix, { includesSign: true });
+    // TODO numericsを参照しない Basics/BytesとかRadixとかにして typeからはbasicsのみ参照する？
     return (new RegExp(pattern)).test(test);
   }
   return false;
