@@ -4,7 +4,6 @@ export * as CodePoint from "./src/code_point/mod.ts";
 export * as Events from "./src/events/mod.ts";
 export * from "./src/exception/mod.ts";
 export * as ExArrayBuffer from "./src/array_buffer/mod.ts";
-export * as ExBigInt from "./src/bigint/mod.ts";
 export * as ExString from "./src/string/mod.ts";
 export * from "./src/_2/growable_buffer.ts";
 export * as I18n from "./src/i18n/mod.ts";

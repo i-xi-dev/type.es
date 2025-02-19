@@ -1,10 +1,12 @@
 import { assertStrictEquals, assertThrows } from "@std/assert";
-import { ExBigInt } from "../../mod.ts";
+import { Numerics } from "../../../mod.ts";
+
+const { BigInt: ExBigInt } = Numerics;
 
 const SIMIN = Number.MIN_SAFE_INTEGER;
 const SIMAX = Number.MAX_SAFE_INTEGER;
 
-Deno.test("ExBigInt.min()", () => {
+Deno.test("Numerics.BigInt.min()", () => {
   assertStrictEquals(ExBigInt.min(0n), 0n);
   assertStrictEquals(ExBigInt.min(1n), 1n);
   assertStrictEquals(ExBigInt.min(-1n), -1n);
@@ -45,7 +47,7 @@ Deno.test("ExBigInt.min()", () => {
   );
 });
 
-Deno.test("ExBigInt.max()", () => {
+Deno.test("Numerics.BigInt.max()", () => {
   assertStrictEquals(ExBigInt.max(0n), 0n);
   assertStrictEquals(ExBigInt.max(1n), 1n);
   assertStrictEquals(ExBigInt.max(-1n), -1n);
@@ -86,7 +88,7 @@ Deno.test("ExBigInt.max()", () => {
   );
 });
 
-Deno.test("ExBigInt.clampToRange()", () => {
+Deno.test("Numerics.BigInt.clampToRange()", () => {
   const ex1 = "`value` must be a `bigint`.";
   assertThrows(
     () => {
@@ -180,7 +182,7 @@ Deno.test("ExBigInt.clampToRange()", () => {
   );
 });
 
-Deno.test("ExBigInt.fromString()", () => {
+Deno.test("Numerics.BigInt.fromString()", () => {
   assertStrictEquals(ExBigInt.fromString("0"), 0n);
   assertStrictEquals(ExBigInt.fromString("-0"), 0n);
   assertStrictEquals(ExBigInt.fromString("+0"), 0n);
@@ -232,7 +234,7 @@ Deno.test("ExBigInt.fromString()", () => {
   );
 });
 
-Deno.test("ExBigInt.fromString() - 2", () => {
+Deno.test("Numerics.BigInt.fromString() - 2", () => {
   const op2 = { radix: 2 } as const;
 
   assertStrictEquals(ExBigInt.fromString("0", op2), 0n);
@@ -270,7 +272,7 @@ Deno.test("ExBigInt.fromString() - 2", () => {
   );
 });
 
-Deno.test("ExBigInt.fromString() - 8", () => {
+Deno.test("Numerics.BigInt.fromString() - 8", () => {
   const op8 = { radix: 8 } as const;
 
   assertStrictEquals(ExBigInt.fromString("0", op8), 0n);
@@ -320,7 +322,7 @@ Deno.test("ExBigInt.fromString() - 8", () => {
   );
 });
 
-Deno.test("ExBigInt.fromString() - 10", () => {
+Deno.test("Numerics.BigInt.fromString() - 10", () => {
   const op10 = { radix: 10 } as const;
 
   assertStrictEquals(ExBigInt.fromString("0", op10), 0n);
@@ -374,7 +376,7 @@ Deno.test("ExBigInt.fromString() - 10", () => {
   );
 });
 
-Deno.test("ExBigInt.fromString() - 16", () => {
+Deno.test("Numerics.BigInt.fromString() - 16", () => {
   const op16 = { radix: 16 } as const;
 
   assertStrictEquals(ExBigInt.fromString("0", op16), 0n);
@@ -440,7 +442,7 @@ Deno.test("ExBigInt.fromString() - 16", () => {
   );
 });
 
-Deno.test("ExBigInt.fromString() - x", () => {
+Deno.test("Numerics.BigInt.fromString() - x", () => {
   const opx = { radix: 3 as 2 } as const;
 
   assertThrows(
@@ -452,7 +454,7 @@ Deno.test("ExBigInt.fromString() - x", () => {
   );
 });
 
-Deno.test("ExBigInt.toString()", () => {
+Deno.test("Numerics.BigInt.toString()", () => {
   const rfe1 = "`value` must be a `bigint`.";
 
   assertThrows(
@@ -495,7 +497,7 @@ Deno.test("ExBigInt.toString()", () => {
   assertStrictEquals(ExBigInt.toString(16n), "16");
 });
 
-Deno.test("ExBigInt.toString() - radix:2", () => {
+Deno.test("Numerics.BigInt.toString() - radix:2", () => {
   const op = { radix: 2 } as const;
 
   assertStrictEquals(ExBigInt.toString(-1n, op), "-1");
@@ -522,7 +524,7 @@ Deno.test("ExBigInt.toString() - radix:2", () => {
   assertStrictEquals(ExBigInt.toString(16n, op), "10000");
 });
 
-Deno.test("ExBigInt.toString() - radix:8", () => {
+Deno.test("Numerics.BigInt.toString() - radix:8", () => {
   const op = { radix: 8 } as const;
 
   assertStrictEquals(ExBigInt.toString(-1n, op), "-1");
@@ -549,7 +551,7 @@ Deno.test("ExBigInt.toString() - radix:8", () => {
   assertStrictEquals(ExBigInt.toString(16n, op), "20");
 });
 
-Deno.test("ExBigInt.toString() - radix:10", () => {
+Deno.test("Numerics.BigInt.toString() - radix:10", () => {
   const op = { radix: 10 } as const;
 
   assertStrictEquals(ExBigInt.toString(-1n, op), "-1");
@@ -576,7 +578,7 @@ Deno.test("ExBigInt.toString() - radix:10", () => {
   assertStrictEquals(ExBigInt.toString(16n, op), "16");
 });
 
-Deno.test("ExBigInt.toString() - radix:16", () => {
+Deno.test("Numerics.BigInt.toString() - radix:16", () => {
   const op = { radix: 16 } as const;
 
   assertStrictEquals(ExBigInt.toString(-1n, op), "-1");
@@ -603,7 +605,7 @@ Deno.test("ExBigInt.toString() - radix:16", () => {
   assertStrictEquals(ExBigInt.toString(16n, op), "10");
 });
 
-Deno.test("ExBigInt.toString() - radix:unknown", () => {
+Deno.test("Numerics.BigInt.toString() - radix:unknown", () => {
   const op = { radix: 3 as 2 } as const;
 
   assertThrows(
@@ -637,7 +639,7 @@ Deno.test("ExBigInt.toString() - radix:unknown", () => {
   // assertStrictEquals(ExBigInt.toString(16n, op), "16");
 });
 
-Deno.test("ExBigInt.fromNumber()", () => {
+Deno.test("Numerics.BigInt.fromNumber()", () => {
   const rfe1 = "`value` must be a finite `number`.";
 
   assertThrows(
@@ -707,7 +709,7 @@ Deno.test("ExBigInt.fromNumber()", () => {
   assertStrictEquals(ExBigInt.fromNumber(SIMIN), BigInt(SIMIN));
 });
 
-Deno.test("ExBigInt.toNumber()", () => {
+Deno.test("Numerics.BigInt.toNumber()", () => {
   assertStrictEquals(ExBigInt.toNumber(0n), 0);
   assertStrictEquals(ExBigInt.toNumber(-1n), -1);
   assertStrictEquals(ExBigInt.toNumber(1n), 1);

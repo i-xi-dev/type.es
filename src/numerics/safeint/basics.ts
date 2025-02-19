@@ -1,4 +1,4 @@
-import * as ExBigInt from "../../bigint/mod.ts";
+import * as ExBigInt from "../bigint/mod.ts";
 import * as ExNumber from "../number/mod.ts";
 import * as Radix from "../radix/mod.ts";
 import * as RoundingMode from "../rounding_mode/mod.ts";

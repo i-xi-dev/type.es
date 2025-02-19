@@ -6,7 +6,7 @@ const { SafeInt } = Numerics;
 const MIN = Number.MIN_SAFE_INTEGER;
 const MAX = Number.MAX_SAFE_INTEGER;
 
-Deno.test("SafeInt.clampToRange()", () => {
+Deno.test("Numerics.SafeInt.clampToRange()", () => {
   const e1 = "`value` must be a safe integer.";
   assertThrows(
     () => {
@@ -64,7 +64,7 @@ Deno.test("SafeInt.clampToRange()", () => {
   assertStrictEquals(SafeInt.clampToRange(3, [0, 2]), 2);
 });
 
-Deno.test("SafeInt.clampToPositive()", () => {
+Deno.test("Numerics.SafeInt.clampToPositive()", () => {
   assertStrictEquals(SafeInt.clampToPositive(MIN), 1);
   assertStrictEquals(SafeInt.clampToPositive(-2), 1);
   assertStrictEquals(SafeInt.clampToPositive(-1), 1);
@@ -84,7 +84,7 @@ Deno.test("SafeInt.clampToPositive()", () => {
   );
 });
 
-Deno.test("SafeInt.clampToNonNegative()", () => {
+Deno.test("Numerics.SafeInt.clampToNonNegative()", () => {
   assertStrictEquals(SafeInt.clampToNonNegative(MIN), 0);
   assertStrictEquals(SafeInt.clampToNonNegative(-2), 0);
   assertStrictEquals(SafeInt.clampToNonNegative(-1), 0);
@@ -107,7 +107,7 @@ Deno.test("SafeInt.clampToNonNegative()", () => {
   );
 });
 
-Deno.test("SafeInt.clampToNonPositive()", () => {
+Deno.test("Numerics.SafeInt.clampToNonPositive()", () => {
   assertStrictEquals(SafeInt.clampToNonPositive(MIN), MIN);
   assertStrictEquals(SafeInt.clampToNonPositive(-2), -2);
   assertStrictEquals(SafeInt.clampToNonPositive(-1), -1);
@@ -130,7 +130,7 @@ Deno.test("SafeInt.clampToNonPositive()", () => {
   );
 });
 
-Deno.test("SafeInt.clampToNegative()", () => {
+Deno.test("Numerics.SafeInt.clampToNegative()", () => {
   assertStrictEquals(SafeInt.clampToNegative(MIN), MIN);
   assertStrictEquals(SafeInt.clampToNegative(-2), -2);
   assertStrictEquals(SafeInt.clampToNegative(-1), -1);
@@ -150,7 +150,7 @@ Deno.test("SafeInt.clampToNegative()", () => {
   );
 });
 
-Deno.test("SafeInt.fromString()", () => {
+Deno.test("Numerics.SafeInt.fromString()", () => {
   // const rfe1 = "`value` must be a `string`.";
   const rfe2 = "`value` must be text representation of 10 based integer.";
 
@@ -243,7 +243,7 @@ Deno.test("SafeInt.fromString()", () => {
   );
 });
 
-Deno.test("SafeInt.fromString() - radix:2", () => {
+Deno.test("Numerics.SafeInt.fromString() - radix:2", () => {
   const op = { radix: 2 } as const;
 
   const rfe2 = "`value` must be text representation of 2 based integer.";
@@ -269,7 +269,7 @@ Deno.test("SafeInt.fromString() - radix:2", () => {
   assertStrictEquals(SafeInt.fromString("01", op), 1);
 });
 
-Deno.test("SafeInt.fromString() - radix:8", () => {
+Deno.test("Numerics.SafeInt.fromString() - radix:8", () => {
   const op = { radix: 8 } as const;
 
   const rfe2 = "`value` must be text representation of 8 based integer.";
@@ -310,7 +310,7 @@ Deno.test("SafeInt.fromString() - radix:8", () => {
   assertStrictEquals(SafeInt.fromString("01", op), 1);
 });
 
-Deno.test("SafeInt.fromString() - radix:10", () => {
+Deno.test("Numerics.SafeInt.fromString() - radix:10", () => {
   const op = { radix: 10 } as const;
 
   assertStrictEquals(SafeInt.fromString("-1", op), -1);
@@ -335,7 +335,7 @@ Deno.test("SafeInt.fromString() - radix:10", () => {
   assertStrictEquals(SafeInt.fromString("01", op), 1);
 });
 
-Deno.test("SafeInt.fromString() - radix:16", () => {
+Deno.test("Numerics.SafeInt.fromString() - radix:16", () => {
   const op = { radix: 16 } as const;
 
   const rfe2 = "`value` must be text representation of 16 based integer.";
@@ -376,7 +376,7 @@ Deno.test("SafeInt.fromString() - radix:16", () => {
   assertStrictEquals(SafeInt.fromString("01", op), 1);
 });
 
-Deno.test("SafeInt.fromString() - radix:unknown", () => {
+Deno.test("Numerics.SafeInt.fromString() - radix:unknown", () => {
   // radix:10 として処理する
   const op = { radix: 3 as 2 } as const;
 
@@ -409,7 +409,7 @@ Deno.test("SafeInt.fromString() - radix:unknown", () => {
   // assertStrictEquals(SafeInt.fromString("01", op), 1);
 });
 
-Deno.test("SafeInt.toString()", () => {
+Deno.test("Numerics.SafeInt.toString()", () => {
   const rfe1 = "`value` must be a safe integer.";
 
   assertThrows(
@@ -452,7 +452,7 @@ Deno.test("SafeInt.toString()", () => {
   assertStrictEquals(SafeInt.toString(16), "16");
 });
 
-Deno.test("SafeInt.toString() - radix:2", () => {
+Deno.test("Numerics.SafeInt.toString() - radix:2", () => {
   const op = { radix: 2 } as const;
 
   assertStrictEquals(SafeInt.toString(-1, op), "-1");
@@ -479,7 +479,7 @@ Deno.test("SafeInt.toString() - radix:2", () => {
   assertStrictEquals(SafeInt.toString(16, op), "10000");
 });
 
-Deno.test("SafeInt.toString() - radix:8", () => {
+Deno.test("Numerics.SafeInt.toString() - radix:8", () => {
   const op = { radix: 8 } as const;
 
   assertStrictEquals(SafeInt.toString(-1, op), "-1");
@@ -506,7 +506,7 @@ Deno.test("SafeInt.toString() - radix:8", () => {
   assertStrictEquals(SafeInt.toString(16, op), "20");
 });
 
-Deno.test("SafeInt.toString() - radix:10", () => {
+Deno.test("Numerics.SafeInt.toString() - radix:10", () => {
   const op = { radix: 10 } as const;
 
   assertStrictEquals(SafeInt.toString(-1, op), "-1");
@@ -533,7 +533,7 @@ Deno.test("SafeInt.toString() - radix:10", () => {
   assertStrictEquals(SafeInt.toString(16, op), "16");
 });
 
-Deno.test("SafeInt.toString() - radix:16", () => {
+Deno.test("Numerics.SafeInt.toString() - radix:16", () => {
   const op = { radix: 16 } as const;
 
   assertStrictEquals(SafeInt.toString(-1, op), "-1");
@@ -560,7 +560,7 @@ Deno.test("SafeInt.toString() - radix:16", () => {
   assertStrictEquals(SafeInt.toString(16, op), "10");
 });
 
-Deno.test("SafeInt.toString() - radix:unknown", () => {
+Deno.test("Numerics.SafeInt.toString() - radix:unknown", () => {
   const op = { radix: 3 as 10 } as const;
 
   assertThrows(
@@ -594,7 +594,7 @@ Deno.test("SafeInt.toString() - radix:unknown", () => {
   // assertStrictEquals(SafeInt.toString(16, op), "16");
 });
 
-Deno.test("SafeInt.fromBigInt()", () => {
+Deno.test("Numerics.SafeInt.fromBigInt()", () => {
   const rfe2 = "`value` must be a `bigint` in the safe integer range.";
 
   assertThrows(
@@ -637,7 +637,7 @@ Deno.test("SafeInt.fromBigInt()", () => {
   assertStrictEquals(SafeInt.fromBigInt(BigInt(MAX)), MAX);
 });
 
-Deno.test("SafeInt.toBigInt()", () => {
+Deno.test("Numerics.SafeInt.toBigInt()", () => {
   const rfe1 = "`value` must be a safe integer.";
 
   assertThrows(

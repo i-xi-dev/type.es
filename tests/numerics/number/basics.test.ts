@@ -3,7 +3,7 @@ import { Numerics } from "../../../mod.ts";
 
 const { Number: ExNumber } = Numerics;
 
-Deno.test("ExNumber.normalize()", () => {
+Deno.test("Numerics.Number.normalize()", () => {
   assertStrictEquals(Object.is(ExNumber.normalize(0), 0), true);
   assertStrictEquals(Object.is(ExNumber.normalize(-0), 0), true);
   assertStrictEquals(Object.is(ExNumber.normalize(-0), -0), false);
@@ -36,7 +36,7 @@ Deno.test("ExNumber.normalize()", () => {
   );
 });
 
-Deno.test("ExNumber.clampToRange()", () => {
+Deno.test("Numerics.Number.clampToRange()", () => {
   const ex1 = "`value` must be a `number`.";
   assertThrows(
     () => {

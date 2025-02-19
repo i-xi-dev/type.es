@@ -1,29 +1,23 @@
-import * as SafeInt from "../numerics/safeint/mod.ts";
-import { assertBigInt, assertBigIntInSafeIntRange } from "../type/bigint.ts";
-import { assertBigIntRange } from "../type/numeric_range.ts";
-import {
-  assertFiniteNumber,
-  isPositiveSafeInt,
-  isSafeInt,
-} from "../type/number.ts";
-import { assertIntegerString } from "../type/integer_string.ts";
+import * as Radix from "../radix/mod.ts";
+import * as SafeInt from "../safeint/mod.ts";
+import * as Type from "../../type/mod.ts";
 import {
   type bigintrange,
   type radix,
   type roundingmode,
   type safeint,
-} from "../type.ts";
-import { EMPTY as EMPTY_STRING } from "../const/string.ts";
-import { Radix } from "../numerics/mod.ts";
+} from "../../type.ts";
+
+import { EMPTY as EMPTY_STRING } from "../../const/string.ts";
 
 export function min<T extends bigint>(value0: T, ...values: T[]): T {
-  assertBigInt(value0, `value0`);
+  Type.assertBigInt(value0, `value0`);
 
   let provMin = value0;
   let value: T;
   for (let i = 0; i < values.length; i++) {
     value = values[i];
-    assertBigInt(value, `values[${i}]`);
+    Type.assertBigInt(value, `values[${i}]`);
 
     if (value < provMin) {
       provMin = value;
@@ -33,13 +27,13 @@ export function min<T extends bigint>(value0: T, ...values: T[]): T {
 }
 
 export function max<T extends bigint>(value0: T, ...values: T[]): T {
-  assertBigInt(value0, `value0`);
+  Type.assertBigInt(value0, `value0`);
 
   let provMax = value0;
   let value: T;
   for (let i = 0; i < values.length; i++) {
     value = values[i];
-    assertBigInt(value, `values[${i}]`);
+    Type.assertBigInt(value, `values[${i}]`);
 
     if (value > provMax) {
       provMax = value;
@@ -56,8 +50,8 @@ export function clampToRange<T extends bigint>(
   value: bigint,
   range: bigintrange<T>,
 ): T {
-  assertBigInt(value, "value");
-  assertBigIntRange(range, "range");
+  Type.assertBigInt(value, "value");
+  Type.assertBigIntRange(range, "range");
 
   const [min, max] = range;
   if (min > max) {
@@ -72,7 +66,7 @@ export type FromStringOptions = {
 
 export function fromString(value: string, options?: FromStringOptions): bigint {
   const radix = options?.radix ?? Radix.DECIMAL;
-  assertIntegerString(value, "value", radix);
+  Type.assertIntegerString(value, "value", radix);
 
   const negative = value.startsWith("-");
   let adjustedValue = value;
@@ -93,7 +87,7 @@ export type ToStringOptions = {
 };
 
 export function toString(value: bigint, options?: ToStringOptions): string {
-  assertBigInt(value, "value");
+  Type.assertBigInt(value, "value");
   const radix = options?.radix ?? Radix.DECIMAL;
   Radix.assertSupportedRadix(radix, "radix");
 
@@ -104,7 +98,7 @@ export function toString(value: bigint, options?: ToStringOptions): string {
   }
 
   const minIntegralDigits = options?.minIntegralDigits;
-  if (isPositiveSafeInt(minIntegralDigits)) {
+  if (Type.isPositiveSafeInt(minIntegralDigits)) {
     result = result.padStart(minIntegralDigits, "0");
   }
 
@@ -119,7 +113,7 @@ export function fromNumber(
   value: number,
   options?: FromNumberOptions,
 ): bigint {
-  assertFiniteNumber(value, "value");
+  Type.assertFiniteNumber(value, "value");
 
   if (Number.isNaN(value)) {
     throw new TypeError("`value` must not be `NaN`.");
@@ -135,7 +129,7 @@ export function fromNumber(
   }
 
   let valueAsInt: safeint;
-  if (isSafeInt(adjustedValue)) {
+  if (Type.isSafeInt(adjustedValue)) {
     valueAsInt = adjustedValue;
   } else {
     valueAsInt = SafeInt.round(adjustedValue, options?.roundingMode);
@@ -145,6 +139,6 @@ export function fromNumber(
 }
 
 export function toNumber(value: bigint): safeint {
-  assertBigIntInSafeIntRange(value, "value");
+  Type.assertBigIntInSafeIntRange(value, "value");
   return Number(value);
 }
