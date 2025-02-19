@@ -1,5 +1,7 @@
 import { assertStrictEquals, assertThrows } from "@std/assert";
-import { SafeInt } from "../../mod.ts";
+import { Numerics } from "../../../mod.ts";
+
+const { SafeInt } = Numerics;
 
 const MIN = Number.MIN_SAFE_INTEGER;
 const MAX = Number.MAX_SAFE_INTEGER;

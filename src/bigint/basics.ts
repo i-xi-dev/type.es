@@ -1,4 +1,4 @@
-import * as SafeInt from "../safeint/mod.ts";
+import * as SafeInt from "../numerics/safeint/mod.ts";
 import { assertBigInt, assertBigIntInSafeIntRange } from "../type/bigint.ts";
 import { assertBigIntRange } from "../type/numeric_range.ts";
 import {

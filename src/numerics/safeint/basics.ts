@@ -1,27 +1,22 @@
-import * as ExBigInt from "../bigint/mod.ts";
-import { Number as ExNumber } from "../numerics/mod.ts";
-import * as RoundingMode from "../const/rounding_mode.ts";
-import {
-  assertSafeInt,
-  isEvenSafeInt,
-  isPositiveNumber,
-} from "../type/number.ts";
-import { assertSafeIntRange } from "../type/numeric_range.ts";
+import * as ExBigInt from "../../bigint/mod.ts";
+import * as ExNumber from "../number/mod.ts";
+import * as Radix from "../radix/mod.ts";
+import * as RoundingMode from "../rounding_mode/mod.ts";
+import * as Type from "../../type/mod.ts";
 import {
   type radix,
   type roundingmode,
   type safeint,
   type safeintrange,
-} from "../type.ts";
-import { Radix } from "../numerics/mod.ts";
+} from "../../type.ts";
 
 //TODO 命名 toか？
 export function clampToRange<T extends safeint>(
   value: safeint,
   range: safeintrange<T>,
 ): T {
-  assertSafeInt(value, "value");
-  assertSafeIntRange(range, "range");
+  Type.assertSafeInt(value, "value");
+  Type.assertSafeIntRange(range, "range");
 
   const [min, max] = range;
   if (min > max) {
@@ -31,22 +26,22 @@ export function clampToRange<T extends safeint>(
 }
 
 export function clampToPositive<T extends safeint>(value: T): T {
-  assertSafeInt(value, "value");
+  Type.assertSafeInt(value, "value");
   return ExNumber.normalize(Math.max(value, 1) as T);
 }
 
 export function clampToNonNegative<T extends safeint>(value: T): T {
-  assertSafeInt(value, "value");
+  Type.assertSafeInt(value, "value");
   return ExNumber.normalize(Math.max(value, ExNumber.ZERO) as T);
 }
 
 export function clampToNonPositive<T extends safeint>(value: T): T {
-  assertSafeInt(value, "value");
+  Type.assertSafeInt(value, "value");
   return ExNumber.normalize(Math.min(value, ExNumber.ZERO) as T);
 }
 
 export function clampToNegative<T extends safeint>(value: T): T {
-  assertSafeInt(value, "value");
+  Type.assertSafeInt(value, "value");
   return ExNumber.normalize(Math.min(value, -1) as T);
 }
 
@@ -69,7 +64,7 @@ export type ToStringOptions = {
 };
 
 export function toString(value: safeint, options?: ToStringOptions): string {
-  assertSafeInt(value, "value");
+  Type.assertSafeInt(value, "value");
   const radix = options?.radix ?? Radix.DECIMAL;
   Radix.assertSupportedRadix(radix, "radix");
 
@@ -80,7 +75,7 @@ export function toString(value: safeint, options?: ToStringOptions): string {
   }
 
   const minIntegralDigits = options?.minIntegralDigits;
-  if (isPositiveNumber(minIntegralDigits)) {
+  if (Type.isPositiveNumber(minIntegralDigits)) {
     result = result.padStart(minIntegralDigits, "0");
   }
 
@@ -92,7 +87,7 @@ export function fromBigInt(value: bigint): safeint {
 }
 
 export function toBigInt(value: safeint): bigint {
-  assertSafeInt(value, "value");
+  Type.assertSafeInt(value, "value");
   return BigInt(value);
 }
 
@@ -103,7 +98,7 @@ export function round(value: number, roundingMode?: roundingmode): safeint {
   }
 
   const integralPart = ExNumber.normalize(Math.trunc(value));
-  const integralPartIsEven = isEvenSafeInt(integralPart);
+  const integralPartIsEven = Type.isEvenSafeInt(integralPart);
 
   const resolvedRoundingMode =
     Object.values(RoundingMode).includes(roundingMode as roundingmode)
