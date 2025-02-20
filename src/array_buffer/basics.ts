@@ -1,13 +1,14 @@
 import * as Type from "../type/mod.ts";
 import {
   type biguint64,
+  type byteorder,
   type int,
   type safeint,
   type uint16,
   type uint32,
   type uint8,
 } from "../type.ts";
-import { ByteOrder } from "../byte_order.ts";
+import * as ByteOrder from "../basics/byte_order/mod.ts";
 import * as env from "../env.ts";
 import { GrowableBuffer } from "../_2/growable_buffer.ts";
 import { BigUint64 } from "../_numerics/big_uint.ts";
@@ -67,8 +68,8 @@ type _Setter<T extends int> = (
   isLittleEndian: boolean,
 ) => void;
 
-function _resolveByteOrder(byteOrder?: ByteOrder): ByteOrder {
-  if (Object.values(ByteOrder).includes(byteOrder as ByteOrder)) {
+function _resolveByteOrder(byteOrder?: byteorder): byteorder {
+  if (Object.values(ByteOrder).includes(byteOrder as byteorder)) {
     return byteOrder!;
   }
   return env.BYTE_ORDER;
@@ -79,7 +80,7 @@ function _fromUint8xIterable<T extends int>(
   uint8xArrayCtor: _Uint8xArrayCtor,
   assertElement: (i: unknown, label: string) => void,
   viewSetter: _Setter<T>,
-  byteOrder: ByteOrder,
+  byteOrder: byteorder,
 ): ArrayBuffer {
   const gb = new GrowableBuffer();
   const isLittleEndian = byteOrder === ByteOrder.LITTLE_ENDIAN;
@@ -101,7 +102,7 @@ async function _fromUint8xAsyncIterable<T extends int>(
   uint8xArrayCtor: _Uint8xArrayCtor,
   assertElement: (i: unknown, label: string) => void,
   viewSetter: _Setter<T>,
-  byteOrder: ByteOrder,
+  byteOrder: byteorder,
 ): Promise<ArrayBuffer> {
   const gb = new GrowableBuffer();
   const isLittleEndian = byteOrder === ByteOrder.LITTLE_ENDIAN;
@@ -128,7 +129,7 @@ function _toUint8xIterable<T extends int>(
   value: ArrayBuffer,
   uint8xArrayCtor: _Uint8xArrayCtor,
   viewGetter: _Getter<T>,
-  byteOrder: ByteOrder,
+  byteOrder: byteorder,
 ): Iterable<T> {
   Type.assertArrayBuffer(value, "value");
 
@@ -157,7 +158,7 @@ function _toUint8xIterable<T extends int>(
 }
 
 export type FromUint8xIterableOptions = {
-  byteOrder?: ByteOrder;
+  byteOrder?: byteorder;
   // maxByteLength?: safeint;
 };
 
@@ -221,7 +222,7 @@ export async function fromUint16AsyncIterable(
 }
 
 export type ToUint8xIterableOptions = {
-  byteOrder?: ByteOrder;
+  byteOrder?: byteorder;
 };
 
 export function toUint16Iterable(

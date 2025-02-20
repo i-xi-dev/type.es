@@ -5,6 +5,8 @@ import _scripts from "../dat/i18n/script_map.json" with { type: "json" };
 
 export type biguint64 = bigint;
 
+export type byteorder = "big-endian" | "little-endian";
+
 /**
  * String matching regular expression `/^[\u0000-\uFFFF]{1}$/`.
  * including surrogates.
