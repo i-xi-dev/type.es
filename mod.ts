@@ -12,4 +12,3 @@ export * as xText from "./src/_text/mod.ts";
 export * as Text from "./src/text/mod.ts";
 export * as Type from "./src/type/mod.ts";
 export type * from "./src/type.ts";
-export * as Unicode from "./src/unicode/mod.ts";

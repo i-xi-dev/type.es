@@ -1,7 +1,9 @@
 import { assertStrictEquals, assertThrows } from "@std/assert";
-import { Unicode } from "../../mod.ts";
+import { Text } from "../../../mod.ts";
 
-Deno.test("new Unicode.GeneralCategorySet()", () => {
+const { Unicode } = Text;
+
+Deno.test("new Text.Unicode.GeneralCategorySet()", () => {
   const gcs1 = new Unicode.GeneralCategorySet(["Lu"]);
   assertStrictEquals(gcs1.includesRune("L"), true);
   assertStrictEquals(JSON.stringify(gcs1.toArray()), `["Lu"]`);
@@ -35,7 +37,7 @@ Deno.test("new Unicode.GeneralCategorySet()", () => {
   );
 });
 
-Deno.test("Unicode.GeneralCategorySet.prototype.size", () => {
+Deno.test("Text.Unicode.GeneralCategorySet.prototype.size", () => {
   const gcs0 = new Unicode.GeneralCategorySet([]);
   assertStrictEquals(gcs0.size, 0);
   const gcs1 = new Unicode.GeneralCategorySet(["Lu"]);
@@ -44,7 +46,7 @@ Deno.test("Unicode.GeneralCategorySet.prototype.size", () => {
   assertStrictEquals(gcs2.size, 2);
 });
 
-Deno.test("Unicode.GeneralCategorySet.prototype.includesRune()", () => {
+Deno.test("Text.Unicode.GeneralCategorySet.prototype.includesRune()", () => {
   const gcs1 = new Unicode.GeneralCategorySet(["Lu"]);
   assertStrictEquals(gcs1.includesRune("L"), true);
   assertStrictEquals(gcs1.includesRune("l"), false);
@@ -94,7 +96,7 @@ Deno.test("Unicode.GeneralCategorySet.prototype.includesRune()", () => {
   );
 });
 
-Deno.test("Unicode.GeneralCategorySet.prototype.includesCodePoint()", () => {
+Deno.test("Text.Unicode.GeneralCategorySet.prototype.includesCodePoint()", () => {
   const gcs1 = new Unicode.GeneralCategorySet(["Lu"]);
   assertStrictEquals(gcs1.includesCodePoint(0x4C), true);
   assertStrictEquals(gcs1.includesCodePoint(0x6C), false);
@@ -119,7 +121,7 @@ Deno.test("Unicode.GeneralCategorySet.prototype.includesCodePoint()", () => {
   );
 });
 
-Deno.test("Unicode.GeneralCategorySet.prototype.findMatches()", () => {
+Deno.test("Text.Unicode.GeneralCategorySet.prototype.findMatches()", () => {
   const s1 = new Unicode.GeneralCategorySet(["Lu"]);
   const r1a = s1.findMatches("123DE6GhijE");
   assertStrictEquals(
@@ -130,7 +132,7 @@ Deno.test("Unicode.GeneralCategorySet.prototype.findMatches()", () => {
   assertStrictEquals(JSON.stringify([...r1b.entries()]), `[]`);
 });
 
-Deno.test("Unicode.GeneralCategorySet.prototype.unionWith()", () => {
+Deno.test("Text.Unicode.GeneralCategorySet.prototype.unionWith()", () => {
   const gcs4 = new Unicode.GeneralCategorySet(["Lu", "Ll"]).unionWith([]);
   assertStrictEquals(JSON.stringify(gcs4.toArray()), `["Ll","Lu"]`);
   assertStrictEquals(gcs4 instanceof Unicode.GeneralCategorySet, true);
@@ -166,7 +168,7 @@ Deno.test("Unicode.GeneralCategorySet.prototype.unionWith()", () => {
   assertStrictEquals(JSON.stringify(gcs6y.toArray()), `[]`);
 });
 
-Deno.test("Unicode.GeneralCategorySet.prototype.has()", () => {
+Deno.test("Text.Unicode.GeneralCategorySet.prototype.has()", () => {
   const gcs0 = new Unicode.GeneralCategorySet([]);
   assertStrictEquals(gcs0.has("Lu"), false);
   assertStrictEquals(gcs0.has("Ll"), false);
@@ -181,7 +183,7 @@ Deno.test("Unicode.GeneralCategorySet.prototype.has()", () => {
   assertStrictEquals(gcs2.has("L"), false);
 });
 
-Deno.test("Unicode.GeneralCategorySet.prototype.keys()", () => {
+Deno.test("Text.Unicode.GeneralCategorySet.prototype.keys()", () => {
   const gcs0 = new Unicode.GeneralCategorySet([]);
   assertStrictEquals(JSON.stringify([...gcs0.keys()]), `[]`);
   const gcs1 = new Unicode.GeneralCategorySet(["Lu"]);
@@ -190,7 +192,7 @@ Deno.test("Unicode.GeneralCategorySet.prototype.keys()", () => {
   assertStrictEquals(JSON.stringify([...gcs2.keys()]), `["Ll","Lu"]`);
 });
 
-Deno.test("Unicode.GeneralCategorySet.prototype.toArray()", () => {
+Deno.test("Text.Unicode.GeneralCategorySet.prototype.toArray()", () => {
   const gcs4 = new Unicode.GeneralCategorySet(["Lu", "Ll"]);
   assertStrictEquals(JSON.stringify(gcs4.toArray()), `["Ll","Lu"]`);
 
@@ -201,7 +203,7 @@ Deno.test("Unicode.GeneralCategorySet.prototype.toArray()", () => {
   assertStrictEquals(JSON.stringify(gcs5.toArray()), `[]`);
 });
 
-Deno.test("Unicode.GeneralCategorySet.prototype.toSet()", () => {
+Deno.test("Text.Unicode.GeneralCategorySet.prototype.toSet()", () => {
   const gcs4 = new Unicode.GeneralCategorySet(["Lu", "Ll"]);
   assertStrictEquals(JSON.stringify([...gcs4.toSet()]), `["Ll","Lu"]`);
 

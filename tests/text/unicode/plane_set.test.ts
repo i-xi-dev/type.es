@@ -1,7 +1,9 @@
 import { assertStrictEquals, assertThrows } from "@std/assert";
-import { Unicode } from "../../mod.ts";
+import { Text } from "../../../mod.ts";
 
-Deno.test("new Unicode.PlaneSet()", () => {
+const { Unicode } = Text;
+
+Deno.test("new Text.Unicode.PlaneSet()", () => {
   const ps1 = new Unicode.PlaneSet([0]);
   assertStrictEquals(ps1.includesRune("L"), true);
   assertStrictEquals(JSON.stringify(ps1.toArray()), `[0]`);
@@ -43,7 +45,7 @@ Deno.test("new Unicode.PlaneSet()", () => {
   );
 });
 
-Deno.test("Unicode.PlaneSet.prototype.size", () => {
+Deno.test("Text.Unicode.PlaneSet.prototype.size", () => {
   const gcs0 = new Unicode.PlaneSet([]);
   assertStrictEquals(gcs0.size, 0);
   const gcs1 = new Unicode.PlaneSet([1]);
@@ -52,7 +54,7 @@ Deno.test("Unicode.PlaneSet.prototype.size", () => {
   assertStrictEquals(gcs2.size, 2);
 });
 
-Deno.test("Unicode.PlaneSet.prototype.includesRune()", () => {
+Deno.test("Text.Unicode.PlaneSet.prototype.includesRune()", () => {
   const ps1 = new Unicode.PlaneSet([0]);
   assertStrictEquals(ps1.includesRune("\u0000"), true);
   assertStrictEquals(ps1.includesRune("\uFFFF"), true);
@@ -102,7 +104,7 @@ Deno.test("Unicode.PlaneSet.prototype.includesRune()", () => {
   );
 });
 
-Deno.test("Unicode.PlaneSet.prototype.includesCodePoint()", () => {
+Deno.test("Text.Unicode.PlaneSet.prototype.includesCodePoint()", () => {
   const ps1 = new Unicode.PlaneSet([0]);
   assertStrictEquals(ps1.includesCodePoint(0), true);
   assertStrictEquals(ps1.includesCodePoint(0xFFFF), true);
@@ -127,7 +129,7 @@ Deno.test("Unicode.PlaneSet.prototype.includesCodePoint()", () => {
   );
 });
 
-Deno.test("Unicode.PlaneSet.prototype.findMatches()", () => {
+Deno.test("Text.Unicode.PlaneSet.prototype.findMatches()", () => {
   const s1 = new Unicode.PlaneSet([1]);
   const r1a = s1.findMatches("123D\u{10000}E\u{10000}6GhijE");
   assertStrictEquals(
@@ -138,7 +140,7 @@ Deno.test("Unicode.PlaneSet.prototype.findMatches()", () => {
   assertStrictEquals(JSON.stringify([...r1b.entries()]), `[]`);
 });
 
-Deno.test("Unicode.PlaneSet.prototype.unionWith()", () => {
+Deno.test("Text.Unicode.PlaneSet.prototype.unionWith()", () => {
   const gcs4 = new Unicode.PlaneSet([16, 0]).unionWith([]);
   assertStrictEquals(JSON.stringify(gcs4.toArray()), `[0,16]`);
 
@@ -173,7 +175,7 @@ Deno.test("Unicode.PlaneSet.prototype.unionWith()", () => {
   assertStrictEquals(JSON.stringify(gcs6y.toArray()), `[]`);
 });
 
-Deno.test("Unicode.PlaneSet.prototype.has()", () => {
+Deno.test("Text.Unicode.PlaneSet.prototype.has()", () => {
   const gcs0 = new Unicode.PlaneSet([]);
   assertStrictEquals(gcs0.has(0), false);
   assertStrictEquals(gcs0.has(1), false);
@@ -188,7 +190,7 @@ Deno.test("Unicode.PlaneSet.prototype.has()", () => {
   assertStrictEquals(gcs2.has(4), true);
 });
 
-Deno.test("Unicode.PlaneSet.prototype.keys()", () => {
+Deno.test("Text.Unicode.PlaneSet.prototype.keys()", () => {
   const gcs0 = new Unicode.PlaneSet([]);
   assertStrictEquals(JSON.stringify([...gcs0.keys()]), `[]`);
   const gcs1 = new Unicode.PlaneSet([1]);
@@ -197,7 +199,7 @@ Deno.test("Unicode.PlaneSet.prototype.keys()", () => {
   assertStrictEquals(JSON.stringify([...gcs2.keys()]), `[2,4]`);
 });
 
-Deno.test("Unicode.PlaneSet.prototype.toArray()", () => {
+Deno.test("Text.Unicode.PlaneSet.prototype.toArray()", () => {
   const gcs4 = new Unicode.PlaneSet([16, 0]);
   assertStrictEquals(JSON.stringify(gcs4.toArray()), `[0,16]`);
 
@@ -208,7 +210,7 @@ Deno.test("Unicode.PlaneSet.prototype.toArray()", () => {
   assertStrictEquals(JSON.stringify(gcs5.toArray()), `[]`);
 });
 
-Deno.test("Unicode.PlaneSet.prototype.toSet()", () => {
+Deno.test("Text.Unicode.PlaneSet.prototype.toSet()", () => {
   const gcs4 = new Unicode.PlaneSet([16, 0]);
   assertStrictEquals(JSON.stringify([...gcs4.toSet()]), `[0,16]`);
 

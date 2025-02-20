@@ -1,7 +1,9 @@
 import { assertStrictEquals, assertThrows } from "@std/assert";
-import { Unicode } from "../../mod.ts";
+import { Text } from "../../../mod.ts";
 
-Deno.test("new Unicode.ScriptSet()", () => {
+const { Unicode } = Text;
+
+Deno.test("new Text.Unicode.ScriptSet()", () => {
   const scs1 = new Unicode.ScriptSet(["Latn"]);
   assertStrictEquals(scs1.includesRune("L"), true);
   assertStrictEquals(JSON.stringify(scs1.toArray()), `["Latn"]`);
@@ -43,7 +45,7 @@ Deno.test("new Unicode.ScriptSet()", () => {
   );
 });
 
-Deno.test("Unicode.ScriptSet.prototype.size", () => {
+Deno.test("Text.Unicode.ScriptSet.prototype.size", () => {
   const gcs0 = new Unicode.ScriptSet([]);
   assertStrictEquals(gcs0.size, 0);
   const gcs1 = new Unicode.ScriptSet(["Kana"]);
@@ -52,7 +54,7 @@ Deno.test("Unicode.ScriptSet.prototype.size", () => {
   assertStrictEquals(gcs2.size, 2);
 });
 
-Deno.test("Unicode.ScriptSet.prototype.includesRune()", () => {
+Deno.test("Text.Unicode.ScriptSet.prototype.includesRune()", () => {
   const scs1 = new Unicode.ScriptSet(["Kana"]);
   assertStrictEquals(scs1.includesRune("ア"), true);
   assertStrictEquals(scs1.includesRune("あ"), false);
@@ -111,7 +113,7 @@ Deno.test("Unicode.ScriptSet.prototype.includesRune()", () => {
   assertStrictEquals(scs00.includesRune("a"), false);
 });
 
-Deno.test("Unicode.ScriptSet.prototype.includesCodePoint()", () => {
+Deno.test("Text.Unicode.ScriptSet.prototype.includesCodePoint()", () => {
   const scs1 = new Unicode.ScriptSet(["Kana"]);
   assertStrictEquals(scs1.includesCodePoint(0x30A2), true);
   assertStrictEquals(scs1.includesCodePoint(0x3042), false);
@@ -134,7 +136,7 @@ Deno.test("Unicode.ScriptSet.prototype.includesCodePoint()", () => {
   );
 });
 
-Deno.test("Unicode.ScriptSet.prototype.findMatches()", () => {
+Deno.test("Text.Unicode.ScriptSet.prototype.findMatches()", () => {
   const s1 = new Unicode.ScriptSet(["Latn"]);
   const r1a = s1.findMatches("123DE6GhijE");
   assertStrictEquals(
@@ -145,7 +147,7 @@ Deno.test("Unicode.ScriptSet.prototype.findMatches()", () => {
   assertStrictEquals(JSON.stringify([...r1b.entries()]), `[]`);
 });
 
-Deno.test("Unicode.ScriptSet.prototype.unionWith()", () => {
+Deno.test("Text.Unicode.ScriptSet.prototype.unionWith()", () => {
   const gcs4 = new Unicode.ScriptSet(["Latn", "Kana"]).unionWith([]);
   assertStrictEquals(JSON.stringify(gcs4.toArray()), `["Kana","Latn"]`);
 
@@ -187,7 +189,7 @@ Deno.test("Unicode.ScriptSet.prototype.unionWith()", () => {
   assertStrictEquals(gcs8e.includesRune("ー"), false);
 });
 
-Deno.test("Unicode.ScriptSet.prototype.has()", () => {
+Deno.test("Text.Unicode.ScriptSet.prototype.has()", () => {
   const gcs0 = new Unicode.ScriptSet([]);
   assertStrictEquals(gcs0.has("Latn"), false);
   assertStrictEquals(gcs0.has("Kana"), false);
@@ -202,7 +204,7 @@ Deno.test("Unicode.ScriptSet.prototype.has()", () => {
   assertStrictEquals(gcs2.has("Zxxx"), false);
 });
 
-Deno.test("Unicode.ScriptSet.prototype.keys()", () => {
+Deno.test("Text.Unicode.ScriptSet.prototype.keys()", () => {
   const gcs0 = new Unicode.ScriptSet([]);
   assertStrictEquals(JSON.stringify([...gcs0.keys()]), `[]`);
   const gcs1 = new Unicode.ScriptSet(["Latn"]);
@@ -211,7 +213,7 @@ Deno.test("Unicode.ScriptSet.prototype.keys()", () => {
   assertStrictEquals(JSON.stringify([...gcs2.keys()]), `["Kana","Latn"]`);
 });
 
-Deno.test("Unicode.ScriptSet.prototype.toArray()", () => {
+Deno.test("Text.Unicode.ScriptSet.prototype.toArray()", () => {
   const scs11 = new Unicode.ScriptSet(["Latn", "Kana"]);
   assertStrictEquals(JSON.stringify(scs11.toArray()), `["Kana","Latn"]`);
 
@@ -222,7 +224,7 @@ Deno.test("Unicode.ScriptSet.prototype.toArray()", () => {
   assertStrictEquals(JSON.stringify(scs00.toArray()), `[]`);
 });
 
-Deno.test("Unicode.ScriptSet.prototype.toSet()", () => {
+Deno.test("Text.Unicode.ScriptSet.prototype.toSet()", () => {
   const scs11 = new Unicode.ScriptSet(["Latn", "Kana"]);
   assertStrictEquals(JSON.stringify([...scs11.toSet()]), `["Kana","Latn"]`);
 
