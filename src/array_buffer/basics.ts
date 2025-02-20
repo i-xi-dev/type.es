@@ -9,7 +9,6 @@ import {
   type uint8,
 } from "../type.ts";
 import * as ByteOrder from "../basics/byte_order/mod.ts";
-import * as env from "../env.ts";
 import { GrowableBuffer } from "../_2/growable_buffer.ts";
 import { BigUint64 } from "../_numerics/big_uint.ts";
 import { Number as ExNumber } from "../numerics/mod.ts";
@@ -72,7 +71,7 @@ function _resolveByteOrder(byteOrder?: byteorder): byteorder {
   if (Object.values(ByteOrder).includes(byteOrder as byteorder)) {
     return byteOrder!;
   }
-  return env.BYTE_ORDER;
+  return ByteOrder.nativeOrder;
 }
 
 function _fromUint8xIterable<T extends int>(
@@ -140,7 +139,7 @@ function _toUint8xIterable<T extends int>(
     );
   }
 
-  if (byteOrder !== env.BYTE_ORDER) {
+  if (byteOrder !== ByteOrder.nativeOrder) {
     const clone = value.slice(0);
     const reader = new DataView(clone);
     const isLittleEndian = byteOrder === ByteOrder.LITTLE_ENDIAN;
@@ -170,7 +169,7 @@ export function fromUint16Iterable(
 
   const byteOrder = _resolveByteOrder(options?.byteOrder);
 
-  if (byteOrder !== env.BYTE_ORDER) {
+  if (byteOrder !== ByteOrder.nativeOrder) {
     return _fromUint8xIterable<uint16>(
       value,
       Uint16Array,
@@ -196,7 +195,7 @@ export async function fromUint16AsyncIterable(
 
   const byteOrder = _resolveByteOrder(options?.byteOrder);
 
-  if (byteOrder !== env.BYTE_ORDER) {
+  if (byteOrder !== ByteOrder.nativeOrder) {
     return _fromUint8xAsyncIterable<uint16>(
       value,
       Uint16Array,
@@ -243,7 +242,7 @@ export function fromUint32Iterable(
 
   const byteOrder = _resolveByteOrder(options?.byteOrder);
 
-  if (byteOrder !== env.BYTE_ORDER) {
+  if (byteOrder !== ByteOrder.nativeOrder) {
     return _fromUint8xIterable<uint32>(
       value,
       Uint32Array,
@@ -269,7 +268,7 @@ export async function fromUint32AsyncIterable(
 
   const byteOrder = _resolveByteOrder(options?.byteOrder);
 
-  if (byteOrder !== env.BYTE_ORDER) {
+  if (byteOrder !== ByteOrder.nativeOrder) {
     return _fromUint8xAsyncIterable<uint32>(
       value,
       Uint32Array,
@@ -311,7 +310,7 @@ export function fromBigUint64Iterable(
 
   const byteOrder = _resolveByteOrder(options?.byteOrder);
 
-  if (byteOrder !== env.BYTE_ORDER) {
+  if (byteOrder !== ByteOrder.nativeOrder) {
     return _fromUint8xIterable<biguint64>(
       value,
       BigUint64Array,
@@ -341,7 +340,7 @@ export async function fromBigUint64AsyncIterable(
 
   const byteOrder = _resolveByteOrder(options?.byteOrder);
 
-  if (byteOrder !== env.BYTE_ORDER) {
+  if (byteOrder !== ByteOrder.nativeOrder) {
     return _fromUint8xAsyncIterable<biguint64>(
       value,
       BigUint64Array,

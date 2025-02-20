@@ -1,6 +1,5 @@
 import { assertRejects, assertStrictEquals, assertThrows } from "@std/assert";
-import { ExArrayBuffer, type uint16 } from "../../mod.ts";
-import { BYTE_ORDER } from "../../src/env.ts";
+import { ByteOrder, ExArrayBuffer, type uint16 } from "../../mod.ts";
 
 Deno.test("ExArrayBuffer.fromUint16Iterable(Array<uint16>)", () => {
   assertThrows(
@@ -87,7 +86,7 @@ Deno.test("ExArrayBuffer.fromUint16Iterable(Array<uint16>)", () => {
 
   const a1x = new Uint8Array(ExArrayBuffer.fromUint16Iterable([0, 1, 65535]));
   assertStrictEquals(a1x.length, 6);
-  if (BYTE_ORDER === "big-endian") {
+  if (ByteOrder.nativeOrder === "big-endian") {
     assertStrictEquals(a1x[0], 0);
     assertStrictEquals(a1x[1], 0);
     assertStrictEquals(a1x[2], 0);
@@ -138,7 +137,7 @@ Deno.test("ExArrayBuffer.fromUint16Iterable(Uint16Array)", () => {
     ExArrayBuffer.fromUint16Iterable(Uint16Array.of(0, 1, 65535)),
   );
   assertStrictEquals(a1x.length, 6);
-  if (BYTE_ORDER === "big-endian") {
+  if (ByteOrder.nativeOrder === "big-endian") {
     assertStrictEquals(a1x[0], 0);
     assertStrictEquals(a1x[1], 0);
     assertStrictEquals(a1x[2], 0);
@@ -202,7 +201,7 @@ Deno.test("ExArrayBuffer.fromUint16Iterable(Generator<uint16>)", () => {
 
   const a1x = new Uint8Array(ExArrayBuffer.fromUint16Iterable(g3));
   assertStrictEquals(a1x.length, 6);
-  if (BYTE_ORDER === "big-endian") {
+  if (ByteOrder.nativeOrder === "big-endian") {
     assertStrictEquals(a1x[0], 0);
     assertStrictEquals(a1x[1], 0);
     assertStrictEquals(a1x[2], 0);
@@ -457,7 +456,7 @@ Deno.test("ExArrayBuffer.toUint16Iterable(Uint8Array)", () => {
     ]),
     "[]",
   );
-  if (BYTE_ORDER === "big-endian") {
+  if (ByteOrder.nativeOrder === "big-endian") {
     assertStrictEquals(
       JSON.stringify([
         ...ExArrayBuffer.toUint16Iterable(

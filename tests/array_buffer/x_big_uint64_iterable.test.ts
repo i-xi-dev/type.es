@@ -1,6 +1,5 @@
 import { assertRejects, assertStrictEquals, assertThrows } from "@std/assert";
-import { type biguint64, ExArrayBuffer } from "../../mod.ts";
-import { BYTE_ORDER } from "../../src/env.ts";
+import { type biguint64, ByteOrder, ExArrayBuffer } from "../../mod.ts";
 
 Deno.test("ExArrayBuffer.fromBigUint64Iterable(Array<biguint64>)", () => {
   assertThrows(
@@ -131,7 +130,7 @@ Deno.test("ExArrayBuffer.fromBigUint64Iterable(Array<biguint64>)", () => {
     ExArrayBuffer.fromBigUint64Iterable([0n, 1n, 0xFFFF_FFFF_FFFF_FFFFn]),
   );
   assertStrictEquals(a1x.length, 24);
-  if (BYTE_ORDER === "big-endian") {
+  if (ByteOrder.nativeOrder === "big-endian") {
     assertStrictEquals(a1x[0], 0);
     assertStrictEquals(a1x[1], 0);
     assertStrictEquals(a1x[2], 0);
@@ -254,7 +253,7 @@ Deno.test("ExArrayBuffer.fromBigUint64Iterable(BigUint64Array)", () => {
     BigUint64Array.of(0n, 1n, 0xFFFF_FFFF_FFFF_FFFFn),
   ));
   assertStrictEquals(a1x.length, 24);
-  if (BYTE_ORDER === "big-endian") {
+  if (ByteOrder.nativeOrder === "big-endian") {
     assertStrictEquals(a1x[0], 0);
     assertStrictEquals(a1x[1], 0);
     assertStrictEquals(a1x[2], 0);
@@ -390,7 +389,7 @@ Deno.test("ExArrayBuffer.fromBigUint64Iterable(Generator<biguint64>)", () => {
 
   const a1x = new Uint8Array(ExArrayBuffer.fromBigUint64Iterable(g3));
   assertStrictEquals(a1x.length, 24);
-  if (BYTE_ORDER === "big-endian") {
+  if (ByteOrder.nativeOrder === "big-endian") {
     assertStrictEquals(a1x[0], 0);
     assertStrictEquals(a1x[1], 0);
     assertStrictEquals(a1x[2], 0);
@@ -702,7 +701,7 @@ Deno.test("ExArrayBuffer.toBigUint64Iterable(Uint8Array)", () => {
     ].join(","),
     "",
   );
-  if (BYTE_ORDER === "big-endian") {
+  if (ByteOrder.nativeOrder === "big-endian") {
     assertStrictEquals(
       [
         ...ExArrayBuffer.toBigUint64Iterable(
