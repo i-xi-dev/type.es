@@ -1,7 +1,9 @@
 import { assertStrictEquals, assertThrows } from "@std/assert";
-import { Rune } from "../../mod.ts";
+import { Text } from "../../../mod.ts";
 
-Deno.test("Rune.fromCodePoint()", () => {
+const { Rune } = Text;
+
+Deno.test("Text.Rune.fromCodePoint()", () => {
   assertStrictEquals(Rune.fromCodePoint(-0x0), "\u0000");
   assertStrictEquals(Rune.fromCodePoint(0x0), "\u0000");
   assertStrictEquals(Rune.fromCodePoint(0xFFFF), "\uFFFF");
@@ -41,7 +43,7 @@ Deno.test("Rune.fromCodePoint()", () => {
   );
 });
 
-Deno.test("Rune.toCodePoint()", () => {
+Deno.test("Text.Rune.toCodePoint()", () => {
   assertStrictEquals(Rune.toCodePoint("\u0000"), 0x0);
   assertStrictEquals(Rune.toCodePoint("\uFFFF"), 0xFFFF);
   assertStrictEquals(Rune.toCodePoint("\u{10000}"), 0x10000);

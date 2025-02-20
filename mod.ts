@@ -8,7 +8,6 @@ export * as I18n from "./src/i18n/mod.ts";
 export * as xNumerics from "./src/_numerics/mod.ts";
 export * as Numerics from "./src/numerics/mod.ts";
 export * as Radix from "./src/basics/radix/mod.ts";
-export * as Rune from "./src/rune/mod.ts";
 export * as xText from "./src/_text/mod.ts";
 export * as Text from "./src/text/mod.ts";
 export * as Type from "./src/type/mod.ts";

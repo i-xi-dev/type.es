@@ -1,5 +1,4 @@
 import * as CodePoint from "../text/code_point/mod.ts";
-import * as Rune from "../rune/mod.ts";
 import * as Type from "../type/mod.ts";
 import { _PropertyValueSetBase } from "./_propval_set_base.ts";
 import {
@@ -8,6 +7,7 @@ import {
   type plane,
   type rune,
 } from "../type.ts";
+import { Rune } from "../text/mod.ts";
 
 function _toPlaneSet(planes: ArrayOrSet<plane>): Set<plane> {
   Type.assertArrayOrSet(

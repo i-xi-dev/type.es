@@ -1,5 +1,5 @@
-import * as Type from "../type/mod.ts";
-import { type codepoint, type rune } from "../type.ts";
+import * as Type from "../../type/mod.ts";
+import { type codepoint, type rune } from "../../type.ts";
 
 export function fromCodePoint(codePoint: codepoint): rune {
   Type.assertCodePoint(codePoint, "codePoint");
