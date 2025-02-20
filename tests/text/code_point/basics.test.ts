@@ -1,7 +1,9 @@
 import { assertStrictEquals, assertThrows } from "@std/assert";
-import { CodePoint } from "../../mod.ts";
+import { Text } from "../../../mod.ts";
 
-Deno.test("CodePoint.toString()", () => {
+const { CodePoint } = Text;
+
+Deno.test("Text.CodePoint.toString()", () => {
   assertStrictEquals(CodePoint.toString(-0x0), "U+0000");
   assertStrictEquals(CodePoint.toString(0x0), "U+0000");
   assertStrictEquals(CodePoint.toString(0xFFFF), "U+FFFF");
@@ -33,7 +35,7 @@ Deno.test("CodePoint.toString()", () => {
   );
 });
 
-Deno.test("CodePoint.planeOf()", () => {
+Deno.test("Text.CodePoint.planeOf()", () => {
   assertStrictEquals(CodePoint.planeOf(0x0), 0);
   assertStrictEquals(CodePoint.planeOf(0xFFFF), 0);
   assertStrictEquals(CodePoint.planeOf(0x10000), 1);

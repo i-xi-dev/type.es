@@ -1,6 +1,6 @@
 import { assertStrictEquals, assertThrows } from "@std/assert";
-import { Text } from "../../mod.ts";
-const { GraphemeSequence } = Text;
+import { xText } from "../../mod.ts";
+const { GraphemeSequence } = xText;
 
 function _iToS(iterable: Iterable<string | number>): string {
   return JSON.stringify([...iterable]);

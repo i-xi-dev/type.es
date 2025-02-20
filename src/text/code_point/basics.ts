@@ -1,7 +1,7 @@
-import * as Radix from "../basics/radix/mod.ts";
-import * as Type from "../type/mod.ts";
-import { type codepoint, type plane } from "../type.ts";
-import { SafeInt } from "../numerics/mod.ts";
+import * as Radix from "../../basics/radix/mod.ts";
+import * as Type from "../../type/mod.ts";
+import { type codepoint, type plane } from "../../type.ts";
+import { SafeInt } from "../../numerics/mod.ts";
 
 const _toStringOptions: SafeInt.ToStringOptions = {
   // lowerCase: false,

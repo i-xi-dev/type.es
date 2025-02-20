@@ -1,7 +1,7 @@
 import { assertStrictEquals, assertThrows } from "@std/assert";
-import { Text } from "../../mod.ts";
+import { xText } from "../../mod.ts";
 
-const { RuneString } = Text;
+const { RuneString } = xText;
 
 Deno.test("RuneString.runeCountOf()", () => {
   assertStrictEquals(RuneString.runeCountOf(""), 0);

@@ -1,7 +1,7 @@
 import { assertStrictEquals } from "@std/assert";
-import { Text } from "../../mod.ts";
+import { xText } from "../../mod.ts";
 
-const { Rune } = Text;
+const { Rune } = xText;
 
 Deno.test("Rune.matchesCommonScript()", () => {
   assertStrictEquals(Rune.matchesCommonScript("ア"), false);

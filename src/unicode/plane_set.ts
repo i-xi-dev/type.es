@@ -1,4 +1,4 @@
-import * as CodePoint from "../code_point/mod.ts";
+import * as CodePoint from "../text/code_point/mod.ts";
 import * as Rune from "../rune/mod.ts";
 import * as Type from "../type/mod.ts";
 import { _PropertyValueSetBase } from "./_propval_set_base.ts";

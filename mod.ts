@@ -1,5 +1,4 @@
 export * as ByteOrder from "./src/basics/byte_order/mod.ts";
-export * as CodePoint from "./src/code_point/mod.ts";
 export * as Events from "./src/events/mod.ts";
 export * from "./src/exception/mod.ts";
 export * as ExArrayBuffer from "./src/array_buffer/mod.ts";
@@ -10,7 +9,8 @@ export * as xNumerics from "./src/_numerics/mod.ts";
 export * as Numerics from "./src/numerics/mod.ts";
 export * as Radix from "./src/basics/radix/mod.ts";
 export * as Rune from "./src/rune/mod.ts";
-export * as Text from "./src/_text/mod.ts";
+export * as xText from "./src/_text/mod.ts";
+export * as Text from "./src/text/mod.ts";
 export * as Type from "./src/type/mod.ts";
 export type * from "./src/type.ts";
 export * as Unicode from "./src/unicode/mod.ts";
