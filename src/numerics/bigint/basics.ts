@@ -1,4 +1,4 @@
-import * as Radix from "../radix/mod.ts";
+import * as Radix from "../../basics/radix/mod.ts";
 import * as SafeInt from "../safeint/mod.ts";
 import * as Type from "../../type/mod.ts";
 import {

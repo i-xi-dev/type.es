@@ -1,6 +1,6 @@
 import * as ExBigInt from "../bigint/mod.ts";
 import * as ExNumber from "../number/mod.ts";
-import * as Radix from "../radix/mod.ts";
+import * as Radix from "../../basics/radix/mod.ts";
 import * as RoundingMode from "../rounding_mode/mod.ts";
 import * as Type from "../../type/mod.ts";
 import {

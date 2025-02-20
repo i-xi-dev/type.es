@@ -4,11 +4,9 @@ import {
   fail,
   unreachable,
 } from "@std/assert";
-import { Numerics } from "../../../mod.ts";
+import { Radix } from "../../../mod.ts";
 
-const { Radix } = Numerics;
-
-Deno.test("Numerics.Radix.assertSupportedRadix()", () => {
+Deno.test("Radix.assertSupportedRadix()", () => {
   try {
     Radix.assertSupportedRadix(2, "test");
     Radix.assertSupportedRadix(8, "test");
@@ -38,7 +36,7 @@ Deno.test("Numerics.Radix.assertSupportedRadix()", () => {
   }
 });
 
-Deno.test("Numerics.Radix.integerPatternOf()", () => {
+Deno.test("Radix.integerPatternOf()", () => {
   assertStrictEquals(Radix.integerPatternOf(2), "^[01]+$");
   assertStrictEquals(Radix.integerPatternOf(8), "^[0-7]+$");
   assertStrictEquals(Radix.integerPatternOf(10), "^[0-9]+$");
@@ -56,7 +54,7 @@ Deno.test("Numerics.Radix.integerPatternOf()", () => {
   );
 });
 
-Deno.test("Numerics.Radix.prefixOf()", () => {
+Deno.test("Radix.prefixOf()", () => {
   assertStrictEquals(Radix.prefixOf(2), "0b");
   assertStrictEquals(Radix.prefixOf(8), "0o");
   assertStrictEquals(Radix.prefixOf(10), "");
