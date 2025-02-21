@@ -7,9 +7,8 @@ import {
   type uint8,
 } from "../_typedef/mod.ts";
 import { BigUint64 } from "../__numerics/big_uint.ts";
-import { type byteorder } from "../type.ts";
+import { type byteorder, type int, type safeint } from "../_typedef/mod.ts";
 import { GrowableBuffer } from "../__2/growable_buffer.ts";
-import { type int, type safeint } from "../_typedef/mod.ts";
 import { Number as ExNumber } from "../numerics/mod.ts";
 import { Uint16, Uint32, Uint8 } from "../__numerics/uint.ts";
 

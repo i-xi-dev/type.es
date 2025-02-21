@@ -1,6 +1,6 @@
 import * as ExString from "../string/mod.ts";
 import * as Radix from "../../_const/radix.ts";
-import { type radix } from "../../type.ts";
+import { type radix } from "../../_typedef/mod.ts";
 
 const _supportedRadixes = [
   Radix.BINARY,
