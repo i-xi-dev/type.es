@@ -1,4 +1,5 @@
 import { type safeint } from "../type.ts";
+import _gcs from "../../dat/unicode/gc_map.ts";
 
 /** 0x0-0x10FFFF */
 export type codepoint = safeint;
@@ -40,3 +41,8 @@ export type usvstring = string;
  * A grapheme cluster.
  */
 export type grapheme = usvstring;
+
+/**
+ * An Unicode General_Category value.
+ */
+export type gc = typeof _gcs[keyof typeof _gcs];

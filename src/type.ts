@@ -1,4 +1,3 @@
-import _gcs from "../dat/unicode/gc_map.ts";
 import _langs from "../dat/i18n/lang_map.json" with { type: "json" };
 import _regions from "../dat/i18n/region_map.json" with { type: "json" };
 import _scripts from "../dat/i18n/script_map.json" with { type: "json" };
@@ -10,11 +9,6 @@ export type byteorder = "big-endian" | "little-endian";
  * including surrogates.
  */
 export type char = string;
-
-/**
- * An Unicode General_Category value.
- */
-export type gc = typeof _gcs[keyof typeof _gcs];
 
 export type int = safeint | bigint;
 
