@@ -1,5 +1,6 @@
 import * as Type from "../../type/mod.ts";
-import { type char, type safeint, type uint16 } from "../../type.ts";
+import { type char, type safeint } from "../../type.ts";
+import { type uint16 } from "../../_typedef/mod.ts";
 
 export function charCountOf(value: string): safeint {
   Type.assertString(value, "value");

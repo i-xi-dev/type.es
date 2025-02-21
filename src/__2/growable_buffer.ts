@@ -1,5 +1,6 @@
 import { Number as ExNumber } from "../numerics/mod.ts";
-import { type safeint, type uint8 } from "../type.ts";
+import { type safeint } from "../type.ts";
+import { type uint8 } from "../_typedef/mod.ts";
 import { Uint8 } from "../__numerics/uint.ts";
 
 const _DEFAULT_SIZE = 1_048_576;

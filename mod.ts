@@ -1,3 +1,4 @@
+export type * from "./src/_typedef/mod.ts";
 export * from "./src/basics/mod.ts";
 export * as Events from "./src/events/mod.ts";
 export * as ExArrayBuffer from "./src/array_buffer/mod.ts";

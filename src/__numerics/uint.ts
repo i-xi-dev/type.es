@@ -18,16 +18,15 @@ import {
   UintNOperations,
 } from "./ranged_integer.ts";
 import { OverflowMode } from "./overflow_mode.ts";
+import { type safeint, type safeintrange } from "../type.ts";
 import {
-  type safeint,
-  type safeintrange,
   type uint16,
   type uint24,
   type uint32,
   type uint6,
   type uint7,
   type uint8,
-} from "../type.ts";
+} from "../_typedef/mod.ts";
 
 class _UinNOperations<T extends safeint> implements UintNOperations<T> {
   readonly #bitLength: safeint;
