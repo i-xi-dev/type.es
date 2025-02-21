@@ -1,5 +1,5 @@
 import * as Type from "../type/mod.ts";
-import { EMPTY as EMPTY_STRING } from "../const/string.ts";
+import { EMPTY as EMPTY_STRING } from "../_const/string.ts";
 import { type grapheme } from "../type.ts";
 import { segmentGraphemes } from "./utils.ts";
 

@@ -1,6 +1,6 @@
 import { type int, type safeint } from "../type.ts";
-import { ZERO as BIGINT_ZERO } from "../const/bigint.ts";
-import { ZERO as NUMBER_ZERO } from "../const/number.ts";
+import { ZERO as BIGINT_ZERO } from "../_const/bigint.ts";
+import { ZERO as NUMBER_ZERO } from "../_const/number.ts";
 
 export function isInteger(test: unknown): test is int {
   return Number.isSafeInteger(test) || (typeof test === "bigint");

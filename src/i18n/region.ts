@@ -1,6 +1,6 @@
+import * as ExString from "../basics/string/mod.ts";
 import * as Type from "../type/mod.ts";
 import _regions from "../../dat/i18n/region_map.json" with { type: "json" };
-import { EMPTY as EMPTY_STRING } from "../const/string.ts";
 import { type region } from "../type.ts";
 
 export type RegionInfo = {
@@ -63,5 +63,5 @@ export function _getRegionName(
     _regionNamesRef = new WeakRef(regionNames);
   }
 
-  return regionNames!.of(region) ?? EMPTY_STRING;
+  return regionNames!.of(region) ?? ExString.EMPTY;
 }

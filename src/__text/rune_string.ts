@@ -7,7 +7,7 @@ import {
   type script,
   type usvstring,
 } from "../type.ts";
-import { EMPTY as EMPTY_STRING } from "../const/string.ts";
+import { EMPTY as EMPTY_STRING } from "../_const/string.ts";
 import { Rune } from "./mod.ts";
 
 export type AllowMalformedOptions = {

@@ -1,11 +1,11 @@
 export * from "./src/basics/mod.ts";
 export * as Events from "./src/events/mod.ts";
 export * as ExArrayBuffer from "./src/array_buffer/mod.ts";
-export * from "./src/_2/growable_buffer.ts";
+export * from "./src/__2/growable_buffer.ts";
 export * as I18n from "./src/i18n/mod.ts";
-export * as xNumerics from "./src/_numerics/mod.ts";
+export * as xNumerics from "./src/__numerics/mod.ts";
 export * as Numerics from "./src/numerics/mod.ts";
-export * as xText from "./src/_text/mod.ts";
+export * as xText from "./src/__text/mod.ts";
 export * as Text from "./src/text/mod.ts";
 export * as Type from "./src/type/mod.ts";
 export type * from "./src/type.ts";

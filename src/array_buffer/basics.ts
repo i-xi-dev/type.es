@@ -9,10 +9,10 @@ import {
   type uint8,
 } from "../type.ts";
 import * as ByteOrder from "../basics/byte_order/mod.ts";
-import { GrowableBuffer } from "../_2/growable_buffer.ts";
-import { BigUint64 } from "../_numerics/big_uint.ts";
+import { GrowableBuffer } from "../__2/growable_buffer.ts";
+import { BigUint64 } from "../__numerics/big_uint.ts";
 import { Number as ExNumber } from "../numerics/mod.ts";
-import { Uint16, Uint32, Uint8 } from "../_numerics/uint.ts";
+import { Uint16, Uint32, Uint8 } from "../__numerics/uint.ts";
 
 // const _DEFAULT_BYTE_LENGTH = 1_024;
 // const _DEFAULT_MAX_BYTE_LENGTH = 1_048_576;

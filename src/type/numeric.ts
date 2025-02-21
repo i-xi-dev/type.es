@@ -1,5 +1,5 @@
 import { type numeric } from "../type.ts";
-import { ZERO as NUMBER_ZERO } from "../const/number.ts";
+import { ZERO as NUMBER_ZERO } from "../_const/number.ts";
 
 export function isNumeric(test: unknown): test is numeric {
   return (typeof test === "number") || (typeof test === "bigint");

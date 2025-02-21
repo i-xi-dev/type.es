@@ -1,5 +1,5 @@
 import { assertString, isEmptyString, isString } from "../type/string.ts";
-import { EMPTY as EMPTY_STRING } from "../const/string.ts";
+import { EMPTY as EMPTY_STRING } from "../_const/string.ts";
 
 // export type PatternOptions = {
 //   noUnicodeSets?: boolean;

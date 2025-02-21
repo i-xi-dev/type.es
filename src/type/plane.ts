@@ -1,6 +1,6 @@
 import { isSafeIntInRange } from "./number.ts";
 import { type plane } from "../type.ts";
-import { Plane } from "../const/unicode.ts";
+import { Plane } from "../_const/unicode.ts";
 
 //XXX 一般名詞すぎる
 export function isPlane(test: unknown): test is plane {

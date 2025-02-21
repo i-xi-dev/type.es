@@ -1,2 +1,2 @@
 export * from "./basics.ts";
-export * from "../../const/code_point.ts";
+export * from "../../_const/code_point.ts";

@@ -1,3 +1,4 @@
+import * as ExString from "../../basics/string/mod.ts";
 import * as Radix from "../../basics/radix/mod.ts";
 import * as SafeInt from "../safeint/mod.ts";
 import * as Type from "../../type/mod.ts";
@@ -7,8 +8,6 @@ import {
   type roundingmode,
   type safeint,
 } from "../../type.ts";
-
-import { EMPTY as EMPTY_STRING } from "../../const/string.ts";
 
 export function min<T extends bigint>(value0: T, ...values: T[]): T {
   Type.assertBigInt(value0, `value0`);
@@ -70,7 +69,7 @@ export function fromString(value: string, options?: FromStringOptions): bigint {
 
   const negative = value.startsWith("-");
   let adjustedValue = value;
-  adjustedValue = adjustedValue.replace(/^[-+]?/, EMPTY_STRING);
+  adjustedValue = adjustedValue.replace(/^[-+]?/, ExString.EMPTY);
   adjustedValue = Radix.prefixOf(radix) + adjustedValue;
   let valueAsBigInt = BigInt(adjustedValue);
   if (negative === true) {

@@ -1,7 +1,7 @@
 import { assertIterable } from "../type/iterable.ts";
 import { type safeint, type uint8 } from "../type.ts";
 import { Uint8 } from "./uint.ts";
-import { ZERO as NUMBER_ZERO } from "../const/number.ts";
+import { ZERO as NUMBER_ZERO } from "../_const/number.ts";
 
 type ArrayLikeOfExpectUint8 =
   | Array<safeint /* uint8 */>

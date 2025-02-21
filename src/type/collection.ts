@@ -1,6 +1,6 @@
 import * as Type from "../type/mod.ts";
 import { type ArrayOrSet } from "../type.ts";
-import { EMPTY as EMPTY_STRING } from "../const/string.ts";
+import { EMPTY as EMPTY_STRING } from "../_const/string.ts";
 
 type _IsT<T> = (i: unknown) => i is T;
 

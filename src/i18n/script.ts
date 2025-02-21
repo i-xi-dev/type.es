@@ -1,6 +1,6 @@
+import * as ExString from "../basics/string/mod.ts";
 import * as Type from "../type/mod.ts";
 import _scripts from "../../dat/i18n/script_map.json" with { type: "json" };
-import { EMPTY as EMPTY_STRING } from "../const/string.ts";
 import { type script } from "../type.ts";
 
 export type ScriptInfo = {
@@ -62,5 +62,5 @@ export function _getScriptName(
     _scriptNamesRef = new WeakRef(scriptNames);
   }
 
-  return scriptNames!.of(script) ?? EMPTY_STRING;
+  return scriptNames!.of(script) ?? ExString.EMPTY;
 }
