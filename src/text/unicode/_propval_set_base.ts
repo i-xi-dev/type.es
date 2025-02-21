@@ -1,6 +1,6 @@
 import * as Type from "../../type/mod.ts";
-import { type ArrayOrSet } from "../../type.ts";
 import {
+  type ArrayOrSet,
   type codepoint,
   type rune,
   type safeint,

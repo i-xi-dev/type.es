@@ -1,8 +1,12 @@
 import * as Rune from "../rune/mod.ts";
 import * as Type from "../../type/mod.ts";
 import { _PropertyValueSetBase } from "./_propval_set_base.ts";
-import { type ArrayOrSet } from "../../type.ts";
-import { type codepoint, type gc, type rune } from "../../_typedef/mod.ts";
+import {
+  type ArrayOrSet,
+  type codepoint,
+  type gc,
+  type rune,
+} from "../../_typedef/mod.ts";
 
 function _toGcSet(gcs: ArrayOrSet<gc>): Set<gc> {
   Type.assertArrayOrSet(
