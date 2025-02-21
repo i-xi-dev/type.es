@@ -46,7 +46,7 @@ export async function fromUint8AsyncIterable(
     gb.put(byte as uint8);
     index++;
   }
-  return gb.slice().buffer;
+  return gb.slice().buffer as ArrayBuffer;
 }
 
 export function toUint8Iterable(value: ArrayBuffer): Iterable<uint8> {
@@ -91,7 +91,7 @@ function _fromUint8xIterable<T extends int>(
     gb.putRange(tmpView);
     index++;
   }
-  return gb.slice().buffer;
+  return gb.slice().buffer as ArrayBuffer;
 }
 
 async function _fromUint8xAsyncIterable<T extends int>(
@@ -113,7 +113,7 @@ async function _fromUint8xAsyncIterable<T extends int>(
     gb.putRange(tmpView);
     index++;
   }
-  return gb.slice().buffer;
+  return gb.slice().buffer as ArrayBuffer;
 }
 
 type _Getter<T extends int> = (
@@ -214,7 +214,7 @@ export async function fromUint16AsyncIterable(
       gb.putRange(tmpView);
       index++;
     }
-    return gb.slice().buffer;
+    return gb.slice().buffer as ArrayBuffer;
   }
 }
 
@@ -286,7 +286,7 @@ export async function fromUint32AsyncIterable(
       gb.putRange(tmpView);
       index++;
     }
-    return gb.slice().buffer;
+    return gb.slice().buffer as ArrayBuffer;
   }
 }
 
@@ -326,7 +326,7 @@ export function fromBigUint64Iterable(
         BigUint64.assert(i, `value[${index}]`);
         return i;
       },
-    ).buffer;
+    ).buffer as ArrayBuffer;
   }
 }
 
@@ -358,7 +358,7 @@ export async function fromBigUint64AsyncIterable(
       gb.putRange(tmpView);
       index++;
     }
-    return gb.slice().buffer;
+    return gb.slice().buffer as ArrayBuffer;
   }
 }
 

@@ -28,8 +28,6 @@ export type ToStringOptions = {
 
 export interface UintNOperations<T extends int> {
   bitLength: safeint;
-  is(value: unknown): value is T;
-  assert(value: unknown, label: string): void;
   bitwiseAnd(self: T, other: T): T;
   bitwiseOr(self: T, other: T): T;
   bitwiseXOr(self: T, other: T): T;
