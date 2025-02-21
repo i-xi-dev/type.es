@@ -1,2 +1,2 @@
 export * from "../../_const/radix.ts";
-export * from "./basics.ts";
+export * from "./main.ts";
