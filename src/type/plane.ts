@@ -1,5 +1,5 @@
 import { isSafeIntInRange } from "./number.ts";
-import { type plane } from "../type.ts";
+import { type plane } from "../_typedef/mod.ts";
 import { Plane } from "../_const/unicode.ts";
 
 //XXX 一般名詞すぎる

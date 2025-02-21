@@ -1,4 +1,5 @@
-import { type codepoint, type safeintrange } from "../type.ts";
+import { type safeintrange } from "../type.ts";
+import { type codepoint } from "../_typedef/mod.ts";
 import * as Radix from "../basics/radix/mod.ts";
 import { isSafeIntInRange } from "./number.ts";
 import {

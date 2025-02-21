@@ -1,4 +1,5 @@
-import { type char, type rune, type usvstring } from "../type.ts";
+import { type char, type usvstring } from "../type.ts";
+import { type rune } from "../_typedef/mod.ts";
 
 export function isString(test: unknown): test is string {
   return (typeof test === "string");

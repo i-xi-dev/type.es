@@ -1,11 +1,6 @@
 import * as Type from "../../type/mod.ts";
-import {
-  type ArrayOrSet,
-  type codepoint,
-  type rune,
-  type safeint,
-  type usvstring,
-} from "../../type.ts";
+import { type ArrayOrSet, type safeint, type usvstring } from "../../type.ts";
+import { type codepoint, type rune } from "../../_typedef/mod.ts";
 
 export abstract class _PropertyValueSetBase<T> implements ReadonlySetLike<T> {
   readonly #set: Set<T>;

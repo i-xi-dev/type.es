@@ -11,9 +11,6 @@ export type byteorder = "big-endian" | "little-endian";
  */
 export type char = string;
 
-/** 0x0-0x10FFFF */
-export type codepoint = safeint;
-
 /**
  * An Unicode General_Category value.
  */
@@ -34,28 +31,6 @@ export type lang = keyof typeof _langs;
 
 export type numeric = number | bigint;
 
-/**
- * A group of code points.
- */
-export type plane =
-  | 0
-  | 1
-  | 2
-  | 3
-  | 4
-  | 5
-  | 6
-  | 7
-  | 8
-  | 9
-  | 10
-  | 11
-  | 12
-  | 13
-  | 14
-  | 15
-  | 16;
-
 // 2,8,10,16にしているのはstringからbigintへのパースが面倒になるからというだけ
 export type radix = 2 | 8 | 10 | 16;
 
@@ -75,12 +50,6 @@ export type roundingmode =
   | "half-up"
   | "toward-zero"
   | "up";
-
-/**
- * String matching regular expression `/^[\u{0}-\u{10FFFF}]{1}$/u`.
- * excluding any lone surrogates.
- */
-export type rune = string;
 
 /**
  * A safe-integer.

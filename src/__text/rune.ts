@@ -1,5 +1,5 @@
 import * as Type from "../type/mod.ts";
-import { type rune } from "../type.ts";
+import { type rune } from "../_typedef/mod.ts";
 
 let _commonSc: WeakRef<RegExp> | null = null;
 

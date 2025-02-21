@@ -1,12 +1,8 @@
 import * as Rune from "../rune/mod.ts";
 import * as Type from "../../type/mod.ts";
 import { _PropertyValueSetBase } from "./_propval_set_base.ts";
-import {
-  type ArrayOrSet,
-  type codepoint,
-  type rune,
-  type script,
-} from "../../type.ts";
+import { type ArrayOrSet, type script } from "../../type.ts";
+import { type codepoint, type rune } from "../../_typedef/mod.ts";
 
 function _toScriptSet(scripts: ArrayOrSet<script>): Set<script> {
   Type.assertArrayOrSet(
