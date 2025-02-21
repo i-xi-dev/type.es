@@ -8,7 +8,6 @@ import {
   type safeint,
 } from "../_typedef/mod.ts";
 import {
-  BITS_PER_BYTE,
   FromBigIntOptions,
   FromNumberOptions,
   FromStringOptions,
@@ -16,6 +15,7 @@ import {
   Uint8xOperations,
   UintNOperations,
 } from "./ranged_integer.ts";
+import { BITS_PER_BYTE } from "../_const/byte.ts";
 import { Number as ExNumber } from "../numerics/mod.ts";
 import { OverflowMode } from "./overflow_mode.ts";
 

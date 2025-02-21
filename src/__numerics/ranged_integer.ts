@@ -44,8 +44,6 @@ export interface UintNOperations<T extends int> {
   toString(self: T, options?: ToStringOptions): string;
 }
 
-export const BITS_PER_BYTE = 8;
-
 export interface Uint8xOperations<T extends int> extends UintNOperations<T> {
   byteLength: safeint;
   toBytes(self: T, littleEndian: boolean): Uint8Array;
