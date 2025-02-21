@@ -3,8 +3,6 @@ import _langs from "../dat/i18n/lang_map.json" with { type: "json" };
 import _regions from "../dat/i18n/region_map.json" with { type: "json" };
 import _scripts from "../dat/i18n/script_map.json" with { type: "json" };
 
-export type biguint64 = bigint;
-
 export type byteorder = "big-endian" | "little-endian";
 
 /**

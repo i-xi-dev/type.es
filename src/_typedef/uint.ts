@@ -315,3 +315,5 @@ export type uint24 = number;
  * A 32-bit unsigned integer.
  */
 export type uint32 = number;
+
+export type biguint64 = bigint;
