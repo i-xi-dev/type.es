@@ -1,5 +1,7 @@
 import { assertRejects, assertStrictEquals, assertThrows } from "@std/assert";
-import { ExArrayBuffer, type uint8 } from "../../mod.ts";
+import { Buffer, type uint8 } from "../../../mod.ts";
+
+const { ArrayBuffer: ExArrayBuffer } = Buffer;
 
 Deno.test("ExArrayBuffer.fromUint8Iterable(Array<uint8>)", () => {
   assertThrows(

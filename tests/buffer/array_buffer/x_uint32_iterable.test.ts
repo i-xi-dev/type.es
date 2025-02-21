@@ -1,5 +1,7 @@
 import { assertRejects, assertStrictEquals, assertThrows } from "@std/assert";
-import { ByteOrder, ExArrayBuffer, type uint32 } from "../../mod.ts";
+import { Buffer, ByteOrder, type uint32 } from "../../../mod.ts";
+
+const { ArrayBuffer: ExArrayBuffer } = Buffer;
 
 Deno.test("ExArrayBuffer.fromUint32Iterable(Array<uint32>)", () => {
   assertThrows(

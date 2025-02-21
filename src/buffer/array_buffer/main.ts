@@ -1,16 +1,18 @@
-import * as ByteOrder from "../basics/byte_order/mod.ts";
-import * as Type from "../type/mod.ts";
+import * as ByteOrder from "../../basics/byte_order/mod.ts";
+import * as Type from "../../type/mod.ts";
 import {
   type biguint64,
+  type byteorder,
+  type int,
+  type safeint,
   type uint16,
   type uint32,
   type uint8,
-} from "../_typedef/mod.ts";
-import { BigUint64 } from "../__numerics/big_uint.ts";
-import { type byteorder, type int, type safeint } from "../_typedef/mod.ts";
-import { GrowableBuffer } from "../__2/growable_buffer.ts";
-import { Number as ExNumber } from "../numerics/mod.ts";
-import { Uint16, Uint32, Uint8 } from "../__numerics/uint.ts";
+} from "../../_typedef/mod.ts";
+import { BigUint64 } from "../../__numerics/big_uint.ts";
+import { GrowableBuffer } from "../../__2/growable_buffer.ts";
+import { Number as ExNumber } from "../../numerics/mod.ts";
+import { Uint16, Uint32, Uint8 } from "../../__numerics/uint.ts";
 
 // const _DEFAULT_BYTE_LENGTH = 1_024;
 // const _DEFAULT_MAX_BYTE_LENGTH = 1_048_576;

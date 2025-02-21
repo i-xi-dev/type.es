@@ -1,7 +1,7 @@
 export type * from "./src/_typedef/mod.ts";
 export * from "./src/basics/mod.ts";
+export * as Buffer from "./src/buffer/mod.ts";
 export * as Events from "./src/events/mod.ts";
-export * as ExArrayBuffer from "./src/array_buffer/mod.ts";
 export * from "./src/__2/growable_buffer.ts";
 export * as I18n from "./src/i18n/mod.ts";
 export * as xNumerics from "./src/__numerics/mod.ts";
