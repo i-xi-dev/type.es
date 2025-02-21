@@ -1,9 +1,9 @@
-import { isBigInt } from "./bigint.ts";
 import {
   type bigintrange,
   type numberrange,
   type safeintrange,
 } from "../type.ts";
+import { isBigInt } from "./bigint.ts";
 
 // min > max については関知しない（マッチする数値は存在しなくなるだけ）
 export function isNumberRange(test: unknown): test is numberrange {

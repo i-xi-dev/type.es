@@ -1,7 +1,7 @@
 import * as ExString from "../basics/string/mod.ts";
 import * as Type from "../type/mod.ts";
 import _scripts from "../../dat/i18n/script_map.json" with { type: "json" };
-import { type script } from "../type.ts";
+import { type script } from "../_typedef/mod.ts";
 
 export type ScriptInfo = {
   /** ISO 15924 Alpha-4 code. */

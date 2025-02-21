@@ -1,7 +1,7 @@
 import * as ExString from "../basics/string/mod.ts";
 import * as Type from "../type/mod.ts";
 import _langs from "../../dat/i18n/lang_map.json" with { type: "json" };
-import { type lang } from "../type.ts";
+import { type lang } from "../_typedef/mod.ts";
 
 export const LanguageScope = {
   COLLECTIVE: "collective",

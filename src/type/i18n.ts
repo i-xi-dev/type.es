@@ -1,7 +1,7 @@
 import _langs from "../../dat/i18n/lang_map.json" with { type: "json" };
 import _regions from "../../dat/i18n/region_map.json" with { type: "json" };
 import _scripts from "../../dat/i18n/script_map.json" with { type: "json" };
-import { type lang, type region, type script } from "../type.ts";
+import { type lang, type region, type script } from "../_typedef/mod.ts";
 
 // RFC 5646の言語サブタグは、ISO 639-1 alpha2があればそれ。ISO 639-2 alpha3があればそれ。B/Tが異なる場合Tがそれ。
 // よってここでは、is("eng")はfalseとなる

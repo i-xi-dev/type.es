@@ -1,5 +1,4 @@
 import * as ExBigInt from "../numerics/bigint/mod.ts";
-import { Number as ExNumber } from "../numerics/mod.ts";
 import * as SafeInt from "../numerics/safeint/mod.ts";
 import * as SafeIntRange from "../numerics/range/safeint_range/mod.ts";
 import {
@@ -17,6 +16,7 @@ import {
   Uint8xOperations,
   UintNOperations,
 } from "./ranged_integer.ts";
+import { Number as ExNumber } from "../numerics/mod.ts";
 import { OverflowMode } from "./overflow_mode.ts";
 import { type safeint, type safeintrange } from "../type.ts";
 import {

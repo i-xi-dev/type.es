@@ -1,6 +1,5 @@
 import * as BigIntRange from "../numerics/range/bigint_range/mod.ts";
 import * as ExBigInt from "../numerics/bigint/mod.ts";
-import { Number as ExNumber } from "../numerics/mod.ts";
 import { assertBigInt, assertBigIntInSafeIntRange } from "../type/bigint.ts";
 import { assertSafeInt } from "../type/number.ts";
 import { type bigintrange, type safeint } from "../type.ts";
@@ -14,6 +13,7 @@ import {
   Uint8xOperations,
   UintNOperations,
 } from "./ranged_integer.ts";
+import { Number as ExNumber } from "../numerics/mod.ts";
 import { OverflowMode } from "./overflow_mode.ts";
 
 class _UinNOperations<T extends bigint> implements UintNOperations<T> {

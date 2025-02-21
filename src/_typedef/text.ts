@@ -1,5 +1,5 @@
-import { type safeint } from "../type.ts";
 import _gcs from "../../dat/unicode/gc_map.ts";
+import { type safeint } from "../type.ts";
 
 /** 0x0-0x10FFFF */
 export type codepoint = safeint;

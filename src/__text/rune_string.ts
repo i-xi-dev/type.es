@@ -1,9 +1,14 @@
 import * as ExNumber from "../numerics/number/mod.ts";
 import * as Type from "../type/mod.ts";
-import { type safeint, type script } from "../type.ts";
-import { type codepoint, type rune, type usvstring } from "../_typedef/mod.ts";
+import {
+  type codepoint,
+  type rune,
+  type script,
+  type usvstring,
+} from "../_typedef/mod.ts";
 import { EMPTY as EMPTY_STRING } from "../_const/string.ts";
 import { Rune } from "./mod.ts";
+import { type safeint } from "../type.ts";
 
 export type AllowMalformedOptions = {
   allowMalformed?: boolean;

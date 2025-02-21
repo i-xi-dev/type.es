@@ -1,7 +1,7 @@
 import * as ExString from "../basics/string/mod.ts";
 import * as Type from "../type/mod.ts";
 import _regions from "../../dat/i18n/region_map.json" with { type: "json" };
-import { type region } from "../type.ts";
+import { type region } from "../_typedef/mod.ts";
 
 export type RegionInfo = {
   /** ISO 3166-1 Alpha-2 code. */
