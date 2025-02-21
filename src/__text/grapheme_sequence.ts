@@ -1,6 +1,6 @@
 import * as Type from "../type/mod.ts";
 import { EMPTY as EMPTY_STRING } from "../_const/string.ts";
-import { type grapheme } from "../type.ts";
+import { type grapheme } from "../_typedef/mod.ts";
 import { segmentGraphemes } from "./utils.ts";
 
 const _NormalizationForms = ["NFC", "NFD", "NFKC", "NFKD"] as const;

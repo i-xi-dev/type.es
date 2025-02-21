@@ -16,11 +16,6 @@ export type char = string;
  */
 export type gc = typeof _gcs[keyof typeof _gcs];
 
-/**
- * A grapheme cluster.
- */
-export type grapheme = usvstring;
-
 export type int = safeint | bigint;
 
 /**
@@ -61,11 +56,6 @@ export type safeint = number;
  * (ISO 15924 script alpha-4 code)
  */
 export type script = keyof typeof _scripts;
-
-/**
- * A rune sequence.
- */
-export type usvstring = string;
 
 export type ArrayOrSet<T> = Array<T> | Set<T>;
 

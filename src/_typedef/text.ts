@@ -30,3 +30,13 @@ export type plane =
  * excluding any lone surrogates.
  */
 export type rune = string;
+
+/**
+ * A rune sequence.
+ */
+export type usvstring = string;
+
+/**
+ * A grapheme cluster.
+ */
+export type grapheme = usvstring;
