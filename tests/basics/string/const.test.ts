@@ -1,6 +1,6 @@
 import { assertStrictEquals } from "@std/assert";
-import { ExString } from "../../mod.ts";
+import { String as ExString } from "../../../mod.ts";
 
-Deno.test("ExString.EMPTY", () => {
+Deno.test("String.EMPTY", () => {
   assertStrictEquals(ExString.EMPTY, "");
 });

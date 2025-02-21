@@ -1,7 +1,7 @@
 import { assertStrictEquals, assertThrows } from "@std/assert";
-import { ExString } from "../../mod.ts";
+import { String as ExString } from "../../../mod.ts";
 
-Deno.test("ExString.charCountOf()", () => {
+Deno.test("String.charCountOf()", () => {
   assertStrictEquals(ExString.charCountOf(""), 0);
   assertStrictEquals(ExString.charCountOf("012"), 3);
   assertStrictEquals(ExString.charCountOf("あい"), 2);
@@ -22,7 +22,7 @@ function _iToS(iterable: Iterable<string | number>): string {
   return JSON.stringify([...iterable]);
 }
 
-Deno.test("ExString.toChars()", () => {
+Deno.test("String.toChars()", () => {
   assertStrictEquals(_iToS(ExString.toChars("")), `[]`);
   assertStrictEquals(_iToS(ExString.toChars("012")), `["0","1","2"]`);
   assertStrictEquals(_iToS(ExString.toChars("あい")), `["あ","い"]`);
@@ -50,7 +50,7 @@ Deno.test("ExString.toChars()", () => {
   );
 });
 
-Deno.test("ExString.toCharCodes()", () => {
+Deno.test("String.toCharCodes()", () => {
   assertStrictEquals(_iToS(ExString.toCharCodes("")), `[]`);
   assertStrictEquals(_iToS(ExString.toCharCodes("012")), `[48,49,50]`);
   assertStrictEquals(_iToS(ExString.toCharCodes("あい")), `[12354,12356]`);

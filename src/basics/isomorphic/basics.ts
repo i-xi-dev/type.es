@@ -1,5 +1,5 @@
-import * as Type from "../type/mod.ts";
-import { EMPTY as EMPTY_STRING } from "../const/string.ts";
+import * as ExString from "../string/mod.ts";
+import * as Type from "../../type/mod.ts";
 
 /**
  * Implementation of [isomorphic decode](https://infra.spec.whatwg.org/#isomorphic-decode) defined in WHATWG Infra Standard.
@@ -18,7 +18,7 @@ export function decode(input: BufferSource): string {
   }
 
   // A: Bの2倍以上遅い（Node.js）
-  // let chars: string = EMPTY_STRING;
+  // let chars: string = ExString.EMPTY;
   // for (const byte of bytes) {
   //   chars = chars + String.fromCharCode(byte);
   // }
@@ -28,7 +28,7 @@ export function decode(input: BufferSource): string {
   const chars = Array.from(bytes, (byte) => {
     return String.fromCharCode(byte);
   });
-  return chars.join(EMPTY_STRING);
+  return chars.join(ExString.EMPTY);
 }
 
 /**
