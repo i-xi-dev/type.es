@@ -14,4 +14,5 @@ export * from "./numeric_range.ts";
 export * from "./object.ts";
 export * from "./plane.ts";
 export * from "./string.ts";
+export * from "./uint.ts";
 export * from "./unicode.ts";
