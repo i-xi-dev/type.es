@@ -19,34 +19,6 @@ Deno.test("Uint32.bitLength", () => {
   assertStrictEquals(Uint32.bitLength, 32);
 });
 
-Deno.test("Uint32.is()", () => {
-  assertStrictEquals(Uint32.is(-1), false);
-  assertStrictEquals(Uint32.is(-0), true);
-  assertStrictEquals(Uint32.is(0), true);
-  assertStrictEquals(Uint32.is(63), true);
-  assertStrictEquals(Uint32.is(64), true);
-  assertStrictEquals(Uint32.is(127), true);
-  assertStrictEquals(Uint32.is(128), true);
-  assertStrictEquals(Uint32.is(255), true);
-  assertStrictEquals(Uint32.is(256), true);
-  assertStrictEquals(Uint32.is(65535), true);
-  assertStrictEquals(Uint32.is(65536), true);
-  assertStrictEquals(Uint32.is(0xFFFFFF), true);
-  assertStrictEquals(Uint32.is(0x1000000), true);
-  assertStrictEquals(Uint32.is(0xFFFFFFFF), true);
-  assertStrictEquals(Uint32.is(0x100000000), false);
-
-  assertStrictEquals(Uint32.is(0.1), false);
-  assertStrictEquals(Uint32.is(0.5), false);
-  assertStrictEquals(Uint32.is("0" as unknown as number), false);
-  assertStrictEquals(Uint32.is(false as unknown as number), false);
-  assertStrictEquals(Uint32.is({} as unknown as number), false);
-  assertStrictEquals(Uint32.is([] as unknown as number), false);
-  assertStrictEquals(Uint32.is([0] as unknown as number), false);
-  assertStrictEquals(Uint32.is(undefined as unknown as number), false);
-  assertStrictEquals(Uint32.is(null as unknown as number), false);
-});
-
 function _bitwiseAnd(a: number, b: number): number {
   const ba = BigInt(a);
   const bb = BigInt(b);

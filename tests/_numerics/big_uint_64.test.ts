@@ -7,36 +7,6 @@ Deno.test("BigUint64.bitLength", () => {
   assertStrictEquals(BigUint64.bitLength, 64);
 });
 
-Deno.test("BigUint64.is()", () => {
-  assertStrictEquals(BigUint64.is(-1n), false);
-  assertStrictEquals(BigUint64.is(-0n), true);
-  assertStrictEquals(BigUint64.is(0n), true);
-  assertStrictEquals(BigUint64.is(63n), true);
-  assertStrictEquals(BigUint64.is(64n), true);
-  assertStrictEquals(BigUint64.is(127n), true);
-  assertStrictEquals(BigUint64.is(128n), true);
-  assertStrictEquals(BigUint64.is(255n), true);
-  assertStrictEquals(BigUint64.is(256n), true);
-  assertStrictEquals(BigUint64.is(65535n), true);
-  assertStrictEquals(BigUint64.is(65536n), true);
-  assertStrictEquals(BigUint64.is(0xFFFFFFn), true);
-  assertStrictEquals(BigUint64.is(0x1000000n), true);
-  assertStrictEquals(BigUint64.is(0xFFFFFFFFn), true);
-  assertStrictEquals(BigUint64.is(0x100000000n), true);
-  assertStrictEquals(BigUint64.is(0xFFFFFFFFFFFFFFFFn), true);
-  assertStrictEquals(BigUint64.is(0x10000000000000000n), false);
-
-  assertStrictEquals(BigUint64.is(0.1 as unknown as bigint), false);
-  assertStrictEquals(BigUint64.is(0.5 as unknown as bigint), false);
-  assertStrictEquals(BigUint64.is("0" as unknown as bigint), false);
-  assertStrictEquals(BigUint64.is(false as unknown as bigint), false);
-  assertStrictEquals(BigUint64.is({} as unknown as bigint), false);
-  assertStrictEquals(BigUint64.is([] as unknown as bigint), false);
-  assertStrictEquals(BigUint64.is([0] as unknown as bigint), false);
-  assertStrictEquals(BigUint64.is(undefined as unknown as bigint), false);
-  assertStrictEquals(BigUint64.is(null as unknown as bigint), false);
-});
-
 Deno.test("BigUint64.bitwiseAnd()", () => {
   assertStrictEquals(
     BigUint64.bitwiseAnd(

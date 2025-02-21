@@ -318,4 +318,12 @@ export type uint24 = safeint;
  */
 export type uint32 = safeint;
 
+/**
+ * A 64-bit unsigned integer.
+ */
 export type biguint64 = bigint;
+
+/**
+ * An 128-bit unsigned integer.
+ */
+export type biguint128 = bigint;
