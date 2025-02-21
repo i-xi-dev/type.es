@@ -1,5 +1,9 @@
 import { assertNumberRange, assertSafeIntRange } from "./numeric_range.ts";
-import { type numberrange, type safeint, type safeintrange } from "../type.ts";
+import {
+  type numberrange,
+  type safeint,
+  type safeintrange,
+} from "../_typedef/mod.ts";
 import { ZERO as NUMBER_ZERO } from "../_const/number.ts";
 
 export function isNumber(test: unknown): test is number {

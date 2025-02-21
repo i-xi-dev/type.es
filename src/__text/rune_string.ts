@@ -8,7 +8,7 @@ import {
 } from "../_typedef/mod.ts";
 import { EMPTY as EMPTY_STRING } from "../_const/string.ts";
 import { Rune } from "./mod.ts";
-import { type safeint } from "../type.ts";
+import { type safeint } from "../_typedef/mod.ts";
 
 export type AllowMalformedOptions = {
   allowMalformed?: boolean;

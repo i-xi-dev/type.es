@@ -1,5 +1,5 @@
 import * as Type from "../../../type/mod.ts";
-import { type safeint, type safeintrange } from "../../../type.ts";
+import { type safeint, type safeintrange } from "../../../_typedef/mod.ts";
 
 export function sizeOf<T extends safeint>(range: safeintrange<T>): safeint {
   Type.assertSafeIntRange(range, "range");

@@ -2,8 +2,11 @@ import * as BigIntRange from "../numerics/range/bigint_range/mod.ts";
 import * as ExBigInt from "../numerics/bigint/mod.ts";
 import { assertBigInt, assertBigIntInSafeIntRange } from "../type/bigint.ts";
 import { assertSafeInt } from "../type/number.ts";
-import { type bigintrange, type safeint } from "../type.ts";
-import { type biguint64 } from "../_typedef/mod.ts";
+import {
+  type bigintrange,
+  type biguint64,
+  type safeint,
+} from "../_typedef/mod.ts";
 import {
   BITS_PER_BYTE,
   FromBigIntOptions,

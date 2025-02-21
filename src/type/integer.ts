@@ -1,4 +1,4 @@
-import { type int, type safeint } from "../type.ts";
+import { type int, type safeint } from "../_typedef/mod.ts";
 import { ZERO as BIGINT_ZERO } from "../_const/bigint.ts";
 import { ZERO as NUMBER_ZERO } from "../_const/number.ts";
 

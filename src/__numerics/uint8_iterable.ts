@@ -1,6 +1,5 @@
 import { assertIterable } from "../type/iterable.ts";
-import { type safeint } from "../type.ts";
-import { type uint8 } from "../_typedef/mod.ts";
+import { type safeint, type uint8 } from "../_typedef/mod.ts";
 import { Uint8 } from "./uint.ts";
 import { ZERO as NUMBER_ZERO } from "../_const/number.ts";
 

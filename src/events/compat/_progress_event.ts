@@ -3,7 +3,7 @@ import {
   RoundingMode,
   SafeInt,
 } from "../../numerics/mod.ts";
-import { type safeint } from "../../type.ts";
+import { type safeint } from "../../_typedef/mod.ts";
 
 function _initAmount(value?: number): safeint {
   let adjustedValue = Number.isFinite(value) ? value as number : ExNumber.ZERO;

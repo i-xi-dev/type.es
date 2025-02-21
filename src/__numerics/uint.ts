@@ -18,8 +18,9 @@ import {
 } from "./ranged_integer.ts";
 import { Number as ExNumber } from "../numerics/mod.ts";
 import { OverflowMode } from "./overflow_mode.ts";
-import { type safeint, type safeintrange } from "../type.ts";
 import {
+  type safeint,
+  type safeintrange,
   type uint16,
   type uint24,
   type uint32,

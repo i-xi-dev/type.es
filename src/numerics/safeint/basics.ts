@@ -3,12 +3,12 @@ import * as ExNumber from "../number/mod.ts";
 import * as Radix from "../../basics/radix/mod.ts";
 import * as RoundingMode from "../rounding_mode/mod.ts";
 import * as Type from "../../type/mod.ts";
+import { type radix } from "../../type.ts";
 import {
-  type radix,
   type roundingmode,
   type safeint,
   type safeintrange,
-} from "../../type.ts";
+} from "../../_typedef/mod.ts";
 
 //TODO 命名 toか？
 export function clampToRange<T extends safeint>(

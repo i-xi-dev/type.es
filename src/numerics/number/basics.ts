@@ -1,5 +1,5 @@
 import * as Type from "../../type/mod.ts";
-import { type numberrange } from "../../type.ts";
+import { type numberrange } from "../../_typedef/mod.ts";
 import { ZERO as NUMBER_ZERO } from "../../_const/number.ts";
 
 export function normalize<T extends number>(value: T): T {

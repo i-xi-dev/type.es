@@ -4,10 +4,10 @@ import * as SafeInt from "../safeint/mod.ts";
 import * as Type from "../../type/mod.ts";
 import {
   type bigintrange,
-  type radix,
   type roundingmode,
   type safeint,
-} from "../../type.ts";
+} from "../../_typedef/mod.ts";
+import { type radix } from "../../type.ts";
 
 export function min<T extends bigint>(value0: T, ...values: T[]): T {
   Type.assertBigInt(value0, `value0`);

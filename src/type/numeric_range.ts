@@ -2,7 +2,7 @@ import {
   type bigintrange,
   type numberrange,
   type safeintrange,
-} from "../type.ts";
+} from "../_typedef/mod.ts";
 import { isBigInt } from "./bigint.ts";
 
 // min > max については関知しない（マッチする数値は存在しなくなるだけ）

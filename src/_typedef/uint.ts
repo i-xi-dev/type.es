@@ -1,3 +1,5 @@
+import { type safeint } from "./numerics.ts";
+
 /**
  * An 1-bit unsigned integer.
  */
@@ -304,16 +306,16 @@ export type uint8 =
 /**
  * A 16-bit unsigned integer.
  */
-export type uint16 = number;
+export type uint16 = safeint;
 
 /**
  * A 24-bit unsigned integer.
  */
-export type uint24 = number;
+export type uint24 = safeint;
 
 /**
  * A 32-bit unsigned integer.
  */
-export type uint32 = number;
+export type uint32 = safeint;
 
 export type biguint64 = bigint;

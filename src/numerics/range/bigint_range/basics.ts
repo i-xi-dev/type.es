@@ -1,5 +1,5 @@
 import * as Type from "../../../type/mod.ts";
-import { type bigintrange } from "../../../type.ts";
+import { type bigintrange } from "../../../_typedef/mod.ts";
 
 export function sizeOf<T extends bigint>(range: bigintrange<T>): bigint {
   Type.assertBigIntRange(range, "range");

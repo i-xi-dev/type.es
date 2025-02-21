@@ -1,9 +1,5 @@
-import {
-  type int,
-  type radix,
-  type roundingmode,
-  type safeint,
-} from "../type.ts";
+import { type int, type roundingmode, type safeint } from "../_typedef/mod.ts";
+import { type radix } from "../type.ts";
 import { OverflowMode } from "./overflow_mode.ts";
 
 export type FromNumberOptions = {

@@ -1,11 +1,10 @@
 import * as Radix from "../basics/radix/mod.ts";
-import { type codepoint } from "../_typedef/mod.ts";
+import { type codepoint, type safeintrange } from "../_typedef/mod.ts";
 import { isSafeIntInRange } from "./number.ts";
 import {
   MAX_VALUE as MAX_CODE_POINT,
   MIN_VALUE as MIN_CODE_POINT,
 } from "../_const/code_point.ts";
-import { type safeintrange } from "../type.ts";
 
 export function isCodePoint(test: unknown): test is codepoint {
   return isSafeIntInRange(test, [MIN_CODE_POINT, MAX_CODE_POINT]);

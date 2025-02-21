@@ -1,5 +1,5 @@
 import { assertBigIntRange } from "./numeric_range.ts";
-import { type bigintrange } from "../type.ts";
+import { type bigintrange } from "../_typedef/mod.ts";
 import { ZERO as BIGINT_ZERO } from "../_const/bigint.ts";
 
 export function isBigInt(test: unknown): test is bigint {

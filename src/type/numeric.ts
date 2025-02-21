@@ -1,4 +1,4 @@
-import { type numeric } from "../type.ts";
+import { type numeric } from "../_typedef/mod.ts";
 import { ZERO as NUMBER_ZERO } from "../_const/number.ts";
 
 export function isNumeric(test: unknown): test is numeric {
