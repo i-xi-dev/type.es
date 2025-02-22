@@ -69,7 +69,8 @@ function _rotateLeft_under32<T extends safeint>(
 interface RangedInt<T extends safeint> {
   MIN_VALUE: T;
   MAX_VALUE: T;
-  // toNumber() → もともとnumberなので不要
+  // toNumber() → もともとnumberなので不要（範囲チェックを追加するくらい。要るかそんなもの？）
+  // toBigInt() → bigint.tsのfromNumberで必要十分（範囲チェックを追加するくらい。要るかそんなもの？）
 }
 
 interface BitOperations<T extends safeint> {

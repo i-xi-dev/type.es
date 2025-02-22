@@ -1,6 +1,6 @@
 import * as BigIntRange from "../numerics/range/bigint_range/mod.ts";
 import * as ExBigInt from "../numerics/bigint/mod.ts";
-import { assertBigInt, assertBigIntInSafeIntRange } from "../type/bigint.ts";
+import { assertBigInt } from "../type/bigint.ts";
 import {
   type bigintrange,
   type biguint64,
@@ -10,7 +10,6 @@ import {
   FromBigIntOptions,
   FromNumberOptions,
   FromStringOptions,
-  ToStringOptions,
   UintNOperations,
 } from "./ranged_integer.ts";
 import { OverflowMode } from "./overflow_mode.ts";
@@ -109,11 +108,6 @@ class _UinNOperations<T extends bigint> implements UintNOperations<T> {
   fromString(value: string, options?: FromStringOptions): T {
     const valueAsBigInt = ExBigInt.fromString(value, options);
     return this.fromBigInt(valueAsBigInt, options);
-  }
-
-  toString(self: T, options?: ToStringOptions): string {
-    this.assert(self, "self");
-    return ExBigInt.toString(self, options);
   }
 }
 

@@ -18,8 +18,9 @@ type _Info<T extends bigint> = {
 interface RangedBigInt<T extends bigint> {
   MIN_VALUE: T;
   MAX_VALUE: T;
-  // toNumber() → bigint.tsのtoNumberで必要十分
-  // toBigInt() → もともとbigintなので不要
+  // toNumber() → bigint.tsのtoNumberで必要十分（範囲チェックを追加するくらい。要るかそんなもの？）
+  // toBigInt() → もともとbigintなので不要（範囲チェックを追加するくらい。要るかそんなもの？）
+  // toString() → bigint.tsのtoStringで必要十分（範囲チェックを追加するくらい。要るかそんなもの？）
 }
 
 interface BitOperations<T extends bigint> {
