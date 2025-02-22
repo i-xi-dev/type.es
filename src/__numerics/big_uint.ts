@@ -199,13 +199,6 @@ class _Uint8xOperations<T extends bigint> extends _UinNOperations<T>
   get byteLength(): safeint {
     return this.bitLength / BITS_PER_BYTE;
   }
-
-  toBytes(self: T, littleEndian: boolean = false): Uint8Array {
-    this.assert(self, "self");
-
-    this.#bufferView.setBigUint64(ExNumber.ZERO, self, littleEndian);
-    return Uint8Array.from(this.#bufferUint8View);
-  }
 }
 
 export const BigUint64 = new _Uint8xOperations<biguint64>(64);

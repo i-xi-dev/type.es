@@ -226,17 +226,20 @@ Deno.test("Numerics.Uint8.rotateLeft()", () => {
 
 //TODO
 
+const le = "little-endian";
+const be = "big-endian";
+
 Deno.test("Numerics.Uint8.toBytes()", () => {
   assertStrictEquals(
     [...Uint8.toBytes(0)].map((i) => i.toString()).join(","),
     "0",
   );
   assertStrictEquals(
-    [...Uint8.toBytes(0, "big-endian")].map((i) => i.toString()).join(","),
+    [...Uint8.toBytes(0, be)].map((i) => i.toString()).join(","),
     "0",
   );
   assertStrictEquals(
-    [...Uint8.toBytes(0, "little-endian")].map((i) => i.toString()).join(","),
+    [...Uint8.toBytes(0, le)].map((i) => i.toString()).join(","),
     "0",
   );
   assertStrictEquals(
@@ -244,11 +247,11 @@ Deno.test("Numerics.Uint8.toBytes()", () => {
     "255",
   );
   assertStrictEquals(
-    [...Uint8.toBytes(0xFF, "big-endian")].map((i) => i.toString()).join(","),
+    [...Uint8.toBytes(0xFF, be)].map((i) => i.toString()).join(","),
     "255",
   );
   assertStrictEquals(
-    [...Uint8.toBytes(0xFF, "little-endian")].map((i) => i.toString()).join(
+    [...Uint8.toBytes(0xFF, le)].map((i) => i.toString()).join(
       ",",
     ),
     "255",
