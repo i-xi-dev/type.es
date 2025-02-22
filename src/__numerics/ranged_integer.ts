@@ -44,5 +44,4 @@ export interface UintNOperations<T extends int> {
 
 export interface Uint8xOperations<T extends int> extends UintNOperations<T> {
   byteLength: safeint;
-  toBytes(self: T, littleEndian: boolean): Uint8Array;
 }

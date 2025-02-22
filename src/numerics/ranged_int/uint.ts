@@ -4,11 +4,18 @@ import * as Type from "../../type/mod.ts";
 import {
   type byteorder,
   type safeint,
+  type uint16,
   type uint6,
+  type uint7,
   type uint8,
 } from "../../_typedef/mod.ts";
 import { Number as ExNumber } from "../../numerics/mod.ts";
-import { Uint6 as Uint6Info, Uint8 as Uint8Info } from "../../_const/uint.ts";
+import {
+  Uint16 as Uint16Info,
+  Uint6 as Uint6Info,
+  Uint7 as Uint7Info,
+  Uint8 as Uint8Info,
+} from "../../_const/uint.ts";
 
 type _Info<T extends safeint> = {
   BIT_LENGTH: safeint;
@@ -94,24 +101,36 @@ interface Uint8x<T extends safeint> extends Uint<T>, ByteOperations<T> {}
 type _AFunc = (test: unknown, label: string) => void;
 
 class _Uint<T extends safeint> implements Uint<T> {
+  readonly BIT_LENGTH: safeint;
+  readonly MIN_VALUE: T;
+  readonly MAX_VALUE: T;
   readonly #info: _Info<T>;
   protected readonly _assert: _AFunc;
 
   constructor(info: _Info<T>, assert: _AFunc) {
+    this.BIT_LENGTH = info.BIT_LENGTH;
+    this.MIN_VALUE = info.MIN_VALUE;
+    this.MAX_VALUE = info.MAX_VALUE;
     this.#info = info;
     this._assert = assert;
-  }
 
-  get BIT_LENGTH(): safeint {
-    return this.#info.BIT_LENGTH;
-  }
-
-  get MIN_VALUE(): T {
-    return this.#info.MIN_VALUE;
-  }
-
-  get MAX_VALUE() {
-    return this.#info.MAX_VALUE;
+    // Object.defineProperties(this, {
+    //   BIT_LENGTH: {
+    //     value: info.BIT_LENGTH,
+    //     writable: false,
+    //     configurable: false,
+    //   },
+    //   MIN_VALUE: {
+    //     value: info.MIN_VALUE,
+    //     writable: false,
+    //     configurable: false,
+    //   },
+    //   MAX_VALUE: {
+    //     value: info.MAX_VALUE,
+    //     writable: false,
+    //     configurable: false,
+    //   },
+    // });
   }
 
   bitwiseAnd(a: T, b: T): T {
@@ -142,19 +161,22 @@ class _Uint<T extends safeint> implements Uint<T> {
   }
 }
 
-export const Uint6: Uint<uint6> = new _Uint(Uint6Info, Type.assertUint6);
-
-type _TFunc<T> = (value: T, byteOrder: byteorder) => Uint8Array;
+function _r(value: safeint, byteLength: safeint): uint8 {
+  const x1 = 0x100 ** byteLength;
+  const x2 = (value >= x1) ? (value % x1) : value;
+  return Math.trunc(x2 / (0x100 ** (byteLength - 1))) as uint8;
+}
 
 class _Uint8x<T extends safeint> extends _Uint<T> implements Uint8x<T> {
   readonly #byteLength: safeint;
-  readonly #toBytes: _TFunc<T>;
 
-  constructor(info: _Info<T>, assert: _AFunc, toBytes: _TFunc<T>) {
+  constructor(info: _Info<T>, assert: _AFunc) {
     super(info, assert);
+    if ((info.BIT_LENGTH % 8) !== 0) {
+      throw new TypeError("");
+    }
 
     this.#byteLength = _byteLengthOf(info.BIT_LENGTH);
-    this.#toBytes = toBytes;
   }
 
   get BYTE_LENGTH(): safeint {
@@ -162,17 +184,52 @@ class _Uint8x<T extends safeint> extends _Uint<T> implements Uint8x<T> {
   }
 
   toBytes(value: T, byteOrder: byteorder = ByteOrder.nativeOrder): Uint8Array {
-    return this.#toBytes(value, byteOrder);
+    this._assert(value, "value");
+
+    // bitLengthは 8 | 16 | 24 | 32 | 40 | 48 のいずれか
+
+    if (this.BIT_LENGTH === 8) {
+      return Uint8Array.of(value);
+    }
+
+    const bytes: Array<uint8> = [];
+    bytes.push((value % 0x100) as uint8);
+    if (this.BIT_LENGTH >= 16) {
+      bytes.push(_r(value, 2));
+
+      if (this.BIT_LENGTH >= 24) {
+        bytes.push(_r(value, 3));
+
+        if (this.BIT_LENGTH >= 32) {
+          bytes.push(_r(value, 4));
+
+          if (this.BIT_LENGTH >= 40) {
+            bytes.push(_r(value, 5));
+
+            if (this.BIT_LENGTH >= 48) {
+              bytes.push(_r(value, 6));
+            }
+          }
+        }
+      }
+    }
+
+    return Uint8Array.from(
+      (byteOrder === ByteOrder.LITTLE_ENDIAN) ? bytes : bytes.reverse(),
+    );
   }
 }
 
-export const Uint8: Uint8x<uint8> = new _Uint8x(
-  Uint8Info,
-  Type.assertUint8,
-  (value: uint8, byteOrder: byteorder) => {
-    void byteOrder;
-    Type.assertUint8(value, "value");
+const Uint6: Uint<uint6> = new _Uint(Uint6Info, Type.assertUint6);
+Object.freeze(Uint6);
 
-    return Uint8Array.of(value);
-  },
-);
+const Uint7: Uint<uint7> = new _Uint(Uint7Info, Type.assertUint7);
+Object.freeze(Uint7);
+
+const Uint8: Uint8x<uint8> = new _Uint8x(Uint8Info, Type.assertUint8);
+Object.freeze(Uint8);
+
+const Uint16: Uint8x<uint16> = new _Uint8x(Uint16Info, Type.assertUint16);
+Object.freeze(Uint16);
+
+export { Uint16, Uint6, Uint7, Uint8 };

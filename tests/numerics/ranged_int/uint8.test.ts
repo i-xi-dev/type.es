@@ -5,6 +5,9 @@ const { Uint8 } = Numerics;
 
 Deno.test("Numerics.Uint8.BIT_LENGTH", () => {
   assertStrictEquals(Uint8.BIT_LENGTH, 8);
+  // Uint8.BIT_LENGTH=6;
+  // delete Uint8["BIT_LENGTH"];
+  // assertStrictEquals(Uint8.BIT_LENGTH, 8);
 });
 
 Deno.test("Numerics.Uint8.MIN_VALUE", () => {

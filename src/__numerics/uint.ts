@@ -288,26 +288,43 @@ class _Uint8xOperations<T extends safeint> extends _UinNOperations<T>
   toBytes(self: T, littleEndian: boolean = false): Uint8Array {
     this.assert(self, "self");
 
+    // bitLengthは 8 | 16 | 24 | 32 | 40 | 48 のいずれか
+
     if (this.bitLength === 8) {
       return Uint8Array.of(self);
     }
 
     const bytes: Array<uint8> = [];
-    if (this.bitLength === 32) {
-      bytes.push(Math.trunc(self / 0x1000000) as uint8);
-    }
-    if (this.bitLength >= 24) {
-      const o3 = (self >= 0x1000000) ? (self % 0x1000000) : self;
-      bytes.push(Math.trunc(o3 / 0x10000) as uint8);
-    }
+    bytes.push((self % 0x100) as uint8);
     if (this.bitLength >= 16) {
       const o2 = (self >= 0x10000) ? (self % 0x10000) : self;
       bytes.push(Math.trunc(o2 / 0x100) as uint8);
-      bytes.push((self % 0x100) as uint8);
+
+      if (this.bitLength >= 24) {
+        const o3 = (self >= 0x1000000) ? (self % 0x1000000) : self;
+        bytes.push(Math.trunc(o3 / 0x10000) as uint8);
+
+        if (this.bitLength >= 32) {
+          const o4 = (self >= 0x100000000) ? (self % 0x100000000) : self;
+          bytes.push(Math.trunc(o4 / 0x1000000) as uint8);
+
+          if (this.bitLength >= 40) {
+            const o5 = (self >= 0x10000000000) ? (self % 0x10000000000) : self;
+            bytes.push(Math.trunc(o5 / 0x100000000) as uint8);
+
+            if (this.bitLength >= 48) {
+              const o6 = (self >= 0x1000000000000)
+                ? (self % 0x1000000000000)
+                : self;
+              bytes.push(Math.trunc(o6 / 0x10000000000) as uint8);
+            }
+          }
+        }
+      }
     }
 
     return Uint8Array.from(
-      (littleEndian === true) ? bytes.reverse() : bytes,
+      (littleEndian === true) ? bytes : bytes.reverse(),
     );
   }
 }
