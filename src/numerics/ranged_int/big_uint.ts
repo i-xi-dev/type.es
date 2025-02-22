@@ -1,6 +1,7 @@
+import * as Byte from "../../basics/byte/mod.ts";
 import * as ByteOrder from "../../basics/byte_order/mod.ts";
 import * as Type from "../../type/mod.ts";
-import { type _AFunc, _byteLengthOf, _normalizeOffset } from "./_utils.ts";
+import { type _AFunc, _normalizeOffset } from "./_utils.ts";
 import {
   type biguint64,
   type byteorder,
@@ -18,43 +19,63 @@ type _Info<T extends bigint> = {
 interface RangedBigInt<T extends bigint> {
   MIN_VALUE: T;
   MAX_VALUE: T;
-  // toNumber() → bigint.tsのtoNumberで必要十分（範囲チェックを追加するくらい。要るかそんなもの？）
-  // toBigInt() → もともとbigintなので不要（範囲チェックを追加するくらい。要るかそんなもの？）
-  // toString() → bigint.tsのtoStringで必要十分（範囲チェックを追加するくらい。要るかそんなもの？）
-}
-
-interface BitOperations<T extends bigint> {
   BIT_LENGTH: safeint;
+  BYTE_LENGTH: safeint;
+  toBytes(value: T, byteOrder?: byteorder): Uint8Array;
   bitwiseAnd(a: T, b: T): T;
   bitwiseOr(a: T, b: T): T;
   bitwiseXOr(a: T, b: T): T;
   //XXX bitwiseNot()
   rotateLeft(value: T, offset: safeint): T;
   //XXX rotateRight()
+  // toNumber() → bigint.tsのtoNumberで必要十分（範囲チェックを追加するくらい。要るかそんなもの？）
+  // toBigInt() → もともとbigintなので不要（範囲チェックを追加するくらい。要るかそんなもの？）
+  // toString() → bigint.tsのtoStringで必要十分（範囲チェックを追加するくらい。要るかそんなもの？）
 }
 
-interface ByteOperations<T extends bigint> {
-  BYTE_LENGTH: safeint;
-  toBytes(value: T, byteOrder?: byteorder): Uint8Array;
-}
-
-interface BigUint<T extends bigint> extends RangedBigInt<T>, BitOperations<T> {}
-
-interface BigUint8x<T extends bigint> extends BigUint<T>, ByteOperations<T> {}
-
-class _BigUint<T extends bigint> implements BigUint<T> {
-  readonly BIT_LENGTH: safeint;
+class _BigUint<T extends bigint> implements RangedBigInt<T> {
   readonly MIN_VALUE: T;
   readonly MAX_VALUE: T;
+  readonly BIT_LENGTH: safeint;
+  readonly BYTE_LENGTH: safeint;
   // readonly #info: _Info<T>;
   protected readonly _assert: _AFunc;
 
+  //XXX 仮
+  readonly #buffer: ArrayBuffer;
+  readonly #bufferView: DataView;
+  readonly #bufferUint8View: Uint8Array;
+
   constructor(info: _Info<T>, assert: _AFunc) {
-    this.BIT_LENGTH = info.BIT_LENGTH;
+    if (info.BIT_LENGTH !== 64) { //XXX 一旦64のみとする
+      throw new TypeError("");
+    }
+
     this.MIN_VALUE = info.MIN_VALUE;
     this.MAX_VALUE = info.MAX_VALUE;
+    this.BIT_LENGTH = info.BIT_LENGTH;
+    this.BYTE_LENGTH = Math.ceil(info.BIT_LENGTH / Byte.BITS_PER_BYTE);
     // this.#info = info;
     this._assert = assert;
+
+    //XXX 仮
+    this.#buffer = new ArrayBuffer(8);
+    this.#bufferView = new DataView(this.#buffer);
+    this.#bufferUint8View = new Uint8Array(this.#buffer);
+  }
+
+  toBytes(value: T, byteOrder: byteorder = ByteOrder.nativeOrder): Uint8Array {
+    this._assert(value, "value");
+    //TODO byteOrderのチェック
+
+    // bitLengthは 56 | 64 | 72 | 80 | 88 | 96 | 104 | 112 | 120 | 128 | ...
+
+    this.#bufferView.setBigUint64(
+      ExNumber.ZERO,
+      value,
+      byteOrder === ByteOrder.LITTLE_ENDIAN,
+    );
+    return Uint8Array.from(this.#bufferUint8View);
   }
 
   bitwiseAnd(a: T, b: T): T {
@@ -97,50 +118,7 @@ class _BigUint<T extends bigint> implements BigUint<T> {
   }
 }
 
-class _BigUint8x<T extends bigint> extends _BigUint<T> implements BigUint8x<T> {
-  readonly #byteLength: safeint;
-
-  readonly #buffer: ArrayBuffer;
-  readonly #bufferView: DataView;
-  readonly #bufferUint8View: Uint8Array;
-
-  constructor(info: _Info<T>, assert: _AFunc) {
-    super(info, assert);
-    // if ((info.BIT_LENGTH % 8) !== 0) {
-    //   throw new TypeError("");
-    // }
-    if (info.BIT_LENGTH !== 64) { //XXX 一旦64のみとする
-      throw new TypeError("");
-    }
-
-    this.#byteLength = _byteLengthOf(info.BIT_LENGTH);
-
-    //XXX 仮
-    this.#buffer = new ArrayBuffer(8);
-    this.#bufferView = new DataView(this.#buffer);
-    this.#bufferUint8View = new Uint8Array(this.#buffer);
-  }
-
-  get BYTE_LENGTH(): safeint {
-    return this.#byteLength;
-  }
-
-  toBytes(value: T, byteOrder: byteorder = ByteOrder.nativeOrder): Uint8Array {
-    this._assert(value, "value");
-    //TODO byteOrderのチェック
-
-    // bitLengthは 56 | 64 | 72 | 80 | 88 | 96 | 104 | 112 | 120 | 128 | ...
-
-    this.#bufferView.setBigUint64(
-      ExNumber.ZERO,
-      value,
-      byteOrder === ByteOrder.LITTLE_ENDIAN,
-    );
-    return Uint8Array.from(this.#bufferUint8View);
-  }
-}
-
-const BigUint64: BigUint8x<biguint64> = new _BigUint8x(
+const BigUint64: RangedBigInt<biguint64> = new _BigUint(
   BigUint64Info,
   Type.assertBigUint64,
 );

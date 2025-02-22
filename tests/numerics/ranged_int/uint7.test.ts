@@ -15,6 +15,65 @@ Deno.test("Numerics.Uint7.MAX_VALUE", () => {
   assertStrictEquals(Uint7.MAX_VALUE, 0x7F);
 });
 
+Deno.test("Numerics.Uint7.BYTE_LENGTH", () => {
+  assertStrictEquals(Uint7.BYTE_LENGTH, 1);
+});
+
+const le = "little-endian";
+const be = "big-endian";
+
+Deno.test("Numerics.Uint7.toBytes()", () => {
+  assertStrictEquals(
+    [...Uint7.toBytes(0)].map((i) => i.toString()).join(","),
+    "0",
+  );
+  assertStrictEquals(
+    [...Uint7.toBytes(0, be)].map((i) => i.toString()).join(","),
+    "0",
+  );
+  assertStrictEquals(
+    [...Uint7.toBytes(0, le)].map((i) => i.toString()).join(","),
+    "0",
+  );
+  assertStrictEquals(
+    [...Uint7.toBytes(0x7F)].map((i) => i.toString()).join(","),
+    "127",
+  );
+  assertStrictEquals(
+    [...Uint7.toBytes(0x7F, be)].map((i) => i.toString()).join(","),
+    "127",
+  );
+  assertStrictEquals(
+    [...Uint7.toBytes(0x7F, le)].map((i) => i.toString()).join(
+      ",",
+    ),
+    "127",
+  );
+
+  const e1 = "`value` must be a 7-bit unsigned integer.";
+  assertThrows(
+    () => {
+      Uint7.toBytes(0x100 as unknown as uint7);
+    },
+    TypeError,
+    e1,
+  );
+  assertThrows(
+    () => {
+      Uint7.toBytes(-1 as unknown as uint7);
+    },
+    TypeError,
+    e1,
+  );
+  assertThrows(
+    () => {
+      Uint7.toBytes(undefined as unknown as uint7);
+    },
+    TypeError,
+    e1,
+  );
+});
+
 Deno.test("Numerics.Uint7.bitwiseAnd()", () => {
   assertStrictEquals(Uint7.bitwiseAnd(0b0000_000, 0b0000_000), 0b0000_000);
   assertStrictEquals(Uint7.bitwiseAnd(0b1111_111, 0b1111_111), 0b1111_111);

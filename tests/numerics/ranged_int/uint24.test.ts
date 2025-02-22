@@ -19,6 +19,111 @@ Deno.test("Numerics.Uint24.BYTE_LENGTH", () => {
   assertStrictEquals(Uint24.BYTE_LENGTH, 3);
 });
 
+const le = "little-endian";
+const be = "big-endian";
+
+Deno.test("Uint24.toBytes()", () => {
+  // assertStrictEquals(
+  //   [...Uint24.toBytes(0)].map((i) => i.toString()).join(","),
+  //   "0,0,0",
+  // );
+  assertStrictEquals(
+    [...Uint24.toBytes(0, be)].map((i) => i.toString()).join(","),
+    "0,0,0",
+  );
+  assertStrictEquals(
+    [...Uint24.toBytes(0, le)].map((i) => i.toString()).join(","),
+    "0,0,0",
+  );
+  // assertStrictEquals(
+  //   [...Uint24.toBytes(0xFF)].map((i) => i.toString()).join(","),
+  //   "0,0,255",
+  // );
+  assertStrictEquals(
+    [...Uint24.toBytes(0xFF, be)].map((i) => i.toString()).join(","),
+    "0,0,255",
+  );
+  assertStrictEquals(
+    [...Uint24.toBytes(0xFF, le)].map((i) => i.toString()).join(","),
+    "255,0,0",
+  );
+
+  // assertStrictEquals(
+  //   [...Uint24.toBytes(0x100)].map((i) => i.toString()).join(","),
+  //   "0,1,0",
+  // );
+  assertStrictEquals(
+    [...Uint24.toBytes(0x100, be)].map((i) => i.toString()).join(","),
+    "0,1,0",
+  );
+  assertStrictEquals(
+    [...Uint24.toBytes(0x100, le)].map((i) => i.toString()).join(","),
+    "0,1,0",
+  );
+
+  // assertStrictEquals(
+  //   [...Uint24.toBytes(0xFFFF)].map((i) => i.toString()).join(","),
+  //   "0,255,255",
+  // );
+  assertStrictEquals(
+    [...Uint24.toBytes(0xFFFF, be)].map((i) => i.toString()).join(","),
+    "0,255,255",
+  );
+  assertStrictEquals(
+    [...Uint24.toBytes(0xFFFF, le)].map((i) => i.toString()).join(","),
+    "255,255,0",
+  );
+
+  // assertStrictEquals(
+  //   [...Uint24.toBytes(0x10000)].map((i) => i.toString()).join(","),
+  //   "1,0,0",
+  // );
+  assertStrictEquals(
+    [...Uint24.toBytes(0x10000, be)].map((i) => i.toString()).join(","),
+    "1,0,0",
+  );
+  assertStrictEquals(
+    [...Uint24.toBytes(0x10000, le)].map((i) => i.toString()).join(","),
+    "0,0,1",
+  );
+
+  // assertStrictEquals(
+  //   [...Uint24.toBytes(0xFFFFFF)].map((i) => i.toString()).join(","),
+  //   "255,255,255",
+  // );
+  assertStrictEquals(
+    [...Uint24.toBytes(0xFFFFFF, be)].map((i) => i.toString()).join(","),
+    "255,255,255",
+  );
+  assertStrictEquals(
+    [...Uint24.toBytes(0xFFFFFF, le)].map((i) => i.toString()).join(","),
+    "255,255,255",
+  );
+
+  const e1 = "`value` must be a 24-bit unsigned integer.";
+  assertThrows(
+    () => {
+      Uint24.toBytes(0x1000000);
+    },
+    TypeError,
+    e1,
+  );
+  assertThrows(
+    () => {
+      Uint24.toBytes(-1);
+    },
+    TypeError,
+    e1,
+  );
+  assertThrows(
+    () => {
+      Uint24.toBytes(undefined as unknown as number);
+    },
+    TypeError,
+    e1,
+  );
+});
+
 Deno.test("Numerics.Uint24.bitwiseAnd()", () => {
   assertStrictEquals(
     Uint24.bitwiseAnd(

@@ -15,6 +15,65 @@ Deno.test("Numerics.Uint6.MAX_VALUE", () => {
   assertStrictEquals(Uint6.MAX_VALUE, 0x3F);
 });
 
+Deno.test("Numerics.Uint6.BYTE_LENGTH", () => {
+  assertStrictEquals(Uint6.BYTE_LENGTH, 1);
+});
+
+const le = "little-endian";
+const be = "big-endian";
+
+Deno.test("Numerics.Uint6.toBytes()", () => {
+  assertStrictEquals(
+    [...Uint6.toBytes(0)].map((i) => i.toString()).join(","),
+    "0",
+  );
+  assertStrictEquals(
+    [...Uint6.toBytes(0, be)].map((i) => i.toString()).join(","),
+    "0",
+  );
+  assertStrictEquals(
+    [...Uint6.toBytes(0, le)].map((i) => i.toString()).join(","),
+    "0",
+  );
+  assertStrictEquals(
+    [...Uint6.toBytes(0x3F)].map((i) => i.toString()).join(","),
+    "63",
+  );
+  assertStrictEquals(
+    [...Uint6.toBytes(0x3F, be)].map((i) => i.toString()).join(","),
+    "63",
+  );
+  assertStrictEquals(
+    [...Uint6.toBytes(0x3F, le)].map((i) => i.toString()).join(
+      ",",
+    ),
+    "63",
+  );
+
+  const e1 = "`value` must be a 6-bit unsigned integer.";
+  assertThrows(
+    () => {
+      Uint6.toBytes(0x100 as unknown as uint6);
+    },
+    TypeError,
+    e1,
+  );
+  assertThrows(
+    () => {
+      Uint6.toBytes(-1 as unknown as uint6);
+    },
+    TypeError,
+    e1,
+  );
+  assertThrows(
+    () => {
+      Uint6.toBytes(undefined as unknown as uint6);
+    },
+    TypeError,
+    e1,
+  );
+});
+
 Deno.test("Numerics.Uint6.bitwiseAnd()", () => {
   assertStrictEquals(Uint6.bitwiseAnd(0b0000_00, 0b0000_00), 0b0000_00);
   assertStrictEquals(Uint6.bitwiseAnd(0b1111_11, 0b1111_11), 0b1111_11);

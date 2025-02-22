@@ -22,6 +22,61 @@ Deno.test("Numerics.Uint8.BYTE_LENGTH", () => {
   assertStrictEquals(Uint8.BYTE_LENGTH, 1);
 });
 
+const le = "little-endian";
+const be = "big-endian";
+
+Deno.test("Numerics.Uint8.toBytes()", () => {
+  assertStrictEquals(
+    [...Uint8.toBytes(0)].map((i) => i.toString()).join(","),
+    "0",
+  );
+  assertStrictEquals(
+    [...Uint8.toBytes(0, be)].map((i) => i.toString()).join(","),
+    "0",
+  );
+  assertStrictEquals(
+    [...Uint8.toBytes(0, le)].map((i) => i.toString()).join(","),
+    "0",
+  );
+  assertStrictEquals(
+    [...Uint8.toBytes(0xFF)].map((i) => i.toString()).join(","),
+    "255",
+  );
+  assertStrictEquals(
+    [...Uint8.toBytes(0xFF, be)].map((i) => i.toString()).join(","),
+    "255",
+  );
+  assertStrictEquals(
+    [...Uint8.toBytes(0xFF, le)].map((i) => i.toString()).join(
+      ",",
+    ),
+    "255",
+  );
+
+  const e1 = "`value` must be an 8-bit unsigned integer.";
+  assertThrows(
+    () => {
+      Uint8.toBytes(0x100 as unknown as uint8);
+    },
+    TypeError,
+    e1,
+  );
+  assertThrows(
+    () => {
+      Uint8.toBytes(-1 as unknown as uint8);
+    },
+    TypeError,
+    e1,
+  );
+  assertThrows(
+    () => {
+      Uint8.toBytes(undefined as unknown as uint8);
+    },
+    TypeError,
+    e1,
+  );
+});
+
 Deno.test("Numerics.Uint8.bitwiseAnd()", () => {
   assertStrictEquals(Uint8.bitwiseAnd(0b0000_0000, 0b0000_0000), 0b0000_0000);
   assertStrictEquals(Uint8.bitwiseAnd(0b1111_1111, 0b1111_1111), 0b1111_1111);
@@ -221,62 +276,5 @@ Deno.test("Numerics.Uint8.rotateLeft()", () => {
     },
     TypeError,
     e2,
-  );
-});
-
-//TODO
-
-const le = "little-endian";
-const be = "big-endian";
-
-Deno.test("Numerics.Uint8.toBytes()", () => {
-  assertStrictEquals(
-    [...Uint8.toBytes(0)].map((i) => i.toString()).join(","),
-    "0",
-  );
-  assertStrictEquals(
-    [...Uint8.toBytes(0, be)].map((i) => i.toString()).join(","),
-    "0",
-  );
-  assertStrictEquals(
-    [...Uint8.toBytes(0, le)].map((i) => i.toString()).join(","),
-    "0",
-  );
-  assertStrictEquals(
-    [...Uint8.toBytes(0xFF)].map((i) => i.toString()).join(","),
-    "255",
-  );
-  assertStrictEquals(
-    [...Uint8.toBytes(0xFF, be)].map((i) => i.toString()).join(","),
-    "255",
-  );
-  assertStrictEquals(
-    [...Uint8.toBytes(0xFF, le)].map((i) => i.toString()).join(
-      ",",
-    ),
-    "255",
-  );
-
-  const e1 = "`value` must be an 8-bit unsigned integer.";
-  assertThrows(
-    () => {
-      Uint8.toBytes(0x100 as unknown as uint8);
-    },
-    TypeError,
-    e1,
-  );
-  assertThrows(
-    () => {
-      Uint8.toBytes(-1 as unknown as uint8);
-    },
-    TypeError,
-    e1,
-  );
-  assertThrows(
-    () => {
-      Uint8.toBytes(undefined as unknown as uint8);
-    },
-    TypeError,
-    e1,
   );
 });

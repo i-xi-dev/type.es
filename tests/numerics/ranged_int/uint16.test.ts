@@ -19,6 +19,85 @@ Deno.test("Numerics.Uint16.BYTE_LENGTH", () => {
   assertStrictEquals(Uint16.BYTE_LENGTH, 2);
 });
 
+const le = "little-endian";
+const be = "big-endian";
+
+Deno.test("Uint16.toBytes()", () => {
+  // assertStrictEquals(
+  //   [...Uint16.toBytes(0)].map((i) => i.toString()).join(","),
+  //   "0,0",
+  // );
+  assertStrictEquals(
+    [...Uint16.toBytes(0, be)].map((i) => i.toString()).join(","),
+    "0,0",
+  );
+  assertStrictEquals(
+    [...Uint16.toBytes(0, le)].map((i) => i.toString()).join(","),
+    "0,0",
+  );
+  // assertStrictEquals(
+  //   [...Uint16.toBytes(0xFF)].map((i) => i.toString()).join(","),
+  //   "0,255",
+  // );
+  assertStrictEquals(
+    [...Uint16.toBytes(0xFF, be)].map((i) => i.toString()).join(","),
+    "0,255",
+  );
+  assertStrictEquals(
+    [...Uint16.toBytes(0xFF, le)].map((i) => i.toString()).join(","),
+    "255,0",
+  );
+
+  // assertStrictEquals(
+  //   [...Uint16.toBytes(0x100)].map((i) => i.toString()).join(","),
+  //   "1,0",
+  // );
+  assertStrictEquals(
+    [...Uint16.toBytes(0x100, be)].map((i) => i.toString()).join(","),
+    "1,0",
+  );
+  assertStrictEquals(
+    [...Uint16.toBytes(0x100, le)].map((i) => i.toString()).join(","),
+    "0,1",
+  );
+
+  // assertStrictEquals(
+  //   [...Uint16.toBytes(0xFFFF)].map((i) => i.toString()).join(","),
+  //   "255,255",
+  // );
+  assertStrictEquals(
+    [...Uint16.toBytes(0xFFFF, be)].map((i) => i.toString()).join(","),
+    "255,255",
+  );
+  assertStrictEquals(
+    [...Uint16.toBytes(0xFFFF, le)].map((i) => i.toString()).join(","),
+    "255,255",
+  );
+
+  const e1 = "`value` must be a 16-bit unsigned integer.";
+  assertThrows(
+    () => {
+      Uint16.toBytes(0x10000);
+    },
+    TypeError,
+    e1,
+  );
+  assertThrows(
+    () => {
+      Uint16.toBytes(-1);
+    },
+    TypeError,
+    e1,
+  );
+  assertThrows(
+    () => {
+      Uint16.toBytes(undefined as unknown as number);
+    },
+    TypeError,
+    e1,
+  );
+});
+
 Deno.test("Numerics.Uint16.bitwiseAnd()", () => {
   assertStrictEquals(
     Uint16.bitwiseAnd(0b0000_0000_0000_0000, 0b0000_0000_0000_0000),

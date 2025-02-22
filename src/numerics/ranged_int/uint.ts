@@ -1,7 +1,7 @@
 import * as Byte from "../../basics/byte/mod.ts";
 import * as ByteOrder from "../../basics/byte_order/mod.ts";
 import * as Type from "../../type/mod.ts";
-import { type _AFunc, _byteLengthOf, _normalizeOffset } from "./_utils.ts";
+import { type _AFunc, _normalizeOffset } from "./_utils.ts";
 import {
   type byteorder,
   type safeint,
@@ -69,61 +69,57 @@ function _rotateLeft_under32<T extends safeint>(
 interface RangedInt<T extends safeint> {
   MIN_VALUE: T;
   MAX_VALUE: T;
-  // toNumber() → もともとnumberなので不要（範囲チェックを追加するくらい。要るかそんなもの？）
-  // toBigInt() → bigint.tsのfromNumberで必要十分（範囲チェックを追加するくらい。要るかそんなもの？）
-}
-
-interface BitOperations<T extends safeint> {
   BIT_LENGTH: safeint;
+  BYTE_LENGTH: safeint;
+  toBytes(value: T, byteOrder?: byteorder): Uint8Array;
   bitwiseAnd(a: T, b: T): T;
   bitwiseOr(a: T, b: T): T;
   bitwiseXOr(a: T, b: T): T;
   //XXX bitwiseNot
   rotateLeft(value: T, offset: safeint): T;
   //XXX rotateRight
+  // toNumber() → もともとnumberなので不要（範囲チェックを追加するくらい。要るかそんなもの？）
+  // toBigInt() → bigint.tsのfromNumberで必要十分（範囲チェックを追加するくらい。要るかそんなもの？）
 }
 
-interface ByteOperations<T extends safeint> {
-  BYTE_LENGTH: safeint;
-  toBytes(value: T, byteOrder?: byteorder): Uint8Array;
-}
-
-interface Uint<T extends safeint> extends RangedInt<T>, BitOperations<T> {}
-
-interface Uint8x<T extends safeint> extends Uint<T>, ByteOperations<T> {}
-
-class _Uint<T extends safeint> implements Uint<T> {
-  readonly BIT_LENGTH: safeint;
+class _Uint<T extends safeint> implements RangedInt<T> {
   readonly MIN_VALUE: T;
   readonly MAX_VALUE: T;
+  readonly BIT_LENGTH: safeint;
+  readonly BYTE_LENGTH: safeint;
   readonly #info: _Info<T>;
   protected readonly _assert: _AFunc;
 
   constructor(info: _Info<T>, assert: _AFunc) {
-    this.BIT_LENGTH = info.BIT_LENGTH;
     this.MIN_VALUE = info.MIN_VALUE;
     this.MAX_VALUE = info.MAX_VALUE;
+    this.BIT_LENGTH = info.BIT_LENGTH;
+    this.BYTE_LENGTH = Math.ceil(info.BIT_LENGTH / Byte.BITS_PER_BYTE);
     this.#info = info;
     this._assert = assert;
+  }
 
-    // IntelliSense上で反映されないので、インスタンス生成後にfreezeする（コンストラクター内でfreezeするとextendsできなくなる）
-    // Object.defineProperties(this, {
-    //   BIT_LENGTH: {
-    //     value: info.BIT_LENGTH,
-    //     writable: false,
-    //     configurable: false,
-    //   },
-    //   MIN_VALUE: {
-    //     value: info.MIN_VALUE,
-    //     writable: false,
-    //     configurable: false,
-    //   },
-    //   MAX_VALUE: {
-    //     value: info.MAX_VALUE,
-    //     writable: false,
-    //     configurable: false,
-    //   },
-    // });
+  toBytes(value: T, byteOrder: byteorder = ByteOrder.nativeOrder): Uint8Array {
+    this._assert(value, "value");
+    //TODO byteOrderのチェック
+
+    // bitLengthは 8 | 16 | 24 | 32 | 40 | 48 のいずれか
+
+    if (this.BIT_LENGTH === 8) {
+      return Uint8Array.of(value);
+    }
+
+    const bytes: Array<uint8> = [];
+    bytes.push((value % 0x100) as uint8);
+    for (let i = 2; i <= 6; i++) { // 16-48
+      if (this.BIT_LENGTH >= (Byte.BITS_PER_BYTE * i)) {
+        bytes.push(_r(value, i));
+      }
+    }
+
+    return Uint8Array.from(
+      (byteOrder === ByteOrder.LITTLE_ENDIAN) ? bytes : bytes.reverse(),
+    );
   }
 
   bitwiseAnd(a: T, b: T): T {
@@ -160,59 +156,21 @@ function _r(value: safeint, byteLength: safeint): uint8 {
   return Math.trunc(x2 / (0x100 ** (byteLength - 1))) as uint8;
 }
 
-class _Uint8x<T extends safeint> extends _Uint<T> implements Uint8x<T> {
-  readonly #byteLength: safeint;
-
-  constructor(info: _Info<T>, assert: _AFunc) {
-    super(info, assert);
-    if ((info.BIT_LENGTH % 8) !== 0) {
-      throw new TypeError("");
-    }
-
-    this.#byteLength = _byteLengthOf(info.BIT_LENGTH);
-  }
-
-  get BYTE_LENGTH(): safeint {
-    return this.#byteLength;
-  }
-
-  toBytes(value: T, byteOrder: byteorder = ByteOrder.nativeOrder): Uint8Array {
-    this._assert(value, "value");
-    //TODO byteOrderのチェック
-
-    // bitLengthは 8 | 16 | 24 | 32 | 40 | 48 のいずれか
-
-    if (this.BIT_LENGTH === 8) {
-      return Uint8Array.of(value);
-    }
-
-    const bytes: Array<uint8> = [];
-    bytes.push((value % 0x100) as uint8);
-    for (let i = 2; i <= 6; i++) {
-      if (this.BIT_LENGTH >= (Byte.BITS_PER_BYTE * i)) {
-        bytes.push(_r(value, i));
-      }
-    }
-
-    return Uint8Array.from(
-      (byteOrder === ByteOrder.LITTLE_ENDIAN) ? bytes : bytes.reverse(),
-    );
-  }
-}
-
-const Uint6: Uint<uint6> = new _Uint(Uint6Info, Type.assertUint6);
+const Uint6: RangedInt<uint6> = new _Uint(Uint6Info, Type.assertUint6);
 Object.freeze(Uint6);
+// defineProperty(s)だとIntelliSense上で反映されないので、インスタンス生成後にfreezeする
+// //（コンストラクター内でfreezeするとextendsできなくなる）
 
-const Uint7: Uint<uint7> = new _Uint(Uint7Info, Type.assertUint7);
+const Uint7: RangedInt<uint7> = new _Uint(Uint7Info, Type.assertUint7);
 Object.freeze(Uint7);
 
-const Uint8: Uint8x<uint8> = new _Uint8x(Uint8Info, Type.assertUint8);
+const Uint8: RangedInt<uint8> = new _Uint(Uint8Info, Type.assertUint8);
 Object.freeze(Uint8);
 
-const Uint16: Uint8x<uint16> = new _Uint8x(Uint16Info, Type.assertUint16);
+const Uint16: RangedInt<uint16> = new _Uint(Uint16Info, Type.assertUint16);
 Object.freeze(Uint16);
 
-const Uint24: Uint8x<uint24> = new _Uint8x(Uint24Info, Type.assertUint24);
+const Uint24: RangedInt<uint24> = new _Uint(Uint24Info, Type.assertUint24);
 Object.freeze(Uint24);
 
 export { Uint16, Uint24, Uint6, Uint7, Uint8 };
