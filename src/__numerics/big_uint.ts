@@ -157,11 +157,6 @@ class _UinNOperations<T extends bigint> implements UintNOperations<T> {
     }
   }
 
-  toBigInt(self: T): bigint {
-    this.assert(self, "self");
-    return self;
-  }
-
   fromString(value: string, options?: FromStringOptions): T {
     const valueAsBigInt = ExBigInt.fromString(value, options);
     return this.fromBigInt(valueAsBigInt, options);

@@ -408,38 +408,6 @@ Deno.test("BigUint64.fromBigInt() - overflowMode", () => {
   assertStrictEquals(BigUint64.fromBigInt(0x1_0000_0000_0000_0000n, op2), 0n);
 });
 
-Deno.test("BigUint64.toBigInt()", () => {
-  assertStrictEquals(BigUint64.toBigInt(0n), 0n);
-  assertStrictEquals(BigUint64.toBigInt(-0n), 0n);
-  assertStrictEquals(
-    BigUint64.toBigInt(0xFFFFFFFFFFFFFFFFn),
-    0xFFFFFFFFFFFFFFFFn,
-  );
-
-  const e1 = "The type of `self` does not match the type of `uint64`.";
-  assertThrows(
-    () => {
-      BigUint64.toBigInt(0x10000000000000000n);
-    },
-    TypeError,
-    e1,
-  );
-  assertThrows(
-    () => {
-      BigUint64.toBigInt(-1n);
-    },
-    TypeError,
-    e1,
-  );
-  assertThrows(
-    () => {
-      BigUint64.toBigInt(undefined as unknown as bigint);
-    },
-    TypeError,
-    e1,
-  );
-});
-
 Deno.test("BigUint64.fromString()", () => {
   assertStrictEquals(BigUint64.fromString("0"), 0n);
   assertStrictEquals(BigUint64.fromString("-0"), 0n);
