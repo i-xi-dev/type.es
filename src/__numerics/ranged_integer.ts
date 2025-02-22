@@ -28,12 +28,10 @@ export type ToStringOptions = {
 
 export interface UintNOperations<T extends int> {
   bitLength: safeint;
-  bitwiseAnd(self: T, other: T): T;
-  bitwiseOr(self: T, other: T): T;
-  bitwiseXOr(self: T, other: T): T;
-  //XXX bitwiseNot(self: T): T;
-  rotateLeft(self: T, offset: safeint): T;
-  //XXX rotateRight(self: T, offset: safeint): T;
+  //bitwiseAnd(self: T, other: T): T;
+  //bitwiseOr(self: T, other: T): T;
+  //bitwiseXOr(self: T, other: T): T;
+  //rotateLeft(self: T, offset: safeint): T;
   fromNumber(value: number, options?: FromNumberOptions): T;
   toNumber(self: T): safeint;
   fromBigInt(value: bigint, options?: FromBigIntOptions): T;

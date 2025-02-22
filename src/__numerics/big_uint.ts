@@ -1,7 +1,6 @@
 import * as BigIntRange from "../numerics/range/bigint_range/mod.ts";
 import * as ExBigInt from "../numerics/bigint/mod.ts";
 import { assertBigInt, assertBigIntInSafeIntRange } from "../type/bigint.ts";
-import { assertSafeInt } from "../type/number.ts";
 import {
   type bigintrange,
   type biguint64,
@@ -14,7 +13,6 @@ import {
   ToStringOptions,
   UintNOperations,
 } from "./ranged_integer.ts";
-import { Number as ExNumber } from "../numerics/mod.ts";
 import { OverflowMode } from "./overflow_mode.ts";
 
 class _UinNOperations<T extends bigint> implements UintNOperations<T> {
@@ -50,48 +48,6 @@ class _UinNOperations<T extends bigint> implements UintNOperations<T> {
         `The type of \`${label}\` does not match the type of \`uint${this.#bitLength}\`.`,
       ); // 型が期待値でない場合も含むのでRangeErrorでなくTypeErrorとした
     }
-  }
-
-  bitwiseAnd(self: T, other: T): T {
-    this.assert(self, "self");
-    this.assert(other, "other");
-
-    const aAndB = (self as bigint) & (other as bigint); //XXX 何故かtypescriptにbigintでなくnumberだと言われる
-    return (aAndB & this.#max) as T;
-  }
-
-  bitwiseOr(self: T, other: T): T {
-    this.assert(self, "self");
-    this.assert(other, "other");
-
-    const aOrB = (self as bigint) | (other as bigint); //XXX 何故かtypescriptにbigintでなくnumberだと言われる
-    return (aOrB & this.#max) as T;
-  }
-
-  bitwiseXOr(self: T, other: T): T {
-    this.assert(self, "self");
-    this.assert(other, "other");
-
-    const aXOrB = (self as bigint) ^ (other as bigint); //XXX 何故かtypescriptにbigintでなくnumberだと言われる
-    return (aXOrB & this.#max) as T;
-  }
-
-  rotateLeft(self: T, offset: safeint): T {
-    this.assert(self, "self");
-    assertSafeInt(offset, "offset");
-
-    let normalizedOffset = offset % this.#bitLength;
-    if (normalizedOffset < ExNumber.ZERO) {
-      normalizedOffset = normalizedOffset + this.#bitLength;
-    }
-    if (normalizedOffset === ExNumber.ZERO) {
-      return self;
-    }
-
-    const bigIntOffset = BigInt(normalizedOffset);
-    return (((self << bigIntOffset) |
-      (self >> (BigInt(this.#bitLength) - bigIntOffset))) &
-      this.#max) as T;
   }
 
   fromNumber(value: number, options?: FromNumberOptions): T {

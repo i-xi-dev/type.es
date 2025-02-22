@@ -25,7 +25,9 @@ interface BitOperations<T extends bigint> {
   bitwiseAnd(a: T, b: T): T;
   bitwiseOr(a: T, b: T): T;
   bitwiseXOr(a: T, b: T): T;
+  //XXX bitwiseNot
   rotateLeft(value: T, offset: safeint): T;
+  //XXX rotateRight
 }
 
 interface ByteOperations<T extends bigint> {
