@@ -624,7 +624,3 @@ Deno.test("BigUint64.toString()", () => {
   assertStrictEquals(BigUint64.toString(0n, op16u3), "000");
   assertStrictEquals(BigUint64.toString(63n, op16u3), "03F");
 });
-
-Deno.test("BigUint64.byteLength", () => {
-  assertStrictEquals(BigUint64.byteLength, 8);
-});

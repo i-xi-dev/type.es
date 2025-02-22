@@ -12,10 +12,8 @@ import {
   FromNumberOptions,
   FromStringOptions,
   ToStringOptions,
-  Uint8xOperations,
   UintNOperations,
 } from "./ranged_integer.ts";
-import { BITS_PER_BYTE } from "../_const/byte.ts";
 import { Number as ExNumber } from "../numerics/mod.ts";
 import { OverflowMode } from "./overflow_mode.ts";
 
@@ -178,26 +176,13 @@ class _UinNOperations<T extends bigint> implements UintNOperations<T> {
 const _BITS = [/* 56, */ 64, /* 72, 80, 88, 96, 104, 112, 120, */ 128] as const;
 type _BITS = typeof _BITS[safeint];
 
-class _Uint8xOperations<T extends bigint> extends _UinNOperations<T>
-  implements Uint8xOperations<T> {
-  readonly #buffer: ArrayBuffer;
-  readonly #bufferView: DataView;
-  readonly #bufferUint8View: Uint8Array;
-
+class _Uint8xOperations<T extends bigint> extends _UinNOperations<T> {
   constructor(bitLength: _BITS) {
     super(bitLength);
     //if ((bitLength % BITS_PER_BYTE) !== ExNumber.ZERO) {
     if (_BITS.includes(bitLength) !== true) {
       throw new Error("Unsupprted bit length.");
     }
-
-    this.#buffer = new ArrayBuffer(bitLength / BITS_PER_BYTE);
-    this.#bufferView = new DataView(this.#buffer);
-    this.#bufferUint8View = new Uint8Array(this.#buffer);
-  }
-
-  get byteLength(): safeint {
-    return this.bitLength / BITS_PER_BYTE;
   }
 }
 
