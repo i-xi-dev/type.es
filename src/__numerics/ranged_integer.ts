@@ -33,7 +33,6 @@ export interface UintNOperations<T extends int> {
   //bitwiseXOr(self: T, other: T): T;
   //rotateLeft(self: T, offset: safeint): T;
   fromNumber(value: number, options?: FromNumberOptions): T;
-  toNumber(self: T): safeint;
   fromBigInt(value: bigint, options?: FromBigIntOptions): T;
   //toBigInt(self: T): bigint;
   fromString(value: string, options?: FromStringOptions): T;

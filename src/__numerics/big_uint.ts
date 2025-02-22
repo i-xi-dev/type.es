@@ -84,13 +84,6 @@ class _UinNOperations<T extends bigint> implements UintNOperations<T> {
     }
   }
 
-  toNumber(self: T): safeint {
-    this.assert(self, "self");
-    assertBigIntInSafeIntRange(self, "self");
-
-    return Number(self);
-  }
-
   fromBigInt(value: bigint, options?: FromBigIntOptions): T {
     assertBigInt(value, "value");
 

@@ -180,36 +180,6 @@ Deno.test("Uint16.fromNumber() - overflowMode", () => {
   assertStrictEquals(Uint16.fromNumber(131072, op2), 0);
 });
 
-Deno.test("Uint16.toNumber()", () => {
-  assertStrictEquals(Uint16.toNumber(0), 0);
-  assertStrictEquals(Uint16.toNumber(-0), 0);
-  assertStrictEquals(Object.is(Uint16.toNumber(-0), 0), true);
-  assertStrictEquals(Uint16.toNumber(0xFFFF), 0xFFFF);
-
-  const e1 = "The type of `self` does not match the type of `uint16`.";
-  assertThrows(
-    () => {
-      Uint16.toNumber(0x10000);
-    },
-    TypeError,
-    e1,
-  );
-  assertThrows(
-    () => {
-      Uint16.toNumber(-1);
-    },
-    TypeError,
-    e1,
-  );
-  assertThrows(
-    () => {
-      Uint16.toNumber(undefined as unknown as number);
-    },
-    TypeError,
-    e1,
-  );
-});
-
 Deno.test("Uint16.fromBigInt()", () => {
   assertStrictEquals(Uint16.fromBigInt(0n), 0);
   assertStrictEquals(Object.is(Uint16.fromBigInt(-0n), 0), true);

@@ -170,36 +170,6 @@ Deno.test("Uint8.fromNumber() - overflowMode", () => {
   assertStrictEquals(Uint8.fromNumber(513, op2), 1);
 });
 
-Deno.test("Uint8.toNumber()", () => {
-  assertStrictEquals(Uint8.toNumber(0), 0);
-  assertStrictEquals(Uint8.toNumber(-0), 0);
-  assertStrictEquals(Object.is(Uint8.toNumber(-0), 0), true);
-  assertStrictEquals(Uint8.toNumber(0xFF), 0xFF);
-
-  const e1 = "The type of `self` does not match the type of `uint8`.";
-  assertThrows(
-    () => {
-      Uint8.toNumber(0x100 as uint8);
-    },
-    TypeError,
-    e1,
-  );
-  assertThrows(
-    () => {
-      Uint8.toNumber(-1 as uint8);
-    },
-    TypeError,
-    e1,
-  );
-  assertThrows(
-    () => {
-      Uint8.toNumber(undefined as unknown as uint8);
-    },
-    TypeError,
-    e1,
-  );
-});
-
 Deno.test("Uint8.fromBigInt()", () => {
   assertStrictEquals(Uint8.fromBigInt(0n), 0);
   assertStrictEquals(Object.is(Uint8.fromBigInt(-0n), 0), true);

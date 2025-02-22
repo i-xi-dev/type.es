@@ -18,6 +18,8 @@ type _Info<T extends bigint> = {
 interface RangedBigInt<T extends bigint> {
   MIN_VALUE: T;
   MAX_VALUE: T;
+  // toNumber() → bigint.tsのtoNumberで必要十分
+  // toBigInt() → もともとbigintなので不要
 }
 
 interface BitOperations<T extends bigint> {
@@ -25,9 +27,9 @@ interface BitOperations<T extends bigint> {
   bitwiseAnd(a: T, b: T): T;
   bitwiseOr(a: T, b: T): T;
   bitwiseXOr(a: T, b: T): T;
-  //XXX bitwiseNot
+  //XXX bitwiseNot()
   rotateLeft(value: T, offset: safeint): T;
-  //XXX rotateRight
+  //XXX rotateRight()
 }
 
 interface ByteOperations<T extends bigint> {

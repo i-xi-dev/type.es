@@ -264,56 +264,6 @@ Deno.test("BigUint64.fromNumber() - overflowMode", () => {
   assertStrictEquals(BigUint64.fromNumber(8589934592, op2), 8589934592n);
 });
 
-Deno.test("BigUint64.toNumber()", () => {
-  assertStrictEquals(BigUint64.toNumber(0n), 0);
-  assertStrictEquals(BigUint64.toNumber(-0n), 0);
-  assertStrictEquals(Object.is(BigUint64.toNumber(-0n), 0), true);
-  // assertStrictEquals(BigUint64.toNumber(0xFFFFFFFFFFFFFFFFn), 0xFFFFFFFFFFFFFFFF);
-  assertStrictEquals(
-    BigUint64.toNumber(BigInt(Number.MAX_SAFE_INTEGER)),
-    Number.MAX_SAFE_INTEGER,
-  );
-
-  const e1 = "The type of `self` does not match the type of `uint64`.";
-  assertThrows(
-    () => {
-      BigUint64.toNumber(0x10000000000000000n);
-    },
-    TypeError,
-    e1,
-  );
-  assertThrows(
-    () => {
-      BigUint64.toNumber(-1n);
-    },
-    TypeError,
-    e1,
-  );
-  assertThrows(
-    () => {
-      BigUint64.toNumber(undefined as unknown as bigint);
-    },
-    TypeError,
-    e1,
-  );
-
-  const e2 = "`self` must be a `bigint` in the safe integer range.";
-  assertThrows(
-    () => {
-      BigUint64.toNumber(0xFFFFFFFFFFFFFFFFn);
-    },
-    TypeError,
-    e2,
-  );
-  assertThrows(
-    () => {
-      BigUint64.toNumber(BigInt(Number.MAX_SAFE_INTEGER) + 1n);
-    },
-    TypeError,
-    e2,
-  );
-});
-
 Deno.test("BigUint64.fromBigInt()", () => {
   assertStrictEquals(BigUint64.fromBigInt(0n), 0n);
   assertStrictEquals(Object.is(BigUint64.fromBigInt(-0n), 0n), true);

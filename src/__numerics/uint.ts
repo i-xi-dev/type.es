@@ -223,12 +223,6 @@ class _UinNOperations<T extends safeint> implements UintNOperations<T> {
     }
   }
 
-  toNumber(self: T): safeint {
-    this.assert(self, "self");
-
-    return ExNumber.normalize(self);
-  }
-
   fromBigInt(value: bigint, options?: FromBigIntOptions): T {
     const valueAsNumber = SafeInt.fromBigInt(value);
 
