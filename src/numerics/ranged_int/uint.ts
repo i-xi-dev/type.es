@@ -1,6 +1,7 @@
 import * as Byte from "../../basics/byte/mod.ts";
 import * as ByteOrder from "../../basics/byte_order/mod.ts";
 import * as Type from "../../type/mod.ts";
+import { type _AFunc, _byteLengthOf, _normalizeOffset } from "./_utils.ts";
 import {
   type byteorder,
   type safeint,
@@ -49,14 +50,6 @@ function _bitwiseXOr_under32<T extends safeint>(
   return ((a ^ b) & info.MAX_VALUE) as T;
 }
 
-function _normalizeOffset(offset: safeint, bitLength: safeint): safeint {
-  const normalizedOffset = offset % bitLength;
-  if (normalizedOffset < ExNumber.ZERO) {
-    return normalizedOffset + bitLength;
-  }
-  return normalizedOffset;
-}
-
 function _rotateLeft_under32<T extends safeint>(
   value: T,
   offset: safeint,
@@ -71,11 +64,6 @@ function _rotateLeft_under32<T extends safeint>(
 
   return (((value << normalizedOffset) |
     (value >> (info.BIT_LENGTH - normalizedOffset))) & info.MAX_VALUE) as T;
-}
-
-function _byteLengthOf(bitLength: safeint): safeint {
-  // assert (bitLength % Byte.BITS_PER_BYTE) === 0;
-  return bitLength / Byte.BITS_PER_BYTE;
 }
 
 interface RangedInt<T extends safeint> {
@@ -100,8 +88,6 @@ interface Uint<T extends safeint> extends RangedInt<T>, BitOperations<T> {}
 
 interface Uint8x<T extends safeint> extends Uint<T>, ByteOperations<T> {}
 
-type _AFunc = (test: unknown, label: string) => void;
-
 class _Uint<T extends safeint> implements Uint<T> {
   readonly BIT_LENGTH: safeint;
   readonly MIN_VALUE: T;
@@ -116,6 +102,7 @@ class _Uint<T extends safeint> implements Uint<T> {
     this.#info = info;
     this._assert = assert;
 
+    // IntelliSense上で反映されないので、インスタンス生成後にfreezeする（コンストラクター内でfreezeするとextendsできなくなる）
     // Object.defineProperties(this, {
     //   BIT_LENGTH: {
     //     value: info.BIT_LENGTH,
@@ -187,6 +174,7 @@ class _Uint8x<T extends safeint> extends _Uint<T> implements Uint8x<T> {
 
   toBytes(value: T, byteOrder: byteorder = ByteOrder.nativeOrder): Uint8Array {
     this._assert(value, "value");
+    //TODO byteOrderのチェック
 
     // bitLengthは 8 | 16 | 24 | 32 | 40 | 48 のいずれか
 
@@ -196,23 +184,9 @@ class _Uint8x<T extends safeint> extends _Uint<T> implements Uint8x<T> {
 
     const bytes: Array<uint8> = [];
     bytes.push((value % 0x100) as uint8);
-    if (this.BIT_LENGTH >= 16) {
-      bytes.push(_r(value, 2));
-
-      if (this.BIT_LENGTH >= 24) {
-        bytes.push(_r(value, 3));
-
-        if (this.BIT_LENGTH >= 32) {
-          bytes.push(_r(value, 4));
-
-          if (this.BIT_LENGTH >= 40) {
-            bytes.push(_r(value, 5));
-
-            if (this.BIT_LENGTH >= 48) {
-              bytes.push(_r(value, 6));
-            }
-          }
-        }
+    for (let i = 2; i <= 6; i++) {
+      if (this.BIT_LENGTH >= (Byte.BITS_PER_BYTE * i)) {
+        bytes.push(_r(value, i));
       }
     }
 
