@@ -226,7 +226,7 @@ Deno.test("Numerics.Uint8.rotateLeft()", () => {
 
 //TODO
 
-Deno.test("Uint8.toBytes()", () => {
+Deno.test("Numerics.Uint8.toBytes()", () => {
   assertStrictEquals(
     [...Uint8.toBytes(0)].map((i) => i.toString()).join(","),
     "0",

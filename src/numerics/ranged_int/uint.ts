@@ -5,6 +5,7 @@ import {
   type byteorder,
   type safeint,
   type uint16,
+  type uint24,
   type uint6,
   type uint7,
   type uint8,
@@ -12,6 +13,7 @@ import {
 import { Number as ExNumber } from "../../numerics/mod.ts";
 import {
   Uint16 as Uint16Info,
+  Uint24 as Uint24Info,
   Uint6 as Uint6Info,
   Uint7 as Uint7Info,
   Uint8 as Uint8Info,
@@ -232,4 +234,7 @@ Object.freeze(Uint8);
 const Uint16: Uint8x<uint16> = new _Uint8x(Uint16Info, Type.assertUint16);
 Object.freeze(Uint16);
 
-export { Uint16, Uint6, Uint7, Uint8 };
+const Uint24: Uint8x<uint24> = new _Uint8x(Uint24Info, Type.assertUint24);
+Object.freeze(Uint24);
+
+export { Uint16, Uint24, Uint6, Uint7, Uint8 };
