@@ -3,6 +3,22 @@ import { Numerics, type uint8 } from "../../../mod.ts";
 
 const { Uint8 } = Numerics;
 
+Deno.test("Numerics.Uint8.BIT_LENGTH", () => {
+  assertStrictEquals(Uint8.BIT_LENGTH, 8);
+});
+
+Deno.test("Numerics.Uint8.MIN_VALUE", () => {
+  assertStrictEquals(Uint8.MIN_VALUE, 0);
+});
+
+Deno.test("Numerics.Uint8.MAX_VALUE", () => {
+  assertStrictEquals(Uint8.MAX_VALUE, 0xFF);
+});
+
+Deno.test("Numerics.Uint8.BYTE_LENGTH", () => {
+  assertStrictEquals(Uint8.BYTE_LENGTH, 1);
+});
+
 Deno.test("Numerics.Uint8.bitwiseAnd()", () => {
   assertStrictEquals(Uint8.bitwiseAnd(0b0000_0000, 0b0000_0000), 0b0000_0000);
   assertStrictEquals(Uint8.bitwiseAnd(0b1111_1111, 0b1111_1111), 0b1111_1111);
@@ -202,5 +218,59 @@ Deno.test("Numerics.Uint8.rotateLeft()", () => {
     },
     TypeError,
     e2,
+  );
+});
+
+//TODO
+
+Deno.test("Uint8.toBytes()", () => {
+  assertStrictEquals(
+    [...Uint8.toBytes(0)].map((i) => i.toString()).join(","),
+    "0",
+  );
+  assertStrictEquals(
+    [...Uint8.toBytes(0, "big-endian")].map((i) => i.toString()).join(","),
+    "0",
+  );
+  assertStrictEquals(
+    [...Uint8.toBytes(0, "little-endian")].map((i) => i.toString()).join(","),
+    "0",
+  );
+  assertStrictEquals(
+    [...Uint8.toBytes(0xFF)].map((i) => i.toString()).join(","),
+    "255",
+  );
+  assertStrictEquals(
+    [...Uint8.toBytes(0xFF, "big-endian")].map((i) => i.toString()).join(","),
+    "255",
+  );
+  assertStrictEquals(
+    [...Uint8.toBytes(0xFF, "little-endian")].map((i) => i.toString()).join(
+      ",",
+    ),
+    "255",
+  );
+
+  const e1 = "`value` must be an 8-bit unsigned integer.";
+  assertThrows(
+    () => {
+      Uint8.toBytes(0x100 as unknown as uint8);
+    },
+    TypeError,
+    e1,
+  );
+  assertThrows(
+    () => {
+      Uint8.toBytes(-1 as unknown as uint8);
+    },
+    TypeError,
+    e1,
+  );
+  assertThrows(
+    () => {
+      Uint8.toBytes(undefined as unknown as uint8);
+    },
+    TypeError,
+    e1,
   );
 });

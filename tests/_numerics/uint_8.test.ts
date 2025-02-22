@@ -3,10 +3,6 @@ import { type uint8, xNumerics } from "../../mod.ts";
 
 const { Uint8 } = xNumerics;
 
-Deno.test("Uint8.bitLength", () => {
-  assertStrictEquals(Uint8.bitLength, 8);
-});
-
 Deno.test("Uint8.fromNumber()", () => {
   assertStrictEquals(Uint8.fromNumber(0), 0);
   assertStrictEquals(Object.is(Uint8.fromNumber(-0), 0), true);
@@ -447,54 +443,4 @@ Deno.test("Uint8.toString()", () => {
 
 Deno.test("Uint8.byteLength", () => {
   assertStrictEquals(Uint8.byteLength, 1);
-});
-
-Deno.test("Uint8.toBytes()", () => {
-  assertStrictEquals(
-    [...Uint8.toBytes(0)].map((i) => i.toString()).join(","),
-    "0",
-  );
-  assertStrictEquals(
-    [...Uint8.toBytes(0, false)].map((i) => i.toString()).join(","),
-    "0",
-  );
-  assertStrictEquals(
-    [...Uint8.toBytes(0, true)].map((i) => i.toString()).join(","),
-    "0",
-  );
-  assertStrictEquals(
-    [...Uint8.toBytes(0xFF)].map((i) => i.toString()).join(","),
-    "255",
-  );
-  assertStrictEquals(
-    [...Uint8.toBytes(0xFF, false)].map((i) => i.toString()).join(","),
-    "255",
-  );
-  assertStrictEquals(
-    [...Uint8.toBytes(0xFF, true)].map((i) => i.toString()).join(","),
-    "255",
-  );
-
-  const e1 = "The type of `self` does not match the type of `uint8`.";
-  assertThrows(
-    () => {
-      Uint8.toBytes(0x100 as unknown as uint8);
-    },
-    TypeError,
-    e1,
-  );
-  assertThrows(
-    () => {
-      Uint8.toBytes(-1 as unknown as uint8);
-    },
-    TypeError,
-    e1,
-  );
-  assertThrows(
-    () => {
-      Uint8.toBytes(undefined as unknown as uint8);
-    },
-    TypeError,
-    e1,
-  );
 });
