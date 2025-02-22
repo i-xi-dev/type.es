@@ -2,7 +2,7 @@ import { assertStrictEquals } from "@std/assert";
 import { I18n } from "../../mod.ts";
 const { Language } = I18n;
 
-Deno.test("Language.infoFor()", () => {
+Deno.test("I18n.Language.infoFor()", () => {
   const e = Language.infoFor("en");
   assertStrictEquals(e?.alpha2, "en");
   assertStrictEquals(e?.alpha3, "eng");

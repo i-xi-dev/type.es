@@ -1,3 +1,4 @@
+export * from "./ranged_int/mod.ts";
 export * as BigInt from "./bigint/mod.ts";
 export * as BigIntRange from "./range/bigint_range/mod.ts";
 export * as Number from "./number/mod.ts";
