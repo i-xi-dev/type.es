@@ -31,6 +31,7 @@ interface RangedBigInt<T extends bigint> {
   rotateLeft(value: T, offset: safeint): T;
   //XXX rotateRight()
   truncate(value: bigint): T;
+  saturate(value: bigint): T;
   // toNumber() → bigint.tsのtoNumber()
   // toBigInt() → もともとbigintなので不要
   // toString() → bigint.tsのtoString()
@@ -173,6 +174,11 @@ class _BigUint<T extends bigint> implements RangedBigInt<T> {
     } else {
       return (this.#size + (value % this.#size)) as T;
     }
+  }
+
+  saturate(value: bigint): T {
+    Type.assertBigInt(value, "value");
+    return ExBigInt.clampToRange(value, [this.MIN_VALUE, this.MAX_VALUE]);
   }
 }
 

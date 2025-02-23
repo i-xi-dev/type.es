@@ -158,53 +158,6 @@ Deno.test("Uint8.fromNumber() - overflowMode", () => {
   );
 });
 
-Deno.test("Uint8.fromBigInt()", () => {
-  assertStrictEquals(Uint8.fromBigInt(0n), 0);
-  assertStrictEquals(Object.is(Uint8.fromBigInt(-0n), 0), true);
-  assertStrictEquals(Uint8.fromBigInt(1n), 1);
-  assertStrictEquals(Uint8.fromBigInt(63n), 63);
-  assertStrictEquals(Uint8.fromBigInt(64n), 64);
-  assertStrictEquals(Uint8.fromBigInt(127n), 127);
-  assertStrictEquals(Uint8.fromBigInt(128n), 128);
-  assertStrictEquals(Uint8.fromBigInt(255n), 255);
-  assertStrictEquals(Uint8.fromBigInt(256n), 255);
-  assertStrictEquals(Uint8.fromBigInt(-1n), 0);
-
-  assertStrictEquals(Uint8.fromBigInt(BigInt(Number.MIN_SAFE_INTEGER)), 0);
-  assertStrictEquals(Uint8.fromBigInt(BigInt(Number.MAX_SAFE_INTEGER)), 255);
-
-  const e1 = "`value` must be a `bigint` in the safe integer range.";
-  assertThrows(
-    () => {
-      Uint8.fromBigInt(undefined as unknown as bigint);
-    },
-    TypeError,
-    e1,
-  );
-  assertThrows(
-    () => {
-      Uint8.fromBigInt("0" as unknown as bigint);
-    },
-    TypeError,
-    e1,
-  );
-
-  assertThrows(
-    () => {
-      Uint8.fromBigInt(BigInt(Number.MAX_SAFE_INTEGER) + 1n);
-    },
-    TypeError,
-    e1,
-  );
-  assertThrows(
-    () => {
-      Uint8.fromBigInt(BigInt(Number.MIN_SAFE_INTEGER) - 1n);
-    },
-    TypeError,
-    e1,
-  );
-});
-
 Deno.test("Uint8.fromBigInt() - overflowMode", () => {
   const op = { overflowMode: "exception" } as const;
 

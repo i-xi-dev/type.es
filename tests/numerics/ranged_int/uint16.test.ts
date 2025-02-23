@@ -635,4 +635,71 @@ Deno.test("Numerics.Uint16.truncate()", () => {
   assertStrictEquals(Uint16.truncate(65537), 1);
   assertStrictEquals(Uint16.truncate(131071), 65535);
   assertStrictEquals(Uint16.truncate(131072), 0);
+
+  const e2 = "`value` must be a safe integer.";
+  assertThrows(
+    () => {
+      Uint16.truncate(0n as unknown as number);
+    },
+    TypeError,
+    e2,
+  );
+});
+
+Deno.test("Numerics.Uint16.saturate()", () => {
+  assertStrictEquals(Uint16.saturate(0), 0);
+  assertStrictEquals(Object.is(Uint16.saturate(-0), 0), true);
+  assertStrictEquals(Uint16.saturate(1), 1);
+  assertStrictEquals(Uint16.saturate(63), 63);
+  assertStrictEquals(Uint16.saturate(64), 64);
+  assertStrictEquals(Uint16.saturate(127), 127);
+  assertStrictEquals(Uint16.saturate(128), 128);
+  assertStrictEquals(Uint16.saturate(255), 255);
+  assertStrictEquals(Uint16.saturate(256), 256);
+  assertStrictEquals(Uint16.saturate(65535), 65535);
+  assertStrictEquals(Uint16.saturate(65536), 65535);
+  assertStrictEquals(Uint16.saturate(-1), 0);
+
+  assertStrictEquals(Uint16.saturate(Number.MIN_SAFE_INTEGER), 0);
+  assertStrictEquals(Uint16.saturate(Number.MAX_SAFE_INTEGER), 65535);
+
+  const e1 = "`value` must be a safe integer.";
+  assertThrows(
+    () => {
+      Uint16.saturate(undefined as unknown as number);
+    },
+    TypeError,
+    e1,
+  );
+  assertThrows(
+    () => {
+      Uint16.saturate("0" as unknown as number);
+    },
+    TypeError,
+    e1,
+  );
+
+  assertThrows(
+    () => {
+      Uint16.saturate(Number.MAX_SAFE_INTEGER + 1);
+    },
+    TypeError,
+    e1,
+  );
+  assertThrows(
+    () => {
+      Uint16.saturate(Number.MIN_SAFE_INTEGER - 1);
+    },
+    TypeError,
+    e1,
+  );
+
+  const e2 = "`value` must be a safe integer.";
+  assertThrows(
+    () => {
+      Uint16.saturate(0n as unknown as number);
+    },
+    TypeError,
+    e2,
+  );
 });

@@ -1219,4 +1219,70 @@ Deno.test("Numerics.BigUint64.truncate()", () => {
     0xFFFF_FFFF_FFFF_FFFFn,
   );
   assertStrictEquals(BigUint64.truncate(0x1_0000_0000_0000_0000n), 0n);
+
+  const e2 = "`value` must be a `bigint`.";
+  assertThrows(
+    () => {
+      BigUint64.truncate(0 as unknown as bigint);
+    },
+    TypeError,
+    e2,
+  );
+});
+
+Deno.test("Numerics.BigUint64.saturate()", () => {
+  assertStrictEquals(BigUint64.saturate(0n), 0n);
+  assertStrictEquals(Object.is(BigUint64.saturate(-0n), 0n), true);
+  assertStrictEquals(BigUint64.saturate(1n), 1n);
+  assertStrictEquals(BigUint64.saturate(63n), 63n);
+  assertStrictEquals(BigUint64.saturate(64n), 64n);
+  assertStrictEquals(BigUint64.saturate(127n), 127n);
+  assertStrictEquals(BigUint64.saturate(128n), 128n);
+  assertStrictEquals(BigUint64.saturate(255n), 255n);
+  assertStrictEquals(BigUint64.saturate(256n), 256n);
+  assertStrictEquals(BigUint64.saturate(65535n), 65535n);
+  assertStrictEquals(BigUint64.saturate(65536n), 65536n);
+  assertStrictEquals(BigUint64.saturate(16777215n), 16777215n);
+  assertStrictEquals(BigUint64.saturate(16777216n), 16777216n);
+  assertStrictEquals(BigUint64.saturate(4294967295n), 4294967295n);
+  assertStrictEquals(
+    BigUint64.saturate(0xFFFF_FFFF_FFFF_FFFFn),
+    0xFFFF_FFFF_FFFF_FFFFn,
+  );
+  assertStrictEquals(
+    BigUint64.saturate(0x1_0000_0000_0000_0000n),
+    0xFFFF_FFFF_FFFF_FFFFn,
+  );
+  assertStrictEquals(BigUint64.saturate(-1n), 0n);
+
+  assertStrictEquals(BigUint64.saturate(BigInt(Number.MIN_SAFE_INTEGER)), 0n);
+  assertStrictEquals(
+    BigUint64.saturate(BigInt(Number.MAX_SAFE_INTEGER)),
+    BigInt(Number.MAX_SAFE_INTEGER),
+  );
+
+  const e1 = "`value` must be a `bigint`.";
+  assertThrows(
+    () => {
+      BigUint64.saturate(undefined as unknown as bigint);
+    },
+    TypeError,
+    e1,
+  );
+  assertThrows(
+    () => {
+      BigUint64.saturate("0" as unknown as bigint);
+    },
+    TypeError,
+    e1,
+  );
+
+  const e2 = "`value` must be a `bigint`.";
+  assertThrows(
+    () => {
+      BigUint64.saturate(0 as unknown as bigint);
+    },
+    TypeError,
+    e2,
+  );
 });

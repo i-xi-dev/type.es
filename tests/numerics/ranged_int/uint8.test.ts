@@ -325,4 +325,69 @@ Deno.test("Numerics.Uint8.truncate()", () => {
   assertStrictEquals(Uint8.truncate(257), 1);
   assertStrictEquals(Uint8.truncate(512), 0);
   assertStrictEquals(Uint8.truncate(513), 1);
+
+  const e2 = "`value` must be a safe integer.";
+  assertThrows(
+    () => {
+      Uint8.truncate(0n as unknown as number);
+    },
+    TypeError,
+    e2,
+  );
+});
+
+Deno.test("Numerics.Uint8.saturate()", () => {
+  assertStrictEquals(Uint8.saturate(0), 0);
+  assertStrictEquals(Object.is(Uint8.saturate(-0), 0), true);
+  assertStrictEquals(Uint8.saturate(1), 1);
+  assertStrictEquals(Uint8.saturate(63), 63);
+  assertStrictEquals(Uint8.saturate(64), 64);
+  assertStrictEquals(Uint8.saturate(127), 127);
+  assertStrictEquals(Uint8.saturate(128), 128);
+  assertStrictEquals(Uint8.saturate(255), 255);
+  assertStrictEquals(Uint8.saturate(256), 255);
+  assertStrictEquals(Uint8.saturate(-1), 0);
+
+  assertStrictEquals(Uint8.saturate(Number.MIN_SAFE_INTEGER), 0);
+  assertStrictEquals(Uint8.saturate(Number.MAX_SAFE_INTEGER), 255);
+
+  const e1 = "`value` must be a safe integer.";
+  assertThrows(
+    () => {
+      Uint8.saturate(undefined as unknown as number);
+    },
+    TypeError,
+    e1,
+  );
+  assertThrows(
+    () => {
+      Uint8.saturate("0" as unknown as number);
+    },
+    TypeError,
+    e1,
+  );
+
+  assertThrows(
+    () => {
+      Uint8.saturate(Number.MAX_SAFE_INTEGER + 1);
+    },
+    TypeError,
+    e1,
+  );
+  assertThrows(
+    () => {
+      Uint8.saturate(Number.MIN_SAFE_INTEGER - 1);
+    },
+    TypeError,
+    e1,
+  );
+
+  const e2 = "`value` must be a safe integer.";
+  assertThrows(
+    () => {
+      Uint8.saturate(0n as unknown as number);
+    },
+    TypeError,
+    e2,
+  );
 });

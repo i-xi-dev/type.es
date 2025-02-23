@@ -852,4 +852,76 @@ Deno.test("Numerics.Uint24.truncate()", () => {
   assertStrictEquals(Uint24.truncate(16777216), 0);
   assertStrictEquals(Uint24.truncate(33554431), 16777215);
   assertStrictEquals(Uint24.truncate(33554432), 0);
+
+  const e2 = "`value` must be a safe integer.";
+  assertThrows(
+    () => {
+      Uint24.truncate(0n as unknown as number);
+    },
+    TypeError,
+    e2,
+  );
+});
+
+Deno.test("Numerics.Uint24.saturate()", () => {
+  assertStrictEquals(Uint24.saturate(0), 0);
+  assertStrictEquals(Object.is(Uint24.saturate(-0), 0), true);
+  assertStrictEquals(Uint24.saturate(1), 1);
+  assertStrictEquals(Uint24.saturate(63), 63);
+  assertStrictEquals(Uint24.saturate(64), 64);
+  assertStrictEquals(Uint24.saturate(127), 127);
+  assertStrictEquals(Uint24.saturate(128), 128);
+  assertStrictEquals(Uint24.saturate(255), 255);
+  assertStrictEquals(Uint24.saturate(256), 256);
+  assertStrictEquals(Uint24.saturate(65535), 65535);
+  assertStrictEquals(Uint24.saturate(65536), 65536);
+  assertStrictEquals(Uint24.saturate(16777215), 16777215);
+  assertStrictEquals(Uint24.saturate(16777216), 16777215);
+  assertStrictEquals(Uint24.saturate(-1), 0);
+
+  assertStrictEquals(Uint24.saturate(Number.MIN_SAFE_INTEGER), 0);
+  assertStrictEquals(
+    Uint24.saturate(Number.MAX_SAFE_INTEGER),
+    16777215,
+  );
+
+  const e1 = "`value` must be a safe integer.";
+  assertThrows(
+    () => {
+      Uint24.saturate(undefined as unknown as number);
+    },
+    TypeError,
+    e1,
+  );
+  assertThrows(
+    () => {
+      Uint24.saturate("0" as unknown as number);
+    },
+    TypeError,
+    e1,
+  );
+
+  assertThrows(
+    () => {
+      Uint24.saturate(Number.MAX_SAFE_INTEGER + 1);
+    },
+    TypeError,
+    e1,
+  );
+  assertThrows(
+    () => {
+      Uint24.saturate(Number.MIN_SAFE_INTEGER - 1);
+    },
+    TypeError,
+    e1,
+  );
+
+  const e2 = "`value` must be a safe integer.";
+  assertThrows(
+    () => {
+      Uint24.saturate(0n as unknown as number);
+    },
+    TypeError,
+    e2,
+  );
 });

@@ -1044,4 +1044,78 @@ Deno.test("Numerics.Uint32.truncate()", () => {
   assertStrictEquals(Uint32.truncate(4294967296), 0);
   assertStrictEquals(Uint32.truncate(8589934591), 4294967295);
   assertStrictEquals(Uint32.truncate(8589934592), 0);
+
+  const e2 = "`value` must be a safe integer.";
+  assertThrows(
+    () => {
+      Uint32.truncate(0n as unknown as number);
+    },
+    TypeError,
+    e2,
+  );
+});
+
+Deno.test("Numerics.Uint32.saturate()", () => {
+  assertStrictEquals(Uint32.saturate(0), 0);
+  assertStrictEquals(Object.is(Uint32.saturate(-0), 0), true);
+  assertStrictEquals(Uint32.saturate(1), 1);
+  assertStrictEquals(Uint32.saturate(63), 63);
+  assertStrictEquals(Uint32.saturate(64), 64);
+  assertStrictEquals(Uint32.saturate(127), 127);
+  assertStrictEquals(Uint32.saturate(128), 128);
+  assertStrictEquals(Uint32.saturate(255), 255);
+  assertStrictEquals(Uint32.saturate(256), 256);
+  assertStrictEquals(Uint32.saturate(65535), 65535);
+  assertStrictEquals(Uint32.saturate(65536), 65536);
+  assertStrictEquals(Uint32.saturate(16777215), 16777215);
+  assertStrictEquals(Uint32.saturate(16777216), 16777216);
+  assertStrictEquals(Uint32.saturate(4294967295), 4294967295);
+  assertStrictEquals(Uint32.saturate(4294967296), 4294967295);
+  assertStrictEquals(Uint32.saturate(-1), 0);
+
+  assertStrictEquals(Uint32.saturate(Number.MIN_SAFE_INTEGER), 0);
+  assertStrictEquals(
+    Uint32.saturate(Number.MAX_SAFE_INTEGER),
+    4294967295,
+  );
+
+  const e1 = "`value` must be a safe integer.";
+  assertThrows(
+    () => {
+      Uint32.saturate(undefined as unknown as number);
+    },
+    TypeError,
+    e1,
+  );
+  assertThrows(
+    () => {
+      Uint32.saturate("0" as unknown as number);
+    },
+    TypeError,
+    e1,
+  );
+
+  assertThrows(
+    () => {
+      Uint32.saturate(Number.MAX_SAFE_INTEGER + 1);
+    },
+    TypeError,
+    e1,
+  );
+  assertThrows(
+    () => {
+      Uint32.saturate(Number.MIN_SAFE_INTEGER - 1);
+    },
+    TypeError,
+    e1,
+  );
+
+  const e2 = "`value` must be a safe integer.";
+  assertThrows(
+    () => {
+      Uint32.saturate(0n as unknown as number);
+    },
+    TypeError,
+    e2,
+  );
 });

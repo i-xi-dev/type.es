@@ -12,7 +12,7 @@ import {
   type uint7,
   type uint8,
 } from "../../_typedef/mod.ts";
-import { Number as ExNumber } from "../../numerics/mod.ts";
+import { Number as ExNumber, SafeInt } from "../../numerics/mod.ts";
 import {
   Uint16 as Uint16Info,
   Uint24 as Uint24Info,
@@ -42,6 +42,7 @@ interface RangedInt<T extends safeint> {
   rotateLeft(value: T, offset: safeint): T;
   //XXX rotateRight()
   truncate(value: safeint): T;
+  saturate(value: safeint): T;
   // toNumber() → もともとnumberなので不要
   // toBigInt() → bigint.tsのfromNumber()
   // toString() → safeint.tsのtoString()
@@ -259,6 +260,11 @@ class _Uint<T extends safeint> implements RangedInt<T> {
     } else {
       return (this.#size + (value % this.#size)) as T;
     }
+  }
+
+  saturate(value: safeint): T {
+    Type.assertSafeInt(value, "value");
+    return SafeInt.clampToRange(value, [this.MIN_VALUE, this.MAX_VALUE]);
   }
 }
 
