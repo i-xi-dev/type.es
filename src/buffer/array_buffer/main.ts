@@ -9,10 +9,8 @@ import {
   type uint32,
   type uint8,
 } from "../../_typedef/mod.ts";
-import { BigUint64 } from "../../__numerics/big_uint.ts";
 import { GrowableBuffer } from "../../__2/growable_buffer.ts";
 import { Number as ExNumber } from "../../numerics/mod.ts";
-import { Uint16, Uint32, Uint8 } from "../../__numerics/uint.ts";
 
 // const _DEFAULT_BYTE_LENGTH = 1_024;
 // const _DEFAULT_MAX_BYTE_LENGTH = 1_048_576;
@@ -29,7 +27,7 @@ export function fromUint8Iterable(
   Type.assertIterable(value, "value");
 
   return Uint8Array.from(value, (byte, index) => {
-    Uint8.assert(byte, `value[${index}]`);
+    Type.assertUint8(byte, `value[${index}]`);
     return byte;
   }).buffer;
 }
@@ -44,7 +42,7 @@ export async function fromUint8AsyncIterable(
   const gb = new GrowableBuffer();
   let index = 0;
   for await (const byte of value) {
-    Uint8.assert(byte, `value[${index}]`);
+    Type.assertUint8(byte, `value[${index}]`);
     gb.put(byte as uint8);
     index++;
   }
@@ -170,7 +168,7 @@ export function fromUint16Iterable(
     return _fromUint8xIterable<uint16>(
       value,
       Uint16Array,
-      (t, l) => Uint16.assert(t, l),
+      (t, l) => Type.assertUint16(t, l),
       (v, i, e) => v.setUint16(0, i, e),
       byteOrder,
     );
@@ -178,7 +176,7 @@ export function fromUint16Iterable(
     // 実行環境のバイトオーダー
 
     return Uint16Array.from(value, (i, index) => {
-      Uint16.assert(i, `value[${index}]`);
+      Type.assertUint16(i, `value[${index}]`);
       return i;
     }).buffer;
   }
@@ -195,7 +193,7 @@ export async function fromUint16AsyncIterable(
     return _fromUint8xAsyncIterable<uint16>(
       value,
       Uint16Array,
-      (t, l) => Uint16.assert(t, l),
+      (t, l) => Type.assertUint16(t, l),
       (v, i, e) => v.setUint16(0, i, e),
       byteOrder,
     );
@@ -207,7 +205,7 @@ export async function fromUint16AsyncIterable(
     const tmpView = new Uint16Array(1);
     let index = 0;
     for await (const i of value) {
-      Uint16.assert(i, `value[${index}]`);
+      Type.assertUint16(i, `value[${index}]`);
       tmpView[0] = i;
       gb.putRange(tmpView);
       index++;
@@ -240,7 +238,7 @@ export function fromUint32Iterable(
     return _fromUint8xIterable<uint32>(
       value,
       Uint32Array,
-      (t, l) => Uint32.assert(t, l),
+      (t, l) => Type.assertUint32(t, l),
       (v, i, e) => v.setUint32(0, i, e),
       byteOrder,
     );
@@ -248,7 +246,7 @@ export function fromUint32Iterable(
     // 実行環境のバイトオーダー
 
     return Uint32Array.from(value, (i, index) => {
-      Uint32.assert(i, `value[${index}]`);
+      Type.assertUint32(i, `value[${index}]`);
       return i;
     }).buffer;
   }
@@ -265,7 +263,7 @@ export async function fromUint32AsyncIterable(
     return _fromUint8xAsyncIterable<uint32>(
       value,
       Uint32Array,
-      (t, l) => Uint32.assert(t, l),
+      (t, l) => Type.assertUint32(t, l),
       (v, i, e) => v.setUint32(0, i, e),
       byteOrder,
     );
@@ -276,7 +274,7 @@ export async function fromUint32AsyncIterable(
     const tmpView = new Uint32Array(1);
     let index = 0;
     for await (const i of value) {
-      Uint32.assert(i, `value[${index}]`);
+      Type.assertUint32(i, `value[${index}]`);
       tmpView[0] = i;
       gb.putRange(tmpView);
       index++;
@@ -305,7 +303,7 @@ export function fromBigUint64Iterable(
     return _fromUint8xIterable<biguint64>(
       value,
       BigUint64Array,
-      (t, l) => BigUint64.assert(t, l),
+      (t, l) => Type.assertBigUint64(t, l),
       (v, i, e) => v.setBigUint64(0, i, e),
       byteOrder,
     );
@@ -316,7 +314,7 @@ export function fromBigUint64Iterable(
     return BigUint64Array.from(
       value as unknown as ArrayLike<bigint>,
       (i, index) => {
-        BigUint64.assert(i, `value[${index}]`);
+        Type.assertBigUint64(i, `value[${index}]`);
         return i;
       },
     ).buffer as ArrayBuffer;
@@ -334,7 +332,7 @@ export async function fromBigUint64AsyncIterable(
     return _fromUint8xAsyncIterable<biguint64>(
       value,
       BigUint64Array,
-      (t, l) => BigUint64.assert(t, l),
+      (t, l) => Type.assertBigUint64(t, l),
       (v, i, e) => v.setBigUint64(0, i, e),
       byteOrder,
     );
@@ -345,7 +343,7 @@ export async function fromBigUint64AsyncIterable(
     const tmpView = new BigUint64Array(1);
     let index = 0;
     for await (const i of value) {
-      BigUint64.assert(i, `value[${index}]`);
+      Type.assertBigUint64(i, `value[${index}]`);
       tmpView[0] = i;
       gb.putRange(tmpView);
       index++;

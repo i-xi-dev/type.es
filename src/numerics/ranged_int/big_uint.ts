@@ -33,7 +33,9 @@ interface RangedBigInt<T extends bigint> {
   truncate(value: bigint): T;
   saturate(value: bigint): T;
   // toNumber() → bigint.tsのtoNumber()
+  // fromBigInt() → truncate(),saturate(),範囲外はエラーにしたければisBigUintXかassertBigUintX
   // toBigInt() → もともとbigintなので不要
+  // fromString() → bigint.tsのfromString()してから、truncate(),saturate(),範囲外は…同上
   // toString() → bigint.tsのtoString()
 }
 

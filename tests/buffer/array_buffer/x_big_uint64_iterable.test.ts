@@ -27,7 +27,7 @@ Deno.test("ExArrayBuffer.fromBigUint64Iterable(Array<biguint64>)", () => {
       );
     },
     TypeError,
-    "The type of `value[0]` does not match the type of `uint64`.",
+    "`value[0]` must be a 64-bit unsigned integer.",
   );
   assertThrows(
     () => {
@@ -36,7 +36,7 @@ Deno.test("ExArrayBuffer.fromBigUint64Iterable(Array<biguint64>)", () => {
       );
     },
     TypeError,
-    "The type of `value[0]` does not match the type of `uint64`.",
+    "`value[0]` must be a 64-bit unsigned integer.",
   );
   assertThrows(
     () => {
@@ -45,7 +45,7 @@ Deno.test("ExArrayBuffer.fromBigUint64Iterable(Array<biguint64>)", () => {
       );
     },
     TypeError,
-    "The type of `value[0]` does not match the type of `uint64`.",
+    "`value[0]` must be a 64-bit unsigned integer.",
   );
   assertThrows(
     () => {
@@ -54,7 +54,7 @@ Deno.test("ExArrayBuffer.fromBigUint64Iterable(Array<biguint64>)", () => {
       );
     },
     TypeError,
-    "The type of `value[1]` does not match the type of `uint64`.",
+    "`value[1]` must be a 64-bit unsigned integer.",
   );
   assertThrows(
     () => {
@@ -63,7 +63,7 @@ Deno.test("ExArrayBuffer.fromBigUint64Iterable(Array<biguint64>)", () => {
       );
     },
     TypeError,
-    "The type of `value[1]` does not match the type of `uint64`.",
+    "`value[1]` must be a 64-bit unsigned integer.",
   );
 
   assertStrictEquals(ExArrayBuffer.fromBigUint64Iterable([]).byteLength, 0);
@@ -444,8 +444,8 @@ Deno.test("ExArrayBuffer.fromBigUint64Iterable(Generator<biguint64>)", () => {
   }
 });
 
-Deno.test("ExArrayBuffer.fromBigUint64AsyncIterable(Array<biguint64>)", () => {
-  assertRejects(
+Deno.test("ExArrayBuffer.fromBigUint64AsyncIterable(Array<biguint64>)", async () => {
+  await assertRejects(
     async () => {
       await ExArrayBuffer.fromBigUint64AsyncIterable(
         0 as unknown as AsyncIterable<biguint64>,
@@ -455,7 +455,7 @@ Deno.test("ExArrayBuffer.fromBigUint64AsyncIterable(Array<biguint64>)", () => {
     "`value` must implement `Symbol.asyncIterator`.",
   );
 
-  assertRejects(
+  await assertRejects(
     async () => {
       await ExArrayBuffer.fromBigUint64AsyncIterable(
         1 as unknown as AsyncIterable<biguint64>,
@@ -465,7 +465,7 @@ Deno.test("ExArrayBuffer.fromBigUint64AsyncIterable(Array<biguint64>)", () => {
     "`value` must implement `Symbol.asyncIterator`.",
   );
 
-  assertRejects(
+  await assertRejects(
     async () => {
       await ExArrayBuffer.fromBigUint64AsyncIterable(
         [-1] as unknown as AsyncIterable<biguint64>,
@@ -474,7 +474,7 @@ Deno.test("ExArrayBuffer.fromBigUint64AsyncIterable(Array<biguint64>)", () => {
     TypeError,
     "`value` must implement `Symbol.asyncIterator`.",
   );
-  assertRejects(
+  await assertRejects(
     async () => {
       await ExArrayBuffer.fromBigUint64AsyncIterable(
         ["0"] as unknown as AsyncIterable<biguint64>,
@@ -483,7 +483,7 @@ Deno.test("ExArrayBuffer.fromBigUint64AsyncIterable(Array<biguint64>)", () => {
     TypeError,
     "`value` must implement `Symbol.asyncIterator`.",
   );
-  assertRejects(
+  await assertRejects(
     async () => {
       await ExArrayBuffer.fromBigUint64AsyncIterable(
         [256] as unknown as AsyncIterable<biguint64>,
@@ -492,7 +492,7 @@ Deno.test("ExArrayBuffer.fromBigUint64AsyncIterable(Array<biguint64>)", () => {
     TypeError,
     "`value` must implement `Symbol.asyncIterator`.",
   );
-  assertRejects(
+  await assertRejects(
     async () => {
       await ExArrayBuffer.fromBigUint64AsyncIterable(
         [0, 256] as unknown as AsyncIterable<biguint64>,
@@ -526,21 +526,21 @@ Deno.test("ExArrayBuffer.fromBigUint64AsyncIterable(AsyncGenerator<BigUint64>)",
   assertStrictEquals(a1[2], 0xFFFF_FFFF_FFFF_FFFFn);
 });
 
-Deno.test("ExArrayBuffer.fromBigUint64AsyncIterable(AsyncGenerator<any>)", () => {
+Deno.test("ExArrayBuffer.fromBigUint64AsyncIterable(AsyncGenerator<any>)", async () => {
   const g1 = (async function* () {
     yield 0n;
     yield 1n;
     yield "a";
   })();
 
-  assertRejects(
+  await assertRejects(
     async () => {
       await ExArrayBuffer.fromBigUint64AsyncIterable(
         g1 as unknown as AsyncGenerator<biguint64>,
       );
     },
     TypeError,
-    "The type of `value[2]` does not match the type of `uint64`.",
+    "`value[2]` must be a 64-bit unsigned integer.",
   );
 
   const g2 = (async function* () {
@@ -549,12 +549,12 @@ Deno.test("ExArrayBuffer.fromBigUint64AsyncIterable(AsyncGenerator<any>)", () =>
     yield 0x1_0000_0000_0000_0000n;
   })();
 
-  assertRejects(
+  await assertRejects(
     async () => {
       await ExArrayBuffer.fromBigUint64AsyncIterable(g2);
     },
     TypeError,
-    "The type of `value[2]` does not match the type of `uint64`.",
+    "`value[2]` must be a 64-bit unsigned integer.",
   );
 
   const g3 = (async function* () {
@@ -563,12 +563,12 @@ Deno.test("ExArrayBuffer.fromBigUint64AsyncIterable(AsyncGenerator<any>)", () =>
     yield -1n;
   })();
 
-  assertRejects(
+  await assertRejects(
     async () => {
       await ExArrayBuffer.fromBigUint64AsyncIterable(g3);
     },
     TypeError,
-    "The type of `value[2]` does not match the type of `uint64`.",
+    "`value[2]` must be a 64-bit unsigned integer.",
   );
 });
 

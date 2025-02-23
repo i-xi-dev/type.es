@@ -25,35 +25,35 @@ Deno.test("ExArrayBuffer.fromUint8Iterable(Array<uint8>)", () => {
       ExArrayBuffer.fromUint8Iterable([-1] as unknown as Array<uint8>);
     },
     TypeError,
-    "The type of `value[0]` does not match the type of `uint8`.",
+    "`value[0]` must be an 8-bit unsigned integer.",
   );
   assertThrows(
     () => {
       ExArrayBuffer.fromUint8Iterable(["0"] as unknown as Array<uint8>);
     },
     TypeError,
-    "The type of `value[0]` does not match the type of `uint8`.",
+    "`value[0]` must be an 8-bit unsigned integer.",
   );
   assertThrows(
     () => {
       ExArrayBuffer.fromUint8Iterable([256] as unknown as Array<uint8>);
     },
     TypeError,
-    "The type of `value[0]` does not match the type of `uint8`.",
+    "`value[0]` must be an 8-bit unsigned integer.",
   );
   assertThrows(
     () => {
       ExArrayBuffer.fromUint8Iterable([0, 256] as unknown as Array<uint8>);
     },
     TypeError,
-    "The type of `value[1]` does not match the type of `uint8`.",
+    "`value[1]` must be an 8-bit unsigned integer.",
   );
   assertThrows(
     () => {
       ExArrayBuffer.fromUint8Iterable([0, -1] as unknown as Array<uint8>);
     },
     TypeError,
-    "The type of `value[1]` does not match the type of `uint8`.",
+    "`value[1]` must be an 8-bit unsigned integer.",
   );
 
   assertStrictEquals(ExArrayBuffer.fromUint8Iterable([]).byteLength, 0);
@@ -98,8 +98,8 @@ Deno.test("ExArrayBuffer.fromUint8Iterable(Generator<uint8>)", () => {
   assertStrictEquals(a1[2], 255);
 });
 
-Deno.test("ExArrayBuffer.fromUint8AsyncIterable(Array<uint8>)", () => {
-  assertRejects(
+Deno.test("ExArrayBuffer.fromUint8AsyncIterable(Array<uint8>)", async () => {
+  await assertRejects(
     async () => {
       await ExArrayBuffer.fromUint8AsyncIterable(
         0 as unknown as AsyncIterable<uint8>,
@@ -109,7 +109,7 @@ Deno.test("ExArrayBuffer.fromUint8AsyncIterable(Array<uint8>)", () => {
     "`value` must implement `Symbol.asyncIterator`.",
   );
 
-  assertRejects(
+  await assertRejects(
     async () => {
       await ExArrayBuffer.fromUint8AsyncIterable(
         1 as unknown as AsyncIterable<uint8>,
@@ -119,7 +119,7 @@ Deno.test("ExArrayBuffer.fromUint8AsyncIterable(Array<uint8>)", () => {
     "`value` must implement `Symbol.asyncIterator`.",
   );
 
-  assertRejects(
+  await assertRejects(
     async () => {
       await ExArrayBuffer.fromUint8AsyncIterable(
         [-1] as unknown as AsyncIterable<uint8>,
@@ -128,7 +128,7 @@ Deno.test("ExArrayBuffer.fromUint8AsyncIterable(Array<uint8>)", () => {
     TypeError,
     "`value` must implement `Symbol.asyncIterator`.",
   );
-  assertRejects(
+  await assertRejects(
     async () => {
       await ExArrayBuffer.fromUint8AsyncIterable(
         ["0"] as unknown as AsyncIterable<uint8>,
@@ -137,7 +137,7 @@ Deno.test("ExArrayBuffer.fromUint8AsyncIterable(Array<uint8>)", () => {
     TypeError,
     "`value` must implement `Symbol.asyncIterator`.",
   );
-  assertRejects(
+  await assertRejects(
     async () => {
       await ExArrayBuffer.fromUint8AsyncIterable(
         [256] as unknown as AsyncIterable<uint8>,
@@ -146,7 +146,7 @@ Deno.test("ExArrayBuffer.fromUint8AsyncIterable(Array<uint8>)", () => {
     TypeError,
     "`value` must implement `Symbol.asyncIterator`.",
   );
-  assertRejects(
+  await assertRejects(
     async () => {
       await ExArrayBuffer.fromUint8AsyncIterable(
         [0, 256] as unknown as AsyncIterable<uint8>,
@@ -178,21 +178,21 @@ Deno.test("ExArrayBuffer.fromUint8AsyncIterable(AsyncGenerator<uint8>)", async (
   assertStrictEquals(a1[2], 255);
 });
 
-Deno.test("ExArrayBuffer.fromUint8AsyncIterable(AsyncGenerator<any>)", () => {
+Deno.test("ExArrayBuffer.fromUint8AsyncIterable(AsyncGenerator<any>)", async () => {
   const g1 = (async function* () {
     yield 0;
     yield 1;
     yield "a";
   })();
 
-  assertRejects(
+  await assertRejects(
     async () => {
       await ExArrayBuffer.fromUint8AsyncIterable(
         g1 as unknown as AsyncGenerator<uint8>,
       );
     },
     TypeError,
-    "The type of `value[2]` does not match the type of `uint8`.",
+    "`value[2]` must be an 8-bit unsigned integer.",
   );
 
   const g2 = (async function* () {
@@ -201,12 +201,12 @@ Deno.test("ExArrayBuffer.fromUint8AsyncIterable(AsyncGenerator<any>)", () => {
     yield 256;
   })();
 
-  assertRejects(
+  await assertRejects(
     async () => {
       await ExArrayBuffer.fromUint8AsyncIterable(g2);
     },
     TypeError,
-    "The type of `value[2]` does not match the type of `uint8`.",
+    "`value[2]` must be an 8-bit unsigned integer.",
   );
 
   const g3 = (async function* () {
@@ -215,12 +215,12 @@ Deno.test("ExArrayBuffer.fromUint8AsyncIterable(AsyncGenerator<any>)", () => {
     yield -1;
   })();
 
-  assertRejects(
+  await assertRejects(
     async () => {
       await ExArrayBuffer.fromUint8AsyncIterable(g3);
     },
     TypeError,
-    "The type of `value[2]` does not match the type of `uint8`.",
+    "`value[2]` must be an 8-bit unsigned integer.",
   );
 });
 
