@@ -22,6 +22,129 @@ Deno.test("Numerics.BigUint64.BYTE_LENGTH", () => {
 const le = "little-endian";
 const be = "big-endian";
 
+Deno.test("Numerics.BigUint64.fromBytes()", () => {
+  assertStrictEquals(
+    BigUint64.fromBytes(Uint8Array.of(0, 0, 0, 0, 0, 0, 0, 0)),
+    0n,
+  );
+  assertStrictEquals(
+    BigUint64.fromBytes(Uint8Array.of(0, 0, 0, 0, 0, 0, 0, 0), be),
+    0n,
+  );
+  assertStrictEquals(
+    BigUint64.fromBytes(Uint8Array.of(0, 0, 0, 0, 0, 0, 0, 0), le),
+    0n,
+  );
+
+  // assertStrictEquals(BigUint64.fromBytes(Uint8Array.of(0, 0, 0, 0, 0, 0, 0, 0xFF)), 0xFFn);
+  assertStrictEquals(
+    BigUint64.fromBytes(Uint8Array.of(0, 0, 0, 0, 0, 0, 0, 0xFF), be),
+    0xFFn,
+  );
+  assertStrictEquals(
+    BigUint64.fromBytes(Uint8Array.of(0xFF, 0, 0, 0, 0, 0, 0, 0), le),
+    0xFFn,
+  );
+
+  // assertStrictEquals(BigUint64.fromBytes(Uint8Array.of(0, 0, 0xFF, 0xFF)), 0xFFFFn);
+  assertStrictEquals(
+    BigUint64.fromBytes(Uint8Array.of(0, 0, 0, 0, 0, 0, 0xFF, 0xFF), be),
+    0xFFFFn,
+  );
+  assertStrictEquals(
+    BigUint64.fromBytes(Uint8Array.of(0xFF, 0xFF, 0, 0, 0, 0, 0, 0), le),
+    0xFFFFn,
+  );
+
+  assertStrictEquals(
+    BigUint64.fromBytes(Uint8Array.of(0, 0, 0, 0, 0, 0, 13, 101), be),
+    3429n,
+  );
+  assertStrictEquals(
+    BigUint64.fromBytes(Uint8Array.of(101, 13, 0, 0, 0, 0, 0, 0), le),
+    3429n,
+  );
+
+  // assertStrictEquals(
+  //   BigUint64.fromBytes(Uint8Array.of(0, 0, 0, 0, 0, 0xFF, 0xFF, 0xFF)),
+  //   0xFFFFFFn,
+  // );
+  assertStrictEquals(
+    BigUint64.fromBytes(Uint8Array.of(0, 0, 0, 0, 0, 0xFF, 0xFF, 0xFF), be),
+    0xFFFFFFn,
+  );
+  assertStrictEquals(
+    BigUint64.fromBytes(Uint8Array.of(0xFF, 0xFF, 0xFF, 0, 0, 0, 0, 0), le),
+    0xFFFFFFn,
+  );
+
+  // assertStrictEquals(
+  //   BigUint64.fromBytes(Uint8Array.of(0, 0, 0, 0, 0xFF, 0xFF, 0xFF, 0xFF)),
+  //   0xFFFFFFFFn,
+  // );
+  assertStrictEquals(
+    BigUint64.fromBytes(Uint8Array.of(0, 0, 0, 0, 0xFF, 0xFF, 0xFF, 0xFF), be),
+    0xFFFFFFFFn,
+  );
+  assertStrictEquals(
+    BigUint64.fromBytes(Uint8Array.of(0xFF, 0xFF, 0xFF, 0xFF, 0, 0, 0, 0), le),
+    0xFFFFFFFFn,
+  );
+
+  assertStrictEquals(
+    BigUint64.fromBytes(
+      Uint8Array.of(0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF),
+    ),
+    0xFFFFFFFF_FFFFFFFFn,
+  );
+  assertStrictEquals(
+    BigUint64.fromBytes(
+      Uint8Array.of(0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF),
+      be,
+    ),
+    0xFFFFFFFF_FFFFFFFFn,
+  );
+  assertStrictEquals(
+    BigUint64.fromBytes(
+      Uint8Array.of(0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF),
+      le,
+    ),
+    0xFFFFFFFF_FFFFFFFFn,
+  );
+
+  const e0 = "`bytes` must be an `Uint8Array`.";
+  assertThrows(
+    () => {
+      BigUint64.fromBytes([0] as unknown as Uint8Array);
+    },
+    TypeError,
+    e0,
+  );
+
+  const e1 = "byte length unmatched.";
+  assertThrows(
+    () => {
+      BigUint64.fromBytes(Uint8Array.of());
+    },
+    RangeError,
+    e1,
+  );
+  assertThrows(
+    () => {
+      BigUint64.fromBytes(Uint8Array.of(0, 0, 0, 0, 0, 0, 0));
+    },
+    RangeError,
+    e1,
+  );
+  assertThrows(
+    () => {
+      BigUint64.fromBytes(Uint8Array.of(0, 0, 0, 0, 0, 0, 0, 0, 0));
+    },
+    RangeError,
+    e1,
+  );
+});
+
 Deno.test("Numerics.BigUint64.toBytes()", () => {
   assertStrictEquals(
     [...BigUint64.toBytes(0n)].map((i) => i.toString()).join(","),

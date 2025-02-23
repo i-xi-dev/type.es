@@ -22,7 +22,7 @@ interface RangedBigInt<T extends bigint> {
   MAX_VALUE: T;
   BIT_LENGTH: safeint;
   BYTE_LENGTH: safeint;
-  //TODO fromBytes
+  fromBytes(bytes: Uint8Array, byteOrder?: byteorder): T;
   toBytes(value: T, byteOrder?: byteorder): Uint8Array;
   bitwiseAnd(a: T, b: T): T;
   bitwiseOr(a: T, b: T): T;
@@ -56,6 +56,41 @@ class _BigUint<T extends bigint> implements RangedBigInt<T> {
     this.#assert = assert;
   }
 
+  fromBytes(
+    bytes: Uint8Array,
+    byteOrder: byteorder = ByteOrder.nativeOrder,
+  ): T {
+    Type.assertUint8Array(bytes, "bytes");
+    Type.assertByteOrder(byteOrder, "byteOrder");
+    if (bytes.length !== this.BYTE_LENGTH) {
+      throw new RangeError("byte length unmatched.");
+    }
+
+    if (this.BYTE_LENGTH === 1) {
+      const byte = bytes[0];
+      if (byte > this.MAX_VALUE) {
+        throw new RangeError("parse result is overflowed.");
+      }
+      return BigInt(byte) as T;
+    }
+
+    //XXX 64以下はBigUint64Arrayにした方が多分速い
+
+    const x = (byteOrder === ByteOrder.LITTLE_ENDIAN)
+      ? [...bytes]
+      : [...bytes].reverse();
+
+    let result = BigInt(x[0]);
+    for (let i = 1; i < x.length; i++) {
+      result += BigInt(x[i] * (0x100 ** i));
+    }
+
+    if (result > this.MAX_VALUE) { // BIT_LENGTH % 8 === 0のときは発生しない
+      throw new RangeError("parse result is overflowed.");
+    }
+    return result as T;
+  }
+
   toBytes(value: T, byteOrder: byteorder = ByteOrder.nativeOrder): Uint8Array {
     this.#assert(value, "value");
     Type.assertByteOrder(byteOrder, "byteOrder");
@@ -76,7 +111,7 @@ class _BigUint<T extends bigint> implements RangedBigInt<T> {
       (byteOrder === ByteOrder.LITTLE_ENDIAN) ? bytes : bytes.reverse(),
     );
 
-    // this.#bufferView.setBigUint64( // 64以下はこれを基にした方が多分速い
+    // this.#bufferView.setBigUint64( //XXX 64以下はこれを基にした方が多分速い
     //   ExNumber.ZERO,
     //   value,
     //   byteOrder === ByteOrder.LITTLE_ENDIAN,

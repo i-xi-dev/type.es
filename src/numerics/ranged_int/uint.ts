@@ -51,12 +51,23 @@ function _getByteByPosition(value: safeint, pos: safeint): uint8 {
   return Math.trunc(x2 / (0x100 ** (pos - 1))) as uint8;
 }
 
+const _BitOperation = {
+  AND: Symbol(),
+  OR: Symbol(),
+  XOR: Symbol(),
+};
+
+type _BitOperation = typeof _BitOperation[keyof typeof _BitOperation];
+
 class _Uint<T extends safeint> implements RangedInt<T> {
   readonly MIN_VALUE: T;
   readonly MAX_VALUE: T;
   readonly BIT_LENGTH: safeint;
   readonly BYTE_LENGTH: safeint; // (1 | 2 | 3 | 4 | 5 | 6)
   readonly #assert: _AFunc;
+  readonly #buffer: ArrayBuffer;
+  readonly #view32: Uint32Array;
+  readonly #view8: Uint8Array;
 
   constructor(info: _Info<T>, assert: _AFunc) {
     this.MIN_VALUE = info.MIN_VALUE;
@@ -67,6 +78,27 @@ class _Uint<T extends safeint> implements RangedInt<T> {
       throw new RangeError("byte length overflowed.");
     }
     this.#assert = assert;
+    this.#buffer = new ArrayBuffer(4 * 3); // 一旦Uint32 3つ分
+    this.#view32 = new Uint32Array(this.#buffer);
+    this.#view8 = new Uint8Array(this.#buffer);
+  }
+
+  #bitOperateUint32(a: uint32, b: uint32, op: _BitOperation): uint32 {
+    // #buffer の 1～4バイトをa, 5～8をb, 9～12を結果 として使用
+    this.#view32[0] = a;
+    this.#view32[1] = b;
+    this.#view32[2] = ExNumber.ZERO;
+    for (let i = 0; i < 4; i++) {
+      if (op === _BitOperation.AND) {
+        this.#view8[i + 8] = this.#view8[i + 0] & this.#view8[i + 4];
+      } else if (op === _BitOperation.OR) {
+        this.#view8[i + 8] = this.#view8[i + 0] | this.#view8[i + 4];
+      } else if (op === _BitOperation.XOR) {
+        this.#view8[i + 8] = this.#view8[i + 0] ^ this.#view8[i + 4];
+      }
+    }
+
+    return this.#view32[2];
   }
 
   fromBytes(
@@ -86,6 +118,8 @@ class _Uint<T extends safeint> implements RangedInt<T> {
       }
       return byte as T;
     }
+
+    //XXX 32以下はUint32Arrayにした方が多分速い
 
     const x = (byteOrder === ByteOrder.LITTLE_ENDIAN)
       ? [...bytes]
@@ -121,6 +155,8 @@ class _Uint<T extends safeint> implements RangedInt<T> {
     return Uint8Array.from(
       (byteOrder === ByteOrder.LITTLE_ENDIAN) ? bytes : bytes.reverse(),
     );
+
+    //XXX 32以下はUint32Arrayにした方が多分速い
   }
 
   bitwiseAnd(a: T, b: T): T {
@@ -128,17 +164,10 @@ class _Uint<T extends safeint> implements RangedInt<T> {
     this.#assert(b, "b");
 
     if (this.BIT_LENGTH < 32) {
-      return ((a & b) & this.MAX_VALUE) as T; //XXX & MAX_VALUEはなんで付けたんだっけ？
+      return ((a & b) & this.MAX_VALUE) as T; //TODO 「& MAX_VALUE」はなんで付けたんだっけ？
+    } else if (this.BIT_LENGTH === 32) {
+      return this.#bitOperateUint32(a, b, _BitOperation.AND) as T;
     }
-    // else if (this.BIT_LENGTH === 32) { // 32の場合のみ
-    //   this.#bufferUint32View[ExNumber.ZERO] = a;
-    //   this.#bufferUint32View[1] = b;
-    //   this.#bufferUint32View[2] = ExNumber.ZERO;
-    //   const [a1, a2, b1, b2] = this.#bufferUint16View; // バイオオーダーは元の順にセットするので、ここでは関係ない
-    //   this.#bufferUint16View[4] = a1 & b1;
-    //   this.#bufferUint16View[5] = a2 & b2;
-    //   return this.#bufferUint32View[2] as T;
-    // }
 
     // ビット演算子はInt32で演算されるので符号を除くと31ビットまでしか演算できない
     const aBytes = this.toBytes(a);
@@ -156,6 +185,8 @@ class _Uint<T extends safeint> implements RangedInt<T> {
 
     if (this.BIT_LENGTH < 32) {
       return ((a | b) & this.MAX_VALUE) as T;
+    } else if (this.BIT_LENGTH === 32) {
+      return this.#bitOperateUint32(a, b, _BitOperation.OR) as T;
     }
 
     // ビット演算子はInt32で演算されるので符号を除くと31ビットまでしか演算できない
@@ -174,6 +205,8 @@ class _Uint<T extends safeint> implements RangedInt<T> {
 
     if (this.BIT_LENGTH < 32) {
       return ((a ^ b) & this.MAX_VALUE) as T;
+    } else if (this.BIT_LENGTH === 32) {
+      return this.#bitOperateUint32(a, b, _BitOperation.XOR) as T;
     }
 
     // ビット演算子はInt32で演算されるので符号を除くと31ビットまでしか演算できない
