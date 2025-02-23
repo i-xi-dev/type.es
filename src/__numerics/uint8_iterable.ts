@@ -1,6 +1,5 @@
 import * as Type from "../type/mod.ts";
 import { type safeint, type uint8 } from "../_typedef/mod.ts";
-import { Uint8 } from "./uint.ts";
 import { ZERO as NUMBER_ZERO } from "../_const/number.ts";
 
 type ArrayLikeOfExpectUint8 =
@@ -19,7 +18,7 @@ export type ArrayLikeOfUint8 =
 // }
 
 export function isArrayOfUint8(value: unknown): value is Array<uint8> {
-  return Array.isArray(value) && value.every((i) => Uint8.is(i));
+  return Array.isArray(value) && value.every((i) => Type.isUint8(i));
 }
 
 export function assertArrayOfUint8(test: unknown, label: string): void {

@@ -45,7 +45,9 @@ interface RangedInt<T extends safeint> {
   saturate(value: safeint): T;
   // fromNumber() → truncate(),saturate(),範囲外はエラーにしたければisUintXかassertUintX（,整数にしたければround等してから）
   // toNumber() → もともとnumberなので不要
+  // fromBigInt() → bigint.tsのtoNumber()してから、truncate(),saturate(),…
   // toBigInt() → bigint.tsのfromNumber()
+  // fromString() → safeint.tsのfromString()してから、truncate(),saturate(),…
   // toString() → safeint.tsのtoString()
 }
 
@@ -83,7 +85,7 @@ class _Uint<T extends safeint> implements RangedInt<T> {
       throw new RangeError("byte length overflowed.");
     }
     this.#assert = assert;
-    this.#size = info.MAX_VALUE + 1; // Uintの場合、最小は0なので最大+1で固定
+    this.#size = info.MAX_VALUE + 1; // Uintの場合、最小は0なので最大+1で固定（= 2 ** bitLength）
     this.#buffer = new ArrayBuffer(4 * 3); // 一旦Uint32 3つ分
     this.#view32 = new Uint32Array(this.#buffer);
     this.#view8 = new Uint8Array(this.#buffer);
