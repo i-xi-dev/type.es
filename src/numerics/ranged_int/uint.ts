@@ -56,7 +56,6 @@ class _Uint<T extends safeint> implements RangedInt<T> {
   readonly MAX_VALUE: T;
   readonly BIT_LENGTH: safeint;
   readonly BYTE_LENGTH: safeint; // (1 | 2 | 3 | 4 | 5 | 6)
-  readonly #info: _Info<T>;
   readonly #assert: _AFunc;
 
   constructor(info: _Info<T>, assert: _AFunc) {
@@ -67,7 +66,6 @@ class _Uint<T extends safeint> implements RangedInt<T> {
     if (this.BYTE_LENGTH > 48) {
       throw new RangeError("byte length overflowed.");
     }
-    this.#info = info;
     this.#assert = assert;
   }
 

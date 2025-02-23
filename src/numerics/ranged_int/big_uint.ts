@@ -6,6 +6,7 @@ import {
   type biguint64,
   type byteorder,
   type safeint,
+  type uint8,
 } from "../../_typedef/mod.ts";
 import { Number as ExNumber } from "../../numerics/mod.ts";
 import { BigUint64 as BigUint64Info } from "../../_const/uint.ts";
@@ -34,49 +35,53 @@ interface RangedBigInt<T extends bigint> {
   // toString() → bigint.tsのtoString()
 }
 
+function _getByteByPosition(value: bigint, pos: safeint): uint8 {
+  const x1 = 0x100n ** BigInt(pos);
+  const x2 = (value >= x1) ? (value % x1) : value;
+  return Math.trunc(Number(x2 / (0x100n ** BigInt(pos - 1)))) as uint8;
+}
+
 class _BigUint<T extends bigint> implements RangedBigInt<T> {
   readonly MIN_VALUE: T;
   readonly MAX_VALUE: T;
   readonly BIT_LENGTH: safeint;
   readonly BYTE_LENGTH: safeint;
-  // readonly #info: _Info<T>;
   readonly #assert: _AFunc;
 
-  //XXX 仮
-  readonly #buffer: ArrayBuffer;
-  readonly #bufferView: DataView;
-  readonly #bufferUint8View: Uint8Array;
-
   constructor(info: _Info<T>, assert: _AFunc) {
-    if (info.BIT_LENGTH !== 64) { //XXX 一旦64のみとする
-      throw new TypeError("");
-    }
-
     this.MIN_VALUE = info.MIN_VALUE;
     this.MAX_VALUE = info.MAX_VALUE;
     this.BIT_LENGTH = info.BIT_LENGTH;
     this.BYTE_LENGTH = Math.ceil(info.BIT_LENGTH / Byte.BITS_PER_BYTE);
-    // this.#info = info;
     this.#assert = assert;
-
-    //XXX 仮
-    this.#buffer = new ArrayBuffer(8);
-    this.#bufferView = new DataView(this.#buffer);
-    this.#bufferUint8View = new Uint8Array(this.#buffer);
   }
 
   toBytes(value: T, byteOrder: byteorder = ByteOrder.nativeOrder): Uint8Array {
     this.#assert(value, "value");
     Type.assertByteOrder(byteOrder, "byteOrder");
 
-    // bitLengthは 56 | 64 | 72 | 80 | 88 | 96 | 104 | 112 | 120 | 128 | ...
+    if (this.BYTE_LENGTH === 1) {
+      return Uint8Array.of(Number(value));
+    }
 
-    this.#bufferView.setBigUint64(
-      ExNumber.ZERO,
-      value,
-      byteOrder === ByteOrder.LITTLE_ENDIAN,
+    const bytes: Array<uint8> = [];
+    bytes.push(Number(value % 0x100n) as uint8);
+    for (let i = 2; i <= 16; i++) { // 16-128 一旦128を上限とする
+      if (this.BIT_LENGTH >= (Byte.BITS_PER_BYTE * i)) {
+        bytes.push(_getByteByPosition(value, i));
+      }
+    }
+
+    return Uint8Array.from(
+      (byteOrder === ByteOrder.LITTLE_ENDIAN) ? bytes : bytes.reverse(),
     );
-    return Uint8Array.from(this.#bufferUint8View);
+
+    // this.#bufferView.setBigUint64( // 64以下はこれを基にした方が多分速い
+    //   ExNumber.ZERO,
+    //   value,
+    //   byteOrder === ByteOrder.LITTLE_ENDIAN,
+    // );
+    // return Uint8Array.from(this.#bufferUint8View);
   }
 
   bitwiseAnd(a: T, b: T): T {
