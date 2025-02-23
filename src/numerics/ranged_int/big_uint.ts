@@ -2,13 +2,13 @@ import * as Byte from "../../basics/byte/mod.ts";
 import * as ByteOrder from "../../basics/byte_order/mod.ts";
 import * as Type from "../../type/mod.ts";
 import { type _AFunc, _normalizeOffset } from "./_utils.ts";
+import { BigInt as ExBigInt, Number as ExNumber } from "../../numerics/mod.ts";
 import {
   type biguint64,
   type byteorder,
   type safeint,
   type uint8,
 } from "../../_typedef/mod.ts";
-import { Number as ExNumber } from "../../numerics/mod.ts";
 import { BigUint64 as BigUint64Info } from "../../_const/uint.ts";
 
 type _Info<T extends bigint> = {
@@ -30,6 +30,7 @@ interface RangedBigInt<T extends bigint> {
   //XXX bitwiseNot()
   rotateLeft(value: T, offset: safeint): T;
   //XXX rotateRight()
+  truncate(value: bigint): T;
   // toNumber() → bigint.tsのtoNumber()
   // toBigInt() → もともとbigintなので不要
   // toString() → bigint.tsのtoString()
@@ -47,6 +48,7 @@ class _BigUint<T extends bigint> implements RangedBigInt<T> {
   readonly BIT_LENGTH: safeint;
   readonly BYTE_LENGTH: safeint;
   readonly #assert: _AFunc;
+  readonly #size: bigint;
 
   constructor(info: _Info<T>, assert: _AFunc) {
     this.MIN_VALUE = info.MIN_VALUE;
@@ -54,6 +56,7 @@ class _BigUint<T extends bigint> implements RangedBigInt<T> {
     this.BIT_LENGTH = info.BIT_LENGTH;
     this.BYTE_LENGTH = Math.ceil(info.BIT_LENGTH / Byte.BITS_PER_BYTE);
     this.#assert = assert;
+    this.#size = info.MAX_VALUE + 1n; // Uintの場合、最小は0なので最大+1で固定
   }
 
   fromBytes(
@@ -156,6 +159,20 @@ class _BigUint<T extends bigint> implements RangedBigInt<T> {
     return (((value << bigIntOffset) |
       (value >> (BigInt(this.BIT_LENGTH) - bigIntOffset))) &
       this.MAX_VALUE) as T;
+  }
+
+  truncate(value: bigint): T {
+    Type.assertBigInt(value, "value");
+
+    if ((value >= ExBigInt.ZERO) && (value <= this.MAX_VALUE)) {
+      return value as T;
+    }
+
+    if (value > ExBigInt.ZERO) {
+      return (value % this.#size) as T;
+    } else {
+      return (this.#size + (value % this.#size)) as T;
+    }
   }
 }
 

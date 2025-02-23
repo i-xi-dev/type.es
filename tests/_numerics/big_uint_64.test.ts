@@ -238,30 +238,6 @@ Deno.test("BigUint64.fromNumber() - overflowMode", () => {
   //   RangeError,
   //   e1,
   // );
-
-  const op2 = { overflowMode: "truncate" } as const;
-
-  assertStrictEquals(BigUint64.fromNumber(-1, op2), 0xFFFFFFFFFFFFFFFFn);
-  assertStrictEquals(BigUint64.fromNumber(64, op2), 64n);
-  assertStrictEquals(BigUint64.fromNumber(65, op2), 65n);
-  assertStrictEquals(BigUint64.fromNumber(128, op2), 128n);
-  assertStrictEquals(BigUint64.fromNumber(129, op2), 129n);
-  assertStrictEquals(BigUint64.fromNumber(256, op2), 256n);
-  assertStrictEquals(BigUint64.fromNumber(257, op2), 257n);
-  assertStrictEquals(BigUint64.fromNumber(512, op2), 512n);
-  assertStrictEquals(BigUint64.fromNumber(513, op2), 513n);
-  assertStrictEquals(BigUint64.fromNumber(65535, op2), 65535n);
-  assertStrictEquals(BigUint64.fromNumber(65536, op2), 65536n);
-  assertStrictEquals(BigUint64.fromNumber(131071, op2), 131071n);
-  assertStrictEquals(BigUint64.fromNumber(131072, op2), 131072n);
-  assertStrictEquals(BigUint64.fromNumber(16777215, op2), 16777215n);
-  assertStrictEquals(BigUint64.fromNumber(16777216, op2), 16777216n);
-  assertStrictEquals(BigUint64.fromNumber(33554431, op2), 33554431n);
-  assertStrictEquals(BigUint64.fromNumber(33554432, op2), 33554432n);
-  assertStrictEquals(BigUint64.fromNumber(4294967295, op2), 4294967295n);
-  assertStrictEquals(BigUint64.fromNumber(4294967296, op2), 4294967296n);
-  assertStrictEquals(BigUint64.fromNumber(8589934591, op2), 8589934591n);
-  assertStrictEquals(BigUint64.fromNumber(8589934592, op2), 8589934592n);
 });
 
 Deno.test("BigUint64.fromBigInt()", () => {
@@ -330,32 +306,6 @@ Deno.test("BigUint64.fromBigInt() - overflowMode", () => {
     RangeError,
     e1,
   );
-
-  const op2 = { overflowMode: "truncate" } as const;
-
-  assertStrictEquals(BigUint64.fromBigInt(-1n, op2), 0xFFFF_FFFF_FFFF_FFFFn);
-  assertStrictEquals(BigUint64.fromBigInt(64n, op2), 64n);
-  assertStrictEquals(BigUint64.fromBigInt(65n, op2), 65n);
-  assertStrictEquals(BigUint64.fromBigInt(128n, op2), 128n);
-  assertStrictEquals(BigUint64.fromBigInt(129n, op2), 129n);
-  assertStrictEquals(BigUint64.fromBigInt(256n, op2), 256n);
-  assertStrictEquals(BigUint64.fromBigInt(257n, op2), 257n);
-  assertStrictEquals(BigUint64.fromBigInt(512n, op2), 512n);
-  assertStrictEquals(BigUint64.fromBigInt(513n, op2), 513n);
-  assertStrictEquals(BigUint64.fromBigInt(65535n, op2), 65535n);
-  assertStrictEquals(BigUint64.fromBigInt(65536n, op2), 65536n);
-  assertStrictEquals(BigUint64.fromBigInt(65537n, op2), 65537n);
-  assertStrictEquals(BigUint64.fromBigInt(131071n, op2), 131071n);
-  assertStrictEquals(BigUint64.fromBigInt(131072n, op2), 131072n);
-  assertStrictEquals(BigUint64.fromBigInt(16777215n, op2), 16777215n);
-  assertStrictEquals(BigUint64.fromBigInt(16777216n, op2), 16777216n);
-  assertStrictEquals(BigUint64.fromBigInt(4294967295n, op2), 4294967295n);
-  assertStrictEquals(BigUint64.fromBigInt(4294967296n, op2), 4294967296n);
-  assertStrictEquals(
-    BigUint64.fromBigInt(0xFFFF_FFFF_FFFF_FFFFn, op2),
-    0xFFFF_FFFF_FFFF_FFFFn,
-  );
-  assertStrictEquals(BigUint64.fromBigInt(0x1_0000_0000_0000_0000n, op2), 0n);
 });
 
 Deno.test("BigUint64.fromString()", () => {

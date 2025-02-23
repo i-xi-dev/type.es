@@ -1189,3 +1189,33 @@ Deno.test("Numerics.BigUint64.rotateLeft()", () => {
     e2,
   );
 });
+
+Deno.test("Numerics.BigUint64.truncate()", () => {
+  assertStrictEquals(BigUint64.truncate(-1n), 0xFFFF_FFFF_FFFF_FFFFn);
+  assertStrictEquals(BigUint64.truncate(64n), 64n);
+  assertStrictEquals(BigUint64.truncate(65n), 65n);
+  assertStrictEquals(BigUint64.truncate(128n), 128n);
+  assertStrictEquals(BigUint64.truncate(129n), 129n);
+  assertStrictEquals(BigUint64.truncate(256n), 256n);
+  assertStrictEquals(BigUint64.truncate(257n), 257n);
+  assertStrictEquals(BigUint64.truncate(512n), 512n);
+  assertStrictEquals(BigUint64.truncate(513n), 513n);
+  assertStrictEquals(BigUint64.truncate(65535n), 65535n);
+  assertStrictEquals(BigUint64.truncate(65536n), 65536n);
+  assertStrictEquals(BigUint64.truncate(65537n), 65537n);
+  assertStrictEquals(BigUint64.truncate(131071n), 131071n);
+  assertStrictEquals(BigUint64.truncate(131072n), 131072n);
+  assertStrictEquals(BigUint64.truncate(16777215n), 16777215n);
+  assertStrictEquals(BigUint64.truncate(16777216n), 16777216n);
+  assertStrictEquals(BigUint64.truncate(33554431n), 33554431n);
+  assertStrictEquals(BigUint64.truncate(33554432n), 33554432n);
+  assertStrictEquals(BigUint64.truncate(4294967295n), 4294967295n);
+  assertStrictEquals(BigUint64.truncate(4294967296n), 4294967296n);
+  assertStrictEquals(BigUint64.truncate(8589934591n), 8589934591n);
+  assertStrictEquals(BigUint64.truncate(8589934592n), 8589934592n);
+  assertStrictEquals(
+    BigUint64.truncate(0xFFFF_FFFF_FFFF_FFFFn),
+    0xFFFF_FFFF_FFFF_FFFFn,
+  );
+  assertStrictEquals(BigUint64.truncate(0x1_0000_0000_0000_0000n), 0n);
+});
