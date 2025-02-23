@@ -45,6 +45,12 @@ interface RangedInt<T extends safeint> {
   // toBigInt() → bigint.tsのfromNumber()
 }
 
+function _getByteByPosition(value: safeint, pos: safeint): uint8 {
+  const x1 = 0x100 ** pos;
+  const x2 = (value >= x1) ? (value % x1) : value;
+  return Math.trunc(x2 / (0x100 ** (pos - 1))) as uint8;
+}
+
 class _Uint<T extends safeint> implements RangedInt<T> {
   readonly MIN_VALUE: T;
   readonly MAX_VALUE: T;
@@ -205,12 +211,6 @@ class _Uint<T extends safeint> implements RangedInt<T> {
     ) as T;
     //XXX 多分bigint使うと遅い
   }
-}
-
-function _getByteByPosition(value: safeint, pos: safeint): uint8 {
-  const x1 = 0x100 ** pos;
-  const x2 = (value >= x1) ? (value % x1) : value;
-  return Math.trunc(x2 / (0x100 ** (pos - 1))) as uint8;
 }
 
 const Uint6: RangedInt<uint6> = new _Uint(Uint6Info, Type.assertUint6);

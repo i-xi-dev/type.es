@@ -3,7 +3,6 @@ import * as SafeInt from "../numerics/safeint/mod.ts";
 import * as SafeIntRange from "../numerics/range/safeint_range/mod.ts";
 import {
   assertNumber,
-  assertSafeInt,
   isNonPositiveSafeInt,
   isSafeInt,
 } from "../type/number.ts";
@@ -36,10 +35,6 @@ class _UinNOperations<T extends safeint> implements UintNOperations<T> {
   readonly #range: safeintrange<T>;
   readonly #size: safeint;
 
-  readonly #buffer: ArrayBuffer;
-  readonly #bufferUint32View: Uint32Array;
-  readonly #bufferUint16View: Uint16Array;
-
   constructor(bitLength: safeint) {
     if (isNonPositiveSafeInt(bitLength) || (bitLength > 32)) {
       throw new Error("not implemented"); //XXX 対応するとしても48まで
@@ -50,10 +45,6 @@ class _UinNOperations<T extends safeint> implements UintNOperations<T> {
     this.#max = (2 ** bitLength - 1) as T;
     this.#range = [this.#min, this.#max];
     this.#size = SafeIntRange.sizeOf(this.#range);
-
-    this.#buffer = new ArrayBuffer(96);
-    this.#bufferUint32View = new Uint32Array(this.#buffer);
-    this.#bufferUint16View = new Uint16Array(this.#buffer);
   }
 
   get bitLength(): safeint {
@@ -194,49 +185,6 @@ class _Uint8xOperations<T extends safeint> extends _UinNOperations<T>
 
   get byteLength(): safeint {
     return this.bitLength / BITS_PER_BYTE;
-  }
-
-  toBytes(self: T, littleEndian: boolean = false): Uint8Array {
-    this.assert(self, "self");
-
-    // bitLengthは 8 | 16 | 24 | 32 | 40 | 48 のいずれか
-
-    if (this.bitLength === 8) {
-      return Uint8Array.of(self);
-    }
-
-    const bytes: Array<uint8> = [];
-    bytes.push((self % 0x100) as uint8);
-    if (this.bitLength >= 16) {
-      const o2 = (self >= 0x10000) ? (self % 0x10000) : self;
-      bytes.push(Math.trunc(o2 / 0x100) as uint8);
-
-      if (this.bitLength >= 24) {
-        const o3 = (self >= 0x1000000) ? (self % 0x1000000) : self;
-        bytes.push(Math.trunc(o3 / 0x10000) as uint8);
-
-        if (this.bitLength >= 32) {
-          const o4 = (self >= 0x100000000) ? (self % 0x100000000) : self;
-          bytes.push(Math.trunc(o4 / 0x1000000) as uint8);
-
-          if (this.bitLength >= 40) {
-            const o5 = (self >= 0x10000000000) ? (self % 0x10000000000) : self;
-            bytes.push(Math.trunc(o5 / 0x100000000) as uint8);
-
-            if (this.bitLength >= 48) {
-              const o6 = (self >= 0x1000000000000)
-                ? (self % 0x1000000000000)
-                : self;
-              bytes.push(Math.trunc(o6 / 0x10000000000) as uint8);
-            }
-          }
-        }
-      }
-    }
-
-    return Uint8Array.from(
-      (littleEndian === true) ? bytes : bytes.reverse(),
-    );
   }
 }
 
