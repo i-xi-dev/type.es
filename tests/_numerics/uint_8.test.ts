@@ -156,18 +156,6 @@ Deno.test("Uint8.fromNumber() - overflowMode", () => {
     RangeError,
     e1,
   );
-
-  const op2 = { overflowMode: "truncate" } as const;
-
-  assertStrictEquals(Uint8.fromNumber(-1, op2), 255);
-  assertStrictEquals(Uint8.fromNumber(64, op2), 64);
-  assertStrictEquals(Uint8.fromNumber(65, op2), 65);
-  assertStrictEquals(Uint8.fromNumber(128, op2), 128);
-  assertStrictEquals(Uint8.fromNumber(129, op2), 129);
-  assertStrictEquals(Uint8.fromNumber(256, op2), 0);
-  assertStrictEquals(Uint8.fromNumber(257, op2), 1);
-  assertStrictEquals(Uint8.fromNumber(512, op2), 0);
-  assertStrictEquals(Uint8.fromNumber(513, op2), 1);
 });
 
 Deno.test("Uint8.fromBigInt()", () => {
@@ -235,18 +223,6 @@ Deno.test("Uint8.fromBigInt() - overflowMode", () => {
     RangeError,
     e1,
   );
-
-  const op2 = { overflowMode: "truncate" } as const;
-
-  assertStrictEquals(Uint8.fromBigInt(-1n, op2), 255);
-  assertStrictEquals(Uint8.fromBigInt(64n, op2), 64);
-  assertStrictEquals(Uint8.fromBigInt(65n, op2), 65);
-  assertStrictEquals(Uint8.fromBigInt(128n, op2), 128);
-  assertStrictEquals(Uint8.fromBigInt(129n, op2), 129);
-  assertStrictEquals(Uint8.fromBigInt(256n, op2), 0);
-  assertStrictEquals(Uint8.fromBigInt(257n, op2), 1);
-  assertStrictEquals(Uint8.fromBigInt(512n, op2), 0);
-  assertStrictEquals(Uint8.fromBigInt(513n, op2), 1);
 });
 
 Deno.test("Uint8.fromString()", () => {

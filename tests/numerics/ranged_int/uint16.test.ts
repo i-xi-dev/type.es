@@ -618,3 +618,21 @@ Deno.test("Numerics.Uint16.rotateLeft()", () => {
     e2,
   );
 });
+
+Deno.test("Numerics.Uint16.truncate()", () => {
+  assertStrictEquals(Uint16.truncate(-1), 65535);
+  assertStrictEquals(Uint16.truncate(0), 0);
+  assertStrictEquals(Uint16.truncate(64), 64);
+  assertStrictEquals(Uint16.truncate(65), 65);
+  assertStrictEquals(Uint16.truncate(128), 128);
+  assertStrictEquals(Uint16.truncate(129), 129);
+  assertStrictEquals(Uint16.truncate(256), 256);
+  assertStrictEquals(Uint16.truncate(257), 257);
+  assertStrictEquals(Uint16.truncate(512), 512);
+  assertStrictEquals(Uint16.truncate(513), 513);
+  assertStrictEquals(Uint16.truncate(65535), 65535);
+  assertStrictEquals(Uint16.truncate(65536), 0);
+  assertStrictEquals(Uint16.truncate(65537), 1);
+  assertStrictEquals(Uint16.truncate(131071), 65535);
+  assertStrictEquals(Uint16.truncate(131072), 0);
+});

@@ -162,22 +162,6 @@ Deno.test("Uint16.fromNumber() - overflowMode", () => {
     RangeError,
     e1,
   );
-
-  const op2 = { overflowMode: "truncate" } as const;
-
-  assertStrictEquals(Uint16.fromNumber(-1, op2), 65535);
-  assertStrictEquals(Uint16.fromNumber(64, op2), 64);
-  assertStrictEquals(Uint16.fromNumber(65, op2), 65);
-  assertStrictEquals(Uint16.fromNumber(128, op2), 128);
-  assertStrictEquals(Uint16.fromNumber(129, op2), 129);
-  assertStrictEquals(Uint16.fromNumber(256, op2), 256);
-  assertStrictEquals(Uint16.fromNumber(257, op2), 257);
-  assertStrictEquals(Uint16.fromNumber(512, op2), 512);
-  assertStrictEquals(Uint16.fromNumber(513, op2), 513);
-  assertStrictEquals(Uint16.fromNumber(65535, op2), 65535);
-  assertStrictEquals(Uint16.fromNumber(65536, op2), 0);
-  assertStrictEquals(Uint16.fromNumber(131071, op2), 65535);
-  assertStrictEquals(Uint16.fromNumber(131072, op2), 0);
 });
 
 Deno.test("Uint16.fromBigInt()", () => {
@@ -247,23 +231,6 @@ Deno.test("Uint16.fromBigInt() - overflowMode", () => {
     RangeError,
     e1,
   );
-
-  const op2 = { overflowMode: "truncate" } as const;
-
-  assertStrictEquals(Uint16.fromBigInt(-1n, op2), 65535);
-  assertStrictEquals(Uint16.fromBigInt(64n, op2), 64);
-  assertStrictEquals(Uint16.fromBigInt(65n, op2), 65);
-  assertStrictEquals(Uint16.fromBigInt(128n, op2), 128);
-  assertStrictEquals(Uint16.fromBigInt(129n, op2), 129);
-  assertStrictEquals(Uint16.fromBigInt(256n, op2), 256);
-  assertStrictEquals(Uint16.fromBigInt(257n, op2), 257);
-  assertStrictEquals(Uint16.fromBigInt(512n, op2), 512);
-  assertStrictEquals(Uint16.fromBigInt(513n, op2), 513);
-  assertStrictEquals(Uint16.fromBigInt(65535n, op2), 65535);
-  assertStrictEquals(Uint16.fromBigInt(65536n, op2), 0);
-  assertStrictEquals(Uint16.fromBigInt(65537n, op2), 1);
-  assertStrictEquals(Uint16.fromBigInt(131071n, op2), 65535);
-  assertStrictEquals(Uint16.fromBigInt(131072n, op2), 0);
 });
 
 Deno.test("Uint16.fromString()", () => {

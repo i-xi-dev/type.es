@@ -144,14 +144,6 @@ Deno.test("Uint6.fromNumber() - overflowMode", () => {
     RangeError,
     e1,
   );
-
-  const op2 = { overflowMode: "truncate" } as const;
-
-  assertStrictEquals(Uint6.fromNumber(-1, op2), 63);
-  assertStrictEquals(Uint6.fromNumber(64, op2), 0);
-  assertStrictEquals(Uint6.fromNumber(65, op2), 1);
-  assertStrictEquals(Uint6.fromNumber(128, op2), 0);
-  assertStrictEquals(Uint6.fromNumber(129, op2), 1);
 });
 
 Deno.test("Uint6.fromBigInt()", () => {
@@ -215,14 +207,6 @@ Deno.test("Uint6.fromBigInt() - overflowMode", () => {
     RangeError,
     e1,
   );
-
-  const op2 = { overflowMode: "truncate" } as const;
-
-  assertStrictEquals(Uint6.fromBigInt(-1n, op2), 63);
-  assertStrictEquals(Uint6.fromBigInt(64n, op2), 0);
-  assertStrictEquals(Uint6.fromBigInt(65n, op2), 1);
-  assertStrictEquals(Uint6.fromBigInt(128n, op2), 0);
-  assertStrictEquals(Uint6.fromBigInt(129n, op2), 1);
 });
 
 Deno.test("Uint6.fromString()", () => {

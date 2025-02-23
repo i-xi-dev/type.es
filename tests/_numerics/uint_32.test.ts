@@ -186,30 +186,6 @@ Deno.test("Uint32.fromNumber() - overflowMode", () => {
     RangeError,
     e1,
   );
-
-  const op2 = { overflowMode: "truncate" } as const;
-
-  assertStrictEquals(Uint32.fromNumber(-1, op2), 4294967295);
-  assertStrictEquals(Uint32.fromNumber(64, op2), 64);
-  assertStrictEquals(Uint32.fromNumber(65, op2), 65);
-  assertStrictEquals(Uint32.fromNumber(128, op2), 128);
-  assertStrictEquals(Uint32.fromNumber(129, op2), 129);
-  assertStrictEquals(Uint32.fromNumber(256, op2), 256);
-  assertStrictEquals(Uint32.fromNumber(257, op2), 257);
-  assertStrictEquals(Uint32.fromNumber(512, op2), 512);
-  assertStrictEquals(Uint32.fromNumber(513, op2), 513);
-  assertStrictEquals(Uint32.fromNumber(65535, op2), 65535);
-  assertStrictEquals(Uint32.fromNumber(65536, op2), 65536);
-  assertStrictEquals(Uint32.fromNumber(131071, op2), 131071);
-  assertStrictEquals(Uint32.fromNumber(131072, op2), 131072);
-  assertStrictEquals(Uint32.fromNumber(16777215, op2), 16777215);
-  assertStrictEquals(Uint32.fromNumber(16777216, op2), 16777216);
-  assertStrictEquals(Uint32.fromNumber(33554431, op2), 33554431);
-  assertStrictEquals(Uint32.fromNumber(33554432, op2), 33554432);
-  assertStrictEquals(Uint32.fromNumber(4294967295, op2), 4294967295);
-  assertStrictEquals(Uint32.fromNumber(4294967296, op2), 0);
-  assertStrictEquals(Uint32.fromNumber(8589934591, op2), 4294967295);
-  assertStrictEquals(Uint32.fromNumber(8589934592, op2), 0);
 });
 
 Deno.test("Uint32.fromBigInt()", () => {
@@ -286,27 +262,6 @@ Deno.test("Uint32.fromBigInt() - overflowMode", () => {
     RangeError,
     e1,
   );
-
-  const op2 = { overflowMode: "truncate" } as const;
-
-  assertStrictEquals(Uint32.fromBigInt(-1n, op2), 4294967295);
-  assertStrictEquals(Uint32.fromBigInt(64n, op2), 64);
-  assertStrictEquals(Uint32.fromBigInt(65n, op2), 65);
-  assertStrictEquals(Uint32.fromBigInt(128n, op2), 128);
-  assertStrictEquals(Uint32.fromBigInt(129n, op2), 129);
-  assertStrictEquals(Uint32.fromBigInt(256n, op2), 256);
-  assertStrictEquals(Uint32.fromBigInt(257n, op2), 257);
-  assertStrictEquals(Uint32.fromBigInt(512n, op2), 512);
-  assertStrictEquals(Uint32.fromBigInt(513n, op2), 513);
-  assertStrictEquals(Uint32.fromBigInt(65535n, op2), 65535);
-  assertStrictEquals(Uint32.fromBigInt(65536n, op2), 65536);
-  assertStrictEquals(Uint32.fromBigInt(65537n, op2), 65537);
-  assertStrictEquals(Uint32.fromBigInt(131071n, op2), 131071);
-  assertStrictEquals(Uint32.fromBigInt(131072n, op2), 131072);
-  assertStrictEquals(Uint32.fromBigInt(16777215n, op2), 16777215);
-  assertStrictEquals(Uint32.fromBigInt(16777216n, op2), 16777216);
-  assertStrictEquals(Uint32.fromBigInt(4294967295n, op2), 4294967295);
-  assertStrictEquals(Uint32.fromBigInt(4294967296n, op2), 0);
 });
 
 Deno.test("Uint32.fromString()", () => {

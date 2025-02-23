@@ -1192,6 +1192,7 @@ Deno.test("Numerics.BigUint64.rotateLeft()", () => {
 
 Deno.test("Numerics.BigUint64.truncate()", () => {
   assertStrictEquals(BigUint64.truncate(-1n), 0xFFFF_FFFF_FFFF_FFFFn);
+  assertStrictEquals(BigUint64.truncate(0n), 0n);
   assertStrictEquals(BigUint64.truncate(64n), 64n);
   assertStrictEquals(BigUint64.truncate(65n), 65n);
   assertStrictEquals(BigUint64.truncate(128n), 128n);

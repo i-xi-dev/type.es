@@ -1019,3 +1019,29 @@ Deno.test("Numerics.Uint32.rotateLeft()", () => {
     e2,
   );
 });
+
+Deno.test("Numerics.Uint32.truncate()", () => {
+  assertStrictEquals(Uint32.truncate(-1), 4294967295);
+  assertStrictEquals(Uint32.truncate(0), 0);
+  assertStrictEquals(Uint32.truncate(64), 64);
+  assertStrictEquals(Uint32.truncate(65), 65);
+  assertStrictEquals(Uint32.truncate(128), 128);
+  assertStrictEquals(Uint32.truncate(129), 129);
+  assertStrictEquals(Uint32.truncate(256), 256);
+  assertStrictEquals(Uint32.truncate(257), 257);
+  assertStrictEquals(Uint32.truncate(512), 512);
+  assertStrictEquals(Uint32.truncate(513), 513);
+  assertStrictEquals(Uint32.truncate(65535), 65535);
+  assertStrictEquals(Uint32.truncate(65536), 65536);
+  assertStrictEquals(Uint32.truncate(65537), 65537);
+  assertStrictEquals(Uint32.truncate(131071), 131071);
+  assertStrictEquals(Uint32.truncate(131072), 131072);
+  assertStrictEquals(Uint32.truncate(16777215), 16777215);
+  assertStrictEquals(Uint32.truncate(16777216), 16777216);
+  assertStrictEquals(Uint32.truncate(33554431), 33554431);
+  assertStrictEquals(Uint32.truncate(33554432), 33554432);
+  assertStrictEquals(Uint32.truncate(4294967295), 4294967295);
+  assertStrictEquals(Uint32.truncate(4294967296), 0);
+  assertStrictEquals(Uint32.truncate(8589934591), 4294967295);
+  assertStrictEquals(Uint32.truncate(8589934592), 0);
+});

@@ -63,23 +63,8 @@ class _UinNOperations<T extends bigint> implements UintNOperations<T> {
             this.#bitLength + "`.",
         );
 
-      case OverflowMode.TRUNCATE:
-        return this.#truncateFromInteger(valueAsBigInt);
-
       default: // case OverflowMode.SATURATE:
         return ExBigInt.clampToRange(valueAsBigInt, this.#range);
-    }
-  }
-
-  #truncateFromInteger(value: bigint): T {
-    if (value === ExBigInt.ZERO) {
-      return ExBigInt.ZERO as T;
-    }
-
-    if (value > ExBigInt.ZERO) {
-      return (value % this.#size) as T;
-    } else {
-      return (this.#size + (value % this.#size)) as T;
     }
   }
 
@@ -96,9 +81,6 @@ class _UinNOperations<T extends bigint> implements UintNOperations<T> {
           "`value` must be within the range of `uint" +
             this.#bitLength + "`.",
         );
-
-      case OverflowMode.TRUNCATE:
-        return this.#truncateFromInteger(value);
 
       default: // case OverflowMode.SATURATE:
         return ExBigInt.clampToRange(value, this.#range);

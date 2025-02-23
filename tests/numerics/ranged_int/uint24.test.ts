@@ -831,3 +831,25 @@ Deno.test("Numerics.Uint24.rotateLeft()", () => {
     e2,
   );
 });
+
+Deno.test("Numerics.Uint24.truncate()", () => {
+  assertStrictEquals(Uint24.truncate(-1), 16777215);
+  assertStrictEquals(Uint24.truncate(0), 0);
+  assertStrictEquals(Uint24.truncate(64), 64);
+  assertStrictEquals(Uint24.truncate(65), 65);
+  assertStrictEquals(Uint24.truncate(128), 128);
+  assertStrictEquals(Uint24.truncate(129), 129);
+  assertStrictEquals(Uint24.truncate(256), 256);
+  assertStrictEquals(Uint24.truncate(257), 257);
+  assertStrictEquals(Uint24.truncate(512), 512);
+  assertStrictEquals(Uint24.truncate(513), 513);
+  assertStrictEquals(Uint24.truncate(65535), 65535);
+  assertStrictEquals(Uint24.truncate(65536), 65536);
+  assertStrictEquals(Uint24.truncate(65537), 65537);
+  assertStrictEquals(Uint24.truncate(131071), 131071);
+  assertStrictEquals(Uint24.truncate(131072), 131072);
+  assertStrictEquals(Uint24.truncate(16777215), 16777215);
+  assertStrictEquals(Uint24.truncate(16777216), 0);
+  assertStrictEquals(Uint24.truncate(33554431), 16777215);
+  assertStrictEquals(Uint24.truncate(33554432), 0);
+});

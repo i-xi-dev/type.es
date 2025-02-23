@@ -41,6 +41,7 @@ interface RangedInt<T extends safeint> {
   //XXX bitwiseNot()
   rotateLeft(value: T, offset: safeint): T;
   //XXX rotateRight()
+  truncate(value: safeint): T;
   // toNumber() → もともとnumberなので不要
   // toBigInt() → bigint.tsのfromNumber()
   // toString() → safeint.tsのtoString()
@@ -66,6 +67,7 @@ class _Uint<T extends safeint> implements RangedInt<T> {
   readonly BIT_LENGTH: safeint;
   readonly BYTE_LENGTH: safeint; // (1 | 2 | 3 | 4 | 5 | 6)
   readonly #assert: _AFunc;
+  readonly #size: safeint;
   readonly #buffer: ArrayBuffer;
   readonly #view32: Uint32Array;
   readonly #view8: Uint8Array;
@@ -79,6 +81,7 @@ class _Uint<T extends safeint> implements RangedInt<T> {
       throw new RangeError("byte length overflowed.");
     }
     this.#assert = assert;
+    this.#size = info.MAX_VALUE + 1; // Uintの場合、最小は0なので最大+1で固定
     this.#buffer = new ArrayBuffer(4 * 3); // 一旦Uint32 3つ分
     this.#view32 = new Uint32Array(this.#buffer);
     this.#view8 = new Uint8Array(this.#buffer);
@@ -242,6 +245,20 @@ class _Uint<T extends safeint> implements RangedInt<T> {
         BigInt(this.MAX_VALUE),
     ) as T;
     //XXX 多分bigint使うと遅い
+  }
+
+  truncate(value: safeint): T {
+    Type.assertSafeInt(value, "value");
+
+    if ((value >= ExNumber.ZERO) && (value <= this.MAX_VALUE)) {
+      return value as T;
+    }
+
+    if (value > ExNumber.ZERO) {
+      return (value % this.#size) as T;
+    } else {
+      return (this.#size + (value % this.#size)) as T;
+    }
   }
 }
 

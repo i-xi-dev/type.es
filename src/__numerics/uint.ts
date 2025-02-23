@@ -96,9 +96,6 @@ class _UinNOperations<T extends safeint> implements UintNOperations<T> {
             this.#bitLength + "`.",
         );
 
-      case OverflowMode.TRUNCATE:
-        return this.#truncateFromInteger(valueAsInt);
-
       default: // case OverflowMode.SATURATE:
         return SafeInt.clampToRange(valueAsInt, this.#range);
     }
@@ -116,18 +113,6 @@ class _UinNOperations<T extends safeint> implements UintNOperations<T> {
   //   return ExNumber.normalize(value as T);
   // }
 
-  #truncateFromInteger(value: safeint): T {
-    // assertSafeInt(value, "value");
-
-    if (value === ExNumber.ZERO) {
-      return ExNumber.ZERO as T;
-    } else if (value > ExNumber.ZERO) {
-      return (value % this.#size) as T;
-    } else {
-      return (this.#size + (value % this.#size)) as T;
-    }
-  }
-
   fromBigInt(value: bigint, options?: FromBigIntOptions): T {
     const valueAsNumber = SafeInt.fromBigInt(value);
 
@@ -141,9 +126,6 @@ class _UinNOperations<T extends safeint> implements UintNOperations<T> {
           "`value` must be within the range of `uint" +
             this.#bitLength + "`.",
         );
-
-      case OverflowMode.TRUNCATE:
-        return this.#truncateFromInteger(valueAsNumber);
 
       default: // case OverflowMode.SATURATE:
         return SafeInt.clampToRange(valueAsNumber, this.#range);

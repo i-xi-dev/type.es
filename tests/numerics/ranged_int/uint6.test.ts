@@ -309,3 +309,13 @@ Deno.test("Numerics.Uint6.rotateLeft()", () => {
     e2,
   );
 });
+
+Deno.test("Numerics.Uint6.truncate()", () => {
+  assertStrictEquals(Uint6.truncate(-1), 63);
+  assertStrictEquals(Uint6.truncate(0), 0);
+  assertStrictEquals(Uint6.truncate(32), 32);
+  assertStrictEquals(Uint6.truncate(64), 0);
+  assertStrictEquals(Uint6.truncate(65), 1);
+  assertStrictEquals(Uint6.truncate(128), 0);
+  assertStrictEquals(Uint6.truncate(129), 1);
+});
