@@ -42,14 +42,6 @@ class _UinNOperations<T extends safeint> implements UintNOperations<T> {
     return SafeIntRange.includes(this.#range, value as T);
   }
 
-  assert(test: unknown, label: string): void {
-    if (this.is(test) !== true) {
-      throw new TypeError(
-        `The type of \`${label}\` does not match the type of \`uint${this.#bitLength}\`.`,
-      ); // 型が期待値でない場合も含むのでRangeErrorでなくTypeErrorとした
-    }
-  }
-
   fromBigInt(value: bigint, options?: FromBigIntOptions): T {
     const valueAsNumber = SafeInt.fromBigInt(value);
 

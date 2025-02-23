@@ -179,7 +179,7 @@ Deno.test("Uint8Iterable.bytesStartsWith()", () => {
     e1,
   );
 
-  const e2 = "The type of `self[0]` does not match the type of `uint8`.";
+  const e2 = "`self[0]` must be an 8-bit unsigned integer.";
   assertThrows(
     () => {
       Uint8Iterable.elementsStartsWith([256], [0]);
@@ -279,7 +279,7 @@ Deno.test("Uint8Iterable.bytesEquals()", () => {
     e1,
   );
 
-  const e2 = "The type of `self[0]` does not match the type of `uint8`.";
+  const e2 = "`self[0]` must be an 8-bit unsigned integer.";
   assertThrows(
     () => {
       Uint8Iterable.elementsEquals([256], [0]);

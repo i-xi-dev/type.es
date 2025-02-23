@@ -1,4 +1,4 @@
-import { assertIterable } from "../type/iterable.ts";
+import * as Type from "../type/mod.ts";
 import { type safeint, type uint8 } from "../_typedef/mod.ts";
 import { Uint8 } from "./uint.ts";
 import { ZERO as NUMBER_ZERO } from "../_const/number.ts";
@@ -48,7 +48,7 @@ export function elementsStartsWith(
   self: Iterable<safeint /* uint8 */>,
   other: ArrayLikeOfExpectUint8,
 ): boolean {
-  assertIterable(self, "self");
+  Type.assertIterable(self, "self");
   assertArrayLikeOfUint8(other, "other");
 
   if (other.length <= NUMBER_ZERO) {
@@ -62,10 +62,10 @@ export function elementsStartsWith(
       return true;
     }
 
-    Uint8.assert(byte, `self[${i}]`);
+    Type.assertUint8(byte, `self[${i}]`);
 
     // const otherByte = other[i];
-    // Uint8.assert(otherByte, `other[${i}]`); _assertUint8SizedIterableでチェック済
+    // Type.assertUint8(otherByte, `other[${i}]`); _assertUint8SizedIterableでチェック済
 
     if (byte !== other[i]) {
       return false;
@@ -81,7 +81,7 @@ export function elementsEquals(
   self: Iterable<safeint /* uint8 */>,
   other: ArrayLikeOfExpectUint8,
 ): boolean {
-  assertIterable(self, "self");
+  Type.assertIterable(self, "self");
   assertArrayLikeOfUint8(other, "other");
 
   const otherLastIndex = other.length - 1;
@@ -91,10 +91,10 @@ export function elementsEquals(
       return false;
     }
 
-    Uint8.assert(byte, `self[${i}]`);
+    Type.assertUint8(byte, `self[${i}]`);
 
     // const otherByte = other[i];
-    // Uint8.assert(otherByte, `other[${i}]`); _assertUint8SizedIterableでチェック済
+    // Type.assertUint8(otherByte, `other[${i}]`); _assertUint8SizedIterableでチェック済
 
     if (byte !== other[i]) {
       return false;
