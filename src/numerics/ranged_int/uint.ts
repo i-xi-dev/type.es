@@ -43,6 +43,7 @@ interface RangedInt<T extends safeint> {
   //XXX rotateRight()
   // toNumber() → もともとnumberなので不要
   // toBigInt() → bigint.tsのfromNumber()
+  // toString() → safeint.tsのtoString()
 }
 
 function _getByteByPosition(value: safeint, pos: safeint): uint8 {

@@ -31,7 +31,6 @@ export interface UintNOperations<T extends int> {
   fromNumber(value: number, options?: FromNumberOptions): T;
   fromBigInt(value: bigint, options?: FromBigIntOptions): T;
   fromString(value: string, options?: FromStringOptions): T;
-  toString(self: T, options?: ToStringOptions): string;
 }
 
 export interface Uint8xOperations<T extends int> extends UintNOperations<T> {

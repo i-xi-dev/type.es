@@ -335,36 +335,3 @@ Deno.test("Uint7.fromString()", () => {
     e216,
   );
 });
-
-Deno.test("Uint7.toString()", () => {
-  assertStrictEquals(Uint7.toString(0), "0");
-  assertStrictEquals(Uint7.toString(-0), "0");
-  assertStrictEquals(Uint7.toString(1), "1");
-  assertStrictEquals(Uint7.toString(63), "63");
-  assertStrictEquals(Uint7.toString(127), "127");
-
-  const e1 = "The type of `self` does not match the type of `uint7`.";
-  assertThrows(
-    () => {
-      Uint7.toString(0x80 as uint7);
-    },
-    TypeError,
-    e1,
-  );
-
-  const op16 = { radix: 16 } as const;
-  assertStrictEquals(Uint7.toString(0, op16), "0");
-  assertStrictEquals(Uint7.toString(63, op16), "3F");
-
-  const op16l = { radix: 16, lowerCase: true } as const;
-  assertStrictEquals(Uint7.toString(0, op16l), "0");
-  assertStrictEquals(Uint7.toString(63, op16l), "3f");
-
-  const op16l2 = { radix: 16, lowerCase: true, minIntegralDigits: 2 } as const;
-  assertStrictEquals(Uint7.toString(0, op16l2), "00");
-  assertStrictEquals(Uint7.toString(63, op16l2), "3f");
-
-  const op16u3 = { radix: 16, lowerCase: false, minIntegralDigits: 3 } as const;
-  assertStrictEquals(Uint7.toString(0, op16u3), "000");
-  assertStrictEquals(Uint7.toString(63, op16u3), "03F");
-});

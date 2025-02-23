@@ -10,7 +10,6 @@ import {
   FromBigIntOptions,
   FromNumberOptions,
   FromStringOptions,
-  ToStringOptions,
   Uint8xOperations,
   UintNOperations,
 } from "./ranged_integer.ts";
@@ -157,11 +156,6 @@ class _UinNOperations<T extends safeint> implements UintNOperations<T> {
   fromString(value: string, options?: FromStringOptions): T {
     const valueAsBigInt = ExBigInt.fromString(value, options);
     return this.fromBigInt(valueAsBigInt, options);
-  }
-
-  toString(self: T, options?: ToStringOptions): string {
-    this.assert(self, "self");
-    return SafeInt.toString(self, options);
   }
 }
 

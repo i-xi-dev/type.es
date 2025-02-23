@@ -348,40 +348,6 @@ Deno.test("Uint8.fromString()", () => {
   );
 });
 
-Deno.test("Uint8.toString()", () => {
-  assertStrictEquals(Uint8.toString(0), "0");
-  assertStrictEquals(Uint8.toString(-0), "0");
-  assertStrictEquals(Uint8.toString(1), "1");
-  assertStrictEquals(Uint8.toString(63), "63");
-  assertStrictEquals(Uint8.toString(127), "127");
-  assertStrictEquals(Uint8.toString(255), "255");
-
-  const e1 = "The type of `self` does not match the type of `uint8`.";
-  assertThrows(
-    () => {
-      Uint8.toString(0x100 as uint8);
-    },
-    TypeError,
-    e1,
-  );
-
-  const op16 = { radix: 16 } as const;
-  assertStrictEquals(Uint8.toString(0, op16), "0");
-  assertStrictEquals(Uint8.toString(63, op16), "3F");
-
-  const op16l = { radix: 16, lowerCase: true } as const;
-  assertStrictEquals(Uint8.toString(0, op16l), "0");
-  assertStrictEquals(Uint8.toString(63, op16l), "3f");
-
-  const op16l2 = { radix: 16, lowerCase: true, minIntegralDigits: 2 } as const;
-  assertStrictEquals(Uint8.toString(0, op16l2), "00");
-  assertStrictEquals(Uint8.toString(63, op16l2), "3f");
-
-  const op16u3 = { radix: 16, lowerCase: false, minIntegralDigits: 3 } as const;
-  assertStrictEquals(Uint8.toString(0, op16u3), "000");
-  assertStrictEquals(Uint8.toString(63, op16u3), "03F");
-});
-
 Deno.test("Uint8.byteLength", () => {
   assertStrictEquals(Uint8.byteLength, 1);
 });
