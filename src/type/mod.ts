@@ -15,4 +15,5 @@ export * from "./object.ts";
 export * from "./plane.ts";
 export * from "./string.ts";
 export * from "./uint.ts";
+export * from "./uint_utils.ts";
 export * from "./unicode.ts";

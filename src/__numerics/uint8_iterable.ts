@@ -17,21 +17,11 @@ export type ArrayLikeOfUint8 =
 // function _isUint8Iterable() {
 // }
 
-export function isArrayOfUint8(value: unknown): value is Array<uint8> {
-  return Array.isArray(value) && value.every((i) => Type.isUint8(i));
-}
-
-export function assertArrayOfUint8(test: unknown, label: string): void {
-  if (isArrayOfUint8(test) !== true) {
-    throw new TypeError(`\`${label}\` must be \`Array<uint8>\`).`);
-  }
-}
-
 // isUint8SizedIterable
 export function isArrayLikeOfUint8(
   test: unknown,
 ): test is ArrayLikeOfUint8 {
-  return isArrayOfUint8(test) || (test instanceof Uint8Array) ||
+  return Type.isArrayOfUint8(test) || (test instanceof Uint8Array) ||
     (test instanceof Uint8ClampedArray);
 }
 

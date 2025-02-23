@@ -1,9 +1,4 @@
-import {
-  assertStrictEquals,
-  assertThrows,
-  fail,
-  unreachable,
-} from "@std/assert";
+import { assertStrictEquals, assertThrows } from "@std/assert";
 import { xNumerics } from "../../mod.ts";
 
 const { Uint8Iterable } = xNumerics;
@@ -32,56 +27,6 @@ function* g1() {
 }
 function* g0() {
 }
-
-Deno.test("Uint8Iterable.isArrayOfUint8()", () => {
-  assertStrictEquals(Uint8Iterable.isArrayOfUint8(a0), true);
-  assertStrictEquals(Uint8Iterable.isArrayOfUint8(a1), true);
-  assertStrictEquals(Uint8Iterable.isArrayOfUint8([255]), true);
-  assertStrictEquals(Uint8Iterable.isArrayOfUint8([-0]), true);
-  assertStrictEquals(Uint8Iterable.isArrayOfUint8([-1]), false);
-  assertStrictEquals(Uint8Iterable.isArrayOfUint8([256]), false);
-  assertStrictEquals(Uint8Iterable.isArrayOfUint8(0), false);
-  assertStrictEquals(Uint8Iterable.isArrayOfUint8(256), false);
-  assertStrictEquals(Uint8Iterable.isArrayOfUint8([0, 255]), true);
-  assertStrictEquals(Uint8Iterable.isArrayOfUint8([0, 255, -1]), false);
-  assertStrictEquals(Uint8Iterable.isArrayOfUint8(["0"]), false);
-
-  assertStrictEquals(Uint8Iterable.isArrayOfUint8(b0), false);
-  assertStrictEquals(Uint8Iterable.isArrayOfUint8(b1), false);
-
-  assertStrictEquals(Uint8Iterable.isArrayOfUint8(g0()), false);
-  assertStrictEquals(Uint8Iterable.isArrayOfUint8(g1()), false);
-});
-
-Deno.test("Uint8Iterable.assertArrayOfUint8()", () => {
-  try {
-    Uint8Iterable.assertArrayOfUint8(a0, "test-1");
-    Uint8Iterable.assertArrayOfUint8(a1, "test-1");
-    Uint8Iterable.assertArrayOfUint8([255], "test-1");
-    Uint8Iterable.assertArrayOfUint8([-0], "test-1");
-  } catch (exception) {
-    fail((exception as Error).toString());
-  }
-
-  try {
-    Uint8Iterable.assertArrayOfUint8([-1], "test-1");
-    unreachable();
-  } catch {
-    //
-  }
-  try {
-    Uint8Iterable.assertArrayOfUint8([256], "test-1");
-    unreachable();
-  } catch {
-    //
-  }
-  try {
-    Uint8Iterable.assertArrayOfUint8(undefined, "test-1");
-    unreachable();
-  } catch {
-    //
-  }
-});
 
 Deno.test("Uint8Iterable.isUint8SizedIterable()", () => {
   assertStrictEquals(Uint8Iterable.isArrayLikeOfUint8(a0), true);
