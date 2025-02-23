@@ -3,7 +3,7 @@ import { type biguint64, Buffer, ByteOrder } from "../../../mod.ts";
 
 const { ArrayBuffer: ExArrayBuffer } = Buffer;
 
-Deno.test("ExArrayBuffer.fromBigUint64Iterable(Array<biguint64>)", () => {
+Deno.test("Buffer.ArrayBuffer.fromBigUint64Iterable(Array<biguint64>)", () => {
   assertThrows(
     () => {
       ExArrayBuffer.fromBigUint64Iterable(0 as unknown as Array<biguint64>);
@@ -185,7 +185,7 @@ Deno.test("ExArrayBuffer.fromBigUint64Iterable(Array<biguint64>)", () => {
   }
 });
 
-Deno.test("ExArrayBuffer.fromBigUint64Iterable(BigUint64Array)", () => {
+Deno.test("Buffer.ArrayBuffer.fromBigUint64Iterable(BigUint64Array)", () => {
   assertStrictEquals(
     ExArrayBuffer.fromBigUint64Iterable(BigUint64Array.of()).byteLength,
     0,
@@ -308,7 +308,7 @@ Deno.test("ExArrayBuffer.fromBigUint64Iterable(BigUint64Array)", () => {
   }
 });
 
-Deno.test("ExArrayBuffer.fromBigUint64Iterable(Generator<biguint64>)", () => {
+Deno.test("Buffer.ArrayBuffer.fromBigUint64Iterable(Generator<biguint64>)", () => {
   const g0 = (function* () {
   })();
   assertStrictEquals(ExArrayBuffer.fromBigUint64Iterable(g0).byteLength, 0);
@@ -444,7 +444,7 @@ Deno.test("ExArrayBuffer.fromBigUint64Iterable(Generator<biguint64>)", () => {
   }
 });
 
-Deno.test("ExArrayBuffer.fromBigUint64AsyncIterable(Array<biguint64>)", async () => {
+Deno.test("Buffer.ArrayBuffer.fromBigUint64AsyncIterable(Array<biguint64>)", async () => {
   await assertRejects(
     async () => {
       await ExArrayBuffer.fromBigUint64AsyncIterable(
@@ -503,7 +503,7 @@ Deno.test("ExArrayBuffer.fromBigUint64AsyncIterable(Array<biguint64>)", async ()
   );
 });
 
-Deno.test("ExArrayBuffer.fromBigUint64AsyncIterable(AsyncGenerator<BigUint64>)", async () => {
+Deno.test("Buffer.ArrayBuffer.fromBigUint64AsyncIterable(AsyncGenerator<BigUint64>)", async () => {
   const g0 = (async function* () {
   })();
   assertStrictEquals(
@@ -526,7 +526,7 @@ Deno.test("ExArrayBuffer.fromBigUint64AsyncIterable(AsyncGenerator<BigUint64>)",
   assertStrictEquals(a1[2], 0xFFFF_FFFF_FFFF_FFFFn);
 });
 
-Deno.test("ExArrayBuffer.fromBigUint64AsyncIterable(AsyncGenerator<any>)", async () => {
+Deno.test("Buffer.ArrayBuffer.fromBigUint64AsyncIterable(AsyncGenerator<any>)", async () => {
   const g1 = (async function* () {
     yield 0n;
     yield 1n;
@@ -572,7 +572,7 @@ Deno.test("ExArrayBuffer.fromBigUint64AsyncIterable(AsyncGenerator<any>)", async
   );
 });
 
-Deno.test("ExArrayBuffer.toBigUint64Iterable(Uint8Array)", () => {
+Deno.test("Buffer.ArrayBuffer.toBigUint64Iterable(Uint8Array)", () => {
   assertThrows(
     () => {
       ExArrayBuffer.toBigUint64Iterable(0 as unknown as ArrayBuffer);

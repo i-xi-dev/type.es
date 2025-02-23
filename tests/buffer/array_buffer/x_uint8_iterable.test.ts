@@ -3,7 +3,7 @@ import { Buffer, type uint8 } from "../../../mod.ts";
 
 const { ArrayBuffer: ExArrayBuffer } = Buffer;
 
-Deno.test("ExArrayBuffer.fromUint8Iterable(Array<uint8>)", () => {
+Deno.test("Buffer.ArrayBuffer.fromUint8Iterable(Array<uint8>)", () => {
   assertThrows(
     () => {
       ExArrayBuffer.fromUint8Iterable(0 as unknown as Array<uint8>);
@@ -65,7 +65,7 @@ Deno.test("ExArrayBuffer.fromUint8Iterable(Array<uint8>)", () => {
   assertStrictEquals(a1[2], 255);
 });
 
-Deno.test("ExArrayBuffer.fromUint8Iterable(Uint8Array)", () => {
+Deno.test("Buffer.ArrayBuffer.fromUint8Iterable(Uint8Array)", () => {
   assertStrictEquals(
     ExArrayBuffer.fromUint8Iterable(new Uint8Array(0)).byteLength,
     0,
@@ -80,7 +80,7 @@ Deno.test("ExArrayBuffer.fromUint8Iterable(Uint8Array)", () => {
   assertStrictEquals(a1[2], 255);
 });
 
-Deno.test("ExArrayBuffer.fromUint8Iterable(Generator<uint8>)", () => {
+Deno.test("Buffer.ArrayBuffer.fromUint8Iterable(Generator<uint8>)", () => {
   const g0 = (function* () {
   })();
   assertStrictEquals(ExArrayBuffer.fromUint8Iterable(g0).byteLength, 0);
@@ -98,7 +98,7 @@ Deno.test("ExArrayBuffer.fromUint8Iterable(Generator<uint8>)", () => {
   assertStrictEquals(a1[2], 255);
 });
 
-Deno.test("ExArrayBuffer.fromUint8AsyncIterable(Array<uint8>)", async () => {
+Deno.test("Buffer.ArrayBuffer.fromUint8AsyncIterable(Array<uint8>)", async () => {
   await assertRejects(
     async () => {
       await ExArrayBuffer.fromUint8AsyncIterable(
@@ -157,7 +157,7 @@ Deno.test("ExArrayBuffer.fromUint8AsyncIterable(Array<uint8>)", async () => {
   );
 });
 
-Deno.test("ExArrayBuffer.fromUint8AsyncIterable(AsyncGenerator<uint8>)", async () => {
+Deno.test("Buffer.ArrayBuffer.fromUint8AsyncIterable(AsyncGenerator<uint8>)", async () => {
   const g0 = (async function* () {
   })();
   assertStrictEquals(
@@ -178,7 +178,7 @@ Deno.test("ExArrayBuffer.fromUint8AsyncIterable(AsyncGenerator<uint8>)", async (
   assertStrictEquals(a1[2], 255);
 });
 
-Deno.test("ExArrayBuffer.fromUint8AsyncIterable(AsyncGenerator<any>)", async () => {
+Deno.test("Buffer.ArrayBuffer.fromUint8AsyncIterable(AsyncGenerator<any>)", async () => {
   const g1 = (async function* () {
     yield 0;
     yield 1;
@@ -224,7 +224,7 @@ Deno.test("ExArrayBuffer.fromUint8AsyncIterable(AsyncGenerator<any>)", async () 
   );
 });
 
-Deno.test("ExArrayBuffer.toUint8Iterable(Uint8Array)", () => {
+Deno.test("Buffer.ArrayBuffer.toUint8Iterable(Uint8Array)", () => {
   assertThrows(
     () => {
       ExArrayBuffer.toUint8Iterable(0 as unknown as ArrayBuffer);

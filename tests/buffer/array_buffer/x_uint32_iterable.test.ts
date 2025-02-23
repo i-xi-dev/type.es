@@ -3,7 +3,7 @@ import { Buffer, ByteOrder, type uint32 } from "../../../mod.ts";
 
 const { ArrayBuffer: ExArrayBuffer } = Buffer;
 
-Deno.test("ExArrayBuffer.fromUint32Iterable(Array<uint32>)", () => {
+Deno.test("Buffer.ArrayBuffer.fromUint32Iterable(Array<uint32>)", () => {
   assertThrows(
     () => {
       ExArrayBuffer.fromUint32Iterable(0 as unknown as Array<uint32>);
@@ -133,7 +133,7 @@ Deno.test("ExArrayBuffer.fromUint32Iterable(Array<uint32>)", () => {
   }
 });
 
-Deno.test("ExArrayBuffer.fromUint32Iterable(Uint32Array)", () => {
+Deno.test("Buffer.ArrayBuffer.fromUint32Iterable(Uint32Array)", () => {
   assertStrictEquals(
     ExArrayBuffer.fromUint32Iterable(Uint32Array.of()).byteLength,
     0,
@@ -208,7 +208,7 @@ Deno.test("ExArrayBuffer.fromUint32Iterable(Uint32Array)", () => {
   }
 });
 
-Deno.test("ExArrayBuffer.fromUint32Iterable(Generator<uint32>)", () => {
+Deno.test("Buffer.ArrayBuffer.fromUint32Iterable(Generator<uint32>)", () => {
   const g0 = (function* () {
   })();
   assertStrictEquals(ExArrayBuffer.fromUint32Iterable(g0).byteLength, 0);
@@ -296,7 +296,7 @@ Deno.test("ExArrayBuffer.fromUint32Iterable(Generator<uint32>)", () => {
   }
 });
 
-Deno.test("ExArrayBuffer.fromUint32AsyncIterable(Array<uint32>)", async () => {
+Deno.test("Buffer.ArrayBuffer.fromUint32AsyncIterable(Array<uint32>)", async () => {
   await assertRejects(
     async () => {
       await ExArrayBuffer.fromUint32AsyncIterable(
@@ -355,7 +355,7 @@ Deno.test("ExArrayBuffer.fromUint32AsyncIterable(Array<uint32>)", async () => {
   );
 });
 
-Deno.test("ExArrayBuffer.fromUint32AsyncIterable(AsyncGenerator<uint32>)", async () => {
+Deno.test("Buffer.ArrayBuffer.fromUint32AsyncIterable(AsyncGenerator<uint32>)", async () => {
   const g0 = (async function* () {
   })();
   assertStrictEquals(
@@ -376,7 +376,7 @@ Deno.test("ExArrayBuffer.fromUint32AsyncIterable(AsyncGenerator<uint32>)", async
   assertStrictEquals(a1[2], 0xFFFFFFFF);
 });
 
-Deno.test("ExArrayBuffer.fromUint32AsyncIterable(AsyncGenerator<any>)", async () => {
+Deno.test("Buffer.ArrayBuffer.fromUint32AsyncIterable(AsyncGenerator<any>)", async () => {
   const g1 = (async function* () {
     yield 0;
     yield 1;
@@ -422,7 +422,7 @@ Deno.test("ExArrayBuffer.fromUint32AsyncIterable(AsyncGenerator<any>)", async ()
   );
 });
 
-Deno.test("ExArrayBuffer.toUint32Iterable(Uint8Array)", () => {
+Deno.test("Buffer.ArrayBuffer.toUint32Iterable(Uint8Array)", () => {
   assertThrows(
     () => {
       ExArrayBuffer.toUint32Iterable(0 as unknown as ArrayBuffer);
