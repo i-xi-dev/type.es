@@ -22,6 +22,87 @@ Deno.test("Numerics.Uint32.BYTE_LENGTH", () => {
 const le = "little-endian";
 const be = "big-endian";
 
+Deno.test("Numerics.Uint32.fromBytes()", () => {
+  assertStrictEquals(Uint32.fromBytes(Uint8Array.of(0, 0, 0, 0)), 0);
+  assertStrictEquals(Uint32.fromBytes(Uint8Array.of(0, 0, 0, 0), be), 0);
+  assertStrictEquals(Uint32.fromBytes(Uint8Array.of(0, 0, 0, 0), le), 0);
+
+  // assertStrictEquals(Uint32.fromBytes(Uint8Array.of(0, 0, 0, 0xFF)), 0xFF);
+  assertStrictEquals(Uint32.fromBytes(Uint8Array.of(0, 0, 0, 0xFF), be), 0xFF);
+  assertStrictEquals(Uint32.fromBytes(Uint8Array.of(0xFF, 0, 0, 0), le), 0xFF);
+
+  // assertStrictEquals(Uint32.fromBytes(Uint8Array.of(0, 0, 0xFF, 0xFF)), 0xFFFF);
+  assertStrictEquals(
+    Uint32.fromBytes(Uint8Array.of(0, 0, 0xFF, 0xFF), be),
+    0xFFFF,
+  );
+  assertStrictEquals(
+    Uint32.fromBytes(Uint8Array.of(0xFF, 0xFF, 0, 0), le),
+    0xFFFF,
+  );
+
+  assertStrictEquals(Uint32.fromBytes(Uint8Array.of(0, 0, 13, 101), be), 3429);
+  assertStrictEquals(Uint32.fromBytes(Uint8Array.of(101, 13, 0, 0), le), 3429);
+
+  // assertStrictEquals(
+  //   Uint32.fromBytes(Uint8Array.of(0, 0xFF, 0xFF, 0xFF)),
+  //   0xFFFFFF,
+  // );
+  assertStrictEquals(
+    Uint32.fromBytes(Uint8Array.of(0, 0xFF, 0xFF, 0xFF), be),
+    0xFFFFFF,
+  );
+  assertStrictEquals(
+    Uint32.fromBytes(Uint8Array.of(0xFF, 0xFF, 0xFF, 0), le),
+    0xFFFFFF,
+  );
+
+  assertStrictEquals(
+    Uint32.fromBytes(Uint8Array.of(0xFF, 0xFF, 0xFF, 0xFF)),
+    0xFFFFFFFF,
+  );
+  assertStrictEquals(
+    Uint32.fromBytes(Uint8Array.of(0xFF, 0xFF, 0xFF, 0xFF), be),
+    0xFFFFFFFF,
+  );
+  assertStrictEquals(
+    Uint32.fromBytes(Uint8Array.of(0xFF, 0xFF, 0xFF, 0xFF), le),
+    0xFFFFFFFF,
+  );
+
+  const e0 = "`bytes` must be an `Uint8Array`.";
+  assertThrows(
+    () => {
+      Uint32.fromBytes([0] as unknown as Uint8Array);
+    },
+    TypeError,
+    e0,
+  );
+
+  const e1 = "byte length unmatched.";
+  assertThrows(
+    () => {
+      Uint32.fromBytes(Uint8Array.of());
+    },
+    RangeError,
+    e1,
+  );
+  assertThrows(
+    () => {
+      Uint32.fromBytes(Uint8Array.of(0, 0, 0));
+    },
+    RangeError,
+    e1,
+  );
+  assertThrows(
+    () => {
+      Uint32.fromBytes(Uint8Array.of(0, 0, 0, 0, 0));
+    },
+    RangeError,
+    e1,
+  );
+});
+
 Deno.test("Numerics.Uint32.toBytes()", () => {
   // assertStrictEquals(
   //   [...Uint32.toBytes(0)].map((i) => i.toString()).join(","),
