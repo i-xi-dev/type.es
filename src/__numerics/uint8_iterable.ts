@@ -1,5 +1,5 @@
 import * as Type from "../type/mod.ts";
-import { type safeint, type uint8 } from "../_typedef/mod.ts";
+import { type safeint } from "../_typedef/mod.ts";
 import { ZERO as NUMBER_ZERO } from "../_const/number.ts";
 
 type ArrayLikeOfExpectUint8 =
@@ -8,37 +8,19 @@ type ArrayLikeOfExpectUint8 =
   | Uint8ClampedArray; //TODO
 
 // Uint8SizedIterable
-export type ArrayLikeOfUint8 =
-  | Array<uint8>
-  | Uint8Array
-  | Uint8ClampedArray;
 
 // 要素の型を判定できないのでassertIterableObject以上のチェックは出来ない
 // function _isUint8Iterable() {
 // }
 
 // isUint8SizedIterable
-export function isArrayLikeOfUint8(
-  test: unknown,
-): test is ArrayLikeOfUint8 {
-  return Type.isArrayOfUint8(test) || (test instanceof Uint8Array) ||
-    (test instanceof Uint8ClampedArray);
-}
-
-export function assertArrayLikeOfUint8(test: unknown, label: string): void {
-  if (isArrayLikeOfUint8(test) !== true) {
-    throw new TypeError(
-      `\`${label}\` must be (\`Array<uint8> | Uint8Array | Uint8ClampedArray\`).`,
-    );
-  }
-}
 
 export function elementsStartsWith(
   self: Iterable<safeint /* uint8 */>,
   other: ArrayLikeOfExpectUint8,
 ): boolean {
   Type.assertIterable(self, "self");
-  assertArrayLikeOfUint8(other, "other");
+  Type.assertArrayOrTypedArrayOfUint8(other, "other");
 
   if (other.length <= NUMBER_ZERO) {
     return true;
@@ -71,7 +53,7 @@ export function elementsEquals(
   other: ArrayLikeOfExpectUint8,
 ): boolean {
   Type.assertIterable(self, "self");
-  assertArrayLikeOfUint8(other, "other");
+  Type.assertArrayOrTypedArrayOfUint8(other, "other");
 
   const otherLastIndex = other.length - 1;
   let i = NUMBER_ZERO;

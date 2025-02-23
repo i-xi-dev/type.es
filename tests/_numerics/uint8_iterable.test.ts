@@ -28,29 +28,6 @@ function* g1() {
 function* g0() {
 }
 
-Deno.test("Uint8Iterable.isUint8SizedIterable()", () => {
-  assertStrictEquals(Uint8Iterable.isArrayLikeOfUint8(a0), true);
-  assertStrictEquals(Uint8Iterable.isArrayLikeOfUint8(a1), true);
-  assertStrictEquals(Uint8Iterable.isArrayLikeOfUint8([255]), true);
-  assertStrictEquals(Uint8Iterable.isArrayLikeOfUint8([-0]), true);
-  assertStrictEquals(Uint8Iterable.isArrayLikeOfUint8([-1]), false);
-  assertStrictEquals(Uint8Iterable.isArrayLikeOfUint8([256]), false);
-  assertStrictEquals(Uint8Iterable.isArrayLikeOfUint8(0), false);
-  assertStrictEquals(Uint8Iterable.isArrayLikeOfUint8(256), false);
-  assertStrictEquals(Uint8Iterable.isArrayLikeOfUint8([0, 255]), true);
-  assertStrictEquals(
-    Uint8Iterable.isArrayLikeOfUint8([0, 255, -1]),
-    false,
-  );
-  assertStrictEquals(Uint8Iterable.isArrayLikeOfUint8(["0"]), false);
-
-  assertStrictEquals(Uint8Iterable.isArrayLikeOfUint8(b0), true);
-  assertStrictEquals(Uint8Iterable.isArrayLikeOfUint8(b1), true);
-
-  assertStrictEquals(Uint8Iterable.isArrayLikeOfUint8(g0()), false);
-  assertStrictEquals(Uint8Iterable.isArrayLikeOfUint8(g1()), false);
-});
-
 Deno.test("Uint8Iterable.bytesStartsWith()", () => {
   assertStrictEquals(Uint8Iterable.elementsStartsWith(a3, a3), true);
   assertStrictEquals(Uint8Iterable.elementsStartsWith(a3, a2), true);
@@ -134,7 +111,7 @@ Deno.test("Uint8Iterable.bytesStartsWith()", () => {
   );
 
   const e3 =
-    "`other` must be (`Array<uint8> | Uint8Array | Uint8ClampedArray`).";
+    "`other` must be a `Array<uint8>` or `Uint8Array` or `Uint8ClampedArray`.";
   assertThrows(
     () => {
       Uint8Iterable.elementsStartsWith(
@@ -234,7 +211,7 @@ Deno.test("Uint8Iterable.bytesEquals()", () => {
   );
 
   const e3 =
-    "`other` must be (`Array<uint8> | Uint8Array | Uint8ClampedArray`).";
+    "`other` must be a `Array<uint8>` or `Uint8Array` or `Uint8ClampedArray`.";
   assertThrows(
     () => {
       Uint8Iterable.elementsEquals([0], undefined as unknown as Uint8Array);

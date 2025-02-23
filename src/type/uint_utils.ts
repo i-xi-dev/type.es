@@ -10,3 +10,26 @@ export function assertArrayOfUint8(test: unknown, label: string): void {
     throw new TypeError(`\`${label}\` must be an \`Array<uint8>\`).`);
   }
 }
+
+type ArrayOrTypedArrayOfUint8 =
+  | Array<uint8>
+  | Uint8Array
+  | Uint8ClampedArray;
+
+export function isArrayOrTypedArrayOfUint8(
+  test: unknown,
+): test is ArrayOrTypedArrayOfUint8 {
+  return isArrayOfUint8(test) || (test instanceof Uint8Array) ||
+    (test instanceof Uint8ClampedArray);
+}
+
+export function assertArrayOrTypedArrayOfUint8(
+  test: unknown,
+  label: string,
+): void {
+  if (isArrayOrTypedArrayOfUint8(test) !== true) {
+    throw new TypeError(
+      `\`${label}\` must be a \`Array<uint8>\` or \`Uint8Array\` or \`Uint8ClampedArray\`.`,
+    );
+  }
+}

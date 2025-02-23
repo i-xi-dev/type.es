@@ -57,6 +57,12 @@ Deno.test("Type.assertArrayOfUint8()", () => {
   }
 
   try {
+    Type.assertArrayOfUint8(Uint8Array.of(0), "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+  try {
     Type.assertArrayOfUint8([-1], "test-1");
     unreachable();
   } catch {
@@ -70,6 +76,49 @@ Deno.test("Type.assertArrayOfUint8()", () => {
   }
   try {
     Type.assertArrayOfUint8(undefined, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+});
+
+Deno.test("Type.isArrayOrTypedArrayOfUint8()", () => {
+  assertStrictEquals(Type.isArrayOrTypedArrayOfUint8(a0), true);
+  assertStrictEquals(Type.isArrayOrTypedArrayOfUint8(a1), true);
+  assertStrictEquals(Type.isArrayOrTypedArrayOfUint8([255]), true);
+  assertStrictEquals(Type.isArrayOrTypedArrayOfUint8([-0]), true);
+  assertStrictEquals(Type.isArrayOrTypedArrayOfUint8([-1]), false);
+  assertStrictEquals(Type.isArrayOrTypedArrayOfUint8([256]), false);
+  assertStrictEquals(Type.isArrayOrTypedArrayOfUint8(0), false);
+  assertStrictEquals(Type.isArrayOrTypedArrayOfUint8(256), false);
+  assertStrictEquals(Type.isArrayOrTypedArrayOfUint8([0, 255]), true);
+  assertStrictEquals(
+    Type.isArrayOrTypedArrayOfUint8([0, 255, -1]),
+    false,
+  );
+  assertStrictEquals(Type.isArrayOrTypedArrayOfUint8(["0"]), false);
+
+  assertStrictEquals(Type.isArrayOrTypedArrayOfUint8(b0), true);
+  assertStrictEquals(Type.isArrayOrTypedArrayOfUint8(b1), true);
+
+  assertStrictEquals(Type.isArrayOrTypedArrayOfUint8(g0()), false);
+  assertStrictEquals(Type.isArrayOrTypedArrayOfUint8(g1()), false);
+});
+
+Deno.test("Type.assertArrayOrTypedArrayOfUint8()", () => {
+  try {
+    Type.assertArrayOrTypedArrayOfUint8(a0, "test-1");
+    Type.assertArrayOrTypedArrayOfUint8(a1, "test-1");
+    Type.assertArrayOrTypedArrayOfUint8([255], "test-1");
+    Type.assertArrayOrTypedArrayOfUint8([-0], "test-1");
+    Type.assertArrayOrTypedArrayOfUint8(Uint8Array.of(0), "test-1");
+    Type.assertArrayOrTypedArrayOfUint8(Uint8ClampedArray.of(0), "test-1");
+  } catch (exception) {
+    fail((exception as Error).toString());
+  }
+
+  try {
+    Type.assertArrayOfUint8([-1], "test-1");
     unreachable();
   } catch {
     //
