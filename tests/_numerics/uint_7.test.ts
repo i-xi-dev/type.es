@@ -237,35 +237,6 @@ Deno.test("Uint7.fromBigInt() - overflowMode", () => {
   assertStrictEquals(Uint7.fromBigInt(257n, op2), 1);
 });
 
-Deno.test("Uint7.toBigInt()", () => {
-  assertStrictEquals(Uint7.toBigInt(0), 0n);
-  assertStrictEquals(Uint7.toBigInt(-0), 0n);
-  assertStrictEquals(Uint7.toBigInt(0x7F), 0x7Fn);
-
-  const e1 = "The type of `self` does not match the type of `uint7`.";
-  assertThrows(
-    () => {
-      Uint7.toBigInt(0x80 as uint7);
-    },
-    TypeError,
-    e1,
-  );
-  assertThrows(
-    () => {
-      Uint7.toBigInt(-1 as uint7);
-    },
-    TypeError,
-    e1,
-  );
-  assertThrows(
-    () => {
-      Uint7.toBigInt(undefined as unknown as uint7);
-    },
-    TypeError,
-    e1,
-  );
-});
-
 Deno.test("Uint7.fromString()", () => {
   assertStrictEquals(Uint7.fromString("0"), 0);
   assertStrictEquals(Uint7.fromString("-0"), 0);

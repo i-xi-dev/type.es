@@ -309,35 +309,6 @@ Deno.test("Uint32.fromBigInt() - overflowMode", () => {
   assertStrictEquals(Uint32.fromBigInt(4294967296n, op2), 0);
 });
 
-Deno.test("Uint32.toBigInt()", () => {
-  assertStrictEquals(Uint32.toBigInt(0), 0n);
-  assertStrictEquals(Uint32.toBigInt(-0), 0n);
-  assertStrictEquals(Uint32.toBigInt(0xFFFFFFFF), 0xFFFFFFFFn);
-
-  const e1 = "The type of `self` does not match the type of `uint32`.";
-  assertThrows(
-    () => {
-      Uint32.toBigInt(0x100000000 as number);
-    },
-    TypeError,
-    e1,
-  );
-  assertThrows(
-    () => {
-      Uint32.toBigInt(-1 as number);
-    },
-    TypeError,
-    e1,
-  );
-  assertThrows(
-    () => {
-      Uint32.toBigInt(undefined as unknown as number);
-    },
-    TypeError,
-    e1,
-  );
-});
-
 Deno.test("Uint32.fromString()", () => {
   assertStrictEquals(Uint32.fromString("0"), 0);
   assertStrictEquals(Uint32.fromString("-0"), 0);

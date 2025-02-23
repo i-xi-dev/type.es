@@ -153,11 +153,6 @@ class _UinNOperations<T extends safeint> implements UintNOperations<T> {
     }
   }
 
-  toBigInt(self: T): bigint {
-    this.assert(self, "self");
-    return BigInt(self);
-  }
-
   //XXX 小数も受け付ける？
   fromString(value: string, options?: FromStringOptions): T {
     const valueAsBigInt = ExBigInt.fromString(value, options);

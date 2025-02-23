@@ -286,35 +286,6 @@ Deno.test("Uint24.fromBigInt() - overflowMode", () => {
   assertStrictEquals(Uint24.fromBigInt(16777216n, op2), 0);
 });
 
-Deno.test("Uint24.toBigInt()", () => {
-  assertStrictEquals(Uint24.toBigInt(0), 0n);
-  assertStrictEquals(Uint24.toBigInt(-0), 0n);
-  assertStrictEquals(Uint24.toBigInt(0xFFFFFF), 0xFFFFFFn);
-
-  const e1 = "The type of `self` does not match the type of `uint24`.";
-  assertThrows(
-    () => {
-      Uint24.toBigInt(0x1000000 as number);
-    },
-    TypeError,
-    e1,
-  );
-  assertThrows(
-    () => {
-      Uint24.toBigInt(-1 as number);
-    },
-    TypeError,
-    e1,
-  );
-  assertThrows(
-    () => {
-      Uint24.toBigInt(undefined as unknown as number);
-    },
-    TypeError,
-    e1,
-  );
-});
-
 Deno.test("Uint24.fromString()", () => {
   assertStrictEquals(Uint24.fromString("0"), 0);
   assertStrictEquals(Uint24.fromString("-0"), 0);
