@@ -1,14 +1,9 @@
 import * as ExBigInt from "../numerics/bigint/mod.ts";
 import * as SafeInt from "../numerics/safeint/mod.ts";
 import * as SafeIntRange from "../numerics/range/safeint_range/mod.ts";
-import {
-  assertNumber,
-  isNonPositiveSafeInt,
-  isSafeInt,
-} from "../type/number.ts";
+import { isNonPositiveSafeInt } from "../type/number.ts";
 import {
   FromBigIntOptions,
-  FromNumberOptions,
   FromStringOptions,
   UintNOperations,
 } from "./ranged_integer.ts";
@@ -30,7 +25,6 @@ class _UinNOperations<T extends safeint> implements UintNOperations<T> {
   readonly #min: T;
   readonly #max: T;
   readonly #range: safeintrange<T>;
-  readonly #size: safeint;
 
   constructor(bitLength: safeint) {
     if (isNonPositiveSafeInt(bitLength) || (bitLength > 32)) {
@@ -41,11 +35,6 @@ class _UinNOperations<T extends safeint> implements UintNOperations<T> {
     this.#min = ExNumber.ZERO as T;
     this.#max = (2 ** bitLength - 1) as T;
     this.#range = [this.#min, this.#max];
-    this.#size = SafeIntRange.sizeOf(this.#range);
-  }
-
-  get bitLength(): safeint {
-    return this.#bitLength;
   }
 
   //
@@ -60,58 +49,6 @@ class _UinNOperations<T extends safeint> implements UintNOperations<T> {
       ); // 型が期待値でない場合も含むのでRangeErrorでなくTypeErrorとした
     }
   }
-
-  fromNumber(value: number, options?: FromNumberOptions): T {
-    assertNumber(value, "value");
-
-    if (Number.isNaN(value)) {
-      throw new TypeError("`value` must not be `NaN`.");
-    }
-
-    let adjustedValue: number;
-    if (value > Number.MAX_SAFE_INTEGER) {
-      adjustedValue = Number.MAX_SAFE_INTEGER;
-    } else if (value < Number.MIN_SAFE_INTEGER) {
-      adjustedValue = Number.MIN_SAFE_INTEGER;
-    } else {
-      //XXX もっと狭めるか？
-      adjustedValue = value;
-    }
-
-    let valueAsInt: safeint;
-    if (isSafeInt(adjustedValue)) {
-      valueAsInt = adjustedValue;
-    } else {
-      valueAsInt = SafeInt.round(adjustedValue, options?.roundingMode);
-    }
-
-    if (this.is(valueAsInt)) {
-      return ExNumber.normalize(valueAsInt);
-    }
-
-    switch (options?.overflowMode) {
-      case OverflowMode.EXCEPTION:
-        throw new RangeError(
-          "`value` must be within the range of `uint" +
-            this.#bitLength + "`.",
-        );
-
-      default: // case OverflowMode.SATURATE:
-        return SafeInt.clampToRange(valueAsInt, this.#range);
-    }
-  }
-
-  // #saturateFromInteger(value: safeint): T {
-  //   // assertSafeInt(value, "value");
-
-  //   if (value > this.#max) {
-  //     return this.#max;
-  //   } else if (value < this.#min) {
-  //     return this.#min;
-  //   }
-
-  //   return ExNumber.normalize(value as T);
-  // }
 
   fromBigInt(value: bigint, options?: FromBigIntOptions): T {
     const valueAsNumber = SafeInt.fromBigInt(value);

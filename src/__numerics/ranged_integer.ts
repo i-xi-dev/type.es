@@ -27,8 +27,4 @@ export type ToStringOptions = {
 }; // Numerics.ToStringOptions;
 
 export interface UintNOperations<T extends int> {
-  bitLength: safeint;
-  fromNumber(value: number, options?: FromNumberOptions): T;
-  //fromBigInt(value: bigint, options?: FromBigIntOptions): T;
-  //fromString(value: string, options?: FromStringOptions): T;
 }

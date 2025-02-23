@@ -25,10 +25,6 @@ class _UinNOperations<T extends bigint> implements UintNOperations<T> {
     this.#range = [this.#min, this.#max];
   }
 
-  get bitLength(): safeint {
-    return this.#bitLength;
-  }
-
   is(value: unknown): value is T {
     return BigIntRange.includes(this.#range, value as T);
   }

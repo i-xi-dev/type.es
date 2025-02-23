@@ -43,6 +43,7 @@ interface RangedInt<T extends safeint> {
   //XXX rotateRight()
   truncate(value: safeint): T;
   saturate(value: safeint): T;
+  // fromNumber() → truncate(),saturate(),範囲外はエラーにしたければisUintXかassertUintX（,整数にしたければround等してから）
   // toNumber() → もともとnumberなので不要
   // toBigInt() → bigint.tsのfromNumber()
   // toString() → safeint.tsのtoString()
