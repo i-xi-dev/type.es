@@ -1,3 +1,23 @@
+export function isArrayBuffer(test: unknown): test is ArrayBuffer {
+  return (test instanceof ArrayBuffer);
+}
+
+export function assertArrayBuffer(test: unknown, label: string): void {
+  if (isArrayBuffer(test) !== true) {
+    throw new TypeError(`\`${label}\` must be an \`ArrayBuffer\`.`);
+  }
+}
+
+export function isUint8Array(test: unknown): test is Uint8Array {
+  return (test instanceof Uint8Array);
+}
+
+export function assertUint8Array(test: unknown, label: string): void {
+  if (isUint8Array(test) !== true) {
+    throw new TypeError(`\`${label}\` must be an \`Uint8Array\`.`);
+  }
+}
+
 export function isBufferSource(test: unknown): test is BufferSource {
   return (test instanceof ArrayBuffer) || ArrayBuffer.isView(test);
 }

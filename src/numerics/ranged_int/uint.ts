@@ -71,6 +71,7 @@ interface RangedInt<T extends safeint> {
   MAX_VALUE: T;
   BIT_LENGTH: safeint;
   BYTE_LENGTH: safeint;
+  //TODO fromBytes(bytes: Uint8Array, byteOrder?: byteorder): T;
   toBytes(value: T, byteOrder?: byteorder): Uint8Array;
   bitwiseAnd(a: T, b: T): T;
   bitwiseOr(a: T, b: T): T;
@@ -86,24 +87,32 @@ class _Uint<T extends safeint> implements RangedInt<T> {
   readonly MIN_VALUE: T;
   readonly MAX_VALUE: T;
   readonly BIT_LENGTH: safeint;
-  readonly BYTE_LENGTH: safeint;
+  readonly BYTE_LENGTH: safeint; // (1 | 2 | 3 | 4 | 5 | 6)
   readonly #info: _Info<T>;
-  protected readonly _assert: _AFunc;
+  readonly #assert: _AFunc;
 
   constructor(info: _Info<T>, assert: _AFunc) {
     this.MIN_VALUE = info.MIN_VALUE;
     this.MAX_VALUE = info.MAX_VALUE;
     this.BIT_LENGTH = info.BIT_LENGTH;
     this.BYTE_LENGTH = Math.ceil(info.BIT_LENGTH / Byte.BITS_PER_BYTE);
+    if (this.BYTE_LENGTH > 48) {
+      throw new RangeError("byte length overflowed.");
+    }
     this.#info = info;
-    this._assert = assert;
+    this.#assert = assert;
   }
 
-  toBytes(value: T, byteOrder: byteorder = ByteOrder.nativeOrder): Uint8Array {
-    this._assert(value, "value");
-    //TODO byteOrderのチェック
+  // fromBytes(bytes: Uint8Array, byteOrder?: byteorder): T {
+  //   Type.assertUint8Array(bytes, "bytes");
+  //   //TODO byteOrderのチェック
 
-    // bitLengthは 8 | 16 | 24 | 32 | 40 | 48 のいずれか
+
+  // }
+
+  toBytes(value: T, byteOrder: byteorder = ByteOrder.nativeOrder): Uint8Array {
+    this.#assert(value, "value");
+    //TODO byteOrderのチェック
 
     if (this.BIT_LENGTH === 8) {
       return Uint8Array.of(value);
@@ -123,28 +132,28 @@ class _Uint<T extends safeint> implements RangedInt<T> {
   }
 
   bitwiseAnd(a: T, b: T): T {
-    this._assert(a, "a");
-    this._assert(b, "b");
+    this.#assert(a, "a");
+    this.#assert(b, "b");
 
     return _bitwiseAnd_under32(a, b, this.#info);
   }
 
   bitwiseOr(a: T, b: T): T {
-    this._assert(a, "a");
-    this._assert(b, "b");
+    this.#assert(a, "a");
+    this.#assert(b, "b");
 
     return _bitwiseOr_under32(a, b, this.#info);
   }
 
   bitwiseXOr(a: T, b: T): T {
-    this._assert(a, "a");
-    this._assert(b, "b");
+    this.#assert(a, "a");
+    this.#assert(b, "b");
 
     return _bitwiseXOr_under32(a, b, this.#info);
   }
 
   rotateLeft(value: T, offset: safeint): T {
-    this._assert(value, "value");
+    this.#assert(value, "value");
 
     return _rotateLeft_under32(value, offset, this.#info);
   }

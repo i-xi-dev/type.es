@@ -39,7 +39,7 @@ class _BigUint<T extends bigint> implements RangedBigInt<T> {
   readonly BIT_LENGTH: safeint;
   readonly BYTE_LENGTH: safeint;
   // readonly #info: _Info<T>;
-  protected readonly _assert: _AFunc;
+  readonly #assert: _AFunc;
 
   //XXX 仮
   readonly #buffer: ArrayBuffer;
@@ -56,7 +56,7 @@ class _BigUint<T extends bigint> implements RangedBigInt<T> {
     this.BIT_LENGTH = info.BIT_LENGTH;
     this.BYTE_LENGTH = Math.ceil(info.BIT_LENGTH / Byte.BITS_PER_BYTE);
     // this.#info = info;
-    this._assert = assert;
+    this.#assert = assert;
 
     //XXX 仮
     this.#buffer = new ArrayBuffer(8);
@@ -65,7 +65,7 @@ class _BigUint<T extends bigint> implements RangedBigInt<T> {
   }
 
   toBytes(value: T, byteOrder: byteorder = ByteOrder.nativeOrder): Uint8Array {
-    this._assert(value, "value");
+    this.#assert(value, "value");
     //TODO byteOrderのチェック
 
     // bitLengthは 56 | 64 | 72 | 80 | 88 | 96 | 104 | 112 | 120 | 128 | ...
@@ -79,31 +79,31 @@ class _BigUint<T extends bigint> implements RangedBigInt<T> {
   }
 
   bitwiseAnd(a: T, b: T): T {
-    this._assert(a, "a");
-    this._assert(b, "b");
+    this.#assert(a, "a");
+    this.#assert(b, "b");
 
     return (((a as bigint) & (b as bigint)) & this.MAX_VALUE) as T;
     // as bigintしているのは、何故かtypescriptにbigintでなくnumberだと言われるので
   }
 
   bitwiseOr(a: T, b: T): T {
-    this._assert(a, "a");
-    this._assert(b, "b");
+    this.#assert(a, "a");
+    this.#assert(b, "b");
 
     return (((a as bigint) | (b as bigint)) & this.MAX_VALUE) as T;
     // as bigintしているのは、何故かtypescriptにbigintでなくnumberだと言われるので
   }
 
   bitwiseXOr(a: T, b: T): T {
-    this._assert(a, "a");
-    this._assert(b, "b");
+    this.#assert(a, "a");
+    this.#assert(b, "b");
 
     return (((a as bigint) ^ (b as bigint)) & this.MAX_VALUE) as T;
     // as bigintしているのは、何故かtypescriptにbigintでなくnumberだと言われるので
   }
 
   rotateLeft(value: T, offset: safeint): T {
-    this._assert(value, "value");
+    this.#assert(value, "value");
     Type.assertSafeInt(offset, "offset");
 
     const normalizedOffset = _normalizeOffset(offset, this.BIT_LENGTH);

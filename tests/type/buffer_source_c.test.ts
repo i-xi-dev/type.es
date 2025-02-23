@@ -31,3 +31,34 @@ Deno.test("Type.assertArrayBuffer()", () => {
     //
   }
 });
+
+Deno.test("Type.isUint8Array()", () => {
+  assertStrictEquals(Type.isUint8Array(new ArrayBuffer(0)), false);
+  assertStrictEquals(Type.isUint8Array(Uint8Array.of(0).buffer), false);
+  assertStrictEquals(Type.isUint8Array(new Uint8Array(0)), true);
+  assertStrictEquals(Type.isUint8Array([]), false);
+  assertStrictEquals(Type.isUint8Array(null), false);
+  assertStrictEquals(Type.isUint8Array(undefined), false);
+});
+
+Deno.test("Type.assertUint8Array()", () => {
+  try {
+    Type.assertUint8Array(new Uint8Array(0), "test-1");
+    Type.assertUint8Array(Uint8Array.of(0), "test-1");
+  } catch (exception) {
+    fail((exception as Error).toString());
+  }
+
+  try {
+    Type.assertUint8Array(new ArrayBuffer(0), "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+  try {
+    Type.assertUint8Array(null, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+});
