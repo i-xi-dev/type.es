@@ -25,6 +25,41 @@ Deno.test("Numerics.Uint8.BYTE_LENGTH", () => {
 const le = "little-endian";
 const be = "big-endian";
 
+Deno.test("Numerics.Uint8.fromBytes()", () => {
+  assertStrictEquals(Uint8.fromBytes(Uint8Array.of(0)), 0);
+  assertStrictEquals(Uint8.fromBytes(Uint8Array.of(0), be), 0);
+  assertStrictEquals(Uint8.fromBytes(Uint8Array.of(0), le), 0);
+
+  assertStrictEquals(Uint8.fromBytes(Uint8Array.of(0xFF)), 0xFF);
+  assertStrictEquals(Uint8.fromBytes(Uint8Array.of(0xFF), be), 0xFF);
+  assertStrictEquals(Uint8.fromBytes(Uint8Array.of(0xFF), le), 0xFF);
+
+  const e0 = "`bytes` must be an `Uint8Array`.";
+  assertThrows(
+    () => {
+      Uint8.fromBytes([0] as unknown as Uint8Array);
+    },
+    TypeError,
+    e0,
+  );
+
+  const e1 = "byte length unmatched.";
+  assertThrows(
+    () => {
+      Uint8.fromBytes(Uint8Array.of());
+    },
+    RangeError,
+    e1,
+  );
+  assertThrows(
+    () => {
+      Uint8.fromBytes(Uint8Array.of(0, 0));
+    },
+    RangeError,
+    e1,
+  );
+});
+
 Deno.test("Numerics.Uint8.toBytes()", () => {
   assertStrictEquals(
     [...Uint8.toBytes(0)].map((i) => i.toString()).join(","),

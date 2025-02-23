@@ -22,7 +22,75 @@ Deno.test("Numerics.Uint24.BYTE_LENGTH", () => {
 const le = "little-endian";
 const be = "big-endian";
 
-Deno.test("Uint24.toBytes()", () => {
+Deno.test("Numerics.Uint24.fromBytes()", () => {
+  assertStrictEquals(Uint24.fromBytes(Uint8Array.of(0, 0, 0)), 0);
+  assertStrictEquals(Uint24.fromBytes(Uint8Array.of(0, 0, 0), be), 0);
+  assertStrictEquals(Uint24.fromBytes(Uint8Array.of(0, 0, 0), le), 0);
+
+  // assertStrictEquals(Uint24.fromBytes(Uint8Array.of(0, 0, 0xFF)), 0xFF);
+  assertStrictEquals(Uint24.fromBytes(Uint8Array.of(0, 0, 0xFF), be), 0xFF);
+  assertStrictEquals(Uint24.fromBytes(Uint8Array.of(0xFF, 0, 0), le), 0xFF);
+
+  // assertStrictEquals(Uint24.fromBytes(Uint8Array.of(0, 0xFF, 0xFF)), 0xFFFF);
+  assertStrictEquals(
+    Uint24.fromBytes(Uint8Array.of(0, 0xFF, 0xFF), be),
+    0xFFFF,
+  );
+  assertStrictEquals(
+    Uint24.fromBytes(Uint8Array.of(0xFF, 0xFF, 0), le),
+    0xFFFF,
+  );
+
+  assertStrictEquals(Uint24.fromBytes(Uint8Array.of(0, 13, 101), be), 3429);
+  assertStrictEquals(Uint24.fromBytes(Uint8Array.of(101, 13, 0), le), 3429);
+
+  assertStrictEquals(
+    Uint24.fromBytes(Uint8Array.of(0xFF, 0xFF, 0xFF)),
+    0xFFFFFF,
+  );
+  assertStrictEquals(
+    Uint24.fromBytes(Uint8Array.of(0xFF, 0xFF, 0xFF), be),
+    0xFFFFFF,
+  );
+  assertStrictEquals(
+    Uint24.fromBytes(Uint8Array.of(0xFF, 0xFF, 0xFF), le),
+    0xFFFFFF,
+  );
+
+  const e0 = "`bytes` must be an `Uint8Array`.";
+  assertThrows(
+    () => {
+      Uint24.fromBytes([0] as unknown as Uint8Array);
+    },
+    TypeError,
+    e0,
+  );
+
+  const e1 = "byte length unmatched.";
+  assertThrows(
+    () => {
+      Uint24.fromBytes(Uint8Array.of());
+    },
+    RangeError,
+    e1,
+  );
+  assertThrows(
+    () => {
+      Uint24.fromBytes(Uint8Array.of(0, 0));
+    },
+    RangeError,
+    e1,
+  );
+  assertThrows(
+    () => {
+      Uint24.fromBytes(Uint8Array.of(0, 0, 0, 0));
+    },
+    RangeError,
+    e1,
+  );
+});
+
+Deno.test("Numerics.Uint24.toBytes()", () => {
   // assertStrictEquals(
   //   [...Uint24.toBytes(0)].map((i) => i.toString()).join(","),
   //   "0,0,0",

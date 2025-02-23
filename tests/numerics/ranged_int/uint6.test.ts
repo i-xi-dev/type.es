@@ -22,6 +22,50 @@ Deno.test("Numerics.Uint6.BYTE_LENGTH", () => {
 const le = "little-endian";
 const be = "big-endian";
 
+Deno.test("Numerics.Uint6.fromBytes()", () => {
+  assertStrictEquals(Uint6.fromBytes(Uint8Array.of(0)), 0);
+  assertStrictEquals(Uint6.fromBytes(Uint8Array.of(0), be), 0);
+  assertStrictEquals(Uint6.fromBytes(Uint8Array.of(0), le), 0);
+
+  assertStrictEquals(Uint6.fromBytes(Uint8Array.of(0x3F)), 0x3F);
+  assertStrictEquals(Uint6.fromBytes(Uint8Array.of(0x3F), be), 0x3F);
+  assertStrictEquals(Uint6.fromBytes(Uint8Array.of(0x3F), le), 0x3F);
+
+  const e0 = "`bytes` must be an `Uint8Array`.";
+  assertThrows(
+    () => {
+      Uint6.fromBytes([0] as unknown as Uint8Array);
+    },
+    TypeError,
+    e0,
+  );
+
+  const e1 = "byte length unmatched.";
+  assertThrows(
+    () => {
+      Uint6.fromBytes(Uint8Array.of());
+    },
+    RangeError,
+    e1,
+  );
+  assertThrows(
+    () => {
+      Uint6.fromBytes(Uint8Array.of(0, 0));
+    },
+    RangeError,
+    e1,
+  );
+
+  const e2 = "parse result is overflowed.";
+  assertThrows(
+    () => {
+      Uint6.fromBytes(Uint8Array.of(0x40));
+    },
+    RangeError,
+    e2,
+  );
+});
+
 Deno.test("Numerics.Uint6.toBytes()", () => {
   assertStrictEquals(
     [...Uint6.toBytes(0)].map((i) => i.toString()).join(","),

@@ -21,6 +21,7 @@ interface RangedBigInt<T extends bigint> {
   MAX_VALUE: T;
   BIT_LENGTH: safeint;
   BYTE_LENGTH: safeint;
+  //TODO fromBytes
   toBytes(value: T, byteOrder?: byteorder): Uint8Array;
   bitwiseAnd(a: T, b: T): T;
   bitwiseOr(a: T, b: T): T;
@@ -28,9 +29,9 @@ interface RangedBigInt<T extends bigint> {
   //XXX bitwiseNot()
   rotateLeft(value: T, offset: safeint): T;
   //XXX rotateRight()
-  // toNumber() → bigint.tsのtoNumberで必要十分（範囲チェックを追加するくらい。要るかそんなもの？）
-  // toBigInt() → もともとbigintなので不要（範囲チェックを追加するくらい。要るかそんなもの？）
-  // toString() → bigint.tsのtoStringで必要十分（範囲チェックを追加するくらい。要るかそんなもの？）
+  // toNumber() → bigint.tsのtoNumber()
+  // toBigInt() → もともとbigintなので不要
+  // toString() → bigint.tsのtoString()
 }
 
 class _BigUint<T extends bigint> implements RangedBigInt<T> {

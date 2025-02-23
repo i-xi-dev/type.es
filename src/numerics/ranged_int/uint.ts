@@ -71,16 +71,16 @@ interface RangedInt<T extends safeint> {
   MAX_VALUE: T;
   BIT_LENGTH: safeint;
   BYTE_LENGTH: safeint;
-  //TODO fromBytes(bytes: Uint8Array, byteOrder?: byteorder): T;
+  fromBytes(bytes: Uint8Array, byteOrder?: byteorder): T;
   toBytes(value: T, byteOrder?: byteorder): Uint8Array;
   bitwiseAnd(a: T, b: T): T;
   bitwiseOr(a: T, b: T): T;
   bitwiseXOr(a: T, b: T): T;
-  //XXX bitwiseNot
+  //XXX bitwiseNot()
   rotateLeft(value: T, offset: safeint): T;
-  //XXX rotateRight
-  // toNumber() → もともとnumberなので不要（範囲チェックを追加するくらい。要るかそんなもの？）
-  // toBigInt() → bigint.tsのfromNumberで必要十分（範囲チェックを追加するくらい。要るかそんなもの？）
+  //XXX rotateRight()
+  // toNumber() → もともとnumberなので不要
+  // toBigInt() → bigint.tsのfromNumber()
 }
 
 class _Uint<T extends safeint> implements RangedInt<T> {
@@ -103,17 +103,44 @@ class _Uint<T extends safeint> implements RangedInt<T> {
     this.#assert = assert;
   }
 
-  // fromBytes(bytes: Uint8Array, byteOrder?: byteorder): T {
-  //   Type.assertUint8Array(bytes, "bytes");
-  //   Type.assertByteOrder(byteOrder, "byteOrder");
+  fromBytes(
+    bytes: Uint8Array,
+    byteOrder: byteorder = ByteOrder.nativeOrder,
+  ): T {
+    Type.assertUint8Array(bytes, "bytes");
+    Type.assertByteOrder(byteOrder, "byteOrder");
+    if (bytes.length !== this.BYTE_LENGTH) {
+      throw new RangeError("byte length unmatched.");
+    }
 
-  // }
+    if (this.BYTE_LENGTH === 1) {
+      const byte = bytes[0];
+      if (byte > this.MAX_VALUE) {
+        throw new RangeError("parse result is overflowed.");
+      }
+      return byte as T;
+    }
+
+    const x = (byteOrder === ByteOrder.LITTLE_ENDIAN)
+      ? [...bytes]
+      : [...bytes].reverse();
+
+    let result = x[0];
+    for (let i = 1; i < x.length; i++) {
+      result += x[i] * (0x100 ** i);
+    }
+
+    if (result > this.MAX_VALUE) { // BIT_LENGTH % 8 === 0のときは発生しない
+      throw new RangeError("parse result is overflowed.");
+    }
+    return result as T;
+  }
 
   toBytes(value: T, byteOrder: byteorder = ByteOrder.nativeOrder): Uint8Array {
     this.#assert(value, "value");
     Type.assertByteOrder(byteOrder, "byteOrder");
 
-    if (this.BIT_LENGTH === 8) {
+    if (this.BYTE_LENGTH === 1) {
       return Uint8Array.of(value);
     }
 
@@ -121,7 +148,7 @@ class _Uint<T extends safeint> implements RangedInt<T> {
     bytes.push((value % 0x100) as uint8);
     for (let i = 2; i <= 6; i++) { // 16-48
       if (this.BIT_LENGTH >= (Byte.BITS_PER_BYTE * i)) {
-        bytes.push(_r(value, i));
+        bytes.push(_getByteByPosition(value, i));
       }
     }
 
@@ -158,10 +185,10 @@ class _Uint<T extends safeint> implements RangedInt<T> {
   }
 }
 
-function _r(value: safeint, byteLength: safeint): uint8 {
-  const x1 = 0x100 ** byteLength;
+function _getByteByPosition(value: safeint, pos: safeint): uint8 {
+  const x1 = 0x100 ** pos;
   const x2 = (value >= x1) ? (value % x1) : value;
-  return Math.trunc(x2 / (0x100 ** (byteLength - 1))) as uint8;
+  return Math.trunc(x2 / (0x100 ** (pos - 1))) as uint8;
 }
 
 const Uint6: RangedInt<uint6> = new _Uint(Uint6Info, Type.assertUint6);
