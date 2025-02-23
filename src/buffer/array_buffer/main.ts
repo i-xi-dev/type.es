@@ -67,20 +67,15 @@ type _Setter<T extends int> = (
   isLittleEndian: boolean,
 ) => void;
 
-function _resolveByteOrder(byteOrder?: byteorder): byteorder {
-  if (Object.values(ByteOrder).includes(byteOrder as byteorder)) {
-    return byteOrder!;
-  }
-  return ByteOrder.nativeOrder;
-}
-
 function _fromUint8xIterable<T extends int>(
   value: Iterable<T>,
   uint8xArrayCtor: _Uint8xArrayCtor,
   assertElement: (i: unknown, label: string) => void,
   viewSetter: _Setter<T>,
-  byteOrder: byteorder,
+  byteOrder: byteorder = ByteOrder.nativeOrder,
 ): ArrayBuffer {
+  Type.assertByteOrder(byteOrder, "byteOrder");
+
   const gb = new GrowableBuffer();
   const isLittleEndian = byteOrder === ByteOrder.LITTLE_ENDIAN;
   const tmp = new ArrayBuffer(uint8xArrayCtor.BYTES_PER_ELEMENT);
@@ -101,8 +96,10 @@ async function _fromUint8xAsyncIterable<T extends int>(
   uint8xArrayCtor: _Uint8xArrayCtor,
   assertElement: (i: unknown, label: string) => void,
   viewSetter: _Setter<T>,
-  byteOrder: byteorder,
+  byteOrder: byteorder = ByteOrder.nativeOrder,
 ): Promise<ArrayBuffer> {
+  Type.assertByteOrder(byteOrder, "byteOrder");
+
   const gb = new GrowableBuffer();
   const isLittleEndian = byteOrder === ByteOrder.LITTLE_ENDIAN;
   const tmp = new ArrayBuffer(uint8xArrayCtor.BYTES_PER_ELEMENT);
@@ -128,9 +125,10 @@ function _toUint8xIterable<T extends int>(
   value: ArrayBuffer,
   uint8xArrayCtor: _Uint8xArrayCtor,
   viewGetter: _Getter<T>,
-  byteOrder: byteorder,
+  byteOrder: byteorder = ByteOrder.nativeOrder,
 ): Iterable<T> {
   Type.assertArrayBuffer(value, "value");
+  Type.assertByteOrder(byteOrder, "byteOrder");
 
   const bytesPerElement = uint8xArrayCtor.BYTES_PER_ELEMENT;
   if ((value.byteLength % bytesPerElement) !== ExNumber.ZERO) {
@@ -167,8 +165,7 @@ export function fromUint16Iterable(
 ): ArrayBuffer {
   Type.assertIterable(value, "value");
 
-  const byteOrder = _resolveByteOrder(options?.byteOrder);
-
+  const byteOrder = options?.byteOrder ?? ByteOrder.nativeOrder;
   if (byteOrder !== ByteOrder.nativeOrder) {
     return _fromUint8xIterable<uint16>(
       value,
@@ -193,8 +190,7 @@ export async function fromUint16AsyncIterable(
 ): Promise<ArrayBuffer> {
   Type.assertAsyncIterable(value, "value");
 
-  const byteOrder = _resolveByteOrder(options?.byteOrder);
-
+  const byteOrder = options?.byteOrder ?? ByteOrder.nativeOrder;
   if (byteOrder !== ByteOrder.nativeOrder) {
     return _fromUint8xAsyncIterable<uint16>(
       value,
@@ -228,10 +224,9 @@ export function toUint16Iterable(
   value: ArrayBuffer,
   options?: ToUint8xIterableOptions,
 ): Iterable<uint16> {
-  const byteOrder = _resolveByteOrder(options?.byteOrder);
   return _toUint8xIterable<uint16>(value, Uint16Array, (v, o, e) => {
     return v.getUint16(o, e);
-  }, byteOrder);
+  }, options?.byteOrder);
 }
 
 export function fromUint32Iterable(
@@ -240,8 +235,7 @@ export function fromUint32Iterable(
 ): ArrayBuffer {
   Type.assertIterable(value, "value");
 
-  const byteOrder = _resolveByteOrder(options?.byteOrder);
-
+  const byteOrder = options?.byteOrder ?? ByteOrder.nativeOrder;
   if (byteOrder !== ByteOrder.nativeOrder) {
     return _fromUint8xIterable<uint32>(
       value,
@@ -266,8 +260,7 @@ export async function fromUint32AsyncIterable(
 ): Promise<ArrayBuffer> {
   Type.assertAsyncIterable(value, "value");
 
-  const byteOrder = _resolveByteOrder(options?.byteOrder);
-
+  const byteOrder = options?.byteOrder ?? ByteOrder.nativeOrder;
   if (byteOrder !== ByteOrder.nativeOrder) {
     return _fromUint8xAsyncIterable<uint32>(
       value,
@@ -296,10 +289,9 @@ export function toUint32Iterable(
   value: ArrayBuffer,
   options?: ToUint8xIterableOptions,
 ): Iterable<uint32> {
-  const byteOrder = _resolveByteOrder(options?.byteOrder);
   return _toUint8xIterable<uint32>(value, Uint32Array, (v, o, e) => {
     return v.getUint32(o, e);
-  }, byteOrder);
+  }, options?.byteOrder);
 }
 
 export function fromBigUint64Iterable(
@@ -308,8 +300,7 @@ export function fromBigUint64Iterable(
 ): ArrayBuffer {
   Type.assertIterable(value, "value");
 
-  const byteOrder = _resolveByteOrder(options?.byteOrder);
-
+  const byteOrder = options?.byteOrder ?? ByteOrder.nativeOrder;
   if (byteOrder !== ByteOrder.nativeOrder) {
     return _fromUint8xIterable<biguint64>(
       value,
@@ -338,8 +329,7 @@ export async function fromBigUint64AsyncIterable(
 ): Promise<ArrayBuffer> {
   Type.assertAsyncIterable(value, "value");
 
-  const byteOrder = _resolveByteOrder(options?.byteOrder);
-
+  const byteOrder = options?.byteOrder ?? ByteOrder.nativeOrder;
   if (byteOrder !== ByteOrder.nativeOrder) {
     return _fromUint8xAsyncIterable<biguint64>(
       value,
@@ -368,10 +358,9 @@ export function toBigUint64Iterable(
   value: ArrayBuffer,
   options?: ToUint8xIterableOptions,
 ): Iterable<biguint64> {
-  const byteOrder = _resolveByteOrder(options?.byteOrder);
   return _toUint8xIterable<biguint64>(value, BigUint64Array, (v, o, e) => {
     return v.getBigUint64(o, e);
-  }, byteOrder);
+  }, options?.byteOrder);
 }
 
 /*XXX

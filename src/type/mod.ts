@@ -1,6 +1,7 @@
 export * from "./bigint.ts";
 export * from "./boolean.ts";
 export * from "./buffer_source.ts";
+export * from "./byte.ts";
 export * from "./code_point.ts";
 export * from "./collection.ts";
 export * from "./i18n.ts";

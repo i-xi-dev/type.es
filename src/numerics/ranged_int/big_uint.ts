@@ -66,7 +66,7 @@ class _BigUint<T extends bigint> implements RangedBigInt<T> {
 
   toBytes(value: T, byteOrder: byteorder = ByteOrder.nativeOrder): Uint8Array {
     this.#assert(value, "value");
-    //TODO byteOrderのチェック
+    Type.assertByteOrder(byteOrder, "byteOrder");
 
     // bitLengthは 56 | 64 | 72 | 80 | 88 | 96 | 104 | 112 | 120 | 128 | ...
 

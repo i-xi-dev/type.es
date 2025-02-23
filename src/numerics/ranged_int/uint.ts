@@ -105,14 +105,13 @@ class _Uint<T extends safeint> implements RangedInt<T> {
 
   // fromBytes(bytes: Uint8Array, byteOrder?: byteorder): T {
   //   Type.assertUint8Array(bytes, "bytes");
-  //   //TODO byteOrderのチェック
-
+  //   Type.assertByteOrder(byteOrder, "byteOrder");
 
   // }
 
   toBytes(value: T, byteOrder: byteorder = ByteOrder.nativeOrder): Uint8Array {
     this.#assert(value, "value");
-    //TODO byteOrderのチェック
+    Type.assertByteOrder(byteOrder, "byteOrder");
 
     if (this.BIT_LENGTH === 8) {
       return Uint8Array.of(value);
