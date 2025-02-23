@@ -26,30 +26,6 @@ type _Info<T extends safeint> = {
   MAX_VALUE: T;
 };
 
-function _bitwiseAnd_under32<T extends safeint>(
-  a: T,
-  b: T,
-  info: _Info<T>,
-): T {
-  return ((a & b) & info.MAX_VALUE) as T;
-}
-
-function _bitwiseOr_under32<T extends safeint>(
-  a: T,
-  b: T,
-  info: _Info<T>,
-): T {
-  return ((a | b) & info.MAX_VALUE) as T;
-}
-
-function _bitwiseXOr_under32<T extends safeint>(
-  a: T,
-  b: T,
-  info: _Info<T>,
-): T {
-  return ((a ^ b) & info.MAX_VALUE) as T;
-}
-
 function _rotateLeft_under32<T extends safeint>(
   value: T,
   offset: safeint,
@@ -161,21 +137,21 @@ class _Uint<T extends safeint> implements RangedInt<T> {
     this.#assert(a, "a");
     this.#assert(b, "b");
 
-    return _bitwiseAnd_under32(a, b, this.#info);
+    return ((a & b) & this.MAX_VALUE) as T;
   }
 
   bitwiseOr(a: T, b: T): T {
     this.#assert(a, "a");
     this.#assert(b, "b");
 
-    return _bitwiseOr_under32(a, b, this.#info);
+    return ((a | b) & this.MAX_VALUE) as T;
   }
 
   bitwiseXOr(a: T, b: T): T {
     this.#assert(a, "a");
     this.#assert(b, "b");
 
-    return _bitwiseXOr_under32(a, b, this.#info);
+    return ((a ^ b) & this.MAX_VALUE) as T;
   }
 
   rotateLeft(value: T, offset: safeint): T {
