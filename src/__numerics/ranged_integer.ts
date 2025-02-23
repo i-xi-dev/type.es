@@ -32,7 +32,3 @@ export interface UintNOperations<T extends int> {
   fromBigInt(value: bigint, options?: FromBigIntOptions): T;
   fromString(value: string, options?: FromStringOptions): T;
 }
-
-export interface Uint8xOperations<T extends int> extends UintNOperations<T> {
-  byteLength: safeint;
-}

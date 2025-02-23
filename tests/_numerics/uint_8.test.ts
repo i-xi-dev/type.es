@@ -347,7 +347,3 @@ Deno.test("Uint8.fromString()", () => {
     e216,
   );
 });
-
-Deno.test("Uint8.byteLength", () => {
-  assertStrictEquals(Uint8.byteLength, 1);
-});

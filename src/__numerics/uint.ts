@@ -10,10 +10,8 @@ import {
   FromBigIntOptions,
   FromNumberOptions,
   FromStringOptions,
-  Uint8xOperations,
   UintNOperations,
 } from "./ranged_integer.ts";
-import { BITS_PER_BYTE } from "../_const/byte.ts";
 import { Number as ExNumber } from "../numerics/mod.ts";
 import { OverflowMode } from "./overflow_mode.ts";
 import {
@@ -159,27 +157,9 @@ class _UinNOperations<T extends safeint> implements UintNOperations<T> {
   }
 }
 
-const _BITS = [8, 16, 24, 32 /* , 40, 48 */] as const;
-type _BITS = typeof _BITS[safeint];
-
-class _Uint8xOperations<T extends safeint> extends _UinNOperations<T>
-  implements Uint8xOperations<T> {
-  constructor(bitLength: _BITS) {
-    super(bitLength);
-    //if ((bitLength % BITS_PER_BYTE) !== ExNumber.ZERO) {
-    if (_BITS.includes(bitLength) !== true) {
-      throw new Error("Unsupprted bit length.");
-    }
-  }
-
-  get byteLength(): safeint {
-    return this.bitLength / BITS_PER_BYTE;
-  }
-}
-
 export const Uint6 = new _UinNOperations<uint6>(6);
 export const Uint7 = new _UinNOperations<uint7>(7);
-export const Uint8 = new _Uint8xOperations<uint8>(8);
-export const Uint16 = new _Uint8xOperations<uint16>(16);
-export const Uint24 = new _Uint8xOperations<uint24>(24);
-export const Uint32 = new _Uint8xOperations<uint32>(32);
+export const Uint8 = new _UinNOperations<uint8>(8);
+export const Uint16 = new _UinNOperations<uint16>(16);
+export const Uint24 = new _UinNOperations<uint24>(24);
+export const Uint32 = new _UinNOperations<uint32>(32);

@@ -1,6 +1,5 @@
-import { Number as ExNumber } from "../numerics/mod.ts";
+import { Number as ExNumber, Uint8 } from "../numerics/mod.ts";
 import { type safeint, type uint8 } from "../_typedef/mod.ts";
-import { Uint8 } from "../__numerics/uint.ts";
 
 const _DEFAULT_SIZE = 1_048_576;
 
@@ -34,9 +33,9 @@ export class GrowableBuffer {
   }
 
   put(uint8: uint8): void {
-    this.#growIfNeeded(Uint8.byteLength);
+    this.#growIfNeeded(Uint8.BYTE_LENGTH);
     this.#buffer[this.#position] = uint8;
-    this.#position = this.#position + Uint8.byteLength;
+    this.#position = this.#position + Uint8.BYTE_LENGTH;
   }
 
   // XXX 最後に連結すべき？
