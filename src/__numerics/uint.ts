@@ -73,63 +73,6 @@ class _UinNOperations<T extends safeint> implements UintNOperations<T> {
     }
   }
 
-  bitwiseAnd(self: T, other: T): T {
-    this.assert(self, "self");
-    this.assert(other, "other");
-
-    if (this.#bitLength === 32) {
-      // ビット演算子はInt32で演算されるので符号を除くと31ビットまでしか演算できない
-      // bigintに変換してビット演算するよりこちらの方が速い
-      this.#bufferUint32View[ExNumber.ZERO] = self;
-      this.#bufferUint32View[1] = other;
-      this.#bufferUint32View[2] = ExNumber.ZERO;
-      const [a1, a2, b1, b2] = this.#bufferUint16View; // バイオオーダーは元の順にセットするので、ここでは関係ない
-      this.#bufferUint16View[4] = a1 & b1;
-      this.#bufferUint16View[5] = a2 & b2;
-      return this.#bufferUint32View[2] as T;
-    } else {
-      return ((self & other) & this.#max) as T;
-    }
-  }
-
-  bitwiseOr(self: T, other: T): T {
-    this.assert(self, "self");
-    this.assert(other, "other");
-
-    if (this.#bitLength === 32) {
-      // ビット演算子はInt32で演算されるので符号を除くと31ビットまでしか演算できない
-      // bigintに変換してビット演算するよりこちらの方が速い
-      this.#bufferUint32View[ExNumber.ZERO] = self;
-      this.#bufferUint32View[1] = other;
-      this.#bufferUint32View[2] = ExNumber.ZERO;
-      const [a1, a2, b1, b2] = this.#bufferUint16View; // バイオオーダーは元の順にセットするので、ここでは関係ない
-      this.#bufferUint16View[4] = a1 | b1;
-      this.#bufferUint16View[5] = a2 | b2;
-      return this.#bufferUint32View[2] as T;
-    } else {
-      return ((self | other) & this.#max) as T;
-    }
-  }
-
-  bitwiseXOr(self: T, other: T): T {
-    this.assert(self, "self");
-    this.assert(other, "other");
-
-    if (this.#bitLength === 32) {
-      // ビット演算子はInt32で演算されるので符号を除くと31ビットまでしか演算できない
-      // bigintに変換してビット演算するよりこちらの方が速い
-      this.#bufferUint32View[ExNumber.ZERO] = self;
-      this.#bufferUint32View[1] = other;
-      this.#bufferUint32View[2] = ExNumber.ZERO;
-      const [a1, a2, b1, b2] = this.#bufferUint16View; // バイオオーダーは元の順にセットするので、ここでは関係ない
-      this.#bufferUint16View[4] = a1 ^ b1;
-      this.#bufferUint16View[5] = a2 ^ b2;
-      return this.#bufferUint32View[2] as T;
-    } else {
-      return ((self ^ other) & this.#max) as T;
-    }
-  }
-
   rotateLeft(self: T, offset: safeint): T {
     this.assert(self, "self");
     assertSafeInt(offset, "offset");

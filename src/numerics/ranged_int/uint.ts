@@ -7,6 +7,7 @@ import {
   type safeint,
   type uint16,
   type uint24,
+  type uint32,
   type uint6,
   type uint7,
   type uint8,
@@ -15,6 +16,7 @@ import { Number as ExNumber } from "../../numerics/mod.ts";
 import {
   Uint16 as Uint16Info,
   Uint24 as Uint24Info,
+  Uint32 as Uint32Info,
   Uint6 as Uint6Info,
   Uint7 as Uint7Info,
   Uint8 as Uint8Info,
@@ -137,21 +139,63 @@ class _Uint<T extends safeint> implements RangedInt<T> {
     this.#assert(a, "a");
     this.#assert(b, "b");
 
-    return ((a & b) & this.MAX_VALUE) as T;
+    if (this.BIT_LENGTH < 32) {
+      return ((a & b) & this.MAX_VALUE) as T; //XXX & MAX_VALUEはなんで付けたんだっけ？
+    }
+    // else if (this.BIT_LENGTH === 32) { // 32の場合のみ
+    //   this.#bufferUint32View[ExNumber.ZERO] = a;
+    //   this.#bufferUint32View[1] = b;
+    //   this.#bufferUint32View[2] = ExNumber.ZERO;
+    //   const [a1, a2, b1, b2] = this.#bufferUint16View; // バイオオーダーは元の順にセットするので、ここでは関係ない
+    //   this.#bufferUint16View[4] = a1 & b1;
+    //   this.#bufferUint16View[5] = a2 & b2;
+    //   return this.#bufferUint32View[2] as T;
+    // }
+
+    // ビット演算子はInt32で演算されるので符号を除くと31ビットまでしか演算できない
+    const aBytes = this.toBytes(a);
+    const bBytes = this.toBytes(b);
+    const r = new Uint8Array(this.BYTE_LENGTH);
+    for (let i = 0; i < r.length; i++) {
+      r[i] = aBytes[i] & bBytes[i];
+    }
+    return this.fromBytes(r);
   }
 
   bitwiseOr(a: T, b: T): T {
     this.#assert(a, "a");
     this.#assert(b, "b");
 
-    return ((a | b) & this.MAX_VALUE) as T;
+    if (this.BIT_LENGTH < 32) {
+      return ((a | b) & this.MAX_VALUE) as T;
+    }
+
+    // ビット演算子はInt32で演算されるので符号を除くと31ビットまでしか演算できない
+    const aBytes = this.toBytes(a);
+    const bBytes = this.toBytes(b);
+    const r = new Uint8Array(this.BYTE_LENGTH);
+    for (let i = 0; i < r.length; i++) {
+      r[i] = aBytes[i] | bBytes[i];
+    }
+    return this.fromBytes(r);
   }
 
   bitwiseXOr(a: T, b: T): T {
     this.#assert(a, "a");
     this.#assert(b, "b");
 
-    return ((a ^ b) & this.MAX_VALUE) as T;
+    if (this.BIT_LENGTH < 32) {
+      return ((a ^ b) & this.MAX_VALUE) as T;
+    }
+
+    // ビット演算子はInt32で演算されるので符号を除くと31ビットまでしか演算できない
+    const aBytes = this.toBytes(a);
+    const bBytes = this.toBytes(b);
+    const r = new Uint8Array(this.BYTE_LENGTH);
+    for (let i = 0; i < r.length; i++) {
+      r[i] = aBytes[i] ^ bBytes[i];
+    }
+    return this.fromBytes(r);
   }
 
   rotateLeft(value: T, offset: safeint): T {
@@ -184,4 +228,7 @@ Object.freeze(Uint16);
 const Uint24: RangedInt<uint24> = new _Uint(Uint24Info, Type.assertUint24);
 Object.freeze(Uint24);
 
-export { Uint16, Uint24, Uint6, Uint7, Uint8 };
+const Uint32: RangedInt<uint32> = new _Uint(Uint32Info, Type.assertUint32);
+Object.freeze(Uint32);
+
+export { Uint16, Uint24, Uint32, Uint6, Uint7, Uint8 };
