@@ -28,22 +28,6 @@ type _Info<T extends safeint> = {
   MAX_VALUE: T;
 };
 
-function _rotateLeft_under32<T extends safeint>(
-  value: T,
-  offset: safeint,
-  info: _Info<T>,
-): T {
-  Type.assertSafeInt(offset, "offset");
-
-  const normalizedOffset = _normalizeOffset(offset, info.BIT_LENGTH);
-  if (normalizedOffset === ExNumber.ZERO) {
-    return value;
-  }
-
-  return (((value << normalizedOffset) |
-    (value >> (info.BIT_LENGTH - normalizedOffset))) & info.MAX_VALUE) as T;
-}
-
 interface RangedInt<T extends safeint> {
   MIN_VALUE: T;
   MAX_VALUE: T;
@@ -200,8 +184,26 @@ class _Uint<T extends safeint> implements RangedInt<T> {
 
   rotateLeft(value: T, offset: safeint): T {
     this.#assert(value, "value");
+    Type.assertSafeInt(offset, "offset");
 
-    return _rotateLeft_under32(value, offset, this.#info);
+    const normalizedOffset = _normalizeOffset(offset, this.BIT_LENGTH);
+    if (normalizedOffset === ExNumber.ZERO) {
+      return value;
+    }
+
+    if (this.BIT_LENGTH < 32) {
+      return (((value << normalizedOffset) |
+        (value >> (this.BIT_LENGTH - normalizedOffset))) & this.MAX_VALUE) as T;
+    }
+
+    // ビット演算子はInt32で演算されるので符号を除くと31ビットまでしか演算できない
+    const bs = BigInt(value);
+    return Number(
+      ((bs << BigInt(normalizedOffset)) |
+        (bs >> BigInt(this.BIT_LENGTH - normalizedOffset))) &
+        BigInt(this.MAX_VALUE),
+    ) as T;
+    //XXX 多分bigint使うと遅い
   }
 }
 

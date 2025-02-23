@@ -73,32 +73,6 @@ class _UinNOperations<T extends safeint> implements UintNOperations<T> {
     }
   }
 
-  rotateLeft(self: T, offset: safeint): T {
-    this.assert(self, "self");
-    assertSafeInt(offset, "offset");
-
-    let normalizedOffset = offset % this.#bitLength;
-    if (normalizedOffset < ExNumber.ZERO) {
-      normalizedOffset = normalizedOffset + this.#bitLength;
-    }
-    if (normalizedOffset === ExNumber.ZERO) {
-      return self;
-    }
-
-    if (this.#bitLength === 32) {
-      // ビット演算子はInt32で演算されるので符号を除くと31ビットまでしか演算できない
-      const bs = BigInt(self);
-      return Number(
-        ((bs << BigInt(normalizedOffset)) |
-          (bs >> BigInt(this.#bitLength - normalizedOffset))) &
-          BigInt(this.#max),
-      ) as T;
-    } else {
-      return (((self << normalizedOffset) |
-        (self >> (this.#bitLength - normalizedOffset))) & this.#max) as T;
-    }
-  }
-
   fromNumber(value: number, options?: FromNumberOptions): T {
     assertNumber(value, "value");
 
