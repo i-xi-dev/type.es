@@ -1,7 +1,5 @@
 import { assertStrictEquals, assertThrows } from "@std/assert";
-import { xNumerics } from "../../mod.ts";
-
-const { Uint8Iterable } = xNumerics;
+import { Uint8Iterable } from "../../mod.ts";
 
 const a3 = [0, 1, 2];
 const a2 = [0, 1];
