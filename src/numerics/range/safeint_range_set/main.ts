@@ -13,9 +13,10 @@ function _sorterMinAsc(a: safeintrange, b: safeintrange): -1 | 0 | 1 {
   return 0;
 }
 
-//XXX Tをやめる？（Tだとtypescriptの推論が…
-export class SafeIntRangeSet<T extends safeint>
-  implements ReadonlySetLike<safeintrange<T>> {
+//XXX Tをやめる？（Tを明示しない場合のtypescriptの推論が…
+export class SafeIntRangeSet<T extends safeint> {
+  // implements ReadonlySetLike<safeintrange<T>> hasとかに意味があると思えない（Setのhasの仕様はオブジェクトの場合参照先が等しいかだし、has(コンストラクターに渡したrangeの参照)がtrueにならない場合がある（コンストラクターで結合や破棄する場合があるので））
+
   readonly #set: Set<safeintrange<T>>;
 
   constructor(iterable: Iterable<safeintrange<T>>) {
@@ -25,10 +26,6 @@ export class SafeIntRangeSet<T extends safeint>
       Type.assertSafeIntRange(range, "iterable[*]");
       this.#add(range);
     }
-  }
-
-  get size(): safeint {
-    return this.#set.size;
   }
 
   //XXX 命名 includesか？
@@ -42,18 +39,6 @@ export class SafeIntRangeSet<T extends safeint>
   //XXX equals(range or rangeset)
   //XXX overlaps(range or rangeset)
   //XXX isDisjoint(range or rangeset)
-
-  has(value: safeintrange<T>): boolean {
-    return this.#set.has(value); // Setの仕様に合わせる（参照先が異なる場合false）
-  }
-
-  keys(): SetIterator<safeintrange<T>> {
-    return this.toSet()[Symbol.iterator]();
-  }
-
-  values(): SetIterator<safeintrange<T>> {
-    return this.toSet()[Symbol.iterator]();
-  }
 
   [Symbol.iterator](): SetIterator<safeintrange<T>> {
     return this.toSet()[Symbol.iterator]();

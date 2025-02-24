@@ -48,21 +48,6 @@ Deno.test("new Numerics.BigIntRangeSet()", () => {
   );
 });
 
-Deno.test("Numerics.BigIntRangeSet.prototype.size", () => {
-  const rs1 = new BigIntRangeSet([[0n, 0n], [0n, 0n]]);
-  assertStrictEquals(rs1.size, 1);
-
-  const rs101 = new BigIntRangeSet([
-    [0n, 1n],
-    [31n, 33n],
-    [3n, 24n],
-    [8n, 14n],
-    [3n, 4n],
-    [25n, 26n],
-  ]);
-  assertStrictEquals(rs101.size, 3);
-});
-
 Deno.test("Numerics.BigIntRangeSet.prototype.includesValue()", () => {
   const rs101 = new BigIntRangeSet([
     [0n, 1n],
@@ -108,4 +93,7 @@ Deno.test("Numerics.BigIntRangeSet.prototype.includesValue()", () => {
   assertStrictEquals(rs101.includesValue(32n), true);
   assertStrictEquals(rs101.includesValue(33n), true);
   assertStrictEquals(rs101.includesValue(34n), false);
+});
+
+Deno.test("Numerics.BigIntRangeSet.prototype.()", () => {
 });

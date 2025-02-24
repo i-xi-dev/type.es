@@ -13,9 +13,10 @@ function _sorterMinAsc(a: bigintrange, b: bigintrange): -1 | 0 | 1 {
   return 0;
 }
 
-//XXX Tをやめる？（Tだとtypescriptの推論が…
-export class BigIntRangeSet<T extends bigint>
-  implements ReadonlySetLike<bigintrange<T>> {
+//XXX Tをやめる？（Tを明示しない場合のtypescriptの推論が…
+export class BigIntRangeSet<T extends bigint> {
+  // implements ReadonlySetLike<bigintrange<T>> hasとかに意味があると思えない（Setのhasの仕様はオブジェクトの場合参照先が等しいかだし、has(コンストラクターに渡したrangeの参照)がtrueにならない場合がある（コンストラクターで結合や破棄する場合があるので））
+
   readonly #set: Set<bigintrange<T>>;
 
   constructor(iterable: Iterable<bigintrange<T>>) {
@@ -25,10 +26,6 @@ export class BigIntRangeSet<T extends bigint>
       Type.assertBigIntRange(range, "iterable[*]");
       this.#add(range);
     }
-  }
-
-  get size(): safeint {
-    return this.#set.size;
   }
 
   //XXX 命名 includesか？
@@ -42,18 +39,6 @@ export class BigIntRangeSet<T extends bigint>
   //XXX equals(range or rangeset)
   //XXX overlaps(range or rangeset)
   //XXX isDisjoint(range or rangeset)
-
-  has(value: bigintrange<T>): boolean {
-    return this.#set.has(value); // Setの仕様に合わせる（参照先が異なる場合false）
-  }
-
-  keys(): SetIterator<bigintrange<T>> {
-    return this.toSet()[Symbol.iterator]();
-  }
-
-  values(): SetIterator<bigintrange<T>> {
-    return this.toSet()[Symbol.iterator]();
-  }
 
   [Symbol.iterator](): SetIterator<bigintrange<T>> {
     return this.toSet()[Symbol.iterator]();
