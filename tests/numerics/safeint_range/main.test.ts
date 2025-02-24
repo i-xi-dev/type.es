@@ -1116,3 +1116,42 @@ Deno.test("Numerics.SafeIntRange.includes()", () => {
   assertStrictEquals(SafeIntRange.includes(r_m1_0, 0), true);
   assertStrictEquals(SafeIntRange.includes(r_m1_0, 1), false);
 });
+
+function _s(r: [number, number] | null): string | null {
+  if (r === null) {
+    return null;
+  }
+  return r.map((i) => i.toString()).join(",");
+}
+
+Deno.test("Numerics.SafeIntRange.union()", () => {
+  assertStrictEquals(_s(SafeIntRange.union([0, 0], [0, 0])), _s([0, 0]));
+
+  assertStrictEquals(_s(SafeIntRange.union([0, 2], [1, 3])), _s([0, 3]));
+  assertStrictEquals(_s(SafeIntRange.union([0, 2], [2, 4])), _s([0, 4]));
+  assertStrictEquals(_s(SafeIntRange.union([0, 1], [2, 3])), _s([0, 3]));
+  assertStrictEquals(_s(SafeIntRange.union([0, 1], [3, 4])), _s(null));
+
+  assertStrictEquals(_s(SafeIntRange.union([1, 3], [0, 2])), _s([0, 3]));
+  assertStrictEquals(_s(SafeIntRange.union([2, 4], [0, 2])), _s([0, 4]));
+  assertStrictEquals(_s(SafeIntRange.union([2, 3], [0, 1])), _s([0, 3]));
+  assertStrictEquals(_s(SafeIntRange.union([3, 4], [0, 1])), _s(null));
+
+  const e1 = "`a` must be a range of safe integer.";
+  assertThrows(
+    () => {
+      SafeIntRange.union(undefined as unknown as [0, 0], [0, 0]);
+    },
+    TypeError,
+    e1,
+  );
+
+  const e2 = "`b` must be a range of safe integer.";
+  assertThrows(
+    () => {
+      SafeIntRange.union([0, 0], undefined as unknown as [0, 0]);
+    },
+    TypeError,
+    e2,
+  );
+});

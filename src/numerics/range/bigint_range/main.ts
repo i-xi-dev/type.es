@@ -1,3 +1,4 @@
+import * as ExBigInt from "../../bigint/mod.ts";
 import * as Type from "../../../type/mod.ts";
 import { type bigintrange } from "../../../_typedef/mod.ts";
 
@@ -120,4 +121,22 @@ export function includes<T extends bigint>(
   Type.assertBigIntRange(range, "range");
   const [min, max] = range;
   return Type.isBigInt(test) && (test >= min) && (test <= max);
+}
+
+export function union<T extends bigint>(
+  a: bigintrange<T>,
+  b: bigintrange<T>,
+): bigintrange<T> | null {
+  // Type.assertBigIntRange(a, "a");
+  // Type.assertBigIntRange(b, "b");
+
+  if (overlaps(a, b) || isAdjacent(a, b)) {
+    const [aMin, aMax] = a;
+    const [bMin, bMax] = b;
+    return [
+      ExBigInt.min(aMin, bMin),
+      ExBigInt.max(aMax, bMax),
+    ];
+  }
+  return null;
 }

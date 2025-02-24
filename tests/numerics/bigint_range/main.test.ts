@@ -1124,3 +1124,42 @@ Deno.test("Numerics.BigIntRange.includes()", () => {
   assertStrictEquals(BigIntRange.includes(r_m1_0, 0n), true);
   assertStrictEquals(BigIntRange.includes(r_m1_0, 1n), false);
 });
+
+function _s(r: [bigint, bigint] | null): string | null {
+  if (r === null) {
+    return null;
+  }
+  return r.map((i) => i.toString()).join(",");
+}
+
+Deno.test("Numerics.BigIntRange.union()", () => {
+  assertStrictEquals(_s(BigIntRange.union([0n, 0n], [0n, 0n])), _s([0n, 0n]));
+
+  assertStrictEquals(_s(BigIntRange.union([0n, 2n], [1n, 3n])), _s([0n, 3n]));
+  assertStrictEquals(_s(BigIntRange.union([0n, 2n], [2n, 4n])), _s([0n, 4n]));
+  assertStrictEquals(_s(BigIntRange.union([0n, 1n], [2n, 3n])), _s([0n, 3n]));
+  assertStrictEquals(_s(BigIntRange.union([0n, 1n], [3n, 4n])), _s(null));
+
+  assertStrictEquals(_s(BigIntRange.union([1n, 3n], [0n, 2n])), _s([0n, 3n]));
+  assertStrictEquals(_s(BigIntRange.union([2n, 4n], [0n, 2n])), _s([0n, 4n]));
+  assertStrictEquals(_s(BigIntRange.union([2n, 3n], [0n, 1n])), _s([0n, 3n]));
+  assertStrictEquals(_s(BigIntRange.union([3n, 4n], [0n, 1n])), _s(null));
+
+  const e1 = "`a` must be a range of `bigint`.";
+  assertThrows(
+    () => {
+      BigIntRange.union(undefined as unknown as [0n, 0n], [0n, 0n]);
+    },
+    TypeError,
+    e1,
+  );
+
+  const e2 = "`b` must be a range of `bigint`.";
+  assertThrows(
+    () => {
+      BigIntRange.union([0n, 0n], undefined as unknown as [0n, 0n]);
+    },
+    TypeError,
+    e2,
+  );
+});

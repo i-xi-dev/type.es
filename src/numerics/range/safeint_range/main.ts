@@ -124,3 +124,21 @@ export function includes<T extends safeint>(
   const [min, max] = range;
   return Type.isSafeInt(test) && (test >= min) && (test <= max);
 }
+
+export function union<T extends safeint>(
+  a: safeintrange<T>,
+  b: safeintrange<T>,
+): safeintrange<T> | null {
+  // Type.assertSafeIntRange(a, "a");
+  // Type.assertSafeIntRange(b, "b");
+
+  if (overlaps(a, b) || isAdjacent(a, b)) {
+    const [aMin, aMax] = a;
+    const [bMin, bMax] = b;
+    return [
+      Math.min(aMin, bMin) as T,
+      Math.max(aMax, bMax) as T,
+    ];
+  }
+  return null;
+}
