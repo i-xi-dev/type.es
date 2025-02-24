@@ -10,7 +10,7 @@ function _sorterMinAsc(a: bigintrange, b: bigintrange): -1 | 0 | 1 {
   } else if (aMin > bMin) {
     return 1;
   }
-  return 0 as never;
+  return 0;
 }
 
 export class BigIntRangeSet<T extends bigint>

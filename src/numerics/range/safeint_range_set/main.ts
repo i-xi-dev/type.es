@@ -10,7 +10,7 @@ function _sorterMinAsc(a: safeintrange, b: safeintrange): -1 | 0 | 1 {
   } else if (aMin > bMin) {
     return 1;
   }
-  return 0 as never;
+  return 0;
 }
 
 export class SafeIntRangeSet<T extends safeint>
