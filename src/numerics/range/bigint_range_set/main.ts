@@ -13,6 +13,7 @@ function _sorterMinAsc(a: bigintrange, b: bigintrange): -1 | 0 | 1 {
   return 0;
 }
 
+//XXX Tをやめる？（Tだとtypescriptの推論が…
 export class BigIntRangeSet<T extends bigint>
   implements ReadonlySetLike<bigintrange<T>> {
   readonly #set: Set<bigintrange<T>>;
@@ -30,7 +31,8 @@ export class BigIntRangeSet<T extends bigint>
     return this.#set.size;
   }
 
-  includesValue(test: T): boolean {
+  //XXX 命名 includesか？
+  includesValue(test: bigint): boolean {
     // Type.assertBigInt(test); BigIntRange.includesでisBigIntしている
     return [...this.#set].some((range) => BigIntRange.includes(range, test));
   }
@@ -70,14 +72,11 @@ export class BigIntRangeSet<T extends bigint>
     let unionedRangeToAdd: bigintrange<T> = rangeToAdd;
     let u: bigintrange<T> | null = null;
     for (const range of this.#set) {
-      u = null;
-      if (BigIntRange.overlaps(range, unionedRangeToAdd)) {
-        u = BigIntRange.union(range, unionedRangeToAdd);
-        if (u) {
-          unionedRangeToAdd = u;
-        } else {
-          newArray.push(range);
-        }
+      u = BigIntRange.union(range, unionedRangeToAdd);
+      if (u) {
+        unionedRangeToAdd = u;
+      } else {
+        newArray.push(range);
       }
     }
     newArray.push(unionedRangeToAdd);

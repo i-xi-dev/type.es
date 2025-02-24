@@ -13,6 +13,7 @@ function _sorterMinAsc(a: safeintrange, b: safeintrange): -1 | 0 | 1 {
   return 0;
 }
 
+//XXX Tをやめる？（Tだとtypescriptの推論が…
 export class SafeIntRangeSet<T extends safeint>
   implements ReadonlySetLike<safeintrange<T>> {
   readonly #set: Set<safeintrange<T>>;
@@ -30,7 +31,8 @@ export class SafeIntRangeSet<T extends safeint>
     return this.#set.size;
   }
 
-  includesValue(test: T): boolean {
+  //XXX 命名 includesか？
+  includesValue(test: safeint): boolean {
     // Type.assertSafeInt(test); SafeIntRange.includesでisSafeIntしている
     return [...this.#set].some((range) => SafeIntRange.includes(range, test));
   }
@@ -70,14 +72,11 @@ export class SafeIntRangeSet<T extends safeint>
     let unionedRangeToAdd: safeintrange<T> = rangeToAdd;
     let u: safeintrange<T> | null = null;
     for (const range of this.#set) {
-      u = null;
-      if (SafeIntRange.overlaps(range, unionedRangeToAdd)) {
-        u = SafeIntRange.union(range, unionedRangeToAdd);
-        if (u) {
-          unionedRangeToAdd = u;
-        } else {
-          newArray.push(range);
-        }
+      u = SafeIntRange.union(range, unionedRangeToAdd);
+      if (u) {
+        unionedRangeToAdd = u;
+      } else {
+        newArray.push(range);
       }
     }
     newArray.push(unionedRangeToAdd);
