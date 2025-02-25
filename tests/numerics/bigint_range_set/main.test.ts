@@ -97,3 +97,21 @@ Deno.test("Numerics.BigIntRangeSet.prototype.includesValue()", () => {
 
 Deno.test("Numerics.BigIntRangeSet.prototype.()", () => {
 });
+
+Deno.test("Numerics.BigIntRangeSet.prototype.[Symbol.iterator]()", () => {
+  const rs1 = new BigIntRangeSet([[0n, 10n], [0n, 0n]]);
+  [...rs1].splice(0);
+  assertStrictEquals(rs1.toArray().map((r) => _s(r)).join("|"), "0,10");
+});
+
+Deno.test("Numerics.BigIntRangeSet.prototype.toArray()", () => {
+  const rs1 = new BigIntRangeSet([[0n, 10n], [0n, 0n]]);
+  rs1.toArray().splice(0);
+  assertStrictEquals(rs1.toArray().map((r) => _s(r)).join("|"), "0,10");
+});
+
+Deno.test("Numerics.BigIntRangeSet.prototype.toSet()", () => {
+  const rs1 = new BigIntRangeSet([[0n, 0n], [0n, 10n]]);
+  rs1.toSet().clear();
+  assertStrictEquals(rs1.toArray().map((r) => _s(r)).join("|"), "0,10");
+});

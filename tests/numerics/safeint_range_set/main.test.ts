@@ -95,5 +95,20 @@ Deno.test("Numerics.SafeIntRangeSet.prototype.includesValue()", () => {
   assertStrictEquals(rs101.includesValue(34), false);
 });
 
-Deno.test("Numerics.SafeIntRangeSet.prototype.()", () => {
+Deno.test("Numerics.SafeIntRangeSet.prototype.[Symbol.iterator]()", () => {
+  const rs1 = new SafeIntRangeSet([[0, 10], [0, 0]]);
+  [...rs1].splice(0);
+  assertStrictEquals(rs1.toArray().map((r) => _s(r)).join("|"), "0,10");
+});
+
+Deno.test("Numerics.SafeIntRangeSet.prototype.toArray()", () => {
+  const rs1 = new SafeIntRangeSet([[0, 10], [0, 0]]);
+  rs1.toArray().splice(0);
+  assertStrictEquals(rs1.toArray().map((r) => _s(r)).join("|"), "0,10");
+});
+
+Deno.test("Numerics.SafeIntRangeSet.prototype.toSet()", () => {
+  const rs1 = new SafeIntRangeSet([[0, 0], [0, 10]]);
+  rs1.toSet().clear();
+  assertStrictEquals(rs1.toArray().map((r) => _s(r)).join("|"), "0,10");
 });
