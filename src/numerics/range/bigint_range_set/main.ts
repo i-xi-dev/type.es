@@ -1,6 +1,6 @@
 import * as BigIntRange from "../bigint_range/mod.ts";
 import * as Type from "../../../type/mod.ts";
-import { type bigintrange, type safeint } from "../../../_typedef/mod.ts";
+import { type bigintrange } from "../../../_typedef/mod.ts";
 
 function _sorterMinAsc(a: bigintrange, b: bigintrange): -1 | 0 | 1 {
   const [aMin] = a;
