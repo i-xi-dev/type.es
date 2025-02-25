@@ -4,23 +4,23 @@ import * as Type from "../../type/mod.ts";
 import { _PropertyValueSetBase } from "./_propval_set_base.ts";
 import {
   type ArrayOrSet,
+  type codeplane,
   type codepoint,
-  type plane,
   type rune,
 } from "../../_typedef/mod.ts";
 
-function _toPlaneSet(planes: ArrayOrSet<plane>): Set<plane> {
+function _toCodePlaneSet(planes: ArrayOrSet<codeplane>): Set<codeplane> {
   Type.assertArrayOrSet(
     planes,
     "planes",
-    { isT: Type.isPlane, elementDesc: "code point plane value" },
+    { isT: Type.isCodePlane, elementDesc: "code point plane value" },
   );
   return new Set(planes);
 }
 
-export class PlaneSet extends _PropertyValueSetBase<plane> {
-  constructor(planes: ArrayOrSet<plane>) {
-    super([..._toPlaneSet(planes)].sort());
+export class CodePlaneSet extends _PropertyValueSetBase<codeplane> {
+  constructor(planes: ArrayOrSet<codeplane>) {
+    super([..._toCodePlaneSet(planes)].sort());
   }
 
   includesRune(rune: rune): boolean {
@@ -37,12 +37,12 @@ export class PlaneSet extends _PropertyValueSetBase<plane> {
     return (this.size > 0) ? this.has(testPlane) : false;
   }
 
-  unionWith(other: this | ArrayOrSet<plane>): this {
-    let otherPlanes: Set<plane>;
-    if (other instanceof PlaneSet) {
+  unionWith(other: this | ArrayOrSet<codeplane>): this {
+    let otherPlanes: Set<codeplane>;
+    if (other instanceof CodePlaneSet) {
       otherPlanes = new Set(other.toArray());
     } else {
-      otherPlanes = _toPlaneSet(other);
+      otherPlanes = _toCodePlaneSet(other);
     }
 
     const unionedPlanes = otherPlanes.union(this);

@@ -1,28 +1,28 @@
 import { assertStrictEquals, assertThrows } from "@std/assert";
 import { Text } from "../../../mod.ts";
 
-const { Unicode } = Text;
+const { CodePlaneSet } = Text;
 
-Deno.test("new Text.Unicode.PlaneSet()", () => {
-  const ps1 = new Unicode.PlaneSet([0]);
+Deno.test("new Text.CodePlaneSet()", () => {
+  const ps1 = new CodePlaneSet([0]);
   assertStrictEquals(ps1.includesRune("L"), true);
   assertStrictEquals(JSON.stringify(ps1.toArray()), `[0]`);
 
-  const ps0 = new Unicode.PlaneSet([]);
+  const ps0 = new CodePlaneSet([]);
   assertStrictEquals(ps0.includesRune("L"), false);
   assertStrictEquals(JSON.stringify(ps0.toArray()), `[]`);
 
-  const ps1x = new Unicode.PlaneSet(new Set([0]));
+  const ps1x = new CodePlaneSet(new Set([0]));
   assertStrictEquals(ps1x.includesRune("L"), true);
   assertStrictEquals(JSON.stringify(ps1x.toArray()), `[0]`);
 
-  const ps0x = new Unicode.PlaneSet(new Set([]));
+  const ps0x = new CodePlaneSet(new Set([]));
   assertStrictEquals(ps0x.includesRune("L"), false);
   assertStrictEquals(JSON.stringify(ps0x.toArray()), `[]`);
 
   assertThrows(
     () => {
-      new Unicode.PlaneSet(undefined as unknown as []);
+      new CodePlaneSet(undefined as unknown as []);
     },
     TypeError,
     "`planes` must be an `Array` of code point plane value or a `Set` of code point plane value.",
@@ -30,7 +30,7 @@ Deno.test("new Text.Unicode.PlaneSet()", () => {
 
   assertThrows(
     () => {
-      new Unicode.PlaneSet(["0" as unknown as 0]);
+      new CodePlaneSet(["0" as unknown as 0]);
     },
     TypeError,
     "`planes` must be an `Array` of code point plane value or a `Set` of code point plane value.",
@@ -38,24 +38,24 @@ Deno.test("new Text.Unicode.PlaneSet()", () => {
 
   assertThrows(
     () => {
-      new Unicode.PlaneSet([-1 as unknown as 0]);
+      new CodePlaneSet([-1 as unknown as 0]);
     },
     TypeError,
     "`planes` must be an `Array` of code point plane value or a `Set` of code point plane value.",
   );
 });
 
-Deno.test("Text.Unicode.PlaneSet.prototype.size", () => {
-  const gcs0 = new Unicode.PlaneSet([]);
+Deno.test("Text.CodePlaneSet.prototype.size", () => {
+  const gcs0 = new CodePlaneSet([]);
   assertStrictEquals(gcs0.size, 0);
-  const gcs1 = new Unicode.PlaneSet([1]);
+  const gcs1 = new CodePlaneSet([1]);
   assertStrictEquals(gcs1.size, 1);
-  const gcs2 = new Unicode.PlaneSet([2, 4, 2]);
+  const gcs2 = new CodePlaneSet([2, 4, 2]);
   assertStrictEquals(gcs2.size, 2);
 });
 
-Deno.test("Text.Unicode.PlaneSet.prototype.includesRune()", () => {
-  const ps1 = new Unicode.PlaneSet([0]);
+Deno.test("Text.CodePlaneSet.prototype.includesRune()", () => {
+  const ps1 = new CodePlaneSet([0]);
   assertStrictEquals(ps1.includesRune("\u0000"), true);
   assertStrictEquals(ps1.includesRune("\uFFFF"), true);
   assertStrictEquals(ps1.includesRune("\u{10000}"), false);
@@ -63,7 +63,7 @@ Deno.test("Text.Unicode.PlaneSet.prototype.includesRune()", () => {
   assertStrictEquals(ps1.includesRune("\u{100000}"), false);
   assertStrictEquals(ps1.includesRune("\u{10FFFF}"), false);
 
-  const ps2 = new Unicode.PlaneSet([16]);
+  const ps2 = new CodePlaneSet([16]);
   assertStrictEquals(ps2.includesRune("\u0000"), false);
   assertStrictEquals(ps2.includesRune("\uFFFF"), false);
   assertStrictEquals(ps2.includesRune("\u{10000}"), false);
@@ -71,7 +71,7 @@ Deno.test("Text.Unicode.PlaneSet.prototype.includesRune()", () => {
   assertStrictEquals(ps2.includesRune("\u{100000}"), true);
   assertStrictEquals(ps2.includesRune("\u{10FFFF}"), true);
 
-  const ps3 = new Unicode.PlaneSet([0, 16]);
+  const ps3 = new CodePlaneSet([0, 16]);
   assertStrictEquals(ps3.includesRune("\u0000"), true);
   assertStrictEquals(ps3.includesRune("\uFFFF"), true);
   assertStrictEquals(ps3.includesRune("\u{10000}"), false);
@@ -79,7 +79,7 @@ Deno.test("Text.Unicode.PlaneSet.prototype.includesRune()", () => {
   assertStrictEquals(ps3.includesRune("\u{100000}"), true);
   assertStrictEquals(ps3.includesRune("\u{10FFFF}"), true);
 
-  const ps0 = new Unicode.PlaneSet([]);
+  const ps0 = new CodePlaneSet([]);
   assertStrictEquals(ps0.includesRune("\u0000"), false);
   assertStrictEquals(ps0.includesRune("\uFFFF"), false);
   assertStrictEquals(ps0.includesRune("\u{10000}"), false);
@@ -104,8 +104,8 @@ Deno.test("Text.Unicode.PlaneSet.prototype.includesRune()", () => {
   );
 });
 
-Deno.test("Text.Unicode.PlaneSet.prototype.includesCodePoint()", () => {
-  const ps1 = new Unicode.PlaneSet([0]);
+Deno.test("Text.CodePlaneSet.prototype.includesCodePoint()", () => {
+  const ps1 = new CodePlaneSet([0]);
   assertStrictEquals(ps1.includesCodePoint(0), true);
   assertStrictEquals(ps1.includesCodePoint(0xFFFF), true);
   assertStrictEquals(ps1.includesCodePoint(0x10000), false);
@@ -129,8 +129,8 @@ Deno.test("Text.Unicode.PlaneSet.prototype.includesCodePoint()", () => {
   );
 });
 
-Deno.test("Text.Unicode.PlaneSet.prototype.findMatches()", () => {
-  const s1 = new Unicode.PlaneSet([1]);
+Deno.test("Text.CodePlaneSet.prototype.findMatches()", () => {
+  const s1 = new CodePlaneSet([1]);
   const r1a = s1.findMatches("123D\u{10000}E\u{10000}6GhijE");
   assertStrictEquals(
     JSON.stringify([...r1a.entries()]),
@@ -140,83 +140,83 @@ Deno.test("Text.Unicode.PlaneSet.prototype.findMatches()", () => {
   assertStrictEquals(JSON.stringify([...r1b.entries()]), `[]`);
 });
 
-Deno.test("Text.Unicode.PlaneSet.prototype.unionWith()", () => {
-  const gcs4 = new Unicode.PlaneSet([16, 0]).unionWith([]);
+Deno.test("Text.CodePlaneSet.prototype.unionWith()", () => {
+  const gcs4 = new CodePlaneSet([16, 0]).unionWith([]);
   assertStrictEquals(JSON.stringify(gcs4.toArray()), `[0,16]`);
 
-  const gcs4b = new Unicode.PlaneSet([16, 0, 16]).unionWith([
+  const gcs4b = new CodePlaneSet([16, 0, 16]).unionWith([
     16,
     0,
   ]);
   assertStrictEquals(JSON.stringify(gcs4b.toArray()), `[0,16]`);
 
-  const gcs5 = new Unicode.PlaneSet([]).unionWith([16, 0]);
+  const gcs5 = new CodePlaneSet([]).unionWith([16, 0]);
   assertStrictEquals(JSON.stringify(gcs5.toArray()), `[0,16]`);
 
-  const gcs6 = new Unicode.PlaneSet([]).unionWith([]);
+  const gcs6 = new CodePlaneSet([]).unionWith([]);
   assertStrictEquals(JSON.stringify(gcs6.toArray()), `[]`);
 
-  const gcs4xb = new Unicode.PlaneSet([16, 0, 16]).unionWith(
-    new Unicode.PlaneSet([16, 0]),
+  const gcs4xb = new CodePlaneSet([16, 0, 16]).unionWith(
+    new CodePlaneSet([16, 0]),
   );
   assertStrictEquals(JSON.stringify(gcs4xb.toArray()), `[0,16]`);
 
-  const gcs6x = new Unicode.PlaneSet([]).unionWith(
-    new Unicode.PlaneSet([]),
+  const gcs6x = new CodePlaneSet([]).unionWith(
+    new CodePlaneSet([]),
   );
   assertStrictEquals(JSON.stringify(gcs6x.toArray()), `[]`);
 
-  const gcs4yb = new Unicode.PlaneSet([16, 0, 16]).unionWith(
+  const gcs4yb = new CodePlaneSet([16, 0, 16]).unionWith(
     new Set([16, 0]),
   );
   assertStrictEquals(JSON.stringify(gcs4yb.toArray()), `[0,16]`);
 
-  const gcs6y = new Unicode.PlaneSet([]).unionWith(new Set([]));
+  const gcs6y = new CodePlaneSet([]).unionWith(new Set([]));
   assertStrictEquals(JSON.stringify(gcs6y.toArray()), `[]`);
 });
 
-Deno.test("Text.Unicode.PlaneSet.prototype.has()", () => {
-  const gcs0 = new Unicode.PlaneSet([]);
+Deno.test("Text.CodePlaneSet.prototype.has()", () => {
+  const gcs0 = new CodePlaneSet([]);
   assertStrictEquals(gcs0.has(0), false);
   assertStrictEquals(gcs0.has(1), false);
   assertStrictEquals(gcs0.has(4), false);
-  const gcs1 = new Unicode.PlaneSet([1]);
+  const gcs1 = new CodePlaneSet([1]);
   assertStrictEquals(gcs1.has(0), false);
   assertStrictEquals(gcs1.has(1), true);
   assertStrictEquals(gcs1.has(4), false);
-  const gcs2 = new Unicode.PlaneSet([2, 4, 2]);
+  const gcs2 = new CodePlaneSet([2, 4, 2]);
   assertStrictEquals(gcs2.has(0), false);
   assertStrictEquals(gcs2.has(1), false);
   assertStrictEquals(gcs2.has(4), true);
 });
 
-Deno.test("Text.Unicode.PlaneSet.prototype.keys()", () => {
-  const gcs0 = new Unicode.PlaneSet([]);
+Deno.test("Text.CodePlaneSet.prototype.keys()", () => {
+  const gcs0 = new CodePlaneSet([]);
   assertStrictEquals(JSON.stringify([...gcs0.keys()]), `[]`);
-  const gcs1 = new Unicode.PlaneSet([1]);
+  const gcs1 = new CodePlaneSet([1]);
   assertStrictEquals(JSON.stringify([...gcs1.keys()]), `[1]`);
-  const gcs2 = new Unicode.PlaneSet([2, 4, 2]);
+  const gcs2 = new CodePlaneSet([2, 4, 2]);
   assertStrictEquals(JSON.stringify([...gcs2.keys()]), `[2,4]`);
 });
 
-Deno.test("Text.Unicode.PlaneSet.prototype.toArray()", () => {
-  const gcs4 = new Unicode.PlaneSet([16, 0]);
+Deno.test("Text.CodePlaneSet.prototype.toArray()", () => {
+  const gcs4 = new CodePlaneSet([16, 0]);
   assertStrictEquals(JSON.stringify(gcs4.toArray()), `[0,16]`);
 
-  const gcs4b = new Unicode.PlaneSet([16, 0, 16]);
+  const gcs4b = new CodePlaneSet([16, 0, 16]);
   assertStrictEquals(JSON.stringify(gcs4b.toArray()), `[0,16]`);
 
-  const gcs5 = new Unicode.PlaneSet([]);
+  const gcs5 = new CodePlaneSet([]);
   assertStrictEquals(JSON.stringify(gcs5.toArray()), `[]`);
 });
 
-Deno.test("Text.Unicode.PlaneSet.prototype.toSet()", () => {
-  const gcs4 = new Unicode.PlaneSet([16, 0]);
+Deno.test("Text.CodePlaneSet.prototype.toSet()", () => {
+  const gcs4 = new CodePlaneSet([16, 0]);
   assertStrictEquals(JSON.stringify([...gcs4.toSet()]), `[0,16]`);
 
-  const gcs4b = new Unicode.PlaneSet([16, 0, 16]);
+  const gcs4b = new CodePlaneSet([16, 0, 16]);
   assertStrictEquals(JSON.stringify([...gcs4b.toSet()]), `[0,16]`);
 
-  const gcs5 = new Unicode.PlaneSet([]);
+  const gcs5 = new CodePlaneSet([]);
   assertStrictEquals(JSON.stringify([...gcs5.toSet()]), `[]`);
 });

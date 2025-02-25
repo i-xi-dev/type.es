@@ -24,7 +24,7 @@ export type ScriptSetMatchingOptions = {
   excludeScx?: boolean;
 };
 
-export class ScriptSet extends _PropertyValueSetBase<script> {
+export class UnicodeScriptSet extends _PropertyValueSetBase<script> {
   readonly #excludeScx: boolean;
   readonly #regex: RegExp;
 
@@ -55,7 +55,7 @@ export class ScriptSet extends _PropertyValueSetBase<script> {
 
   unionWith(other: this | ArrayOrSet<script>): this {
     let otherScripts: Set<script>;
-    if (other instanceof ScriptSet) {
+    if (other instanceof UnicodeScriptSet) {
       otherScripts = new Set(other.toArray());
     } else {
       otherScripts = _toScriptSet(other);

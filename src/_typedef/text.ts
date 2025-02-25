@@ -7,7 +7,7 @@ export type codepoint = safeint;
 /**
  * A group of code points.
  */
-export type plane =
+export type codeplane =
   | 0
   | 1
   | 2

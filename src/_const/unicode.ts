@@ -1,13 +1,13 @@
 import _blocks from "../../dat/unicode/block_map.ts";
 import _gcs from "../../dat/unicode/gc_map.ts";
 // import {
+//   type codeplane,
 //   type codepoint,
 //   type gc,
-//   type plane,
 //   type safeintrange,
 // } from "../type.ts";
 
-export const Plane /* : Record<string, plane> */ = {
+export const CodePlane /* : Record<string, codeplane> */ = {
   BMP: 0,
   SMP: 1,
   SIP: 2,
@@ -17,6 +17,7 @@ export const Plane /* : Record<string, plane> */ = {
   SPUA_B: 16,
 } as const;
 
-export const GeneralCategory /* : Record<string, gc> */ = _gcs;
+export const UnicodeGeneralCategory /* : Record<string, gc> */ = _gcs;
 
-export const Block /* : Record<string, safeintrange<codepoint>> */ = _blocks;
+export const UnicodeBlock /* : Record<string, safeintrange<codepoint>> */ =
+  _blocks;

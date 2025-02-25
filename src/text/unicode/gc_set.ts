@@ -20,7 +20,7 @@ function _toGcSet(gcs: ArrayOrSet<gc>): Set<gc> {
   return new Set(gcs);
 }
 
-export class GeneralCategorySet extends _PropertyValueSetBase<gc> {
+export class UnicodeGeneralCategorySet extends _PropertyValueSetBase<gc> {
   readonly #regex: RegExp;
 
   constructor(gcs: ArrayOrSet<gc>) {
@@ -44,7 +44,7 @@ export class GeneralCategorySet extends _PropertyValueSetBase<gc> {
 
   unionWith(other: this | ArrayOrSet<gc>): this {
     let otherGcs: Set<gc>;
-    if (other instanceof GeneralCategorySet) {
+    if (other instanceof UnicodeGeneralCategorySet) {
       otherGcs = new Set(other.toArray());
     } else {
       otherGcs = _toGcSet(other);

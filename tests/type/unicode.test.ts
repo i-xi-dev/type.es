@@ -1,47 +1,47 @@
 import { assertStrictEquals, fail, unreachable } from "@std/assert";
 import { Type } from "../../mod.ts";
 
-Deno.test("Type.isPlane()", () => {
-  assertStrictEquals(Type.isPlane(-1), false);
-  assertStrictEquals(Type.isPlane(-0), true);
-  assertStrictEquals(Type.isPlane(0), true);
-  assertStrictEquals(Type.isPlane(16), true);
-  assertStrictEquals(Type.isPlane(17), false);
+Deno.test("Type.isCodePlane()", () => {
+  assertStrictEquals(Type.isCodePlane(-1), false);
+  assertStrictEquals(Type.isCodePlane(-0), true);
+  assertStrictEquals(Type.isCodePlane(0), true);
+  assertStrictEquals(Type.isCodePlane(16), true);
+  assertStrictEquals(Type.isCodePlane(17), false);
 
-  assertStrictEquals(Type.isPlane(undefined), false);
-  assertStrictEquals(Type.isPlane("0"), false);
+  assertStrictEquals(Type.isCodePlane(undefined), false);
+  assertStrictEquals(Type.isCodePlane("0"), false);
 });
 
-Deno.test("Type.assertPlane()", () => {
+Deno.test("Type.assertCodePlane()", () => {
   try {
-    Type.assertPlane(0, "test-1");
-    Type.assertPlane(16, "test-1");
+    Type.assertCodePlane(0, "test-1");
+    Type.assertCodePlane(16, "test-1");
   } catch (exception) {
     fail((exception as Error).toString());
   }
 
   try {
-    Type.assertPlane(-1, "test-1");
+    Type.assertCodePlane(-1, "test-1");
     unreachable();
   } catch {
     //
   }
   try {
-    Type.assertPlane(17, "test-1");
-    unreachable();
-  } catch {
-    //
-  }
-
-  try {
-    Type.assertPlane(undefined, "test-1");
+    Type.assertCodePlane(17, "test-1");
     unreachable();
   } catch {
     //
   }
 
   try {
-    Type.assertPlane("0", "test-1");
+    Type.assertCodePlane(undefined, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+
+  try {
+    Type.assertCodePlane("0", "test-1");
     unreachable();
   } catch {
     //
