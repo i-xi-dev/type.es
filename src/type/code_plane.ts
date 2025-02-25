@@ -1,5 +1,5 @@
+import * as CodePlane from "../_const/code_plane.ts";
 import { type codeplane } from "../_typedef/mod.ts";
-import { CodePlane } from "../_const/unicode.ts";
 import { isSafeIntInRange } from "./number.ts";
 
 export function isCodePlane(test: unknown): test is codeplane {
