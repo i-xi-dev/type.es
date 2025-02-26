@@ -8,10 +8,7 @@ export function normalize<T extends number>(value: T): T {
 }
 
 //TODO 命名 toか？
-export function clampToRange<T extends number>(
-  value: number,
-  range: numberrange<T>,
-): T {
+export function clampToRange(value: number, range: numberrange): number {
   Type.assertNumber(value, "value");
   Type.assertNumberRange(range, "range");
 
@@ -19,5 +16,5 @@ export function clampToRange<T extends number>(
   if (min > max) {
     throw new RangeError("`max` must be greater than or equal to `min`.");
   }
-  return normalize(Math.min(Math.max(value, min), max)) as T;
+  return normalize(Math.min(Math.max(value, min), max));
 }

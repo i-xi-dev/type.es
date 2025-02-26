@@ -103,7 +103,7 @@ export function includes(range: bigintrange, test: bigint): boolean {
   return Type.isBigInt(test) && (test >= min) && (test <= max);
 }
 
-//TODO unionではないのでは
+//TODO unionではないのでは mergeIfOverlapedとか
 export function union(a: bigintrange, b: bigintrange): bigintrange | null {
   // Type.assertBigIntRange(a, "a");
   // Type.assertBigIntRange(b, "b");

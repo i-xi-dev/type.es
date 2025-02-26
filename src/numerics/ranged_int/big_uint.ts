@@ -181,7 +181,7 @@ class _BigUint<T extends bigint> implements RangedBigInt<T> {
 
   saturate(value: bigint): T {
     Type.assertBigInt(value, "value");
-    return ExBigInt.clampToRange(value, [this.MIN_VALUE, this.MAX_VALUE]);
+    return ExBigInt.clampToRange(value, [this.MIN_VALUE, this.MAX_VALUE]) as T;
   }
 }
 

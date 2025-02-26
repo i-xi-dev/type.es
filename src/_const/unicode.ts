@@ -3,10 +3,9 @@ import _gcs from "../../dat/unicode/gc_map.ts";
 // import {
 //   type codepoint,
 //   type gc,
-//   type safeintrange,
+//   type codepointrange,
 // } from "../type.ts";
 
 export const UnicodeGeneralCategory /* : Record<string, gc> */ = _gcs;
 
-export const UnicodeBlock /* : Record<string, safeintrange<codepoint>> */ =
-  _blocks;
+export const UnicodeBlock /* : Record<string, codepointrange> */ = _blocks;

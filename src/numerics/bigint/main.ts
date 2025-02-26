@@ -45,10 +45,7 @@ const _min = min;
 const _max = max;
 
 //TODO 命名 toか？
-export function clampToRange<T extends bigint>(
-  value: bigint,
-  range: bigintrange<T>,
-): T {
+export function clampToRange(value: bigint, range: bigintrange): bigint {
   Type.assertBigInt(value, "value");
   Type.assertBigIntRange(range, "range");
 
@@ -56,7 +53,7 @@ export function clampToRange<T extends bigint>(
   if (min > max) {
     throw new RangeError("`max` must be greater than or equal to `min`.");
   }
-  return _min(_max(value, min), max) as T;
+  return _min(_max(value, min), max);
 }
 
 export type FromStringOptions = {

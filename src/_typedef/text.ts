@@ -4,6 +4,8 @@ import { type safeint } from "./numerics.ts";
 /** 0x0-0x10FFFF */
 export type codepoint = safeint;
 
+export type codepointrange = [min: codepoint, max: codepoint];
+
 /**
  * A group of code points.
  */

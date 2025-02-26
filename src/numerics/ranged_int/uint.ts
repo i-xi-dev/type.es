@@ -267,7 +267,7 @@ class _Uint<T extends safeint> implements RangedInt<T> {
 
   saturate(value: safeint): T {
     Type.assertSafeInt(value, "value");
-    return SafeInt.clampToRange(value, [this.MIN_VALUE, this.MAX_VALUE]);
+    return SafeInt.clampToRange(value, [this.MIN_VALUE, this.MAX_VALUE]) as T;
   }
 }
 

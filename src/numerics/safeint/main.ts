@@ -11,10 +11,7 @@ import {
 } from "../../_typedef/mod.ts";
 
 //TODO 命名 toか？
-export function clampToRange<T extends safeint>(
-  value: safeint,
-  range: safeintrange<T>,
-): T {
+export function clampToRange(value: safeint, range: safeintrange): safeint {
   Type.assertSafeInt(value, "value");
   Type.assertSafeIntRange(range, "range");
 
@@ -22,7 +19,7 @@ export function clampToRange<T extends safeint>(
   if (min > max) {
     throw new RangeError("`max` must be greater than or equal to `min`.");
   }
-  return ExNumber.normalize(Math.min(Math.max(value, min), max)) as T;
+  return ExNumber.normalize(Math.min(Math.max(value, min), max));
 }
 
 export function clampToPositive<T extends safeint>(value: T): T {

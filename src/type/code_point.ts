@@ -1,5 +1,5 @@
 import * as Radix from "../basics/radix/mod.ts";
-import { type codepoint, type safeintrange } from "../_typedef/mod.ts";
+import { type codepoint, type codepointrange } from "../_typedef/mod.ts";
 import { isSafeIntInRange } from "./number.ts";
 import {
   MAX_VALUE as MAX_CODE_POINT,
@@ -98,7 +98,7 @@ export function assertVariationSelectorCodePoint(
 
 export function isCodePointInRange(
   test: unknown,
-  range: safeintrange<codepoint>,
+  range: codepointrange,
 ): test is codepoint {
   assertCodePoint(range[0], "range.min");
   assertCodePoint(range[1], "range.max");
@@ -109,7 +109,7 @@ export function isCodePointInRange(
 export function assertCodePointInRange(
   test: unknown,
   label: string,
-  range: safeintrange<codepoint>,
+  range: codepointrange,
 ): void {
   if (isCodePointInRange(test, range) !== true) {
     throw new TypeError(
