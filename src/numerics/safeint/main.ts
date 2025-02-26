@@ -22,24 +22,24 @@ export function clampToRange(value: safeint, range: safeintrange): safeint {
   return ExNumber.normalize(Math.min(Math.max(value, min), max));
 }
 
-export function clampToPositive<T extends safeint>(value: T): T {
+export function clampToPositive(value: safeint): safeint {
   Type.assertSafeInt(value, "value");
-  return ExNumber.normalize(Math.max(value, 1) as T);
+  return ExNumber.normalize(Math.max(value, 1));
 }
 
-export function clampToNonNegative<T extends safeint>(value: T): T {
+export function clampToNonNegative(value: safeint): safeint {
   Type.assertSafeInt(value, "value");
-  return ExNumber.normalize(Math.max(value, ExNumber.ZERO) as T);
+  return ExNumber.normalize(Math.max(value, ExNumber.ZERO));
 }
 
-export function clampToNonPositive<T extends safeint>(value: T): T {
+export function clampToNonPositive(value: safeint): safeint {
   Type.assertSafeInt(value, "value");
-  return ExNumber.normalize(Math.min(value, ExNumber.ZERO) as T);
+  return ExNumber.normalize(Math.min(value, ExNumber.ZERO));
 }
 
-export function clampToNegative<T extends safeint>(value: T): T {
+export function clampToNegative(value: safeint): safeint {
   Type.assertSafeInt(value, "value");
-  return ExNumber.normalize(Math.min(value, -1) as T);
+  return ExNumber.normalize(Math.min(value, -1));
 }
 
 export type FromStringOptions = {
