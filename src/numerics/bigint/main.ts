@@ -9,11 +9,11 @@ import {
   type safeint,
 } from "../../_typedef/mod.ts";
 
-export function min<T extends bigint>(value0: T, ...values: T[]): T {
+export function min(value0: bigint, ...values: bigint[]): bigint {
   Type.assertBigInt(value0, `value0`);
 
   let provMin = value0;
-  let value: T;
+  let value: bigint;
   for (let i = 0; i < values.length; i++) {
     value = values[i];
     Type.assertBigInt(value, `values[${i}]`);
@@ -25,11 +25,11 @@ export function min<T extends bigint>(value0: T, ...values: T[]): T {
   return provMin;
 }
 
-export function max<T extends bigint>(value0: T, ...values: T[]): T {
+export function max(value0: bigint, ...values: bigint[]): bigint {
   Type.assertBigInt(value0, `value0`);
 
   let provMax = value0;
-  let value: T;
+  let value: bigint;
   for (let i = 0; i < values.length; i++) {
     value = values[i];
     Type.assertBigInt(value, `values[${i}]`);
