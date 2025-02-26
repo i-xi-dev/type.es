@@ -1,7 +1,7 @@
 import * as Type from "../../../type/mod.ts";
 import { type safeint, type safeintrange } from "../../../_typedef/mod.ts";
 
-export function sizeOf<T extends safeint>(range: safeintrange<T>): safeint {
+export function sizeOf(range: safeintrange): safeint {
   Type.assertSafeIntRange(range, "range");
 
   const [min, max] = range;
@@ -14,22 +14,20 @@ export function sizeOf<T extends safeint>(range: safeintrange<T>): safeint {
   return size;
 }
 
-export function minOf<T extends safeint>(range: safeintrange<T>): T {
+export function minOf(range: safeintrange): safeint {
   Type.assertSafeIntRange(range, "range");
   return range[0];
 }
 
-export function maxOf<T extends safeint>(range: safeintrange<T>): T {
+export function maxOf(range: safeintrange): safeint {
   Type.assertSafeIntRange(range, "range");
   return range[1];
 }
 
-//XXX fromXxx<T extends safeint>(xxx: { min: T, max: T }): safeintrange<T>
-//XXX toXxx<T extends safeint>(range: safeintrange<T>): { min: T, max: T }
+//XXX fromXxx(xxx: { min: safeint, max: safeint }): safeintrange
+//XXX toXxx(range: safeintrange): { min: safeint, max: safeint }
 
-export function toIterable<T extends safeint>(
-  range: safeintrange<T>,
-): IterableIterator<T> {
+export function toIterable(range: safeintrange): IterableIterator<safeint> {
   Type.assertSafeIntRange(range, "range");
 
   const [min, max] = range;
@@ -44,14 +42,11 @@ export function toIterable<T extends safeint>(
   })();
 }
 
-// toArray<T extends safeint>(): Array<T> → 実装しない（要素数が多いと配列を作れないので。（要素数上限はECMAの仕様上はMAX_SAFE_INTEGERだが、実装はそれよりはるかに小さいっぽい））
-// toSet<T extends safeint>(): Set<T> → 同上
+// toArray(): Array<safeint> → 実装しない（要素数が多いと配列を作れないので。（要素数上限はECMAの仕様上はMAX_SAFE_INTEGERだが、実装はそれよりはるかに小さいっぽい））
+// toSet(): Set<safeint> → 同上
 
 // a equals b (b equals a)
-export function equals<T extends safeint>(
-  a: safeintrange<T>,
-  b: safeintrange<T>,
-): boolean {
+export function equals(a: safeintrange, b: safeintrange): boolean {
   Type.assertSafeIntRange(a, "a");
   Type.assertSafeIntRange(b, "b");
 
@@ -61,10 +56,7 @@ export function equals<T extends safeint>(
 }
 
 // a overlaps b (b overlaps a)
-export function overlaps<T extends safeint>(
-  a: safeintrange<T>,
-  b: safeintrange<T>,
-): boolean {
+export function overlaps(a: safeintrange, b: safeintrange): boolean {
   Type.assertSafeIntRange(a, "a");
   Type.assertSafeIntRange(b, "b");
 
@@ -74,10 +66,7 @@ export function overlaps<T extends safeint>(
 }
 
 // a covers b (b isCoveredBy a) (a isSuperrangeOf b) (b isSubrangeOf a)
-export function covers<T extends safeint>(
-  a: safeintrange<T>,
-  b: safeintrange<T>,
-): boolean {
+export function covers(a: safeintrange, b: safeintrange): boolean {
   Type.assertSafeIntRange(a, "a");
   Type.assertSafeIntRange(b, "b");
 
@@ -87,19 +76,13 @@ export function covers<T extends safeint>(
 }
 
 // a isDisjointFrom b (b isDisjointFrom a)
-export function isDisjoint<T extends safeint>(
-  a: safeintrange<T>,
-  b: safeintrange<T>,
-): boolean {
+export function isDisjoint(a: safeintrange, b: safeintrange): boolean {
   return !overlaps(a, b);
 }
 
 // a isAdjacentTo b (b isAdjacent a)
 // disjointかつ隣接（図形のtouchesとは意味が異なる）
-export function isAdjacent<T extends safeint>(
-  a: safeintrange<T>,
-  b: safeintrange<T>,
-): boolean {
+export function isAdjacent(a: safeintrange, b: safeintrange): boolean {
   // Type.assertSafeIntRange(a, "a");
   // Type.assertSafeIntRange(b, "b");
   if (overlaps(a, b)) {
@@ -116,19 +99,19 @@ export function isAdjacent<T extends safeint>(
   return false;
 }
 
-export function includes<T extends safeint>(
-  range: safeintrange<T>,
-  test: T,
+export function includes(
+  range: safeintrange,
+  test: safeint,
 ): boolean {
   Type.assertSafeIntRange(range, "range");
   const [min, max] = range;
   return Type.isSafeInt(test) && (test >= min) && (test <= max);
 }
 
-export function union<T extends safeint>(
-  a: safeintrange<T>,
-  b: safeintrange<T>,
-): safeintrange<T> | null {
+export function union(
+  a: safeintrange,
+  b: safeintrange,
+): safeintrange | null {
   // Type.assertSafeIntRange(a, "a");
   // Type.assertSafeIntRange(b, "b");
 
@@ -136,8 +119,8 @@ export function union<T extends safeint>(
     const [aMin, aMax] = a;
     const [bMin, bMax] = b;
     return [
-      Math.min(aMin, bMin) as T,
-      Math.max(aMax, bMax) as T,
+      Math.min(aMin, bMin),
+      Math.max(aMax, bMax),
     ];
   }
   return null;

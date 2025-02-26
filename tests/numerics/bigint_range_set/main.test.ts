@@ -95,7 +95,33 @@ Deno.test("Numerics.BigIntRangeSet.prototype.includesValue()", () => {
   assertStrictEquals(rs101.includesValue(34n), false);
 });
 
-Deno.test("Numerics.BigIntRangeSet.prototype.()", () => {
+Deno.test("Numerics.BigIntRangeSet.prototype.unionWith()", () => {
+  const rs100 = new BigIntRangeSet([[0n, 1n]]);
+  const rs100b = rs100.unionWith([[31n, 33n], [3n, 24n], [8n, 14n]]);
+  const rs100c = rs100b.unionWith([[3n, 4n], [25n, 26n]]);
+  assertStrictEquals(
+    rs100.toArray().map((r) => _s(r)).join("|"),
+    "0,1",
+  );
+  assertStrictEquals(
+    rs100c.toArray().map((r) => _s(r)).join("|"),
+    "0,1|3,26|31,33",
+  );
+
+  const rs101 = new BigIntRangeSet([
+    [0n, 1n],
+    [31n, 33n],
+    [3n, 24n],
+    [8n, 14n],
+    [3n, 4n],
+    [25n, 26n],
+  ]);
+  const rs101b = rs101.unionWith([[31n, 33n], [3n, 24n], [8n, 14n]]);
+  const rs101c = rs101b.unionWith([[3n, 4n], [25n, 26n]]);
+  assertStrictEquals(
+    rs101c.toArray().map((r) => _s(r)).join("|"),
+    "0,1|3,26|31,33",
+  );
 });
 
 Deno.test("Numerics.BigIntRangeSet.prototype.[Symbol.iterator]()", () => {

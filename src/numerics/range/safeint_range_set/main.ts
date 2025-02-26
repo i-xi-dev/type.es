@@ -13,13 +13,13 @@ function _sorterMinAsc(a: safeintrange, b: safeintrange): -1 | 0 | 1 {
   return 0;
 }
 
-//XXX Tをやめる？（Tを明示しない場合のtypescriptの推論が…
-export class SafeIntRangeSet<T extends safeint> {
-  // implements ReadonlySetLike<safeintrange<T>> hasとかに意味があると思えない（Setのhasの仕様はオブジェクトの場合参照先が等しいかだし、has(コンストラクターに渡したrangeの参照)がtrueにならない場合がある（コンストラクターで結合や破棄する場合があるので））
+export class SafeIntRangeSet {
+  // implements ReadonlySetLike<safeintrange> hasとかに意味があると思えない（Setのhasの仕様はオブジェクトの場合参照先が等しいかだし、has(コンストラクターに渡したrangeの参照)がtrueにならない場合がある（コンストラクターで結合や破棄する場合があるので））
 
-  readonly #set: Set<safeintrange<T>>;
+  readonly #set: Set<safeintrange>;
 
-  constructor(iterable: Iterable<safeintrange<T>>) {
+  constructor(iterable: Iterable<safeintrange>) {
+    Type.assertIterable(iterable, "iterable");
     this.#set = new Set();
 
     for (const range of iterable) {
@@ -34,28 +34,38 @@ export class SafeIntRangeSet<T extends safeint> {
     return [...this.#set].some((range) => SafeIntRange.includes(range, test));
   }
 
-  //XXX unionWith, exceptWith, intersectWith, ...
+  unionWith(other: Iterable<safeintrange>): this {
+    Type.assertIterable(other, "other");
 
+    const cloned = Reflect.construct(this.constructor, [this]);
+    for (const range of other) {
+      Type.assertSafeIntRange(range, "other[*]");
+      cloned.#add(range);
+    }
+    return cloned;
+  }
+
+  //XXX exceptWith, intersectWith, ...
   //XXX equals(range or rangeset)
   //XXX overlaps(range or rangeset)
   //XXX isDisjoint(range or rangeset)
 
-  [Symbol.iterator](): SetIterator<safeintrange<T>> {
+  [Symbol.iterator](): SetIterator<safeintrange> {
     return this.toSet()[Symbol.iterator]();
   }
 
-  toArray(): Array<safeintrange<T>> {
+  toArray(): Array<safeintrange> {
     return [...this.toSet()];
   }
 
-  toSet(): Set<safeintrange<T>> {
+  toSet(): Set<safeintrange> {
     return globalThis.structuredClone(this.#set);
   }
 
-  #add(rangeToAdd: safeintrange<T>): void {
+  #add(rangeToAdd: safeintrange): void {
     const newArray = [];
-    let unionedRangeToAdd: safeintrange<T> = rangeToAdd;
-    let u: safeintrange<T> | null = null;
+    let unionedRangeToAdd: safeintrange = rangeToAdd;
+    let u: safeintrange | null = null;
     for (const range of this.#set) {
       u = SafeIntRange.union(range, unionedRangeToAdd);
       if (u) {

@@ -13,13 +13,13 @@ function _sorterMinAsc(a: bigintrange, b: bigintrange): -1 | 0 | 1 {
   return 0;
 }
 
-//XXX Tをやめる？（Tを明示しない場合のtypescriptの推論が…
-export class BigIntRangeSet<T extends bigint> {
-  // implements ReadonlySetLike<bigintrange<T>> hasとかに意味があると思えない（Setのhasの仕様はオブジェクトの場合参照先が等しいかだし、has(コンストラクターに渡したrangeの参照)がtrueにならない場合がある（コンストラクターで結合や破棄する場合があるので））
+export class BigIntRangeSet {
+  // implements ReadonlySetLike<bigintrange> hasとかに意味があると思えない（Setのhasの仕様はオブジェクトの場合参照先が等しいかだし、has(コンストラクターに渡したrangeの参照)がtrueにならない場合がある（コンストラクターで結合や破棄する場合があるので））
 
-  readonly #set: Set<bigintrange<T>>;
+  readonly #set: Set<bigintrange>;
 
-  constructor(iterable: Iterable<bigintrange<T>>) {
+  constructor(iterable: Iterable<bigintrange>) {
+    Type.assertIterable(iterable, "iterable");
     this.#set = new Set();
 
     for (const range of iterable) {
@@ -34,28 +34,38 @@ export class BigIntRangeSet<T extends bigint> {
     return [...this.#set].some((range) => BigIntRange.includes(range, test));
   }
 
-  //XXX unionWith, exceptWith, intersectWith, ...
+  unionWith(other: Iterable<bigintrange>): this {
+    Type.assertIterable(other, "other");
 
+    const cloned = Reflect.construct(this.constructor, [this]);
+    for (const range of other) {
+      Type.assertBigIntRange(range, "other[*]");
+      cloned.#add(range);
+    }
+    return cloned;
+  }
+
+  //XXX exceptWith, intersectWith, ...
   //XXX equals(range or rangeset)
   //XXX overlaps(range or rangeset)
   //XXX isDisjoint(range or rangeset)
 
-  [Symbol.iterator](): SetIterator<bigintrange<T>> {
+  [Symbol.iterator](): SetIterator<bigintrange> {
     return this.toSet()[Symbol.iterator]();
   }
 
-  toArray(): Array<bigintrange<T>> {
+  toArray(): Array<bigintrange> {
     return [...this.toSet()];
   }
 
-  toSet(): Set<bigintrange<T>> {
+  toSet(): Set<bigintrange> {
     return globalThis.structuredClone(this.#set);
   }
 
-  #add(rangeToAdd: bigintrange<T>): void {
+  #add(rangeToAdd: bigintrange): void {
     const newArray = [];
-    let unionedRangeToAdd: bigintrange<T> = rangeToAdd;
-    let u: bigintrange<T> | null = null;
+    let unionedRangeToAdd: bigintrange = rangeToAdd;
+    let u: bigintrange | null = null;
     for (const range of this.#set) {
       u = BigIntRange.union(range, unionedRangeToAdd);
       if (u) {

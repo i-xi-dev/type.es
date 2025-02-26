@@ -2,7 +2,7 @@ import * as ExBigInt from "../../bigint/mod.ts";
 import * as Type from "../../../type/mod.ts";
 import { type bigintrange } from "../../../_typedef/mod.ts";
 
-export function sizeOf<T extends bigint>(range: bigintrange<T>): bigint {
+export function sizeOf(range: bigintrange): bigint {
   Type.assertBigIntRange(range, "range");
 
   const [min, max] = range;
@@ -12,22 +12,20 @@ export function sizeOf<T extends bigint>(range: bigintrange<T>): bigint {
   return size;
 }
 
-export function minOf<T extends bigint>(range: bigintrange<T>): T {
+export function minOf(range: bigintrange): bigint {
   Type.assertBigIntRange(range, "range");
   return range[0];
 }
 
-export function maxOf<T extends bigint>(range: bigintrange<T>): T {
+export function maxOf(range: bigintrange): bigint {
   Type.assertBigIntRange(range, "range");
   return range[1];
 }
 
-//XXX fromXxx<T extends bigint>(xxx: { min: T, max: T }): bigintrange<T>
-//XXX toXxx<T extends bigint>(range: bigintrange<T>): { min: T, max: T }
+//XXX fromXxx(xxx: { min: bigint, max: bigint }): bigintrange
+//XXX toXxx(range: bigintrange): { min: bigint, max: bigint }
 
-export function toIterable<T extends bigint>(
-  range: bigintrange<T>,
-): IterableIterator<T> {
+export function toIterable(range: bigintrange): IterableIterator<bigint> {
   Type.assertBigIntRange(range, "range");
 
   const [min, max] = range;
@@ -42,14 +40,11 @@ export function toIterable<T extends bigint>(
   })();
 }
 
-// toArray<T extends bigint>(): Array<T> → 実装しない（要素数が多いと配列を作れないので。（要素数上限はECMAの仕様上はMAX_SAFE_INTEGERだが、実装はそれよりはるかに小さいっぽい））
-// toSet<T extends bigint>(): Set<T> → 同上
+// toArray(): Array<bigint> → 実装しない（要素数が多いと配列を作れないので。（要素数上限はECMAの仕様上はMAX_SAFE_INTEGERだが、実装はそれよりはるかに小さいっぽい））
+// toSet(): Set<bigint> → 同上
 
 // a equals b (b equals a)
-export function equals<T extends bigint>(
-  a: bigintrange<T>,
-  b: bigintrange<T>,
-): boolean {
+export function equals(a: bigintrange, b: bigintrange): boolean {
   Type.assertBigIntRange(a, "a");
   Type.assertBigIntRange(b, "b");
 
@@ -59,10 +54,7 @@ export function equals<T extends bigint>(
 }
 
 // a overlaps b (b overlaps a)
-export function overlaps<T extends bigint>(
-  a: bigintrange<T>,
-  b: bigintrange<T>,
-): boolean {
+export function overlaps(a: bigintrange, b: bigintrange): boolean {
   Type.assertBigIntRange(a, "a");
   Type.assertBigIntRange(b, "b");
 
@@ -72,10 +64,7 @@ export function overlaps<T extends bigint>(
 }
 
 // a covers b (b isCoveredBy a) (a isSuperrangeOf b) (b isSubrangeOf a)
-export function covers<T extends bigint>(
-  a: bigintrange<T>,
-  b: bigintrange<T>,
-): boolean {
+export function covers(a: bigintrange, b: bigintrange): boolean {
   Type.assertBigIntRange(a, "a");
   Type.assertBigIntRange(b, "b");
 
@@ -85,19 +74,13 @@ export function covers<T extends bigint>(
 }
 
 // a isDisjointFrom b (b isDisjointFrom a)
-export function isDisjoint<T extends bigint>(
-  a: bigintrange<T>,
-  b: bigintrange<T>,
-): boolean {
+export function isDisjoint(a: bigintrange, b: bigintrange): boolean {
   return !overlaps(a, b);
 }
 
 // a isAdjacentTo b (b isAdjacent a)
 // disjointかつ隣接（図形のtouchesとは意味が異なる）
-export function isAdjacent<T extends bigint>(
-  a: bigintrange<T>,
-  b: bigintrange<T>,
-): boolean {
+export function isAdjacent(a: bigintrange, b: bigintrange): boolean {
   // Type.assertBigIntRange(a, "a");
   // Type.assertBigIntRange(b, "b");
   if (overlaps(a, b)) {
@@ -106,27 +89,22 @@ export function isAdjacent<T extends bigint>(
 
   const [aMin, aMax] = a;
   const [bMin, bMax] = b;
-  if ((bMin - aMax) as unknown as T === 1n) {
+  if ((bMin - aMax) === 1n) {
     return true;
-  } else if ((aMin - bMax) as unknown as T === 1n) {
+  } else if ((aMin - bMax) === 1n) {
     return true;
   }
   return false;
 }
 
-export function includes<T extends bigint>(
-  range: bigintrange<T>,
-  test: T,
-): boolean {
+export function includes(range: bigintrange, test: bigint): boolean {
   Type.assertBigIntRange(range, "range");
   const [min, max] = range;
   return Type.isBigInt(test) && (test >= min) && (test <= max);
 }
 
-export function union<T extends bigint>(
-  a: bigintrange<T>,
-  b: bigintrange<T>,
-): bigintrange<T> | null {
+//TODO unionではないのでは
+export function union(a: bigintrange, b: bigintrange): bigintrange | null {
   // Type.assertBigIntRange(a, "a");
   // Type.assertBigIntRange(b, "b");
 

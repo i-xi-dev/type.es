@@ -95,6 +95,35 @@ Deno.test("Numerics.SafeIntRangeSet.prototype.includesValue()", () => {
   assertStrictEquals(rs101.includesValue(34), false);
 });
 
+Deno.test("Numerics.SafeIntRangeSet.prototype.unionWith()", () => {
+  const rs100 = new SafeIntRangeSet([[0, 1]]);
+  const rs100b = rs100.unionWith([[31, 33], [3, 24], [8, 14]]);
+  const rs100c = rs100b.unionWith([[3, 4], [25, 26]]);
+  assertStrictEquals(
+    rs100.toArray().map((r) => _s(r)).join("|"),
+    "0,1",
+  );
+  assertStrictEquals(
+    rs100c.toArray().map((r) => _s(r)).join("|"),
+    "0,1|3,26|31,33",
+  );
+
+  const rs101 = new SafeIntRangeSet([
+    [0, 1],
+    [31, 33],
+    [3, 24],
+    [8, 14],
+    [3, 4],
+    [25, 26],
+  ]);
+  const rs101b = rs101.unionWith([[31, 33], [3, 24], [8, 14]]);
+  const rs101c = rs101b.unionWith([[3, 4], [25, 26]]);
+  assertStrictEquals(
+    rs101c.toArray().map((r) => _s(r)).join("|"),
+    "0,1|3,26|31,33",
+  );
+});
+
 Deno.test("Numerics.SafeIntRangeSet.prototype.[Symbol.iterator]()", () => {
   const rs1 = new SafeIntRangeSet([[0, 10], [0, 0]]);
   [...rs1].splice(0);
