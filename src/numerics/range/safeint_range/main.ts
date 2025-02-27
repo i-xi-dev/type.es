@@ -108,7 +108,8 @@ export function includes(
   return Type.isSafeInt(test) && (test >= min) && (test <= max);
 }
 
-export function union(
+// 範囲重複または隣接している場合は新たな範囲を返却、上記以外の場合nullを返却
+export function mergeIfPossible(
   a: safeintrange,
   b: safeintrange,
 ): safeintrange | null {

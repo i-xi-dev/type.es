@@ -67,7 +67,7 @@ export class BigIntRangeSet {
     let unionedRangeToAdd: bigintrange = rangeToAdd;
     let u: bigintrange | null = null;
     for (const range of this.#set) {
-      u = BigIntRange.union(range, unionedRangeToAdd);
+      u = BigIntRange.mergeIfPossible(range, unionedRangeToAdd);
       if (u) {
         unionedRangeToAdd = u;
       } else {

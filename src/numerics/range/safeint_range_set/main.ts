@@ -67,7 +67,7 @@ export class SafeIntRangeSet {
     let unionedRangeToAdd: safeintrange = rangeToAdd;
     let u: safeintrange | null = null;
     for (const range of this.#set) {
-      u = SafeIntRange.union(range, unionedRangeToAdd);
+      u = SafeIntRange.mergeIfPossible(range, unionedRangeToAdd);
       if (u) {
         unionedRangeToAdd = u;
       } else {
