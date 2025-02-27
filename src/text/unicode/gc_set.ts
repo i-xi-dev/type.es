@@ -30,19 +30,19 @@ export class UnicodeGeneralCategorySet extends _PropertyValueSetBase<gc> {
     this.#regex = new RegExp(`^[${pattern}]$`, "v");
   }
 
-  includesRune(rune: rune): boolean {
+  override includesRune(rune: rune): boolean {
     Type.assertRune(rune, "rune");
-    return (this.size > 0) ? this.#regex.test(rune) : false;
+    return (this._set.size > 0) ? this.#regex.test(rune) : false;
   }
 
-  includesCodePoint(codePoint: codepoint): boolean {
+  override includesCodePoint(codePoint: codepoint): boolean {
     Type.assertCodePoint(codePoint, "codePoint");
 
     const rune = Rune.fromCodePoint(codePoint);
     return this.includesRune(rune);
   }
 
-  unionWith(other: this | ArrayOrSet<gc>): this {
+  override unionWith(other: this | ArrayOrSet<gc>): this {
     let otherGcs: Set<gc>;
     if (other instanceof UnicodeGeneralCategorySet) {
       otherGcs = new Set(other.toArray());
@@ -50,7 +50,7 @@ export class UnicodeGeneralCategorySet extends _PropertyValueSetBase<gc> {
       otherGcs = _toGcSet(other);
     }
 
-    const unionedGcs = otherGcs.union(this);
+    const unionedGcs = otherGcs.union(this._set);
     return Reflect.construct(this.constructor, [unionedGcs]);
   }
 }

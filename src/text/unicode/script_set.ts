@@ -41,19 +41,19 @@ export class UnicodeScriptSet extends _PropertyValueSetBase<script> {
     this.#regex = new RegExp(`^[${pattern}]$`, "v");
   }
 
-  includesRune(rune: rune): boolean {
+  override includesRune(rune: rune): boolean {
     Type.assertRune(rune, "rune");
-    return (this.size > 0) ? this.#regex.test(rune) : false;
+    return (this._set.size > 0) ? this.#regex.test(rune) : false;
   }
 
-  includesCodePoint(codePoint: codepoint): boolean {
+  override includesCodePoint(codePoint: codepoint): boolean {
     Type.assertCodePoint(codePoint, "codePoint");
 
     const rune = Rune.fromCodePoint(codePoint);
     return this.includesRune(rune);
   }
 
-  unionWith(other: this | ArrayOrSet<script>): this {
+  override unionWith(other: this | ArrayOrSet<script>): this {
     let otherScripts: Set<script>;
     if (other instanceof UnicodeScriptSet) {
       otherScripts = new Set(other.toArray());
@@ -61,7 +61,7 @@ export class UnicodeScriptSet extends _PropertyValueSetBase<script> {
       otherScripts = _toScriptSet(other);
     }
 
-    const unionedScripts = otherScripts.union(this);
+    const unionedScripts = otherScripts.union(this._set);
     return Reflect.construct(this.constructor, [unionedScripts, {
       excludeScx: this.#excludeScx,
     }]);

@@ -59,7 +59,7 @@ export class BigIntRangeSet {
   }
 
   toSet(): Set<bigintrange> {
-    return globalThis.structuredClone(this.#set);
+    return new Set(this.#set);
   }
 
   #add(rangeToAdd: bigintrange): void {

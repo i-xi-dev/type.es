@@ -45,14 +45,14 @@ Deno.test("new Text.CodePlaneSet()", () => {
   );
 });
 
-Deno.test("Text.CodePlaneSet.prototype.size", () => {
-  const gcs0 = new CodePlaneSet([]);
-  assertStrictEquals(gcs0.size, 0);
-  const gcs1 = new CodePlaneSet([1]);
-  assertStrictEquals(gcs1.size, 1);
-  const gcs2 = new CodePlaneSet([2, 4, 2]);
-  assertStrictEquals(gcs2.size, 2);
-});
+// Deno.test("Text.CodePlaneSet.prototype.size", () => {
+//   const gcs0 = new CodePlaneSet([]);
+//   assertStrictEquals(gcs0.size, 0);
+//   const gcs1 = new CodePlaneSet([1]);
+//   assertStrictEquals(gcs1.size, 1);
+//   const gcs2 = new CodePlaneSet([2, 4, 2]);
+//   assertStrictEquals(gcs2.size, 2);
+// });
 
 Deno.test("Text.CodePlaneSet.prototype.includesRune()", () => {
   const ps1 = new CodePlaneSet([0]);
@@ -175,29 +175,29 @@ Deno.test("Text.CodePlaneSet.prototype.unionWith()", () => {
   assertStrictEquals(JSON.stringify(gcs6y.toArray()), `[]`);
 });
 
-Deno.test("Text.CodePlaneSet.prototype.has()", () => {
-  const gcs0 = new CodePlaneSet([]);
-  assertStrictEquals(gcs0.has(0), false);
-  assertStrictEquals(gcs0.has(1), false);
-  assertStrictEquals(gcs0.has(4), false);
-  const gcs1 = new CodePlaneSet([1]);
-  assertStrictEquals(gcs1.has(0), false);
-  assertStrictEquals(gcs1.has(1), true);
-  assertStrictEquals(gcs1.has(4), false);
-  const gcs2 = new CodePlaneSet([2, 4, 2]);
-  assertStrictEquals(gcs2.has(0), false);
-  assertStrictEquals(gcs2.has(1), false);
-  assertStrictEquals(gcs2.has(4), true);
-});
+// Deno.test("Text.CodePlaneSet.prototype.has()", () => {
+//   const gcs0 = new CodePlaneSet([]);
+//   assertStrictEquals(gcs0.has(0), false);
+//   assertStrictEquals(gcs0.has(1), false);
+//   assertStrictEquals(gcs0.has(4), false);
+//   const gcs1 = new CodePlaneSet([1]);
+//   assertStrictEquals(gcs1.has(0), false);
+//   assertStrictEquals(gcs1.has(1), true);
+//   assertStrictEquals(gcs1.has(4), false);
+//   const gcs2 = new CodePlaneSet([2, 4, 2]);
+//   assertStrictEquals(gcs2.has(0), false);
+//   assertStrictEquals(gcs2.has(1), false);
+//   assertStrictEquals(gcs2.has(4), true);
+// });
 
-Deno.test("Text.CodePlaneSet.prototype.keys()", () => {
-  const gcs0 = new CodePlaneSet([]);
-  assertStrictEquals(JSON.stringify([...gcs0.keys()]), `[]`);
-  const gcs1 = new CodePlaneSet([1]);
-  assertStrictEquals(JSON.stringify([...gcs1.keys()]), `[1]`);
-  const gcs2 = new CodePlaneSet([2, 4, 2]);
-  assertStrictEquals(JSON.stringify([...gcs2.keys()]), `[2,4]`);
-});
+// Deno.test("Text.CodePlaneSet.prototype.keys()", () => {
+//   const gcs0 = new CodePlaneSet([]);
+//   assertStrictEquals(JSON.stringify([...gcs0.keys()]), `[]`);
+//   const gcs1 = new CodePlaneSet([1]);
+//   assertStrictEquals(JSON.stringify([...gcs1.keys()]), `[1]`);
+//   const gcs2 = new CodePlaneSet([2, 4, 2]);
+//   assertStrictEquals(JSON.stringify([...gcs2.keys()]), `[2,4]`);
+// });
 
 Deno.test("Text.CodePlaneSet.prototype.toArray()", () => {
   const gcs4 = new CodePlaneSet([16, 0]);

@@ -1,21 +1,16 @@
 import * as Type from "../../type/mod.ts";
 import {
-  type ArrayOrSet,
   type codepoint,
   type rune,
   type safeint,
   type usvstring,
 } from "../../_typedef/mod.ts";
 
-export abstract class _PropertyValueSetBase<T> implements ReadonlySetLike<T> {
-  readonly #set: Set<T>;
+export abstract class _PropertyValueSetBase<T> {
+  protected readonly _set: Set<T>;
 
   constructor(iterable: Iterable<T>) {
-    this.#set = new Set(iterable);
-  }
-
-  get size(): safeint {
-    return this.#set.size;
+    this._set = new Set(iterable);
   }
 
   //TODO 命名 includesか？
@@ -45,29 +40,17 @@ export abstract class _PropertyValueSetBase<T> implements ReadonlySetLike<T> {
 
   //TODO 否定のfindMatches
 
-  abstract unionWith(other: this | ArrayOrSet<T>): this;
-
-  has(value: T): boolean {
-    return this.#set.has(value);
-  }
-
-  keys(): SetIterator<T> {
-    return this.#set[Symbol.iterator]();
-  }
-
-  values(): SetIterator<T> {
-    return this.#set[Symbol.iterator]();
-  }
+  abstract unionWith(other: Iterable<T>): this;
 
   [Symbol.iterator](): SetIterator<T> {
-    return this.#set[Symbol.iterator]();
+    return this._set[Symbol.iterator]();
   }
 
   toArray(): Array<T> {
-    return [...this.#set];
+    return [...this._set];
   }
 
   toSet(): Set<T> {
-    return new Set(this.#set);
+    return new Set(this._set);
   }
 }

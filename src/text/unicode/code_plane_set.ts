@@ -23,21 +23,21 @@ export class CodePlaneSet extends _PropertyValueSetBase<codeplane> {
     super([..._toCodePlaneSet(planes)].sort());
   }
 
-  includesRune(rune: rune): boolean {
+  override includesRune(rune: rune): boolean {
     Type.assertRune(rune, "rune");
 
     const codePoint = Rune.toCodePoint(rune);
     return this.includesCodePoint(codePoint);
   }
 
-  includesCodePoint(codePoint: codepoint): boolean {
+  override includesCodePoint(codePoint: codepoint): boolean {
     Type.assertCodePoint(codePoint, "codePoint");
 
     const testPlane = CodePoint.planeOf(codePoint);
-    return (this.size > 0) ? this.has(testPlane) : false;
+    return (this._set.size > 0) ? this._set.has(testPlane) : false;
   }
 
-  unionWith(other: this | ArrayOrSet<codeplane>): this {
+  override unionWith(other: this | ArrayOrSet<codeplane>): this {
     let otherPlanes: Set<codeplane>;
     if (other instanceof CodePlaneSet) {
       otherPlanes = new Set(other.toArray());
@@ -45,7 +45,7 @@ export class CodePlaneSet extends _PropertyValueSetBase<codeplane> {
       otherPlanes = _toCodePlaneSet(other);
     }
 
-    const unionedPlanes = otherPlanes.union(this);
+    const unionedPlanes = otherPlanes.union(this._set);
     return Reflect.construct(this.constructor, [unionedPlanes]);
   }
 }

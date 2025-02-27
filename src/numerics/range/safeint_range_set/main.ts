@@ -59,7 +59,7 @@ export class SafeIntRangeSet {
   }
 
   toSet(): Set<safeintrange> {
-    return globalThis.structuredClone(this.#set);
+    return new Set(this.#set);
   }
 
   #add(rangeToAdd: safeintrange): void {

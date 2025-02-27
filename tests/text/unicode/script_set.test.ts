@@ -45,14 +45,14 @@ Deno.test("new Text.UnicodeScriptSet()", () => {
   );
 });
 
-Deno.test("Text.UnicodeScriptSet.prototype.size", () => {
-  const gcs0 = new UnicodeScriptSet([]);
-  assertStrictEquals(gcs0.size, 0);
-  const gcs1 = new UnicodeScriptSet(["Kana"]);
-  assertStrictEquals(gcs1.size, 1);
-  const gcs2 = new UnicodeScriptSet(["Hira", "Kana", "Hira"]);
-  assertStrictEquals(gcs2.size, 2);
-});
+// Deno.test("Text.UnicodeScriptSet.prototype.size", () => {
+//   const gcs0 = new UnicodeScriptSet([]);
+//   assertStrictEquals(gcs0.size, 0);
+//   const gcs1 = new UnicodeScriptSet(["Kana"]);
+//   assertStrictEquals(gcs1.size, 1);
+//   const gcs2 = new UnicodeScriptSet(["Hira", "Kana", "Hira"]);
+//   assertStrictEquals(gcs2.size, 2);
+// });
 
 Deno.test("Text.UnicodeScriptSet.prototype.includesRune()", () => {
   const scs1 = new UnicodeScriptSet(["Kana"]);
@@ -189,29 +189,29 @@ Deno.test("Text.UnicodeScriptSet.prototype.unionWith()", () => {
   assertStrictEquals(gcs8e.includesRune("ー"), false);
 });
 
-Deno.test("Text.UnicodeScriptSet.prototype.has()", () => {
-  const gcs0 = new UnicodeScriptSet([]);
-  assertStrictEquals(gcs0.has("Latn"), false);
-  assertStrictEquals(gcs0.has("Kana"), false);
-  assertStrictEquals(gcs0.has("Zxxx"), false);
-  const gcs1 = new UnicodeScriptSet(["Latn"]);
-  assertStrictEquals(gcs1.has("Latn"), true);
-  assertStrictEquals(gcs1.has("Kana"), false);
-  assertStrictEquals(gcs1.has("Zxxx"), false);
-  const gcs2 = new UnicodeScriptSet(["Latn", "Kana", "Latn"]);
-  assertStrictEquals(gcs2.has("Latn"), true);
-  assertStrictEquals(gcs2.has("Kana"), true);
-  assertStrictEquals(gcs2.has("Zxxx"), false);
-});
+// Deno.test("Text.UnicodeScriptSet.prototype.has()", () => {
+//   const gcs0 = new UnicodeScriptSet([]);
+//   assertStrictEquals(gcs0.has("Latn"), false);
+//   assertStrictEquals(gcs0.has("Kana"), false);
+//   assertStrictEquals(gcs0.has("Zxxx"), false);
+//   const gcs1 = new UnicodeScriptSet(["Latn"]);
+//   assertStrictEquals(gcs1.has("Latn"), true);
+//   assertStrictEquals(gcs1.has("Kana"), false);
+//   assertStrictEquals(gcs1.has("Zxxx"), false);
+//   const gcs2 = new UnicodeScriptSet(["Latn", "Kana", "Latn"]);
+//   assertStrictEquals(gcs2.has("Latn"), true);
+//   assertStrictEquals(gcs2.has("Kana"), true);
+//   assertStrictEquals(gcs2.has("Zxxx"), false);
+// });
 
-Deno.test("Text.UnicodeScriptSet.prototype.keys()", () => {
-  const gcs0 = new UnicodeScriptSet([]);
-  assertStrictEquals(JSON.stringify([...gcs0.keys()]), `[]`);
-  const gcs1 = new UnicodeScriptSet(["Latn"]);
-  assertStrictEquals(JSON.stringify([...gcs1.keys()]), `["Latn"]`);
-  const gcs2 = new UnicodeScriptSet(["Latn", "Kana", "Latn"]);
-  assertStrictEquals(JSON.stringify([...gcs2.keys()]), `["Kana","Latn"]`);
-});
+// Deno.test("Text.UnicodeScriptSet.prototype.keys()", () => {
+//   const gcs0 = new UnicodeScriptSet([]);
+//   assertStrictEquals(JSON.stringify([...gcs0.keys()]), `[]`);
+//   const gcs1 = new UnicodeScriptSet(["Latn"]);
+//   assertStrictEquals(JSON.stringify([...gcs1.keys()]), `["Latn"]`);
+//   const gcs2 = new UnicodeScriptSet(["Latn", "Kana", "Latn"]);
+//   assertStrictEquals(JSON.stringify([...gcs2.keys()]), `["Kana","Latn"]`);
+// });
 
 Deno.test("Text.UnicodeScriptSet.prototype.toArray()", () => {
   const scs11 = new UnicodeScriptSet(["Latn", "Kana"]);
