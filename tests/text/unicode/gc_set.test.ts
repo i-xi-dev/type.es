@@ -25,7 +25,7 @@ Deno.test("new Text.UnicodeGeneralCategorySet()", () => {
       new UnicodeGeneralCategorySet(undefined as unknown as []);
     },
     TypeError,
-    "`gcs` must be an `Array` of Unicode `General_Category` value or a `Set` of Unicode `General_Category` value.",
+    "`gcs` must implement `Symbol.iterator`.",
   );
 
   assertThrows(
@@ -33,7 +33,7 @@ Deno.test("new Text.UnicodeGeneralCategorySet()", () => {
       new UnicodeGeneralCategorySet(["2" as "Lu"]);
     },
     TypeError,
-    "`gcs` must be an `Array` of Unicode `General_Category` value or a `Set` of Unicode `General_Category` value.",
+    "`gcs[*]` must be an Unicode `General_Category` value.",
   );
 });
 

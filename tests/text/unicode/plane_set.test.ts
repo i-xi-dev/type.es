@@ -25,7 +25,7 @@ Deno.test("new Text.CodePlaneSet()", () => {
       new CodePlaneSet(undefined as unknown as []);
     },
     TypeError,
-    "`planes` must be an `Array` of code point plane value or a `Set` of code point plane value.",
+    "`planes` must implement `Symbol.iterator`.",
   );
 
   assertThrows(
@@ -33,7 +33,7 @@ Deno.test("new Text.CodePlaneSet()", () => {
       new CodePlaneSet(["0" as unknown as 0]);
     },
     TypeError,
-    "`planes` must be an `Array` of code point plane value or a `Set` of code point plane value.",
+    "`planes[*]` must be an code point plane value.",
   );
 
   assertThrows(
@@ -41,7 +41,7 @@ Deno.test("new Text.CodePlaneSet()", () => {
       new CodePlaneSet([-1 as unknown as 0]);
     },
     TypeError,
-    "`planes` must be an `Array` of code point plane value or a `Set` of code point plane value.",
+    "`planes[*]` must be an code point plane value.",
   );
 });
 

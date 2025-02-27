@@ -1,30 +1,21 @@
 import * as Rune from "../rune/mod.ts";
 import * as Type from "../../type/mod.ts";
 import { _PropertyValueSetBase } from "./_propval_set_base.ts";
-import {
-  type ArrayOrSet,
-  type codepoint,
-  type gc,
-  type rune,
-} from "../../_typedef/mod.ts";
-
-function _toGcSet(gcs: ArrayOrSet<gc>): Set<gc> {
-  Type.assertArrayOrSet(
-    gcs,
-    "gcs",
-    {
-      isT: Type.isUnicodeGeneralCategory,
-      elementDesc: "Unicode \`General_Category\` value",
-    },
-  );
-  return new Set(gcs);
-}
+import { type codepoint, type gc, type rune } from "../../_typedef/mod.ts";
 
 export class UnicodeGeneralCategorySet extends _PropertyValueSetBase<gc> {
   readonly #regex: RegExp;
 
-  constructor(gcs: ArrayOrSet<gc>) {
-    super([..._toGcSet(gcs)].sort());
+  constructor(gcs: Iterable<gc>) {
+    Type.assertIterable(gcs, "gcs");
+    const array: Array<gc> = [];
+    for (const gc of gcs) {
+      Type.assertUnicodeGeneralCategory(gc, "gcs[*]");
+      if (array.includes(gc) !== true) {
+        array.push(gc);
+      }
+    }
+    super(array.sort());
 
     const pattern = [...this].map((gc) => `\\p{gc=${gc}}`).join();
     this.#regex = new RegExp(`^[${pattern}]$`, "v");
@@ -42,15 +33,8 @@ export class UnicodeGeneralCategorySet extends _PropertyValueSetBase<gc> {
     return this.includesRune(rune);
   }
 
-  override unionWith(other: this | ArrayOrSet<gc>): this {
-    let otherGcs: Set<gc>;
-    if (other instanceof UnicodeGeneralCategorySet) {
-      otherGcs = new Set(other.toArray());
-    } else {
-      otherGcs = _toGcSet(other);
-    }
-
-    const unionedGcs = otherGcs.union(this._set);
-    return Reflect.construct(this.constructor, [unionedGcs]);
+  override unionWith(other: Iterable<gc>): this {
+    Type.assertIterable(other, "other");
+    return Reflect.construct(this.constructor, [[...this, ...other]]);
   }
 }

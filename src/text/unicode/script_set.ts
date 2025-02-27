@@ -1,24 +1,7 @@
 import * as Rune from "../rune/mod.ts";
 import * as Type from "../../type/mod.ts";
 import { _PropertyValueSetBase } from "./_propval_set_base.ts";
-import {
-  type ArrayOrSet,
-  type codepoint,
-  type rune,
-  type script,
-} from "../../_typedef/mod.ts";
-
-function _toScriptSet(scripts: ArrayOrSet<script>): Set<script> {
-  Type.assertArrayOrSet(
-    scripts,
-    "scripts",
-    {
-      isT: Type.isUnicodeScript,
-      elementDesc: "supported script in Unicode property",
-    },
-  );
-  return new Set(scripts);
-}
+import { type codepoint, type rune, type script } from "../../_typedef/mod.ts";
 
 export type ScriptSetMatchingOptions = {
   excludeScx?: boolean;
@@ -28,8 +11,16 @@ export class UnicodeScriptSet extends _PropertyValueSetBase<script> {
   readonly #excludeScx: boolean;
   readonly #regex: RegExp;
 
-  constructor(scripts: ArrayOrSet<script>, options?: ScriptSetMatchingOptions) {
-    super([..._toScriptSet(scripts)].sort());
+  constructor(scripts: Iterable<script>, options?: ScriptSetMatchingOptions) {
+    Type.assertIterable(scripts, "scripts");
+    const array: Array<script> = [];
+    for (const script of scripts) {
+      Type.assertUnicodeScript(script, "scripts[*]");
+      if (array.includes(script) !== true) {
+        array.push(script);
+      }
+    }
+    super(array.sort());
 
     this.#excludeScx = options?.excludeScx === true;
 
@@ -53,16 +44,9 @@ export class UnicodeScriptSet extends _PropertyValueSetBase<script> {
     return this.includesRune(rune);
   }
 
-  override unionWith(other: this | ArrayOrSet<script>): this {
-    let otherScripts: Set<script>;
-    if (other instanceof UnicodeScriptSet) {
-      otherScripts = new Set(other.toArray());
-    } else {
-      otherScripts = _toScriptSet(other);
-    }
-
-    const unionedScripts = otherScripts.union(this._set);
-    return Reflect.construct(this.constructor, [unionedScripts, {
+  override unionWith(other: Iterable<script>): this {
+    Type.assertIterable(other, "other");
+    return Reflect.construct(this.constructor, [[...this, ...other], {
       excludeScx: this.#excludeScx,
     }]);
   }

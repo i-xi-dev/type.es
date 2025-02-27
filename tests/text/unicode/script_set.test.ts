@@ -25,7 +25,7 @@ Deno.test("new Text.UnicodeScriptSet()", () => {
       new UnicodeScriptSet(["Zsym"]);
     },
     TypeError,
-    "`scripts` must be an `Array` of supported script in Unicode property or a `Set` of supported script in Unicode property.",
+    "`scripts[*]` must be a supported script in Unicode property.",
   );
 
   assertThrows(
@@ -33,7 +33,7 @@ Deno.test("new Text.UnicodeScriptSet()", () => {
       new UnicodeScriptSet(undefined as unknown as []);
     },
     TypeError,
-    "`scripts` must be an `Array` of supported script in Unicode property or a `Set` of supported script in Unicode property.",
+    "`scripts` must implement `Symbol.iterator`.",
   );
 
   assertThrows(
@@ -41,7 +41,7 @@ Deno.test("new Text.UnicodeScriptSet()", () => {
       new UnicodeScriptSet(["2" as "Latn"]);
     },
     TypeError,
-    "`scripts` must be an `Array` of supported script in Unicode property or a `Set` of supported script in Unicode property.",
+    "`scripts[*]` must be a supported script in Unicode property.",
   );
 });
 
