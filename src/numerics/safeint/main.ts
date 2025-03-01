@@ -16,9 +16,6 @@ export function clampToRange(value: safeint, range: safeintrange): safeint {
   Type.assertSafeIntRange(range, "range");
 
   const [min, max] = range;
-  if (min > max) {
-    throw new RangeError("`max` must be greater than or equal to `min`.");
-  }
   return ExNumber.normalize(Math.min(Math.max(value, min), max));
 }
 

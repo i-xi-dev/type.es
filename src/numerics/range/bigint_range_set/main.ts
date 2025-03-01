@@ -1,83 +1,39 @@
 import * as BigIntRange from "../bigint_range/mod.ts";
 import * as Type from "../../../type/mod.ts";
-import { type bigintrange } from "../../../_typedef/mod.ts";
+import { type bigintrange, type safeint } from "../../../_typedef/mod.ts";
+import { _IntRangeSet } from "../_int_range_set.ts";
 
-function _sorterMinAsc(a: bigintrange, b: bigintrange): -1 | 0 | 1 {
-  const [aMin] = a;
-  const [bMin] = b;
-  if (aMin < bMin) {
-    return -1;
-  } else if (aMin > bMin) {
-    return 1;
+export class BigIntRangeSet extends _IntRangeSet<bigint, bigintrange> {
+  static fromRanges(subranges: Iterable<bigintrange>) {
+    Type.assertIterable(subranges, "subranges");
+    return new BigIntRangeSet(subranges);
   }
-  return 0;
-}
 
-export class BigIntRangeSet {
-  // implements ReadonlySetLike<bigintrange> hasとかに意味があると思えない（Setのhasの仕様はオブジェクトの場合参照先が等しいかだし、has(コンストラクターに渡したrangeの参照)がtrueにならない場合がある（コンストラクターで結合や破棄する場合があるので））
-
-  readonly #set: Set<bigintrange>;
-
-  constructor(iterable: Iterable<bigintrange>) {
-    Type.assertIterable(iterable, "iterable");
-    this.#set = new Set();
-
-    for (const range of iterable) {
-      Type.assertBigIntRange(range, "iterable[*]");
-      this.#add(range);
+  protected override _getSize(): safeint {
+    let size = 0n;
+    for (const subrange of this._set) {
+      size += (subrange[1] as bigint) - (subrange[0] as bigint) + 1n;
     }
-  }
 
-  //XXX 命名 includesか？
-  includesValue(test: bigint): boolean {
-    // Type.assertBigInt(test); BigIntRange.includesでisBigIntしている
-    return [...this.#set].some((range) => BigIntRange.includes(range, test));
-  }
-
-  unionWith(other: Iterable<bigintrange>): this {
-    Type.assertIterable(other, "other");
-
-    const cloned = Reflect.construct(this.constructor, [this]);
-    for (const range of other) {
-      Type.assertBigIntRange(range, "other[*]");
-      cloned.#add(range);
+    if (Type.isBigIntInSafeIntRange(size) !== true) {
+      throw new RangeError("TODO");
     }
-    return cloned;
+
+    return Number(size);
   }
 
-  //XXX exceptWith, intersectWith, ...
-  //XXX equals(range or rangeset)
-  //XXX overlaps(range or rangeset)
-  //XXX isDisjoint(range or rangeset)
-
-  [Symbol.iterator](): SetIterator<bigintrange> {
-    return this.toSet()[Symbol.iterator]();
+  protected override _assertValue(value: bigint): void {
+    Type.assertBigInt(value, "value");
   }
 
-  toArray(): Array<bigintrange> {
-    return [...this.toSet()];
+  protected override _assertSubrange(subrange: bigintrange): void {
+    Type.assertBigIntRange(subrange, "subrange");
   }
 
-  toSet(): Set<bigintrange> {
-    return new Set(this.#set);
-  }
-
-  #add(rangeToAdd: bigintrange): void {
-    const newArray = [];
-    let unionedRangeToAdd: bigintrange = rangeToAdd;
-    let u: bigintrange | null = null;
-    for (const range of this.#set) {
-      u = BigIntRange.mergeIfPossible(range, unionedRangeToAdd);
-      if (u) {
-        unionedRangeToAdd = u;
-      } else {
-        newArray.push(range);
-      }
-    }
-    newArray.push(unionedRangeToAdd);
-
-    newArray.sort(_sorterMinAsc);
-    this.#set.clear();
-    newArray.forEach((r) => this.#set.add(r));
+  protected override _mergeSubrangesIfPossible(
+    a: bigintrange,
+    b: bigintrange,
+  ): bigintrange | null {
+    return BigIntRange.mergeIfPossible(a, b);
   }
 }

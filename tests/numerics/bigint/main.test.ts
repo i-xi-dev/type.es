@@ -116,7 +116,7 @@ Deno.test("Numerics.BigInt.clampToRange()", () => {
     ex3,
   );
 
-  const e1 = "`max` must be greater than or equal to `min`.";
+  const e1 = "`range` must be a range of `bigint`.";
 
   assertStrictEquals(ExBigInt.clampToRange(0n, [0n, 0n]), 0n);
   assertStrictEquals(ExBigInt.clampToRange(0n, [0n, 1n]), 0n);
@@ -128,14 +128,14 @@ Deno.test("Numerics.BigInt.clampToRange()", () => {
     () => {
       ExBigInt.clampToRange(0n, [1n, 0n]); // 負のrange
     },
-    RangeError,
+    TypeError,
     e1,
   );
   assertThrows(
     () => {
       ExBigInt.clampToRange(0n, [0n, -1n]); // 負のrange
     },
-    RangeError,
+    TypeError,
     e1,
   );
 
@@ -149,14 +149,14 @@ Deno.test("Numerics.BigInt.clampToRange()", () => {
     () => {
       ExBigInt.clampToRange(1n, [1n, 0n]); // 負のrange
     },
-    RangeError,
+    TypeError,
     e1,
   );
   assertThrows(
     () => {
       ExBigInt.clampToRange(1n, [0n, -1n]); // 負のrange
     },
-    RangeError,
+    TypeError,
     e1,
   );
 
@@ -170,14 +170,14 @@ Deno.test("Numerics.BigInt.clampToRange()", () => {
     () => {
       ExBigInt.clampToRange(-1n, [1n, 0n]); // 負のrange
     },
-    RangeError,
+    TypeError,
     e1,
   );
   assertThrows(
     () => {
       ExBigInt.clampToRange(-1n, [0n, -1n]); // 負のrange
     },
-    RangeError,
+    TypeError,
     e1,
   );
 });

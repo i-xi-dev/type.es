@@ -34,12 +34,12 @@ Deno.test("Numerics.SafeInt.clampToRange()", () => {
     e3,
   );
 
-  const e4 = "`max` must be greater than or equal to `min`.";
+  const e4 = "`range` must be a range of safe integer.";
   assertThrows(
     () => {
       SafeInt.clampToRange(0, [1, 0]);
     },
-    RangeError,
+    TypeError,
     e4,
   );
 

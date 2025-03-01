@@ -10,23 +10,30 @@ function _s(r: [number, number] | null): string | null {
   return r.map((i) => i.toString()).join(",");
 }
 
-Deno.test("new Numerics.SafeIntRangeSet()", () => {
-  const rs1 = new SafeIntRangeSet([[0, 0], [0, 0]]);
-  assertStrictEquals(rs1.toArray().map((r) => _s(r)).join("|"), "0,0");
+function _i(r: number[]): string {
+  return r.map((i) => i.toString()).join(",");
+}
 
-  const rs2 = new SafeIntRangeSet([[0, 2], [1, 3]]);
-  assertStrictEquals(rs2.toArray().map((r) => _s(r)).join("|"), "0,3");
+Deno.test("Numerics.SafeIntRangeSet.fromRanges()", () => {
+  const rs1 = SafeIntRangeSet.fromRanges([[0, 0], [0, 0]]);
+  assertStrictEquals([...rs1.toRanges()].map((r) => _s(r)).join("|"), "0,0");
 
-  const rs3 = new SafeIntRangeSet([[0, 2], [2, 4]]);
-  assertStrictEquals(rs3.toArray().map((r) => _s(r)).join("|"), "0,4");
+  const rs2 = SafeIntRangeSet.fromRanges([[0, 2], [1, 3]]);
+  assertStrictEquals([...rs2.toRanges()].map((r) => _s(r)).join("|"), "0,3");
 
-  const rs4 = new SafeIntRangeSet([[0, 1], [2, 3]]);
-  assertStrictEquals(rs4.toArray().map((r) => _s(r)).join("|"), "0,3");
+  const rs3 = SafeIntRangeSet.fromRanges([[0, 2], [2, 4]]);
+  assertStrictEquals([...rs3.toRanges()].map((r) => _s(r)).join("|"), "0,4");
 
-  const rs5 = new SafeIntRangeSet([[0, 1], [3, 4]]);
-  assertStrictEquals(rs5.toArray().map((r) => _s(r)).join("|"), "0,1|3,4");
+  const rs4 = SafeIntRangeSet.fromRanges([[0, 1], [2, 3]]);
+  assertStrictEquals([...rs4.toRanges()].map((r) => _s(r)).join("|"), "0,3");
 
-  const rs101 = new SafeIntRangeSet([
+  const rs5 = SafeIntRangeSet.fromRanges([[0, 1], [3, 4]]);
+  assertStrictEquals(
+    [...rs5.toRanges()].map((r) => _s(r)).join("|"),
+    "0,1|3,4",
+  );
+
+  const rs101 = SafeIntRangeSet.fromRanges([
     [0, 1],
     [31, 33],
     [3, 24],
@@ -35,21 +42,24 @@ Deno.test("new Numerics.SafeIntRangeSet()", () => {
     [25, 26],
   ]);
   assertStrictEquals(
-    rs101.toArray().map((r) => _s(r)).join("|"),
+    [...rs101.toRanges()].map((r) => _s(r)).join("|"),
     "0,1|3,26|31,33",
   );
 
   assertThrows(
     () => {
-      new SafeIntRangeSet([0] as unknown as [[0, 0]]);
+      SafeIntRangeSet.fromRanges([0] as unknown as [[0, 0]]);
     },
     TypeError,
-    "`iterable[*]` must be a range of safe integer.",
+    "`subrange` must be a range of safe integer.",
   );
 });
 
-Deno.test("Numerics.SafeIntRangeSet.prototype.includesValue()", () => {
-  const rs101 = new SafeIntRangeSet([
+Deno.test("Numerics.SafeIntRangeSet.prototype.size", () => {
+  const rs0 = SafeIntRangeSet.fromRanges([]);
+  assertStrictEquals(rs0.size, 0);
+
+  const rs101 = SafeIntRangeSet.fromRanges([
     [0, 1],
     [31, 33],
     [3, 24],
@@ -57,58 +67,11 @@ Deno.test("Numerics.SafeIntRangeSet.prototype.includesValue()", () => {
     [3, 4],
     [25, 26],
   ]);
-  assertStrictEquals(rs101.includesValue(-1), false);
-  assertStrictEquals(rs101.includesValue(0), true);
-  assertStrictEquals(rs101.includesValue(1), true);
-  assertStrictEquals(rs101.includesValue(2), false);
-  assertStrictEquals(rs101.includesValue(3), true);
-  assertStrictEquals(rs101.includesValue(4), true);
-  assertStrictEquals(rs101.includesValue(5), true);
-  assertStrictEquals(rs101.includesValue(6), true);
-  assertStrictEquals(rs101.includesValue(7), true);
-  assertStrictEquals(rs101.includesValue(8), true);
-  assertStrictEquals(rs101.includesValue(9), true);
-  assertStrictEquals(rs101.includesValue(10), true);
-  assertStrictEquals(rs101.includesValue(11), true);
-  assertStrictEquals(rs101.includesValue(12), true);
-  assertStrictEquals(rs101.includesValue(13), true);
-  assertStrictEquals(rs101.includesValue(14), true);
-  assertStrictEquals(rs101.includesValue(15), true);
-  assertStrictEquals(rs101.includesValue(16), true);
-  assertStrictEquals(rs101.includesValue(17), true);
-  assertStrictEquals(rs101.includesValue(18), true);
-  assertStrictEquals(rs101.includesValue(19), true);
-  assertStrictEquals(rs101.includesValue(20), true);
-  assertStrictEquals(rs101.includesValue(21), true);
-  assertStrictEquals(rs101.includesValue(22), true);
-  assertStrictEquals(rs101.includesValue(23), true);
-  assertStrictEquals(rs101.includesValue(24), true);
-  assertStrictEquals(rs101.includesValue(25), true);
-  assertStrictEquals(rs101.includesValue(26), true);
-  assertStrictEquals(rs101.includesValue(27), false);
-  assertStrictEquals(rs101.includesValue(28), false);
-  assertStrictEquals(rs101.includesValue(29), false);
-  assertStrictEquals(rs101.includesValue(30), false);
-  assertStrictEquals(rs101.includesValue(31), true);
-  assertStrictEquals(rs101.includesValue(32), true);
-  assertStrictEquals(rs101.includesValue(33), true);
-  assertStrictEquals(rs101.includesValue(34), false);
+  assertStrictEquals(rs101.size, 29);
 });
 
-Deno.test("Numerics.SafeIntRangeSet.prototype.unionWith()", () => {
-  const rs100 = new SafeIntRangeSet([[0, 1]]);
-  const rs100b = rs100.unionWith([[31, 33], [3, 24], [8, 14]]);
-  const rs100c = rs100b.unionWith([[3, 4], [25, 26]]);
-  assertStrictEquals(
-    rs100.toArray().map((r) => _s(r)).join("|"),
-    "0,1",
-  );
-  assertStrictEquals(
-    rs100c.toArray().map((r) => _s(r)).join("|"),
-    "0,1|3,26|31,33",
-  );
-
-  const rs101 = new SafeIntRangeSet([
+Deno.test("Numerics.SafeIntRangeSet.prototype.has()", () => {
+  const rs101 = SafeIntRangeSet.fromRanges([
     [0, 1],
     [31, 33],
     [3, 24],
@@ -116,28 +79,62 @@ Deno.test("Numerics.SafeIntRangeSet.prototype.unionWith()", () => {
     [3, 4],
     [25, 26],
   ]);
-  const rs101b = rs101.unionWith([[31, 33], [3, 24], [8, 14]]);
-  const rs101c = rs101b.unionWith([[3, 4], [25, 26]]);
+  assertStrictEquals(rs101.has(-1), false);
+  assertStrictEquals(rs101.has(0), true);
+  assertStrictEquals(rs101.has(1), true);
+  assertStrictEquals(rs101.has(2), false);
+  assertStrictEquals(rs101.has(3), true);
+  assertStrictEquals(rs101.has(4), true);
+  assertStrictEquals(rs101.has(5), true);
+  assertStrictEquals(rs101.has(6), true);
+  assertStrictEquals(rs101.has(7), true);
+  assertStrictEquals(rs101.has(8), true);
+  assertStrictEquals(rs101.has(9), true);
+  assertStrictEquals(rs101.has(10), true);
+  assertStrictEquals(rs101.has(11), true);
+  assertStrictEquals(rs101.has(12), true);
+  assertStrictEquals(rs101.has(13), true);
+  assertStrictEquals(rs101.has(14), true);
+  assertStrictEquals(rs101.has(15), true);
+  assertStrictEquals(rs101.has(16), true);
+  assertStrictEquals(rs101.has(17), true);
+  assertStrictEquals(rs101.has(18), true);
+  assertStrictEquals(rs101.has(19), true);
+  assertStrictEquals(rs101.has(20), true);
+  assertStrictEquals(rs101.has(21), true);
+  assertStrictEquals(rs101.has(22), true);
+  assertStrictEquals(rs101.has(23), true);
+  assertStrictEquals(rs101.has(24), true);
+  assertStrictEquals(rs101.has(25), true);
+  assertStrictEquals(rs101.has(26), true);
+  assertStrictEquals(rs101.has(27), false);
+  assertStrictEquals(rs101.has(28), false);
+  assertStrictEquals(rs101.has(29), false);
+  assertStrictEquals(rs101.has(30), false);
+  assertStrictEquals(rs101.has(31), true);
+  assertStrictEquals(rs101.has(32), true);
+  assertStrictEquals(rs101.has(33), true);
+  assertStrictEquals(rs101.has(34), false);
+});
+
+Deno.test("Numerics.SafeIntRangeSet.prototype.keys()", () => {
+  const rs0 = SafeIntRangeSet.fromRanges([]);
+  assertStrictEquals(_i([...rs0.keys()]), "");
+
+  const rs101 = SafeIntRangeSet.fromRanges([
+    [0, 1],
+    [31, 33],
+    [3, 24],
+    [8, 14],
+    [3, 4],
+    [25, 26],
+  ]);
   assertStrictEquals(
-    rs101c.toArray().map((r) => _s(r)).join("|"),
-    "0,1|3,26|31,33",
+    _i([...rs101.keys()]),
+    "0,1,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,31,32,33",
   );
 });
 
-Deno.test("Numerics.SafeIntRangeSet.prototype.[Symbol.iterator]()", () => {
-  const rs1 = new SafeIntRangeSet([[0, 10], [0, 0]]);
-  [...rs1].splice(0);
-  assertStrictEquals(rs1.toArray().map((r) => _s(r)).join("|"), "0,10");
-});
+// [Symbol.iterator]() → keys()
 
-Deno.test("Numerics.SafeIntRangeSet.prototype.toArray()", () => {
-  const rs1 = new SafeIntRangeSet([[0, 10], [0, 0]]);
-  rs1.toArray().splice(0);
-  assertStrictEquals(rs1.toArray().map((r) => _s(r)).join("|"), "0,10");
-});
-
-Deno.test("Numerics.SafeIntRangeSet.prototype.toSet()", () => {
-  const rs1 = new SafeIntRangeSet([[0, 0], [0, 10]]);
-  rs1.toSet().clear();
-  assertStrictEquals(rs1.toArray().map((r) => _s(r)).join("|"), "0,10");
-});
+// toRanges() → fromRangesで一緒に確認済

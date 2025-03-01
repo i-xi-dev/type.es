@@ -31,10 +31,6 @@ export function toIterable(range: safeintrange): IterableIterator<safeint> {
   Type.assertSafeIntRange(range, "range");
 
   const [min, max] = range;
-  if (min > max) {
-    throw new RangeError("The size of `range` is non-positive.");
-  }
-
   return (function* () {
     for (let i = min; i <= max; i++) {
       yield i;

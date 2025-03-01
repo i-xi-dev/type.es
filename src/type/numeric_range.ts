@@ -5,10 +5,9 @@ import {
 } from "../_typedef/mod.ts";
 import { isBigInt } from "./bigint.ts";
 
-// min > max については関知しない（マッチする数値は存在しなくなるだけ）
 export function isNumberRange(test: unknown): test is numberrange {
   return Array.isArray(test) && (test.length === 2) &&
-    test.every((i) => Number.isFinite(i));
+    test.every((i) => Number.isFinite(i)) && (test[0] <= test[1]);
 }
 
 export function assertNumberRange(test: unknown, label: string): void {
@@ -17,10 +16,9 @@ export function assertNumberRange(test: unknown, label: string): void {
   }
 }
 
-// min > max については関知しない（マッチする数値は存在しなくなるだけ）
 export function isSafeIntRange(test: unknown): test is safeintrange {
   return Array.isArray(test) && (test.length === 2) &&
-    test.every((i) => Number.isSafeInteger(i));
+    test.every((i) => Number.isSafeInteger(i)) && (test[0] <= test[1]);
 }
 
 export function assertSafeIntRange(test: unknown, label: string): void {
@@ -29,10 +27,9 @@ export function assertSafeIntRange(test: unknown, label: string): void {
   }
 }
 
-// min > max については関知しない（マッチする数値は存在しなくなるだけ）
 export function isBigIntRange(test: unknown): test is bigintrange {
   return Array.isArray(test) && (test.length === 2) &&
-    test.every((i) => isBigInt(i));
+    test.every((i) => isBigInt(i)) && (test[0] <= test[1]);
 }
 
 export function assertBigIntRange(test: unknown, label: string): void {

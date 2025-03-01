@@ -32,3 +32,5 @@ export type numberrange = [min: number, max: number];
  * A closed range of the safe integers.
  */
 export type safeintrange = [min: safeint, max: safeint];
+
+export type intrange = safeintrange | bigintrange;

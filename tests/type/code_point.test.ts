@@ -268,10 +268,18 @@ Deno.test("Type.isCodePointInRange()", () => {
 
   assertThrows(
     () => {
+      Type.isCodePointInRange(0, [1, 0]);
+    },
+    TypeError,
+    "`range` must be a range of code point.",
+  );
+
+  assertThrows(
+    () => {
       Type.isCodePointInRange(0, [0, 0x110000]);
     },
     TypeError,
-    "`range.max` must be a code point.",
+    "`range` must be a range of code point.",
   );
 
   assertThrows(
@@ -279,10 +287,8 @@ Deno.test("Type.isCodePointInRange()", () => {
       Type.isCodePointInRange(0, [-1, 0x10FFFF]);
     },
     TypeError,
-    "`range.min` must be a code point.",
+    "`range` must be a range of code point.",
   );
-
-  assertStrictEquals(Type.isCodePointInRange(0, [0x10FFFF, 0]), false); //XXX 負のレンジはエラーにすべき？
 });
 
 Deno.test("Type.assertCodePointInRange()", () => {

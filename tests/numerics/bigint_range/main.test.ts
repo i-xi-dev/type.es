@@ -92,8 +92,8 @@ Deno.test("Numerics.BigIntRange.toIterable()", () => {
     () => {
       BigIntRange.toIterable([0n, -1n]);
     },
-    RangeError,
-    "The size of `range` is non-positive.",
+    TypeError,
+    "`range` must be a range of `bigint`.",
   );
 });
 

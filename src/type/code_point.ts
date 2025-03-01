@@ -1,6 +1,7 @@
 import * as Radix from "../basics/radix/mod.ts";
 import { type codepoint, type codepointrange } from "../_typedef/mod.ts";
 import { isSafeIntInRange } from "./number.ts";
+import { isSafeIntRange } from "./numeric_range.ts";
 import {
   MAX_VALUE as MAX_CODE_POINT,
   MIN_VALUE as MIN_CODE_POINT,
@@ -100,9 +101,12 @@ export function isCodePointInRange(
   test: unknown,
   range: codepointrange,
 ): test is codepoint {
-  assertCodePoint(range[0], "range.min");
-  assertCodePoint(range[1], "range.max");
-
+  if (
+    (isSafeIntRange(range) !== true) || (isCodePoint(range[0]) !== true) ||
+    (isCodePoint(range[1]) !== true)
+  ) {
+    throw new TypeError("`range` must be a range of code point.");
+  }
   return isSafeIntInRange(test, range);
 }
 

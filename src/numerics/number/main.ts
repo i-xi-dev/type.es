@@ -13,8 +13,5 @@ export function clampToRange(value: number, range: numberrange): number {
   Type.assertNumberRange(range, "range");
 
   const [min, max] = range;
-  if (min > max) {
-    throw new RangeError("`max` must be greater than or equal to `min`.");
-  }
   return normalize(Math.min(Math.max(value, min), max));
 }

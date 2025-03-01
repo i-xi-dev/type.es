@@ -64,7 +64,7 @@ Deno.test("Numerics.Number.clampToRange()", () => {
     ex3,
   );
 
-  const e1 = "`max` must be greater than or equal to `min`.";
+  const e1 = "`range` must be a range of `number`.";
 
   assertStrictEquals(ExNumber.clampToRange(0, [0, 0]), 0);
   assertStrictEquals(ExNumber.clampToRange(0, [0, 1]), 0);
@@ -76,14 +76,14 @@ Deno.test("Numerics.Number.clampToRange()", () => {
     () => {
       ExNumber.clampToRange(0, [1, 0]); // 負のrange
     },
-    RangeError,
+    TypeError,
     e1,
   );
   assertThrows(
     () => {
       ExNumber.clampToRange(0, [0, -1]); // 負のrange
     },
-    RangeError,
+    TypeError,
     e1,
   );
 
@@ -103,14 +103,14 @@ Deno.test("Numerics.Number.clampToRange()", () => {
     () => {
       ExNumber.clampToRange(1, [1, 0]); // 負のrange
     },
-    RangeError,
+    TypeError,
     e1,
   );
   assertThrows(
     () => {
       ExNumber.clampToRange(1, [0, -1]); // 負のrange
     },
-    RangeError,
+    TypeError,
     e1,
   );
 
@@ -130,14 +130,14 @@ Deno.test("Numerics.Number.clampToRange()", () => {
     () => {
       ExNumber.clampToRange(-1, [1, 0]); // 負のrange
     },
-    RangeError,
+    TypeError,
     e1,
   );
   assertThrows(
     () => {
       ExNumber.clampToRange(-1, [0, -1]); // 負のrange
     },
-    RangeError,
+    TypeError,
     e1,
   );
 });

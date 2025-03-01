@@ -377,32 +377,39 @@ Deno.test("Type.assertEvenBigInt()", () => {
 
 Deno.test("Type.isBigIntInRange()", () => {
   assertStrictEquals(Type.isBigIntInRange(0n, [0n, 0n]), true);
-  assertStrictEquals(Type.isBigIntInRange(0n, [1n, 0n]), false); // 負のrange
+  // assertStrictEquals(Type.isBigIntInRange(0n, [1n, 0n]), false); // 負のrange
   assertStrictEquals(Type.isBigIntInRange(0n, [0n, 1n]), true);
   assertStrictEquals(Type.isBigIntInRange(0n, [-1n, 0n]), true);
-  assertStrictEquals(Type.isBigIntInRange(0n, [0n, -1n]), false); // 負のrange
+  // assertStrictEquals(Type.isBigIntInRange(0n, [0n, -1n]), false); // 負のrange
   assertStrictEquals(Type.isBigIntInRange(0n, [1n, 1n]), false);
   assertStrictEquals(Type.isBigIntInRange(0n, [-1n, -1n]), false);
 
   assertStrictEquals(Type.isBigIntInRange(1n, [0n, 0n]), false);
-  assertStrictEquals(Type.isBigIntInRange(1n, [1n, 0n]), false); // 負のrange
+  // assertStrictEquals(Type.isBigIntInRange(1n, [1n, 0n]), false); // 負のrange
   assertStrictEquals(Type.isBigIntInRange(1n, [0n, 1n]), true);
   assertStrictEquals(Type.isBigIntInRange(1n, [-1n, 0n]), false);
-  assertStrictEquals(Type.isBigIntInRange(1n, [0n, -1n]), false); // 負のrange
+  // assertStrictEquals(Type.isBigIntInRange(1n, [0n, -1n]), false); // 負のrange
   assertStrictEquals(Type.isBigIntInRange(1n, [1n, 1n]), true);
   assertStrictEquals(Type.isBigIntInRange(1n, [-1n, -1n]), false);
 
   assertStrictEquals(Type.isBigIntInRange(-1n, [0n, 0n]), false);
-  assertStrictEquals(Type.isBigIntInRange(-1n, [1n, 0n]), false); // 負のrange
+  // assertStrictEquals(Type.isBigIntInRange(-1n, [1n, 0n]), false); // 負のrange
   assertStrictEquals(Type.isBigIntInRange(-1n, [0n, 1n]), false);
   assertStrictEquals(Type.isBigIntInRange(-1n, [-1n, 0n]), true);
-  assertStrictEquals(Type.isBigIntInRange(-1n, [0n, -1n]), false); // 負のrange
+  // assertStrictEquals(Type.isBigIntInRange(-1n, [0n, -1n]), false); // 負のrange
   assertStrictEquals(Type.isBigIntInRange(-1n, [1n, 1n]), false);
   assertStrictEquals(Type.isBigIntInRange(-1n, [-1n, -1n]), true);
 
   assertStrictEquals(Type.isBigIntInRange(0, [0n, 0n]), false);
 
   const ex2 = "`range` must be a range of `bigint`.";
+  assertThrows(
+    () => {
+      Type.isBigIntInRange(0n, [1n, 0n]);
+    },
+    TypeError,
+    ex2,
+  );
   assertThrows(
     () => {
       Type.isBigIntInRange(0n, [undefined as unknown as bigint, 0n]);

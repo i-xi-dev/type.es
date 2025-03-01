@@ -84,8 +84,8 @@ Deno.test("Numerics.SafeIntRange.toIterable()", () => {
     () => {
       SafeIntRange.toIterable([0, -1]);
     },
-    RangeError,
-    "The size of `range` is non-positive.",
+    TypeError,
+    "`range` must be a range of safe integer.",
   );
 });
 

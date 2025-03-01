@@ -50,9 +50,6 @@ export function clampToRange(value: bigint, range: bigintrange): bigint {
   Type.assertBigIntRange(range, "range");
 
   const [min, max] = range;
-  if (min > max) {
-    throw new RangeError("`max` must be greater than or equal to `min`.");
-  }
   return _min(_max(value, min), max);
 }
 

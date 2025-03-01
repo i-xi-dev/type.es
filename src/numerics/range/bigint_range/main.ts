@@ -29,10 +29,6 @@ export function toIterable(range: bigintrange): IterableIterator<bigint> {
   Type.assertBigIntRange(range, "range");
 
   const [min, max] = range;
-  if (min > max) {
-    throw new RangeError("The size of `range` is non-positive.");
-  }
-
   return (function* () {
     for (let i = min; i <= max; i++) {
       yield i;
