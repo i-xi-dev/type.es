@@ -4,7 +4,7 @@ import { type int, type intrange, type safeint } from "../../_typedef/mod.ts";
 // implements ReadonlySetLike<T>にしようとしたが・・・ keysの定義おかしくない？
 export abstract class _IntRangeSet<T extends int, U extends intrange> {
   protected readonly _set: Set<U>;
-  protected readonly _size: safeint;
+  readonly #size: safeint;
 
   protected constructor(subranges: Iterable<U>) {
     Type.assertIterable(subranges, "subranges");
@@ -13,11 +13,11 @@ export abstract class _IntRangeSet<T extends int, U extends intrange> {
     for (const subrange of subranges) {
       this._add(subrange);
     }
-    this._size = this._getSize();
+    this.#size = this._getSize();
   }
 
   get size(): safeint {
-    return this._size;
+    return this.#size;
   }
 
   has(value: T): boolean {
