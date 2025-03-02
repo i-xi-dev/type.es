@@ -14,7 +14,9 @@ export function _parse(
     codePoint = Rune.toCodePoint(codePointOrRune);
     rune = codePointOrRune;
   } else {
-    throw new TypeError("TODO");
+    throw new TypeError(
+      "`codePointOrRune` must be a code point or string representing a single code point.",
+    );
   }
 
   return { codePoint, rune };

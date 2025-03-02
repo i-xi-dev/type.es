@@ -1,7 +1,7 @@
 import { isNonNullObject } from "./object.ts";
 
 // deno-lint-ignore no-explicit-any
-export function isIterable<T = any>(test: unknown): test is Iterable<T> {
+export function isIterable<T = any>(test: unknown): test is Iterable<T> { //XXX stringがfalseなので命名が良くない
   return isNonNullObject(test) && (Symbol.iterator in test);
 }
 
