@@ -115,6 +115,14 @@ Deno.test("Numerics.BigIntRangeSet.prototype.has()", () => {
   assertStrictEquals(rs101.has(32n), true);
   assertStrictEquals(rs101.has(33n), true);
   assertStrictEquals(rs101.has(34n), false);
+
+  assertThrows(
+    () => {
+      rs101.has(0);
+    },
+    TypeError,
+    "`value` must be a `bigint`.",
+  );
 });
 
 Deno.test("Numerics.BigIntRangeSet.prototype.keys()", () => {

@@ -1,7 +1,7 @@
 import { assertStrictEquals, assertThrows } from "@std/assert";
-import { Numerics } from "../../../mod.ts";
+import { Text } from "../../../mod.ts";
 
-const { SafeIntRangeSet } = Numerics;
+const { CodePointRangeSet } = Text;
 
 function _s(r: [number, number] | null): string | null {
   if (r === null) {
@@ -14,26 +14,26 @@ function _i(r: number[]): string {
   return r.map((i) => i.toString()).join(",");
 }
 
-Deno.test("Numerics.SafeIntRangeSet.fromRanges()", () => {
-  const rs1 = SafeIntRangeSet.fromRanges([[0, 0], [0, 0]]);
+Deno.test("Numerics.CodePointRangeSet.fromRanges()", () => {
+  const rs1 = CodePointRangeSet.fromRanges([[0, 0], [0, 0]]);
   assertStrictEquals([...rs1.toRanges()].map((r) => _s(r)).join("|"), "0,0");
 
-  const rs2 = SafeIntRangeSet.fromRanges([[0, 2], [1, 3]]);
+  const rs2 = CodePointRangeSet.fromRanges([[0, 2], [1, 3]]);
   assertStrictEquals([...rs2.toRanges()].map((r) => _s(r)).join("|"), "0,3");
 
-  const rs3 = SafeIntRangeSet.fromRanges([[0, 2], [2, 4]]);
+  const rs3 = CodePointRangeSet.fromRanges([[0, 2], [2, 4]]);
   assertStrictEquals([...rs3.toRanges()].map((r) => _s(r)).join("|"), "0,4");
 
-  const rs4 = SafeIntRangeSet.fromRanges([[0, 1], [2, 3]]);
+  const rs4 = CodePointRangeSet.fromRanges([[0, 1], [2, 3]]);
   assertStrictEquals([...rs4.toRanges()].map((r) => _s(r)).join("|"), "0,3");
 
-  const rs5 = SafeIntRangeSet.fromRanges([[0, 1], [3, 4]]);
+  const rs5 = CodePointRangeSet.fromRanges([[0, 1], [3, 4]]);
   assertStrictEquals(
     [...rs5.toRanges()].map((r) => _s(r)).join("|"),
     "0,1|3,4",
   );
 
-  const rs101 = SafeIntRangeSet.fromRanges([
+  const rs101 = CodePointRangeSet.fromRanges([
     [0, 1],
     [31, 33],
     [3, 24],
@@ -48,18 +48,18 @@ Deno.test("Numerics.SafeIntRangeSet.fromRanges()", () => {
 
   assertThrows(
     () => {
-      SafeIntRangeSet.fromRanges([0] as unknown as [[0, 0]]);
+      CodePointRangeSet.fromRanges([0] as unknown as [[0, 0]]);
     },
     TypeError,
-    "`subrange` must be a range of safe integer.",
+    "`subrange` must be a range of code point.",
   );
 });
 
-Deno.test("Numerics.SafeIntRangeSet.prototype.size", () => {
-  const rs0 = SafeIntRangeSet.fromRanges([]);
+Deno.test("Numerics.CodePointRangeSet.prototype.size", () => {
+  const rs0 = CodePointRangeSet.fromRanges([]);
   assertStrictEquals(rs0.size, 0);
 
-  const rs101 = SafeIntRangeSet.fromRanges([
+  const rs101 = CodePointRangeSet.fromRanges([
     [0, 1],
     [31, 33],
     [3, 24],
@@ -70,8 +70,8 @@ Deno.test("Numerics.SafeIntRangeSet.prototype.size", () => {
   assertStrictEquals(rs101.size, 29);
 });
 
-Deno.test("Numerics.SafeIntRangeSet.prototype.has()", () => {
-  const rs101 = SafeIntRangeSet.fromRanges([
+Deno.test("Numerics.CodePointRangeSet.prototype.has()", () => {
+  const rs101 = CodePointRangeSet.fromRanges([
     [0, 1],
     [31, 33],
     [3, 24],
@@ -79,7 +79,6 @@ Deno.test("Numerics.SafeIntRangeSet.prototype.has()", () => {
     [3, 4],
     [25, 26],
   ]);
-  assertStrictEquals(rs101.has(-1), false);
   assertStrictEquals(rs101.has(0), true);
   assertStrictEquals(rs101.has(1), true);
   assertStrictEquals(rs101.has(2), false);
@@ -118,18 +117,18 @@ Deno.test("Numerics.SafeIntRangeSet.prototype.has()", () => {
 
   assertThrows(
     () => {
-      rs101.has(Number.MIN_SAFE_INTEGER - 1);
+      rs101.has(-1);
     },
     TypeError,
-    "`value` must be a safe integer.",
+    "`value` must be a code point.",
   );
 });
 
-Deno.test("Numerics.SafeIntRangeSet.prototype.keys()", () => {
-  const rs0 = SafeIntRangeSet.fromRanges([]);
+Deno.test("Numerics.CodePointRangeSet.prototype.keys()", () => {
+  const rs0 = CodePointRangeSet.fromRanges([]);
   assertStrictEquals(_i([...rs0.keys()]), "");
 
-  const rs101 = SafeIntRangeSet.fromRanges([
+  const rs101 = CodePointRangeSet.fromRanges([
     [0, 1],
     [31, 33],
     [3, 24],
