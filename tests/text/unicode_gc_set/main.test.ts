@@ -1,7 +1,37 @@
-import { assertStrictEquals } from "@std/assert";
+import { assertStrictEquals, assertThrows } from "@std/assert";
 import { Text } from "../../../mod.ts";
 
 const { UnicodeGeneralCategorySet } = Text;
+
+Deno.test("new Text.UnicodeGeneralCategorySet()", () => {
+  const gcs1 = new UnicodeGeneralCategorySet(["Lu"]);
+  assertStrictEquals(JSON.stringify([...gcs1]), `["Lu"]`);
+
+  const gcs0 = new UnicodeGeneralCategorySet([]);
+  assertStrictEquals(JSON.stringify([...gcs0]), `[]`);
+
+  const gcs1s = new UnicodeGeneralCategorySet(new Set(["Lu"]));
+  assertStrictEquals(JSON.stringify([...gcs1s]), `["Lu"]`);
+
+  const gcs0s = new UnicodeGeneralCategorySet(new Set([]));
+  assertStrictEquals(JSON.stringify([...gcs0s]), `[]`);
+
+  assertThrows(
+    () => {
+      new UnicodeGeneralCategorySet(undefined as unknown as []);
+    },
+    TypeError,
+    "`gcs` must implement `Symbol.iterator`.",
+  );
+
+  assertThrows(
+    () => {
+      new UnicodeGeneralCategorySet(["2" as "Lu"]);
+    },
+    TypeError,
+    "`gcs[*]` must be an Unicode `General_Category` value.",
+  );
+});
 
 Deno.test("Text.UnicodeGeneralCategorySet.prototype.size", () => {
   const gcs0 = new UnicodeGeneralCategorySet([]);
