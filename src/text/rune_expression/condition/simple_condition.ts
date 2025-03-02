@@ -4,12 +4,14 @@ import { _parse } from "../_utils.ts";
 import {
   type codeplane,
   type codepoint,
+  type gc,
   type intrange,
   type rune,
   type script,
 } from "../../../_typedef/mod.ts";
 import { CodePointRangeSet } from "../../code_point_range_set/mod.ts";
 import { ICondition } from "../i_condition.ts";
+import { UnicodeGeneralCategorySet } from "../../unicode_gc_set/mod.ts";
 import { UnicodeScriptSet } from "../../unicode_sc_set/mod.ts";
 
 //TODO 否定条件
@@ -56,6 +58,24 @@ class _UnicodeScriptCondition implements ICondition {
   }
 }
 
+class _UnicodeGeneralCategoryCondition implements ICondition {
+  readonly #ugcSet: UnicodeGeneralCategorySet;
+  readonly #regex?: RegExp;
+
+  constructor(gcs: Iterable<gc>) {
+    this.#ugcSet = new UnicodeGeneralCategorySet(gcs);
+    if (this.#ugcSet.size > 0) {
+      const pattern = [...this.#ugcSet].map((gc) => `\\p{gc=${gc}}`).join();
+      this.#regex = new RegExp(`^[${pattern}]$`, "v");
+    }
+  }
+
+  isMatch(codePointOrRune: codepoint | rune): boolean {
+    const { rune } = _parse(codePointOrRune);
+    return this.#regex?.test(rune) ?? false;
+  }
+}
+
 export function fromCodePointRanges(
   ranges: Iterable<intrange<codepoint>>,
 ): ICondition {
@@ -78,4 +98,9 @@ export function fromScripts(
 ): ICondition {
   // scriptsはチェックされる
   return new _UnicodeScriptCondition(scripts, options);
+}
+
+export function fromGeneralCategories(gcs: Iterable<gc>): ICondition {
+  // gcsはチェックされる
+  return new _UnicodeGeneralCategoryCondition(gcs);
 }
