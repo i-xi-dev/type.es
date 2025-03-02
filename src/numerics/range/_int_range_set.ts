@@ -20,9 +20,9 @@ export abstract class _IntRangeSet<T extends int> { //XXX implements Set<T>
   }
 
   has(value: unknown): boolean {
-    this._assertValue(value as int); //XXX falseで返すべき？
+    this._assertValue(value as T); //XXX falseで返すべき？
     for (const subrange of this._set) {
-      if (((value as int) >= subrange[0]) && ((value as int) <= subrange[1])) {
+      if (((value as T) >= subrange[0]) && ((value as T) <= subrange[1])) {
         return true;
       }
     }
@@ -76,7 +76,7 @@ export abstract class _IntRangeSet<T extends int> { //XXX implements Set<T>
 
   protected abstract _getSize(): safeint;
 
-  protected abstract _assertValue(value: int): void;
+  protected abstract _assertValue(value: T): void;
 
   protected abstract _assertSubrange(subrange: intrange): void;
 
