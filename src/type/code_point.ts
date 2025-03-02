@@ -1,5 +1,5 @@
 import * as Radix from "../basics/radix/mod.ts";
-import { type codepoint, type codepointrange } from "../_typedef/mod.ts";
+import { type codepoint, type intrange } from "../_typedef/mod.ts";
 import { isSafeIntInRange } from "./number.ts";
 import { isSafeIntRange } from "./numeric_range.ts";
 import {
@@ -99,7 +99,7 @@ export function assertVariationSelectorCodePoint(
 
 export function isCodePointInRange(
   test: unknown,
-  range: codepointrange,
+  range: intrange<codepoint>,
 ): test is codepoint {
   if (
     (isSafeIntRange(range) !== true) || (isCodePoint(range[0]) !== true) ||
@@ -113,7 +113,7 @@ export function isCodePointInRange(
 export function assertCodePointInRange(
   test: unknown,
   label: string,
-  range: codepointrange,
+  range: intrange<codepoint>,
 ): void {
   if (isCodePointInRange(test, range) !== true) {
     throw new TypeError(
