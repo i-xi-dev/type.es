@@ -4,6 +4,7 @@ export * from "./buffer_source.ts";
 export * from "./byte.ts";
 export * from "./code_plane.ts";
 export * from "./code_point.ts";
+export * from "./code_point_range.ts";
 export * from "./collection.ts";
 export * from "./i18n.ts";
 export * from "./integer.ts";
