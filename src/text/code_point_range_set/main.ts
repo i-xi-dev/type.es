@@ -7,7 +7,7 @@ export class CodePointRangeSet<T extends codepoint = codepoint>
   static override fromRanges<T extends codepoint = codepoint>(
     subranges: Iterable<intrange<T>>,
   ): CodePointRangeSet<T> {
-    Type.assertIterable(subranges, "subranges");
+    // Type.assertIterable(subranges, "subranges");
     return new CodePointRangeSet(subranges);
   }
 

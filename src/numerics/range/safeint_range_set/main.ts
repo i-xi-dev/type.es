@@ -12,7 +12,7 @@ export class SafeIntRangeSet<T extends safeint = safeint>
   static fromRanges<T extends safeint = safeint>(
     subranges: Iterable<intrange<T>>,
   ): SafeIntRangeSet<T> {
-    Type.assertIterable(subranges, "subranges");
+    // Type.assertIterable(subranges, "subranges");
     return new SafeIntRangeSet(subranges);
   }
 

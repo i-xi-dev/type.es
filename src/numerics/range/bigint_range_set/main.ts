@@ -11,7 +11,7 @@ export class BigIntRangeSet<T extends bigint = bigint> extends _IntRangeSet<T> {
   static fromRanges<T extends bigint = bigint>(
     subranges: Iterable<intrange<T>>,
   ): BigIntRangeSet<T> {
-    Type.assertIterable(subranges, "subranges");
+    // Type.assertIterable(subranges, "subranges");
     return new BigIntRangeSet(subranges);
   }
 
