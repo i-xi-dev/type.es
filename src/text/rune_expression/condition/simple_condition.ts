@@ -27,11 +27,18 @@ class _CodePointCondition implements ICondition {
   }
 }
 
+export type UnicodeScriptConditionOptions = {
+  excludeScx?: boolean;
+};
+
 class _UnicodeScriptCondition implements ICondition {
   readonly #uscSet: UnicodeScriptSet;
   readonly #regex?: RegExp;
 
-  constructor(scripts: Iterable<script>, options?: { excludeScx?: boolean }) {
+  constructor(
+    scripts: Iterable<script>,
+    options?: UnicodeScriptConditionOptions,
+  ) {
     this.#uscSet = new UnicodeScriptSet(scripts);
     if (this.#uscSet.size > 0) {
       const pattern = [...this.#uscSet].map((script) => {
@@ -65,7 +72,10 @@ export function fromCodePlanes(planes: Iterable<codeplane>): ICondition {
   return new _CodePointCondition(ranges);
 }
 
-export function fromScripts(scripts: Iterable<script>): ICondition {
+export function fromScripts(
+  scripts: Iterable<script>,
+  options?: UnicodeScriptConditionOptions,
+): ICondition {
   // scriptsはチェックされる
-  return new _UnicodeScriptCondition(scripts);
+  return new _UnicodeScriptCondition(scripts, options);
 }
