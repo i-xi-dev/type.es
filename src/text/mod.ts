@@ -6,3 +6,4 @@ export * as Rune from "./rune/mod.ts";
 export * from "./unicode_block/mod.ts";
 export * from "./unicode_gc/mod.ts";
 export * from "./unicode_gc_set/mod.ts";
+export * from "./unicode_script_set/mod.ts";
