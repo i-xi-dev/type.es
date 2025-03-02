@@ -6,9 +6,13 @@ import {
   type codepoint,
   type intrange,
   type rune,
+  type script,
 } from "../../../_typedef/mod.ts";
 import { CodePointRangeSet } from "../../code_point_range_set/mod.ts";
 import { ICondition } from "../i_condition.ts";
+import { UnicodeScriptSet } from "../../unicode_sc_set/mod.ts";
+
+//TODO 否定条件
 
 class _CodePointCondition implements ICondition {
   readonly #codePointRangeSet: CodePointRangeSet;
@@ -19,7 +23,29 @@ class _CodePointCondition implements ICondition {
 
   isMatch(codePointOrRune: codepoint | rune): boolean {
     const { codePoint } = _parse(codePointOrRune);
-    return this.#codePointRangeSet?.has(codePoint);
+    return this.#codePointRangeSet.has(codePoint);
+  }
+}
+
+class _UnicodeScriptCondition implements ICondition {
+  readonly #uscSet: UnicodeScriptSet;
+  readonly #regex?: RegExp;
+
+  constructor(scripts: Iterable<script>, options?: { excludeScx?: boolean }) {
+    this.#uscSet = new UnicodeScriptSet(scripts);
+    if (this.#uscSet.size > 0) {
+      const pattern = [...this.#uscSet].map((script) => {
+        return (options?.excludeScx === true)
+          ? `\\p{sc=${script}}`
+          : `\\p{sc=${script}}\\p{scx=${script}}`;
+      }).join();
+      this.#regex = new RegExp(`^[${pattern}]$`, "v");
+    }
+  }
+
+  isMatch(codePointOrRune: codepoint | rune): boolean {
+    const { rune } = _parse(codePointOrRune);
+    return this.#regex?.test(rune) ?? false;
   }
 }
 
@@ -37,4 +63,9 @@ export function fromCodePlanes(planes: Iterable<codeplane>): ICondition {
     ranges.push(CodePointRange.ofCodePlane(plane));
   }
   return new _CodePointCondition(ranges);
+}
+
+export function fromScripts(scripts: Iterable<script>): ICondition {
+  // scriptsはチェックされる
+  return new _UnicodeScriptCondition(scripts);
 }

@@ -4,6 +4,11 @@ import { Text } from "../../../mod.ts";
 const { SimpleCondition } = Text;
 
 Deno.test("Text.SimpleCondition.fromCodePointRanges()", () => {
+  const c0 = SimpleCondition.fromCodePointRanges([]);
+  assertStrictEquals(c0.isMatch("\uFFFF"), false);
+  assertStrictEquals(c0.isMatch("\u{10000}"), false);
+  assertStrictEquals(c0.isMatch(0), false);
+
   const c1 = SimpleCondition.fromCodePointRanges([[0, 0xFFFF]]);
   assertStrictEquals(c1.isMatch("\uFFFF"), true);
   assertStrictEquals(c1.isMatch("\u{10000}"), false);
@@ -42,6 +47,11 @@ Deno.test("Text.SimpleCondition.fromCodePointRanges()", () => {
 });
 
 Deno.test("Text.SimpleCondition.fromCodePlanes()", () => {
+  const c0 = SimpleCondition.fromCodePlanes([]);
+  assertStrictEquals(c0.isMatch("\uFFFF"), false);
+  assertStrictEquals(c0.isMatch("\u{10000}"), false);
+  assertStrictEquals(c0.isMatch(0), false);
+
   const c1 = SimpleCondition.fromCodePlanes([0]);
   assertStrictEquals(c1.isMatch("\uFFFF"), true);
   assertStrictEquals(c1.isMatch("\u{10000}"), false);
