@@ -14,7 +14,7 @@ function _i(r: number[]): string {
   return r.map((i) => i.toString()).join(",");
 }
 
-Deno.test("Numerics.CodePointRangeSet.fromRanges()", () => {
+Deno.test("Text.CodePointRangeSet.fromRanges()", () => {
   const rs1 = CodePointRangeSet.fromRanges([[0, 0], [0, 0]]);
   assertStrictEquals([...rs1.toRanges()].map((r) => _s(r)).join("|"), "0,0");
 
@@ -55,7 +55,7 @@ Deno.test("Numerics.CodePointRangeSet.fromRanges()", () => {
   );
 });
 
-Deno.test("Numerics.CodePointRangeSet.prototype.size", () => {
+Deno.test("Text.CodePointRangeSet.prototype.size", () => {
   const rs0 = CodePointRangeSet.fromRanges([]);
   assertStrictEquals(rs0.size, 0);
 
@@ -70,7 +70,7 @@ Deno.test("Numerics.CodePointRangeSet.prototype.size", () => {
   assertStrictEquals(rs101.size, 29);
 });
 
-Deno.test("Numerics.CodePointRangeSet.prototype.has()", () => {
+Deno.test("Text.CodePointRangeSet.prototype.has()", () => {
   const rs101 = CodePointRangeSet.fromRanges([
     [0, 1],
     [31, 33],
@@ -124,7 +124,7 @@ Deno.test("Numerics.CodePointRangeSet.prototype.has()", () => {
   );
 });
 
-Deno.test("Numerics.CodePointRangeSet.prototype.keys()", () => {
+Deno.test("Text.CodePointRangeSet.prototype.keys()", () => {
   const rs0 = CodePointRangeSet.fromRanges([]);
   assertStrictEquals(_i([...rs0.keys()]), "");
 
