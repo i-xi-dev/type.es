@@ -19,18 +19,11 @@ export type roundingmode =
   | "up";
 
 /**
- * A closed range of the `bigint`s.
- */
-export type bigintrange = [min: bigint, max: bigint];
-
-/**
  * A closed range of the `number`s.
  */
-export type numberrange = [min: number, max: number];
+export type numberrange<T extends number = number> = [min: T, max: T];
 
 /**
- * A closed range of the safe integers.
+ * A closed range of the integers.
  */
-export type safeintrange = [min: safeint, max: safeint];
-
-export type intrange = safeintrange | bigintrange;
+export type intrange<T extends int = int> = [min: T, max: T];

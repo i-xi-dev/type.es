@@ -1,7 +1,7 @@
 import {
-  type bigintrange,
+  type intrange,
   type numberrange,
-  type safeintrange,
+  type safeint,
 } from "../_typedef/mod.ts";
 import { isBigInt } from "./bigint.ts";
 
@@ -16,7 +16,7 @@ export function assertNumberRange(test: unknown, label: string): void {
   }
 }
 
-export function isSafeIntRange(test: unknown): test is safeintrange {
+export function isSafeIntRange(test: unknown): test is intrange<safeint> {
   return Array.isArray(test) && (test.length === 2) &&
     test.every((i) => Number.isSafeInteger(i)) && (test[0] <= test[1]);
 }
@@ -27,7 +27,7 @@ export function assertSafeIntRange(test: unknown, label: string): void {
   }
 }
 
-export function isBigIntRange(test: unknown): test is bigintrange {
+export function isBigIntRange(test: unknown): test is intrange<bigint> {
   return Array.isArray(test) && (test.length === 2) &&
     test.every((i) => isBigInt(i)) && (test[0] <= test[1]);
 }

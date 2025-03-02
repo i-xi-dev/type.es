@@ -1,8 +1,8 @@
 import { assertNumberRange, assertSafeIntRange } from "./numeric_range.ts";
 import {
+  type intrange,
   type numberrange,
   type safeint,
-  type safeintrange,
 } from "../_typedef/mod.ts";
 import { ZERO as NUMBER_ZERO } from "../_const/number.ts";
 
@@ -166,7 +166,7 @@ export function assertEvenSafeInt(test: unknown, label: string): void {
 
 export function isSafeIntInRange(
   test: unknown,
-  range: safeintrange,
+  range: intrange<safeint>,
 ): test is safeint {
   assertSafeIntRange(range, "range");
 
@@ -177,7 +177,7 @@ export function isSafeIntInRange(
 export function assertSafeIntInRange(
   test: unknown,
   label: string,
-  range: safeintrange,
+  range: intrange<safeint>,
 ): void {
   if (isSafeIntInRange(test, range) !== true) {
     throw new TypeError(

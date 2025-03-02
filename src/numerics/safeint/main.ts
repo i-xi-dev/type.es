@@ -4,14 +4,17 @@ import * as Radix from "../../basics/radix/mod.ts";
 import * as RoundingMode from "../rounding_mode/mod.ts";
 import * as Type from "../../type/mod.ts";
 import {
+  type intrange,
   type radix,
   type roundingmode,
   type safeint,
-  type safeintrange,
 } from "../../_typedef/mod.ts";
 
 //TODO 命名 toか？
-export function clampToRange(value: safeint, range: safeintrange): safeint {
+export function clampToRange(
+  value: safeint,
+  range: intrange<safeint>,
+): safeint {
   Type.assertSafeInt(value, "value");
   Type.assertSafeIntRange(range, "range");
 

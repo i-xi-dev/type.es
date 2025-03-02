@@ -1,6 +1,8 @@
 import * as ExBigInt from "../../bigint/mod.ts";
 import * as Type from "../../../type/mod.ts";
-import { type bigintrange } from "../../../_typedef/mod.ts";
+import { type intrange } from "../../../_typedef/mod.ts";
+
+type bigintrange = intrange<bigint>;
 
 export function sizeOf(range: bigintrange): bigint {
   Type.assertBigIntRange(range, "range");

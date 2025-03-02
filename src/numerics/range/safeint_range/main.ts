@@ -1,5 +1,7 @@
 import * as Type from "../../../type/mod.ts";
-import { type safeint, type safeintrange } from "../../../_typedef/mod.ts";
+import { type intrange, type safeint } from "../../../_typedef/mod.ts";
+
+type safeintrange = intrange<safeint>;
 
 export function sizeOf(range: safeintrange): safeint {
   Type.assertSafeIntRange(range, "range");
@@ -24,8 +26,8 @@ export function maxOf(range: safeintrange): safeint {
   return range[1];
 }
 
-//XXX fromXxx(xxx: { min: safeint, max: safeint }): safeintrange
-//XXX toXxx(range: safeintrange): { min: safeint, max: safeint }
+//XXX fromXxx(xxx: { min: safeint, max: safeint }): intrange
+//XXX toXxx(range: intrange): { min: safeint, max: safeint }
 
 export function toIterable(range: safeintrange): IterableIterator<safeint> {
   Type.assertSafeIntRange(range, "range");
@@ -95,10 +97,7 @@ export function isAdjacent(a: safeintrange, b: safeintrange): boolean {
   return false;
 }
 
-export function includes(
-  range: safeintrange,
-  test: safeint,
-): boolean {
+export function includes(range: safeintrange, test: safeint): boolean {
   Type.assertSafeIntRange(range, "range");
   const [min, max] = range;
   return Type.isSafeInt(test) && (test >= min) && (test <= max);

@@ -1,11 +1,11 @@
 import * as Type from "../../type/mod.ts";
 import { type int, type intrange, type safeint } from "../../_typedef/mod.ts";
 
-export abstract class _IntRangeSet<T extends int, U extends intrange> { //XXX implements Set<T>
-  protected readonly _set: Set<U>;
+export abstract class _IntRangeSet<T extends int> { //XXX implements Set<T>
+  protected readonly _set: Set<intrange<T>>;
   readonly #size: safeint;
 
-  protected constructor(subranges: Iterable<U>) {
+  protected constructor(subranges: Iterable<intrange<T>>) {
     Type.assertIterable(subranges, "subranges");
     this._set = new Set();
 
@@ -19,10 +19,10 @@ export abstract class _IntRangeSet<T extends int, U extends intrange> { //XXX im
     return this.#size;
   }
 
-  has(value: T): boolean {
-    this._assertValue(value);
+  has(value: unknown): boolean {
+    this._assertValue(value as int);
     for (const subrange of this._set) {
-      if ((value >= subrange[0]) && (value <= subrange[1])) {
+      if (((value as int) >= subrange[0]) && ((value as int) <= subrange[1])) {
         return true;
       }
     }
@@ -43,22 +43,22 @@ export abstract class _IntRangeSet<T extends int, U extends intrange> { //XXX im
     })(this.toRanges());
   }
 
-  //XXX with(U),
-  //XXX union(Iterable<U>), ...
+  //XXX with(intrange<T>),
+  //XXX union(Iterable<intrange<T>>), ...
   //XXX equals()
   //XXX overlaps()isSubrange,isSuperrange
   //XXX isDisjoint()
 
-  toRanges(): Iterable<U> {
+  toRanges(): Iterable<intrange<T>> {
     return globalThis.structuredClone(this._set)[Symbol.iterator](); // 要素が配列の参照なのでstructuredClone
   }
 
-  protected _add(subrange: U): void {
+  protected _add(subrange: intrange<T>): void {
     this._assertSubrange(subrange);
 
-    const subrangeArray: Array<U> = [];
-    let newSubrange: U = subrange;
-    let mergedRange: U | null = null;
+    const subrangeArray: Array<intrange<T>> = [];
+    let newSubrange: intrange<T> = subrange;
+    let mergedRange: intrange<T> | null = null;
     for (const thisSubrange of this._set) {
       mergedRange = this._mergeSubrangesIfPossible(thisSubrange, newSubrange);
       if (mergedRange) {
@@ -76,13 +76,16 @@ export abstract class _IntRangeSet<T extends int, U extends intrange> { //XXX im
 
   protected abstract _getSize(): safeint;
 
-  protected abstract _assertValue(value: T): void;
+  protected abstract _assertValue(value: int): void;
 
-  protected abstract _assertSubrange(subrange: U): void;
+  protected abstract _assertSubrange(subrange: intrange): void;
 
-  protected abstract _mergeSubrangesIfPossible(a: U, b: U): U | null;
+  protected abstract _mergeSubrangesIfPossible(
+    a: intrange<T>,
+    b: intrange<T>,
+  ): intrange<T> | null;
 
-  protected _sorter(a: U, b: U): -1 | 0 | 1 {
+  protected _sorter(a: intrange<T>, b: intrange<T>): -1 | 0 | 1 {
     const [aMin] = a;
     const [bMin] = b;
     if (aMin < bMin) {

@@ -3,7 +3,7 @@ import * as Radix from "../../basics/radix/mod.ts";
 import * as SafeInt from "../safeint/mod.ts";
 import * as Type from "../../type/mod.ts";
 import {
-  type bigintrange,
+  type intrange,
   type radix,
   type roundingmode,
   type safeint,
@@ -45,7 +45,7 @@ const _min = min;
 const _max = max;
 
 //TODO 命名 toか？
-export function clampToRange(value: bigint, range: bigintrange): bigint {
+export function clampToRange(value: bigint, range: intrange<bigint>): bigint {
   Type.assertBigInt(value, "value");
   Type.assertBigIntRange(range, "range");
 
