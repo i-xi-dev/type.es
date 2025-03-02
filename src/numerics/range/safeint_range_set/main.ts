@@ -4,16 +4,19 @@ import { type safeint, type safeintrange } from "../../../_typedef/mod.ts";
 import { _IntRangeSet } from "../_int_range_set.ts";
 
 export class SafeIntRangeSet extends _IntRangeSet<safeint, safeintrange> {
-  static fromRanges(subranges: Iterable<safeintrange>) {
+  static fromRanges(subranges: Iterable<safeintrange>): SafeIntRangeSet {
     Type.assertIterable(subranges, "subranges");
     return new SafeIntRangeSet(subranges);
   }
 
+  // static fromValues(values: Iterable<safeint>): SafeIntRangeSet {
+  // }
+
   protected override _getSize(): safeint {
-    let size = 0;
-    for (const subrange of this._set) {
-      size += (subrange[1] as safeint) - (subrange[0] as safeint) + 1;
-    }
+    const size = [...this._set].reduce(
+      (total, subrange) => total += SafeIntRange.sizeOf(subrange),
+      0,
+    );
 
     if (Type.isSafeInt(size) !== true) {
       throw new RangeError("TODO");

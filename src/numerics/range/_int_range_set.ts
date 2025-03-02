@@ -1,8 +1,7 @@
 import * as Type from "../../type/mod.ts";
 import { type int, type intrange, type safeint } from "../../_typedef/mod.ts";
 
-// implements ReadonlySetLike<T>にしようとしたが・・・ keysの定義おかしくない？
-export abstract class _IntRangeSet<T extends int, U extends intrange> {
+export abstract class _IntRangeSet<T extends int, U extends intrange> { //XXX implements Set<T>
   protected readonly _set: Set<U>;
   readonly #size: safeint;
 
