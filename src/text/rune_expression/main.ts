@@ -176,3 +176,32 @@ export function fromGeneralCategories(gcs: Iterable<gc>): Condition {
   // gcsはチェックされる
   return new _UnicodeGeneralCategoryCondition(gcs);
 }
+
+abstract class _ComplexCondition extends _ConditionBase implements Condition {
+  protected readonly _conditions: Array<Condition>;
+
+  constructor(conditions: Array<Condition>) {
+    super();
+    this._conditions = [...conditions];
+  }
+}
+
+class _AndContion extends _ComplexCondition implements Condition {
+  override isMatch(codePointOrRune: codepoint | rune): boolean {
+    throw new Error("not implementd");
+  }
+}
+
+class _OrContion extends _ComplexCondition implements Condition {
+  override isMatch(codePointOrRune: codepoint | rune): boolean {
+    throw new Error("not implementd");
+  }
+}
+
+export function and(...conditions: Array<Condition>): Condition {
+  return new _AndContion(conditions);
+}
+
+export function or(...conditions: Array<Condition>): Condition {
+  return new _OrContion(conditions);
+}
