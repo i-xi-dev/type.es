@@ -1,7 +1,29 @@
-import { type codepoint, type rune } from "../../_typedef/mod.ts";
+import {
+  type codepoint,
+  type rune,
+  type safeint,
+  type usvstring,
+} from "../../_typedef/mod.ts";
+
+export type FindMatchedRunesOptions = {};
+
+// indexesはcharのindexではなく、runeのindex
+export type FindMatchedRunesResult = {
+  rune: rune;
+  runeIndex: safeint;
+};
+
+export type FindMatchedRunesResults = Iterable<FindMatchedRunesResult>;
 
 export interface ICondition {
   isMatch(codePointOrRune: codepoint | rune): boolean;
 
-  //TODO findMatches(text: usvstring, limit?: safeint): Map<rune, Array<safeint>>;
+  findMatchedRunes(
+    text: usvstring,
+    options?: FindMatchedRunesOptions,
+  ): FindMatchedRunesResults;
+
+  //TODO findUnmatched
+
+  //XXX findGraphemes
 }

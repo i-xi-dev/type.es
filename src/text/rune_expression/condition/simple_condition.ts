@@ -8,22 +8,49 @@ import {
   type intrange,
   type rune,
   type script,
+  type usvstring,
 } from "../../../_typedef/mod.ts";
 import { CodePointRangeSet } from "../../code_point_range_set/mod.ts";
-import { ICondition } from "../i_condition.ts";
+import {
+  type FindMatchedRunesOptions,
+  type FindMatchedRunesResults,
+  type ICondition,
+} from "../i_condition.ts";
 import { UnicodeGeneralCategorySet } from "../../unicode_gc_set/mod.ts";
 import { UnicodeScriptSet } from "../../unicode_sc_set/mod.ts";
 
 //TODO 否定条件
 
-class _CodePointCondition implements ICondition {
+abstract class _ConditionBase implements ICondition {
+  abstract isMatch(codePointOrRune: codepoint | rune): boolean;
+
+  findMatchedRunes(
+    text: usvstring,
+    options?: FindMatchedRunesOptions,
+  ): FindMatchedRunesResults {
+    Type.assertUSVString(text, "text");
+
+    return (function* (runes, isMatch) {
+      let runeIndex = 0;
+      for (const rune of runes) {
+        if (isMatch(rune)) {
+          yield { rune, runeIndex };
+        }
+        runeIndex++;
+      }
+    })(text, this.isMatch);
+  }
+}
+
+class _CodePointCondition extends _ConditionBase implements ICondition {
   readonly #codePointRangeSet: CodePointRangeSet;
 
   constructor(ranges: Iterable<intrange<codepoint>>) {
+    super();
     this.#codePointRangeSet = CodePointRangeSet.fromRanges(ranges);
   }
 
-  isMatch(codePointOrRune: codepoint | rune): boolean {
+  override isMatch(codePointOrRune: codepoint | rune): boolean {
     const { codePoint } = _parse(codePointOrRune);
     return this.#codePointRangeSet.has(codePoint);
   }
@@ -33,46 +60,51 @@ export type UnicodeScriptConditionOptions = {
   excludeScx?: boolean;
 };
 
-class _UnicodeScriptCondition implements ICondition {
-  readonly #uscSet: UnicodeScriptSet;
+abstract class _RegexConditionBase extends _ConditionBase
+  implements ICondition {
   readonly #regex?: RegExp;
 
-  constructor(
-    scripts: Iterable<script>,
-    options?: UnicodeScriptConditionOptions,
-  ) {
-    this.#uscSet = new UnicodeScriptSet(scripts);
-    if (this.#uscSet.size > 0) {
-      const pattern = [...this.#uscSet].map((script) => {
-        return (options?.excludeScx === true)
-          ? `\\p{sc=${script}}`
-          : `\\p{sc=${script}}\\p{scx=${script}}`;
-      }).join();
-      this.#regex = new RegExp(`^[${pattern}]$`, "v");
-    }
+  protected constructor(regex?: RegExp) {
+    super();
+    this.#regex = regex;
   }
 
-  isMatch(codePointOrRune: codepoint | rune): boolean {
+  override isMatch(codePointOrRune: codepoint | rune): boolean {
     const { rune } = _parse(codePointOrRune);
     return this.#regex?.test(rune) ?? false;
   }
 }
 
-class _UnicodeGeneralCategoryCondition implements ICondition {
-  readonly #ugcSet: UnicodeGeneralCategorySet;
-  readonly #regex?: RegExp;
-
-  constructor(gcs: Iterable<gc>) {
-    this.#ugcSet = new UnicodeGeneralCategorySet(gcs);
-    if (this.#ugcSet.size > 0) {
-      const pattern = [...this.#ugcSet].map((gc) => `\\p{gc=${gc}}`).join();
-      this.#regex = new RegExp(`^[${pattern}]$`, "v");
+class _UnicodeScriptCondition extends _RegexConditionBase
+  implements ICondition {
+  constructor(
+    scripts: Iterable<script>,
+    options?: UnicodeScriptConditionOptions,
+  ) {
+    const uscSet = new UnicodeScriptSet(scripts);
+    let regex: RegExp | undefined = undefined;
+    if (uscSet.size > 0) {
+      const pattern = [...uscSet].map((script) => {
+        return (options?.excludeScx === true)
+          ? `\\p{sc=${script}}`
+          : `\\p{sc=${script}}\\p{scx=${script}}`;
+      }).join();
+      regex = new RegExp(`^[${pattern}]$`, "v");
     }
+    super(regex);
   }
+}
 
-  isMatch(codePointOrRune: codepoint | rune): boolean {
-    const { rune } = _parse(codePointOrRune);
-    return this.#regex?.test(rune) ?? false;
+class _UnicodeGeneralCategoryCondition extends _RegexConditionBase
+  implements ICondition {
+  constructor(gcs: Iterable<gc>) {
+    const ugcSet = new UnicodeGeneralCategorySet(gcs);
+    let regex: RegExp | undefined = undefined;
+    if (ugcSet.size > 0) {
+      const pattern = [...ugcSet].map((gc) => `\\p{gc=${gc}}`).join();
+      regex = new RegExp(`^[${pattern}]$`, "v");
+    }
+    super(regex);
   }
 }
 

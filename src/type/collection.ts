@@ -1,5 +1,4 @@
 import * as Type from "../type/mod.ts";
-import { type ArrayOrSet } from "../_typedef/mod.ts";
 import { EMPTY as EMPTY_STRING } from "../_const/string.ts";
 
 type _IsT<T> = (i: unknown) => i is T;
@@ -65,7 +64,7 @@ export function assertSet<T>(
 export function isArrayOrSet<T>(
   test: unknown,
   isT?: _IsT<T>,
-): test is ArrayOrSet<T> {
+): test is Array<T> | Set<T> {
   if (Array.isArray(test)) {
     return isArray(test, isT);
   }

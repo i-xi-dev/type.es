@@ -42,8 +42,8 @@ export function toRunes(
     Type.assertUSVString(value, "value");
   }
 
-  return (function* (s) {
-    for (const rune of [...s]) {
+  return (function* (runes) {
+    for (const rune of runes) {
       yield rune;
     }
   })(value);
@@ -88,8 +88,8 @@ export function toCodePoints(
     Type.assertUSVString(value, "value");
   }
 
-  return (function* (s) {
-    for (const rune of [...s]) {
+  return (function* (runes) {
+    for (const rune of runes) {
       yield rune.codePointAt(ExNumber.ZERO)!;
     }
   })(value);
@@ -142,7 +142,7 @@ export function belongsToScripts(
   );
 
   let runeCount = ExNumber.ZERO;
-  for (const rune of [...test]) {
+  for (const rune of test) {
     runeCount += 1;
 
     if (specifiedScRegex.test(rune)) {
