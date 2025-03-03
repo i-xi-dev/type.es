@@ -30,15 +30,18 @@ abstract class _ConditionBase implements ICondition {
   ): FindMatchedRunesResults {
     Type.assertUSVString(text, "text");
 
-    return (function* (runes, isMatch) {
+    // deno-lint-ignore no-this-alias
+    const self = this;
+    
+    return (function* (runes) {
       let runeIndex = 0;
       for (const rune of runes) {
-        if (isMatch(rune)) {
+        if (self.isMatch(rune)) {
           yield { rune, runeIndex };
         }
         runeIndex++;
       }
-    })(text, this.isMatch);
+    })(text);
   }
 }
 

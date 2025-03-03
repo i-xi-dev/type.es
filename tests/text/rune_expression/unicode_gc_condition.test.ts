@@ -123,3 +123,14 @@ Deno.test("Text.SimpleCondition.prototype.isMatch() - _UnicodeGeneralCategoryCon
     "`codePointOrRune` must be a code point or string representing a single code point.",
   );
 });
+
+Deno.test("Text.SimpleCondition.prototype.findMatchedRunes() - _UnicodeGeneralCategoryCondition", () => {
+  const s1 = SimpleCondition.fromGeneralCategories(["Lu"]);
+  const r1a = s1.findMatchedRunes("123DE6GhijE");
+  assertStrictEquals(
+    JSON.stringify([...r1a]),
+    `[{"rune":"D","runeIndex":3},{"rune":"E","runeIndex":4},{"rune":"G","runeIndex":6},{"rune":"E","runeIndex":10}]`,
+  );
+  const r1b = s1.findMatchedRunes("");
+  assertStrictEquals(JSON.stringify([...r1b]), `[]`);
+});
