@@ -123,3 +123,22 @@ Deno.test("Text.SimpleCondition.prototype.isMatch() - _UnicodeScriptCondition ru
   assertStrictEquals(scs00.isMatch("\u3099"), false);
   assertStrictEquals(scs00.isMatch("a"), false);
 });
+
+Deno.test("Text.SimpleCondition.prototype.findMatchedRunes() - _UnicodeScriptCondition", () => {
+  const s1 = SimpleCondition.fromScripts(["Latn"]);
+  const r1a = s1.findMatchedRunes("123DE6GhijE");
+  assertStrictEquals(
+    JSON.stringify([...r1a]),
+    `[{"rune":"D","runeIndex":3},{"rune":"E","runeIndex":4},{"rune":"G","runeIndex":6},{"rune":"h","runeIndex":7},{"rune":"i","runeIndex":8},{"rune":"j","runeIndex":9},{"rune":"E","runeIndex":10}]`,
+  );
+  const r1b = s1.findMatchedRunes("");
+  assertStrictEquals(JSON.stringify([...r1b]), `[]`);
+
+  assertThrows(
+    () => {
+      s1.findMatchedRunes("\uD800");
+    },
+    TypeError,
+    "`text` must be a `USVString`.",
+  );
+});

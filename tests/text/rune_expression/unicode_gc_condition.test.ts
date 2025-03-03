@@ -133,4 +133,12 @@ Deno.test("Text.SimpleCondition.prototype.findMatchedRunes() - _UnicodeGeneralCa
   );
   const r1b = s1.findMatchedRunes("");
   assertStrictEquals(JSON.stringify([...r1b]), `[]`);
+
+  assertThrows(
+    () => {
+      s1.findMatchedRunes("\uD800");
+    },
+    TypeError,
+    "`text` must be a `USVString`.",
+  );
 });

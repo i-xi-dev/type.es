@@ -32,7 +32,7 @@ abstract class _ConditionBase implements ICondition {
 
     // deno-lint-ignore no-this-alias
     const self = this;
-    
+
     return (function* (runes) {
       let runeIndex = 0;
       for (const rune of runes) {
