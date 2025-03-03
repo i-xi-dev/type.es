@@ -141,3 +141,22 @@ Deno.test("Text.SimpleCondition.prototype.isMatch() - _CodePointCondition", () =
     "`codePointOrRune` must be a code point or string representing a single code point.",
   );
 });
+
+Deno.test("Text.SimpleCondition.prototype.findMatchedRunes() - _CodePointCondition", () => {
+  const s1 = SimpleCondition.fromCodePlanes([1]);
+  const r1a = s1.findMatchedRunes("123D\u{10000}E\u{10000}6GhijE");
+  assertStrictEquals(
+    JSON.stringify([...r1a]),
+    `[{"rune":"\u{10000}","runeIndex":4},{"rune":"\u{10000}","runeIndex":6}]`,
+  );
+  const r1b = s1.findMatchedRunes("");
+  assertStrictEquals(JSON.stringify([...r1b]), `[]`);
+
+  assertThrows(
+    () => {
+      s1.findMatchedRunes("\uD800");
+    },
+    TypeError,
+    "`text` must be a `USVString`.",
+  );
+});
