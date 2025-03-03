@@ -1,49 +1,49 @@
 import { assertStrictEquals, assertThrows } from "@std/assert";
 import { Text } from "../../../mod.ts";
 
-const { SimpleCondition } = Text;
+const { RuneExpression } = Text;
 
-Deno.test("Text.SimpleCondition.fromScripts()", () => {
-  const c0 = SimpleCondition.fromScripts([]);
+Deno.test("Text.RuneExpression.fromScripts()", () => {
+  const c0 = RuneExpression.fromScripts([]);
   assertStrictEquals(c0.isMatch("A"), false);
   assertStrictEquals(c0.isMatch("0"), false);
 
-  const c1 = SimpleCondition.fromScripts(["Latn"]);
+  const c1 = RuneExpression.fromScripts(["Latn"]);
   assertStrictEquals(c1.isMatch("A"), true);
   assertStrictEquals(c1.isMatch("0"), false);
 
   assertThrows(
     () => {
-      SimpleCondition.fromScripts(undefined as unknown as ["Latn"]);
+      RuneExpression.fromScripts(undefined as unknown as ["Latn"]);
     },
     TypeError,
     "`scripts` must implement `Symbol.iterator`.",
   );
   assertThrows(
     () => {
-      SimpleCondition.fromScripts("Latn" as unknown as ["Latn"]);
+      RuneExpression.fromScripts("Latn" as unknown as ["Latn"]);
     },
     TypeError,
     "`scripts` must implement `Symbol.iterator`.",
   );
   assertThrows(
     () => {
-      SimpleCondition.fromScripts(["2222"] as unknown as ["Latn"]);
+      RuneExpression.fromScripts(["2222"] as unknown as ["Latn"]);
     },
     TypeError,
     "`scripts[*]` must be a supported script in Unicode property.",
   );
   assertThrows(
     () => {
-      SimpleCondition.fromScripts([1] as unknown as ["Latn"]);
+      RuneExpression.fromScripts([1] as unknown as ["Latn"]);
     },
     TypeError,
     "`scripts[*]` must be a supported script in Unicode property.",
   );
 });
 
-Deno.test("Text.SimpleCondition.prototype.isMatch() - _UnicodeScriptCondition codepoint", () => {
-  const scs1 = SimpleCondition.fromScripts(["Kana"]);
+Deno.test("Text.RuneExpression.prototype.isMatch() - _UnicodeScriptCondition codepoint", () => {
+  const scs1 = RuneExpression.fromScripts(["Kana"]);
   assertStrictEquals(scs1.isMatch(0x30A2), true);
   assertStrictEquals(scs1.isMatch(0x3042), false);
   assertStrictEquals(scs1.isMatch(0x30FC), true);
@@ -65,33 +65,33 @@ Deno.test("Text.SimpleCondition.prototype.isMatch() - _UnicodeScriptCondition co
   );
 });
 
-Deno.test("Text.SimpleCondition.prototype.isMatch() - _UnicodeScriptCondition rune", () => {
-  const scs1 = SimpleCondition.fromScripts(["Kana"]);
+Deno.test("Text.RuneExpression.prototype.isMatch() - _UnicodeScriptCondition rune", () => {
+  const scs1 = RuneExpression.fromScripts(["Kana"]);
   assertStrictEquals(scs1.isMatch("ア"), true);
   assertStrictEquals(scs1.isMatch("あ"), false);
   assertStrictEquals(scs1.isMatch("ー"), true);
   assertStrictEquals(scs1.isMatch("\u3099"), true);
 
-  const scs2 = SimpleCondition.fromScripts(["Hira"]);
+  const scs2 = RuneExpression.fromScripts(["Hira"]);
   assertStrictEquals(scs2.isMatch("ア"), false);
   assertStrictEquals(scs2.isMatch("あ"), true);
   assertStrictEquals(scs2.isMatch("ー"), true);
   assertStrictEquals(scs2.isMatch("\u3099"), true);
 
   const opEx = { excludeScx: true } as const;
-  const scs1x = SimpleCondition.fromScripts(["Kana"], opEx);
+  const scs1x = RuneExpression.fromScripts(["Kana"], opEx);
   assertStrictEquals(scs1x.isMatch("ア"), true);
   assertStrictEquals(scs1x.isMatch("あ"), false);
   assertStrictEquals(scs1x.isMatch("ー"), false);
   assertStrictEquals(scs1x.isMatch("\u3099"), false);
 
-  const scs2x = SimpleCondition.fromScripts(["Hira"], opEx);
+  const scs2x = RuneExpression.fromScripts(["Hira"], opEx);
   assertStrictEquals(scs2x.isMatch("ア"), false);
   assertStrictEquals(scs2x.isMatch("あ"), true);
   assertStrictEquals(scs2x.isMatch("ー"), false);
   assertStrictEquals(scs2x.isMatch("\u3099"), false);
 
-  const scs10 = SimpleCondition.fromScripts(["Latn"]);
+  const scs10 = RuneExpression.fromScripts(["Latn"]);
   assertStrictEquals(scs10.isMatch("a"), true);
   assertStrictEquals(scs10.isMatch("1"), false);
   assertThrows(
@@ -109,14 +109,14 @@ Deno.test("Text.SimpleCondition.prototype.isMatch() - _UnicodeScriptCondition ru
     "`codePointOrRune` must be a code point or string representing a single code point.",
   );
 
-  const scs11 = SimpleCondition.fromScripts(["Latn", "Kana"]);
+  const scs11 = RuneExpression.fromScripts(["Latn", "Kana"]);
   assertStrictEquals(scs11.isMatch("ア"), true);
   assertStrictEquals(scs11.isMatch("あ"), false);
   assertStrictEquals(scs11.isMatch("ー"), true);
   assertStrictEquals(scs11.isMatch("\u3099"), true);
   assertStrictEquals(scs11.isMatch("a"), true);
 
-  const scs00 = SimpleCondition.fromScripts([]);
+  const scs00 = RuneExpression.fromScripts([]);
   assertStrictEquals(scs00.isMatch("ア"), false);
   assertStrictEquals(scs00.isMatch("あ"), false);
   assertStrictEquals(scs00.isMatch("ー"), false);
@@ -124,8 +124,8 @@ Deno.test("Text.SimpleCondition.prototype.isMatch() - _UnicodeScriptCondition ru
   assertStrictEquals(scs00.isMatch("a"), false);
 });
 
-Deno.test("Text.SimpleCondition.prototype.findMatchedRunes() - _UnicodeScriptCondition", () => {
-  const s1 = SimpleCondition.fromScripts(["Latn"]);
+Deno.test("Text.RuneExpression.prototype.findMatchedRunes() - _UnicodeScriptCondition", () => {
+  const s1 = RuneExpression.fromScripts(["Latn"]);
   const r1a = s1.findMatchedRunes("123DE6GhijE");
   assertStrictEquals(
     JSON.stringify([...r1a]),

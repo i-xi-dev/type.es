@@ -1,49 +1,49 @@
 import { assertStrictEquals, assertThrows } from "@std/assert";
 import { Text } from "../../../mod.ts";
 
-const { SimpleCondition } = Text;
+const { RuneExpression } = Text;
 
-Deno.test("Text.SimpleCondition.fromGeneralCategories()", () => {
-  const c0 = SimpleCondition.fromGeneralCategories([]);
+Deno.test("Text.RuneExpression.fromGeneralCategories()", () => {
+  const c0 = RuneExpression.fromGeneralCategories([]);
   assertStrictEquals(c0.isMatch("A"), false);
   assertStrictEquals(c0.isMatch("0"), false);
 
-  const c1 = SimpleCondition.fromGeneralCategories(["L"]);
+  const c1 = RuneExpression.fromGeneralCategories(["L"]);
   assertStrictEquals(c1.isMatch("A"), true);
   assertStrictEquals(c1.isMatch("0"), false);
 
   assertThrows(
     () => {
-      SimpleCondition.fromGeneralCategories(undefined as unknown as ["L"]);
+      RuneExpression.fromGeneralCategories(undefined as unknown as ["L"]);
     },
     TypeError,
     "`gcs` must implement `Symbol.iterator`.",
   );
   assertThrows(
     () => {
-      SimpleCondition.fromGeneralCategories("L" as unknown as ["L"]);
+      RuneExpression.fromGeneralCategories("L" as unknown as ["L"]);
     },
     TypeError,
     "`gcs` must implement `Symbol.iterator`.",
   );
   assertThrows(
     () => {
-      SimpleCondition.fromGeneralCategories(["5"] as unknown as ["L"]);
+      RuneExpression.fromGeneralCategories(["5"] as unknown as ["L"]);
     },
     TypeError,
     "`gcs[*]` must be an Unicode `General_Category` value.",
   );
   assertThrows(
     () => {
-      SimpleCondition.fromGeneralCategories([1] as unknown as ["L"]);
+      RuneExpression.fromGeneralCategories([1] as unknown as ["L"]);
     },
     TypeError,
     "`gcs[*]` must be an Unicode `General_Category` value.",
   );
 });
 
-Deno.test("Text.SimpleCondition.prototype.isMatch() - _UnicodeGeneralCategoryCondition codepoint", () => {
-  const gcs1 = SimpleCondition.fromGeneralCategories(["Lu"]);
+Deno.test("Text.RuneExpression.prototype.isMatch() - _UnicodeGeneralCategoryCondition codepoint", () => {
+  const gcs1 = RuneExpression.fromGeneralCategories(["Lu"]);
   assertStrictEquals(gcs1.isMatch(0x4C), true);
   assertStrictEquals(gcs1.isMatch(0x6C), false);
   assertStrictEquals(gcs1.isMatch(0x20), false);
@@ -67,8 +67,8 @@ Deno.test("Text.SimpleCondition.prototype.isMatch() - _UnicodeGeneralCategoryCon
   );
 });
 
-Deno.test("Text.SimpleCondition.prototype.isMatch() - _UnicodeGeneralCategoryCondition rune", () => {
-  const gcs1 = SimpleCondition.fromGeneralCategories(["Lu"]);
+Deno.test("Text.RuneExpression.prototype.isMatch() - _UnicodeGeneralCategoryCondition rune", () => {
+  const gcs1 = RuneExpression.fromGeneralCategories(["Lu"]);
   assertStrictEquals(gcs1.isMatch("L"), true);
   assertStrictEquals(gcs1.isMatch("l"), false);
   assertStrictEquals(gcs1.isMatch(" "), false);
@@ -76,7 +76,7 @@ Deno.test("Text.SimpleCondition.prototype.isMatch() - _UnicodeGeneralCategoryCon
   assertStrictEquals(gcs1.isMatch("$"), false);
   assertStrictEquals(gcs1.isMatch("\u{2029}"), false);
 
-  const gcs2 = SimpleCondition.fromGeneralCategories(["Ll"]);
+  const gcs2 = RuneExpression.fromGeneralCategories(["Ll"]);
   assertStrictEquals(gcs2.isMatch("L"), false);
   assertStrictEquals(gcs2.isMatch("l"), true);
   assertStrictEquals(gcs2.isMatch(" "), false);
@@ -84,7 +84,7 @@ Deno.test("Text.SimpleCondition.prototype.isMatch() - _UnicodeGeneralCategoryCon
   assertStrictEquals(gcs2.isMatch("$"), false);
   assertStrictEquals(gcs2.isMatch("\u{2029}"), false);
 
-  const gcs3 = SimpleCondition.fromGeneralCategories(["L"]);
+  const gcs3 = RuneExpression.fromGeneralCategories(["L"]);
   assertStrictEquals(gcs3.isMatch("L"), true);
   assertStrictEquals(gcs3.isMatch("l"), true);
   assertStrictEquals(gcs3.isMatch(" "), false);
@@ -92,7 +92,7 @@ Deno.test("Text.SimpleCondition.prototype.isMatch() - _UnicodeGeneralCategoryCon
   assertStrictEquals(gcs3.isMatch("$"), false);
   assertStrictEquals(gcs3.isMatch("\u{2029}"), false);
 
-  const gcs4 = SimpleCondition.fromGeneralCategories(["Lu", "Ll"]);
+  const gcs4 = RuneExpression.fromGeneralCategories(["Lu", "Ll"]);
   assertStrictEquals(gcs4.isMatch("L"), true);
   assertStrictEquals(gcs4.isMatch("l"), true);
   assertStrictEquals(gcs4.isMatch(" "), false);
@@ -100,7 +100,7 @@ Deno.test("Text.SimpleCondition.prototype.isMatch() - _UnicodeGeneralCategoryCon
   assertStrictEquals(gcs4.isMatch("$"), false);
   assertStrictEquals(gcs4.isMatch("\u{2029}"), false);
 
-  const gcs5 = SimpleCondition.fromGeneralCategories([]);
+  const gcs5 = RuneExpression.fromGeneralCategories([]);
   assertStrictEquals(gcs5.isMatch("L"), false);
   assertStrictEquals(gcs5.isMatch("l"), false);
   assertStrictEquals(gcs5.isMatch(" "), false);
@@ -124,8 +124,8 @@ Deno.test("Text.SimpleCondition.prototype.isMatch() - _UnicodeGeneralCategoryCon
   );
 });
 
-Deno.test("Text.SimpleCondition.prototype.findMatchedRunes() - _UnicodeGeneralCategoryCondition", () => {
-  const s1 = SimpleCondition.fromGeneralCategories(["Lu"]);
+Deno.test("Text.RuneExpression.prototype.findMatchedRunes() - _UnicodeGeneralCategoryCondition", () => {
+  const s1 = RuneExpression.fromGeneralCategories(["Lu"]);
   const r1a = s1.findMatchedRunes("123DE6GhijE");
   assertStrictEquals(
     JSON.stringify([...r1a]),

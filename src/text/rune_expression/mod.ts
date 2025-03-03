@@ -1,1 +1,1 @@
-export * as SimpleCondition from "./condition/simple_condition.ts";
+export * from "./main.ts";

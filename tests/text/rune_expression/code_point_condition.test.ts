@@ -1,43 +1,43 @@
 import { assertStrictEquals, assertThrows } from "@std/assert";
 import { Text } from "../../../mod.ts";
 
-const { SimpleCondition } = Text;
+const { RuneExpression } = Text;
 
-Deno.test("Text.SimpleCondition.fromCodePointRanges()", () => {
-  const c0 = SimpleCondition.fromCodePointRanges([]);
+Deno.test("Text.RuneExpression.fromCodePointRanges()", () => {
+  const c0 = RuneExpression.fromCodePointRanges([]);
   assertStrictEquals(c0.isMatch("\uFFFF"), false);
   assertStrictEquals(c0.isMatch("\u{10000}"), false);
   assertStrictEquals(c0.isMatch(0), false);
 
-  const c1 = SimpleCondition.fromCodePointRanges([[0, 0xFFFF]]);
+  const c1 = RuneExpression.fromCodePointRanges([[0, 0xFFFF]]);
   assertStrictEquals(c1.isMatch("\uFFFF"), true);
   assertStrictEquals(c1.isMatch("\u{10000}"), false);
   assertStrictEquals(c1.isMatch(0), true);
 
   assertThrows(
     () => {
-      SimpleCondition.fromCodePointRanges(undefined as unknown as [[0, 0]]);
+      RuneExpression.fromCodePointRanges(undefined as unknown as [[0, 0]]);
     },
     TypeError,
     "`subranges` must implement `Symbol.iterator`.",
   );
   assertThrows(
     () => {
-      SimpleCondition.fromCodePointRanges("1" as unknown as [[0, 0]]);
+      RuneExpression.fromCodePointRanges("1" as unknown as [[0, 0]]);
     },
     TypeError,
     "`subranges` must implement `Symbol.iterator`.",
   );
   assertThrows(
     () => {
-      SimpleCondition.fromCodePointRanges([0, 0] as unknown as [[0, 0]]);
+      RuneExpression.fromCodePointRanges([0, 0] as unknown as [[0, 0]]);
     },
     TypeError,
     "`subrange` must be a range of code point.",
   );
   assertThrows(
     () => {
-      SimpleCondition.fromCodePointRanges(
+      RuneExpression.fromCodePointRanges(
         [["0", "0"]] as unknown as [[0, 0]],
       );
     },
@@ -46,49 +46,49 @@ Deno.test("Text.SimpleCondition.fromCodePointRanges()", () => {
   );
 });
 
-Deno.test("Text.SimpleCondition.fromCodePlanes()", () => {
-  const c0 = SimpleCondition.fromCodePlanes([]);
+Deno.test("Text.RuneExpression.fromCodePlanes()", () => {
+  const c0 = RuneExpression.fromCodePlanes([]);
   assertStrictEquals(c0.isMatch("\uFFFF"), false);
   assertStrictEquals(c0.isMatch("\u{10000}"), false);
   assertStrictEquals(c0.isMatch(0), false);
 
-  const c1 = SimpleCondition.fromCodePlanes([0]);
+  const c1 = RuneExpression.fromCodePlanes([0]);
   assertStrictEquals(c1.isMatch("\uFFFF"), true);
   assertStrictEquals(c1.isMatch("\u{10000}"), false);
   assertStrictEquals(c1.isMatch(0), true);
 
   assertThrows(
     () => {
-      SimpleCondition.fromCodePlanes(undefined as unknown as [0]);
+      RuneExpression.fromCodePlanes(undefined as unknown as [0]);
     },
     TypeError,
     "`planes` must implement `Symbol.iterator`.",
   );
   assertThrows(
     () => {
-      SimpleCondition.fromCodePlanes("1" as unknown as [0]);
+      RuneExpression.fromCodePlanes("1" as unknown as [0]);
     },
     TypeError,
     "`planes` must implement `Symbol.iterator`.",
   );
   assertThrows(
     () => {
-      SimpleCondition.fromCodePlanes([[0, 0]] as unknown as [0]);
+      RuneExpression.fromCodePlanes([[0, 0]] as unknown as [0]);
     },
     TypeError,
     "`codePlane` must be an code point plane value.",
   );
   assertThrows(
     () => {
-      SimpleCondition.fromCodePlanes(["0"] as unknown as [0]);
+      RuneExpression.fromCodePlanes(["0"] as unknown as [0]);
     },
     TypeError,
     "`codePlane` must be an code point plane value.",
   );
 });
 
-Deno.test("Text.SimpleCondition.prototype.isMatch() - _CodePointCondition", () => {
-  const c1 = SimpleCondition.fromCodePointRanges([[0x200, 0x204]]);
+Deno.test("Text.RuneExpression.prototype.isMatch() - _CodePointCondition", () => {
+  const c1 = RuneExpression.fromCodePointRanges([[0x200, 0x204]]);
   assertStrictEquals(c1.isMatch(0x1FF), false);
   assertStrictEquals(c1.isMatch(0x200), true);
   assertStrictEquals(c1.isMatch(0x201), true);
@@ -142,8 +142,8 @@ Deno.test("Text.SimpleCondition.prototype.isMatch() - _CodePointCondition", () =
   );
 });
 
-Deno.test("Text.SimpleCondition.prototype.findMatchedRunes() - _CodePointCondition", () => {
-  const s1 = SimpleCondition.fromCodePlanes([1]);
+Deno.test("Text.RuneExpression.prototype.findMatchedRunes() - _CodePointCondition", () => {
+  const s1 = RuneExpression.fromCodePlanes([1]);
   const r1a = s1.findMatchedRunes("123D\u{10000}E\u{10000}6GhijE");
   assertStrictEquals(
     JSON.stringify([...r1a]),

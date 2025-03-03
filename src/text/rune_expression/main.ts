@@ -1,27 +1,66 @@
-import * as CodePointRange from "../../code_point_range/mod.ts";
-import * as Type from "../../../type/mod.ts";
-import { _parse } from "../_utils.ts";
+import * as CodePointRange from "../code_point_range/mod.ts";
+import * as Rune from "../rune/mod.ts";
+import * as Type from "../../type/mod.ts";
 import {
   type codeplane,
   type codepoint,
   type gc,
   type intrange,
   type rune,
+  type safeint,
   type script,
   type usvstring,
-} from "../../../_typedef/mod.ts";
-import { CodePointRangeSet } from "../../code_point_range_set/mod.ts";
-import {
-  type FindMatchedRunesOptions,
-  type FindMatchedRunesResults,
-  type ICondition,
-} from "../i_condition.ts";
-import { UnicodeGeneralCategorySet } from "../../unicode_gc_set/mod.ts";
-import { UnicodeScriptSet } from "../../unicode_sc_set/mod.ts";
+} from "../../_typedef/mod.ts";
+import { CodePointRangeSet } from "../code_point_range_set/mod.ts";
+import { UnicodeGeneralCategorySet } from "../unicode_gc_set/mod.ts";
+import { UnicodeScriptSet } from "../unicode_sc_set/mod.ts";
 
 //TODO 否定条件
 
-abstract class _ConditionBase implements ICondition {
+function _parse(
+  codePointOrRune: codepoint | rune,
+): { codePoint: codepoint; rune: rune } {
+  let codePoint: codepoint;
+  let rune: rune;
+  if (Type.isCodePoint(codePointOrRune)) {
+    codePoint = codePointOrRune;
+    rune = Rune.fromCodePoint(codePointOrRune);
+  } else if (Type.isRune(codePointOrRune)) {
+    codePoint = Rune.toCodePoint(codePointOrRune);
+    rune = codePointOrRune;
+  } else {
+    throw new TypeError(
+      "`codePointOrRune` must be a code point or string representing a single code point.",
+    );
+  }
+
+  return { codePoint, rune };
+}
+
+export type FindMatchedRunesOptions = {};
+
+// indexesはcharのindexではなく、runeのindex
+export type FindMatchedRunesResult = {
+  rune: rune;
+  runeIndex: safeint;
+};
+
+export type FindMatchedRunesResults = Iterable<FindMatchedRunesResult>;
+
+export interface Condition {
+  isMatch(codePointOrRune: codepoint | rune): boolean;
+
+  findMatchedRunes(
+    text: usvstring,
+    options?: FindMatchedRunesOptions,
+  ): FindMatchedRunesResults;
+
+  //TODO findUnmatched
+
+  //XXX findGraphemes
+}
+
+abstract class _ConditionBase implements Condition {
   abstract isMatch(codePointOrRune: codepoint | rune): boolean;
 
   findMatchedRunes(
@@ -45,7 +84,7 @@ abstract class _ConditionBase implements ICondition {
   }
 }
 
-class _CodePointCondition extends _ConditionBase implements ICondition {
+class _CodePointCondition extends _ConditionBase implements Condition {
   readonly #codePointRangeSet: CodePointRangeSet;
 
   constructor(ranges: Iterable<intrange<codepoint>>) {
@@ -63,8 +102,7 @@ export type UnicodeScriptConditionOptions = {
   excludeScx?: boolean;
 };
 
-abstract class _RegexConditionBase extends _ConditionBase
-  implements ICondition {
+abstract class _RegexConditionBase extends _ConditionBase implements Condition {
   readonly #regex?: RegExp;
 
   protected constructor(regex?: RegExp) {
@@ -78,8 +116,7 @@ abstract class _RegexConditionBase extends _ConditionBase
   }
 }
 
-class _UnicodeScriptCondition extends _RegexConditionBase
-  implements ICondition {
+class _UnicodeScriptCondition extends _RegexConditionBase implements Condition {
   constructor(
     scripts: Iterable<script>,
     options?: UnicodeScriptConditionOptions,
@@ -99,7 +136,7 @@ class _UnicodeScriptCondition extends _RegexConditionBase
 }
 
 class _UnicodeGeneralCategoryCondition extends _RegexConditionBase
-  implements ICondition {
+  implements Condition {
   constructor(gcs: Iterable<gc>) {
     const ugcSet = new UnicodeGeneralCategorySet(gcs);
     let regex: RegExp | undefined = undefined;
@@ -113,12 +150,12 @@ class _UnicodeGeneralCategoryCondition extends _RegexConditionBase
 
 export function fromCodePointRanges(
   ranges: Iterable<intrange<codepoint>>,
-): ICondition {
+): Condition {
   // rangesはチェックされる
   return new _CodePointCondition(ranges);
 }
 
-export function fromCodePlanes(planes: Iterable<codeplane>): ICondition {
+export function fromCodePlanes(planes: Iterable<codeplane>): Condition {
   Type.assertIterable(planes, "planes");
   const ranges = [];
   for (const plane of planes) {
@@ -130,12 +167,12 @@ export function fromCodePlanes(planes: Iterable<codeplane>): ICondition {
 export function fromScripts(
   scripts: Iterable<script>,
   options?: UnicodeScriptConditionOptions,
-): ICondition {
+): Condition {
   // scriptsはチェックされる
   return new _UnicodeScriptCondition(scripts, options);
 }
 
-export function fromGeneralCategories(gcs: Iterable<gc>): ICondition {
+export function fromGeneralCategories(gcs: Iterable<gc>): Condition {
   // gcsはチェックされる
   return new _UnicodeGeneralCategoryCondition(gcs);
 }
