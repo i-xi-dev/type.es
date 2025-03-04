@@ -12,8 +12,8 @@ Deno.test("Numerics.BigIntRange.sizeOf()", () => {
   assertStrictEquals(BigIntRange.sizeOf([0n, _MAX - 1n]), _MAX);
   assertStrictEquals(BigIntRange.sizeOf([1n, _MAX]), _MAX);
 
-  assertStrictEquals(BigIntRange.sizeOf([0n, _MAX]), _MAX + 1n);
-  assertStrictEquals(BigIntRange.sizeOf([_MIN, _MAX]), _MAX * 2n + 1n);
+  // assertStrictEquals(BigIntRange.sizeOf([0n, _MAX]), _MAX + 1n);
+  // assertStrictEquals(BigIntRange.sizeOf([_MIN, _MAX]), _MAX * 2n + 1n);
 
   const e1 = "`range` must be a range of `bigint`.";
   assertThrows(
@@ -22,6 +22,13 @@ Deno.test("Numerics.BigIntRange.sizeOf()", () => {
     },
     TypeError,
     e1,
+  );
+  assertThrows(
+    () => {
+      BigIntRange.sizeOf([0n, _MAX]);
+    },
+    RangeError,
+    "The size of `range` overflowed.",
   );
 });
 

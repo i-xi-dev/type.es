@@ -53,6 +53,14 @@ Deno.test("Numerics.BigIntRangeSet.fromRanges()", () => {
     TypeError,
     "`subrange` must be a range of `bigint`.",
   );
+
+  assertThrows(
+    () => {
+      BigIntRangeSet.fromRanges([[0n, BigInt(Number.MAX_SAFE_INTEGER)]]);
+    },
+    RangeError,
+    "The size of `range` overflowed.",
+  );
 });
 
 Deno.test("Numerics.BigIntRangeSet.prototype.size", () => {

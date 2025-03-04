@@ -24,10 +24,6 @@ export class BigIntRangeSet<T extends bigint = bigint> extends _IntRangeSet<T> {
       0n,
     );
 
-    if (Type.isBigIntInSafeIntRange(size) !== true) {
-      throw new RangeError("TODO");
-    }
-
     return Number(size);
   }
 

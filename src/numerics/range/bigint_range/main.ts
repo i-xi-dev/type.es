@@ -11,6 +11,10 @@ export function sizeOf(range: bigintrange): bigint {
   const d = (max as bigint) - (min as bigint); // typescriptでなぜかnumber扱いになる
   const size = d + 1n;
 
+  if (size > Number.MAX_SAFE_INTEGER) {
+    throw new RangeError("The size of `range` overflowed.");
+  }
+
   return size;
 }
 
