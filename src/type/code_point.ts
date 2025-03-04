@@ -152,37 +152,3 @@ export function assertPrivateUseCodePoint(test: unknown, label: string): void {
     throw new TypeError(`\`${label}\` must be a private use code point.`);
   }
 }
-
-//TODO CodePointInRanges？に移す（extends SafeIntegerRanges）
-// export function isCodePointInRanges(
-//   test: unknown,
-//   ranges: safeintrange.Like<codepoint>[],
-// ): test is codepoint {
-//   if (isCodePoint(test) !== true) {
-//     return false;
-//   }
-//
-//   if (Array.isArray(ranges) !== true) {
-//     throw new TypeError("`ranges` must be an `Array`.");
-//   }
-//
-//   let range: safeintrange.Struct<codepoint>;
-//   //for (const rangeSource of ranges) {
-//   for (let i = 0; i < ranges.length; i++) {
-//     try {
-//       range = IntegerRange.Struct.fromRangeLike(ranges[i]);
-//     } catch {
-//       throw new TypeError(
-//         `\`ranges[${i}]\` must be a \`safeintrange.Like\`.`,
-//       );
-//     }
-//
-//     assertCodePoint(range.min, `ranges[${i}].min`);
-//     assertCodePoint(range.max, `ranges[${i}].max`);
-//     if ((test >= range.min) && (test <= range.max)) {
-//       return true;
-//     }
-//   }
-//
-//   return false;
-// }
