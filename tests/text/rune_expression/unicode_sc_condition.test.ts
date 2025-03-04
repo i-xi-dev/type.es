@@ -4,13 +4,21 @@ import { Text } from "../../../mod.ts";
 const { RuneExpression } = Text;
 
 Deno.test("Text.RuneExpression.fromScripts()", () => {
-  const c0 = RuneExpression.fromScripts([]);
-  assertStrictEquals(c0.isMatch("A"), false);
-  assertStrictEquals(c0.isMatch("0"), false);
+  // const c0 = RuneExpression.fromScripts([]);
+  // assertStrictEquals(c0.isMatch("A"), false);
+  // assertStrictEquals(c0.isMatch("0"), false);
 
   const c1 = RuneExpression.fromScripts(["Latn"]);
   assertStrictEquals(c1.isMatch("A"), true);
   assertStrictEquals(c1.isMatch("0"), false);
+
+  assertThrows(
+    () => {
+      RuneExpression.fromScripts([]);
+    },
+    TypeError,
+    "`scripts` must have 1 or more scripts.",
+  );
 
   assertThrows(
     () => {
@@ -116,12 +124,12 @@ Deno.test(" _UnicodeScriptCondition.prototype.isMatch() - rune", () => {
   assertStrictEquals(scs11.isMatch("\u3099"), true);
   assertStrictEquals(scs11.isMatch("a"), true);
 
-  const scs00 = RuneExpression.fromScripts([]);
-  assertStrictEquals(scs00.isMatch("ア"), false);
-  assertStrictEquals(scs00.isMatch("あ"), false);
-  assertStrictEquals(scs00.isMatch("ー"), false);
-  assertStrictEquals(scs00.isMatch("\u3099"), false);
-  assertStrictEquals(scs00.isMatch("a"), false);
+  // const scs00 = RuneExpression.fromScripts([]);
+  // assertStrictEquals(scs00.isMatch("ア"), false);
+  // assertStrictEquals(scs00.isMatch("あ"), false);
+  // assertStrictEquals(scs00.isMatch("ー"), false);
+  // assertStrictEquals(scs00.isMatch("\u3099"), false);
+  // assertStrictEquals(scs00.isMatch("a"), false);
 });
 
 Deno.test(" _UnicodeScriptCondition.prototype.findMatchedRunes()", () => {

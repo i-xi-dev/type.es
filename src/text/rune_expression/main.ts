@@ -90,6 +90,9 @@ class _CodePointCondition extends _ConditionBase implements Condition {
   constructor(ranges: Iterable<intrange<codepoint>>) {
     super();
     this.#codePointRangeSet = CodePointRangeSet.fromRanges(ranges);
+    if (this.#codePointRangeSet.size < 1) {
+      throw new TypeError("`ranges` must have 1 or more ranges.");
+    }
   }
 
   override isMatch(codePointOrRune: codepoint | rune): boolean {
@@ -103,16 +106,16 @@ export type UnicodeScriptConditionOptions = {
 };
 
 abstract class _RegexConditionBase extends _ConditionBase implements Condition {
-  readonly #regex?: RegExp;
+  readonly #regex: RegExp;
 
-  protected constructor(regex?: RegExp) {
+  protected constructor(regex: RegExp) {
     super();
     this.#regex = regex;
   }
 
   override isMatch(codePointOrRune: codepoint | rune): boolean {
     const { rune } = _parse(codePointOrRune);
-    return this.#regex?.test(rune) ?? false; //TODO コンストラクタで0要素をエラーにすべき
+    return this.#regex.test(rune);
   }
 }
 
@@ -122,15 +125,16 @@ class _UnicodeScriptCondition extends _RegexConditionBase implements Condition {
     options?: UnicodeScriptConditionOptions,
   ) {
     const uscSet = new UnicodeScriptSet(scripts);
-    let regex: RegExp | undefined = undefined;
-    if (uscSet.size > 0) {
-      const pattern = [...uscSet].map((script) => {
-        return (options?.excludeScx === true)
-          ? `\\p{sc=${script}}`
-          : `\\p{sc=${script}}\\p{scx=${script}}`;
-      }).join();
-      regex = new RegExp(`^[${pattern}]$`, "v");
+    if (uscSet.size < 1) {
+      throw new TypeError("`scripts` must have 1 or more scripts.");
     }
+
+    const pattern = [...uscSet].map((script) => {
+      return (options?.excludeScx === true)
+        ? `\\p{sc=${script}}`
+        : `\\p{sc=${script}}\\p{scx=${script}}`;
+    }).join();
+    const regex = new RegExp(`^[${pattern}]$`, "v");
     super(regex);
   }
 }
@@ -139,11 +143,14 @@ class _UnicodeGeneralCategoryCondition extends _RegexConditionBase
   implements Condition {
   constructor(gcs: Iterable<gc>) {
     const ugcSet = new UnicodeGeneralCategorySet(gcs);
-    let regex: RegExp | undefined = undefined;
-    if (ugcSet.size > 0) {
-      const pattern = [...ugcSet].map((gc) => `\\p{gc=${gc}}`).join();
-      regex = new RegExp(`^[${pattern}]$`, "v");
+    if (ugcSet.size < 1) {
+      throw new TypeError(
+        "`gcs` must have 1 or more `General_Category` values.",
+      );
     }
+
+    const pattern = [...ugcSet].map((gc) => `\\p{gc=${gc}}`).join();
+    const regex = new RegExp(`^[${pattern}]$`, "v");
     super(regex);
   }
 }

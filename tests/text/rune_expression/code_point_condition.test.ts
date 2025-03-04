@@ -4,15 +4,23 @@ import { Text } from "../../../mod.ts";
 const { RuneExpression } = Text;
 
 Deno.test("Text.RuneExpression.fromCodePointRanges()", () => {
-  const c0 = RuneExpression.fromCodePointRanges([]);
-  assertStrictEquals(c0.isMatch("\uFFFF"), false);
-  assertStrictEquals(c0.isMatch("\u{10000}"), false);
-  assertStrictEquals(c0.isMatch(0), false);
+  // const c0 = RuneExpression.fromCodePointRanges([]);
+  // assertStrictEquals(c0.isMatch("\uFFFF"), false);
+  // assertStrictEquals(c0.isMatch("\u{10000}"), false);
+  // assertStrictEquals(c0.isMatch(0), false);
 
   const c1 = RuneExpression.fromCodePointRanges([[0, 0xFFFF]]);
   assertStrictEquals(c1.isMatch("\uFFFF"), true);
   assertStrictEquals(c1.isMatch("\u{10000}"), false);
   assertStrictEquals(c1.isMatch(0), true);
+
+  assertThrows(
+    () => {
+      RuneExpression.fromCodePointRanges([]);
+    },
+    TypeError,
+    "`ranges` must have 1 or more ranges.",
+  );
 
   assertThrows(
     () => {
@@ -47,15 +55,23 @@ Deno.test("Text.RuneExpression.fromCodePointRanges()", () => {
 });
 
 Deno.test("Text.RuneExpression.fromCodePlanes()", () => {
-  const c0 = RuneExpression.fromCodePlanes([]);
-  assertStrictEquals(c0.isMatch("\uFFFF"), false);
-  assertStrictEquals(c0.isMatch("\u{10000}"), false);
-  assertStrictEquals(c0.isMatch(0), false);
+  // const c0 = RuneExpression.fromCodePlanes([]);
+  // assertStrictEquals(c0.isMatch("\uFFFF"), false);
+  // assertStrictEquals(c0.isMatch("\u{10000}"), false);
+  // assertStrictEquals(c0.isMatch(0), false);
 
   const c1 = RuneExpression.fromCodePlanes([0]);
   assertStrictEquals(c1.isMatch("\uFFFF"), true);
   assertStrictEquals(c1.isMatch("\u{10000}"), false);
   assertStrictEquals(c1.isMatch(0), true);
+
+  assertThrows(
+    () => {
+      RuneExpression.fromCodePlanes([]);
+    },
+    TypeError,
+    "`ranges` must have 1 or more ranges.",
+  );
 
   assertThrows(
     () => {

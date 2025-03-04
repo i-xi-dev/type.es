@@ -4,13 +4,21 @@ import { Text } from "../../../mod.ts";
 const { RuneExpression } = Text;
 
 Deno.test("Text.RuneExpression.fromGeneralCategories()", () => {
-  const c0 = RuneExpression.fromGeneralCategories([]);
-  assertStrictEquals(c0.isMatch("A"), false);
-  assertStrictEquals(c0.isMatch("0"), false);
+  // const c0 = RuneExpression.fromGeneralCategories([]);
+  // assertStrictEquals(c0.isMatch("A"), false);
+  // assertStrictEquals(c0.isMatch("0"), false);
 
   const c1 = RuneExpression.fromGeneralCategories(["L"]);
   assertStrictEquals(c1.isMatch("A"), true);
   assertStrictEquals(c1.isMatch("0"), false);
+
+  assertThrows(
+    () => {
+      RuneExpression.fromGeneralCategories([]);
+    },
+    TypeError,
+    "`gcs` must have 1 or more `General_Category` values.",
+  );
 
   assertThrows(
     () => {
@@ -100,13 +108,13 @@ Deno.test(" _UnicodeGeneralCategoryCondition.prototype.isMatch() - rune", () => 
   assertStrictEquals(gcs4.isMatch("$"), false);
   assertStrictEquals(gcs4.isMatch("\u{2029}"), false);
 
-  const gcs5 = RuneExpression.fromGeneralCategories([]);
-  assertStrictEquals(gcs5.isMatch("L"), false);
-  assertStrictEquals(gcs5.isMatch("l"), false);
-  assertStrictEquals(gcs5.isMatch(" "), false);
-  assertStrictEquals(gcs5.isMatch("0"), false);
-  assertStrictEquals(gcs5.isMatch("$"), false);
-  assertStrictEquals(gcs5.isMatch("\u{2029}"), false);
+  // const gcs5 = RuneExpression.fromGeneralCategories([]);
+  // assertStrictEquals(gcs5.isMatch("L"), false);
+  // assertStrictEquals(gcs5.isMatch("l"), false);
+  // assertStrictEquals(gcs5.isMatch(" "), false);
+  // assertStrictEquals(gcs5.isMatch("0"), false);
+  // assertStrictEquals(gcs5.isMatch("$"), false);
+  // assertStrictEquals(gcs5.isMatch("\u{2029}"), false);
 
   assertThrows(
     () => {
