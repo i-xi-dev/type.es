@@ -187,5 +187,3 @@ export function assertSafeIntInRange(
     );
   }
 }
-
-//TODO isSafeIntegerInRanges → 別ファイル
