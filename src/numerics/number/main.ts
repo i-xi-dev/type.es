@@ -7,7 +7,6 @@ export function normalize(value: number): number {
   return ((value === NUMBER_ZERO) ? (value + NUMBER_ZERO) : value); // -0を0
 }
 
-//TODO 命名 toか？
 export function clampToRange(value: number, range: numberrange): number {
   Type.assertNumber(value, "value");
   Type.assertNumberRange(range, "range");

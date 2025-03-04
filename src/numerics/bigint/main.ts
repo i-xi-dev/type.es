@@ -44,7 +44,6 @@ export function max(value0: bigint, ...values: bigint[]): bigint {
 const _min = min;
 const _max = max;
 
-//TODO 命名 toか？
 export function clampToRange(value: bigint, range: intrange<bigint>): bigint {
   Type.assertBigInt(value, "value");
   Type.assertBigIntRange(range, "range");

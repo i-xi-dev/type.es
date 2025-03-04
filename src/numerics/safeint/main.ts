@@ -10,7 +10,6 @@ import {
   type safeint,
 } from "../../_typedef/mod.ts";
 
-//TODO 命名 toか？
 export function clampToRange(
   value: safeint,
   range: intrange<safeint>,
