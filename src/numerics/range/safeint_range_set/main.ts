@@ -20,16 +20,10 @@ export class SafeIntRangeSet<T extends safeint = safeint>
   // }
 
   protected override _getSize(): safeint {
-    const size = [...this._set].reduce(
+    return [...this._set].reduce(
       (total, subrange) => total += SafeIntRange.sizeOf(subrange),
       0,
     );
-
-    if (Type.isSafeInt(size) !== true) {
-      throw new RangeError("TODO");
-    }
-
-    return Number(size);
   }
 
   protected override _assertValue(value: int): void {

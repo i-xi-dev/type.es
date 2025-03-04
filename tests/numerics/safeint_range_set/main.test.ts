@@ -53,6 +53,14 @@ Deno.test("Numerics.SafeIntRangeSet.fromRanges()", () => {
     TypeError,
     "`subrange` must be a range of safe integer.",
   );
+
+  assertThrows(
+    () => {
+      SafeIntRangeSet.fromRanges([[0, Number.MAX_SAFE_INTEGER]]);
+    },
+    RangeError,
+    "The size of `range` overflowed.",
+  );
 });
 
 Deno.test("Numerics.SafeIntRangeSet.prototype.size", () => {
