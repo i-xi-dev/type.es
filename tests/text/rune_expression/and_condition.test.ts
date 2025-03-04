@@ -26,19 +26,19 @@ Deno.test("Text.RuneExpression.and()", () => {
       RuneExpression.and([]);
     },
     TypeError,
-    "`conditions` must have 1 or more conditions.",
+    "`expressions` must have 1 or more expressions.",
   );
 
   assertThrows(
     () => {
-      RuneExpression.and([{} as unknown as Text.RuneExpression.Condition]);
+      RuneExpression.and([{} as unknown as Text.RuneExpression]);
     },
     TypeError,
-    "`conditions[*]` must be a `RuneExpression.Condition`.",
+    "`expressions[*]` must be a `RuneExpression`.",
   );
 });
 
-Deno.test(" _AndContion.prototype.isMatch() - codepoint", () => {
+Deno.test(" _AndExpression.prototype.isMatch() - codepoint", () => {
   const c1 = RuneExpression.and([
     RuneExpression.fromScripts(["Latn"]),
   ]);
@@ -79,3 +79,6 @@ Deno.test(" _AndContion.prototype.isMatch() - codepoint", () => {
     "`codePointOrRune` must be a code point or string representing a single code point.",
   );
 });
+
+//TODO _ComplexExpressionのネスト
+//TODO find～

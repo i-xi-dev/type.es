@@ -37,36 +37,26 @@ function _parse(
   return { codePoint, rune };
 }
 
-export type FindMatchedRunesOptions = {};
-
-// indexesはcharのindexではなく、runeのindex
-export type FindMatchedRunesResult = {
-  rune: rune;
-  runeIndex: safeint;
-};
-
-export type FindMatchedRunesResults = Iterable<FindMatchedRunesResult>;
-
-export interface Condition {
+export interface RuneExpression {
   isMatch(codePointOrRune: codepoint | rune): boolean;
 
   findMatchedRunes(
     text: usvstring,
-    options?: FindMatchedRunesOptions,
-  ): FindMatchedRunesResults;
+    options?: RuneExpression.FindMatchedRunesOptions,
+  ): RuneExpression.FindMatchedRunesResults;
 
   //TODO findUnmatched
 
   //XXX findGraphemes
 }
 
-abstract class _ConditionBase implements Condition {
+abstract class _ExpressionBase implements RuneExpression {
   abstract isMatch(codePointOrRune: codepoint | rune): boolean;
 
   findMatchedRunes(
     text: usvstring,
-    options?: FindMatchedRunesOptions,
-  ): FindMatchedRunesResults {
+    options?: RuneExpression.FindMatchedRunesOptions,
+  ): RuneExpression.FindMatchedRunesResults {
     Type.assertUSVString(text, "text");
 
     // deno-lint-ignore no-this-alias
@@ -84,7 +74,7 @@ abstract class _ConditionBase implements Condition {
   }
 }
 
-class _CodePointCondition extends _ConditionBase implements Condition {
+class _CodePointExpression extends _ExpressionBase implements RuneExpression {
   readonly #codePointRangeSet: CodePointRangeSet;
 
   constructor(ranges: Iterable<intrange<codepoint>>) {
@@ -101,11 +91,8 @@ class _CodePointCondition extends _ConditionBase implements Condition {
   }
 }
 
-export type UnicodeScriptConditionOptions = {
-  excludeScx?: boolean;
-};
-
-abstract class _RegexConditionBase extends _ConditionBase implements Condition {
+abstract class _RegexExpressionBase extends _ExpressionBase
+  implements RuneExpression {
   readonly #regex: RegExp;
 
   protected constructor(regex: RegExp) {
@@ -119,10 +106,10 @@ abstract class _RegexConditionBase extends _ConditionBase implements Condition {
   }
 }
 
-class _UnicodeScriptCondition extends _RegexConditionBase implements Condition {
+class _ScriptExpression extends _RegexExpressionBase implements RuneExpression {
   constructor(
     scripts: Iterable<script>,
-    options?: UnicodeScriptConditionOptions,
+    options?: RuneExpression.UnicodeScriptOptions,
   ) {
     const uscSet = new UnicodeScriptSet(scripts);
     if (uscSet.size < 1) {
@@ -139,8 +126,8 @@ class _UnicodeScriptCondition extends _RegexConditionBase implements Condition {
   }
 }
 
-class _UnicodeGeneralCategoryCondition extends _RegexConditionBase
-  implements Condition {
+class _GeneralCategoryExpression extends _RegexExpressionBase
+  implements RuneExpression {
   constructor(gcs: Iterable<gc>) {
     const ugcSet = new UnicodeGeneralCategorySet(gcs);
     if (ugcSet.size < 1) {
@@ -155,73 +142,90 @@ class _UnicodeGeneralCategoryCondition extends _RegexConditionBase
   }
 }
 
-export function fromCodePointRanges(
-  ranges: Iterable<intrange<codepoint>>,
-): Condition {
-  // rangesはチェックされる
-  return new _CodePointCondition(ranges);
-}
+abstract class _ComplexExpression extends _ExpressionBase
+  implements RuneExpression {
+  protected readonly _exps: Array<RuneExpression>;
 
-export function fromCodePlanes(planes: Iterable<codeplane>): Condition {
-  Type.assertIterable(planes, "planes");
-  const ranges = [];
-  for (const plane of planes) {
-    ranges.push(CodePointRange.ofCodePlane(plane));
-  }
-  return new _CodePointCondition(ranges);
-}
-
-export function fromScripts(
-  scripts: Iterable<script>,
-  options?: UnicodeScriptConditionOptions,
-): Condition {
-  // scriptsはチェックされる
-  return new _UnicodeScriptCondition(scripts, options);
-}
-
-export function fromGeneralCategories(gcs: Iterable<gc>): Condition {
-  // gcsはチェックされる
-  return new _UnicodeGeneralCategoryCondition(gcs);
-}
-
-abstract class _ComplexCondition extends _ConditionBase implements Condition {
-  protected readonly _conditions: Array<Condition>;
-
-  constructor(conditions: Array<Condition>) {
+  constructor(expressions: Array<RuneExpression>) {
     super();
-    Type.assertArray(conditions, "conditions");
-    if (conditions.length < 1) {
-      throw new TypeError("`conditions` must have 1 or more conditions.");
+    Type.assertArray(expressions, "expressions");
+    if (expressions.length < 1) {
+      throw new TypeError("`expressions` must have 1 or more expressions.");
     }
-    if (conditions.every((con) => con instanceof _ConditionBase) !== true) {
+    if (expressions.every((con) => con instanceof _ExpressionBase) !== true) {
       throw new TypeError(
-        "`conditions[*]` must be a `RuneExpression.Condition`.",
+        "`expressions[*]` must be a `RuneExpression`.",
       );
     }
-    this._conditions = [...conditions];
+    this._exps = [...expressions];
   }
 }
 
-class _AndContion extends _ComplexCondition implements Condition {
+class _AndExpression extends _ComplexExpression implements RuneExpression {
   override isMatch(codePointOrRune: codepoint | rune): boolean {
-    return this._conditions.every((condition) =>
-      condition.isMatch(codePointOrRune)
+    return this._exps.every((expression) =>
+      expression.isMatch(codePointOrRune)
     );
   }
 }
 
-class _OrContion extends _ComplexCondition implements Condition {
+class _OrExpression extends _ComplexExpression implements RuneExpression {
   override isMatch(codePointOrRune: codepoint | rune): boolean {
-    return this._conditions.some((condition) =>
-      condition.isMatch(codePointOrRune)
-    );
+    return this._exps.some((expression) => expression.isMatch(codePointOrRune));
   }
 }
 
-export function and(conditions: Array<Condition>): Condition {
-  return new _AndContion(conditions);
-}
+export namespace RuneExpression {
+  export type FindMatchedRunesOptions = {};
 
-export function or(conditions: Array<Condition>): Condition {
-  return new _OrContion(conditions);
+  // indexesはcharのindexではなく、runeのindex
+  export type FindMatchedRunesResult = {
+    rune: rune;
+    runeIndex: safeint;
+  };
+
+  export type FindMatchedRunesResults = Iterable<
+    RuneExpression.FindMatchedRunesResult
+  >;
+
+  export type UnicodeScriptOptions = {
+    excludeScx?: boolean;
+  };
+
+  export function fromCodePointRanges(
+    ranges: Iterable<intrange<codepoint>>,
+  ): RuneExpression {
+    // rangesはチェックされる
+    return new _CodePointExpression(ranges);
+  }
+
+  export function fromCodePlanes(planes: Iterable<codeplane>): RuneExpression {
+    Type.assertIterable(planes, "planes");
+    const ranges = [];
+    for (const plane of planes) {
+      ranges.push(CodePointRange.ofCodePlane(plane));
+    }
+    return new _CodePointExpression(ranges);
+  }
+
+  export function fromScripts(
+    scripts: Iterable<script>,
+    options?: RuneExpression.UnicodeScriptOptions,
+  ): RuneExpression {
+    // scriptsはチェックされる
+    return new _ScriptExpression(scripts, options);
+  }
+
+  export function fromGeneralCategories(gcs: Iterable<gc>): RuneExpression {
+    // gcsはチェックされる
+    return new _GeneralCategoryExpression(gcs);
+  }
+
+  export function and(expressions: Array<RuneExpression>): RuneExpression {
+    return new _AndExpression(expressions);
+  }
+
+  export function or(expressions: Array<RuneExpression>): RuneExpression {
+    return new _OrExpression(expressions);
+  }
 }
