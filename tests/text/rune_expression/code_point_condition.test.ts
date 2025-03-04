@@ -87,7 +87,7 @@ Deno.test("Text.RuneExpression.fromCodePlanes()", () => {
   );
 });
 
-Deno.test("Text.RuneExpression.prototype.isMatch() - _CodePointCondition", () => {
+Deno.test(" _CodePointCondition.prototype.isMatch()", () => {
   const c1 = RuneExpression.fromCodePointRanges([[0x200, 0x204]]);
   assertStrictEquals(c1.isMatch(0x1FF), false);
   assertStrictEquals(c1.isMatch(0x200), true);
@@ -142,7 +142,7 @@ Deno.test("Text.RuneExpression.prototype.isMatch() - _CodePointCondition", () =>
   );
 });
 
-Deno.test("Text.RuneExpression.prototype.findMatchedRunes() - _CodePointCondition", () => {
+Deno.test(" _CodePointCondition.prototype.findMatchedRunes()", () => {
   const s1 = RuneExpression.fromCodePlanes([1]);
   const r1a = s1.findMatchedRunes("123D\u{10000}E\u{10000}6GhijE");
   assertStrictEquals(

@@ -112,7 +112,7 @@ abstract class _RegexConditionBase extends _ConditionBase implements Condition {
 
   override isMatch(codePointOrRune: codepoint | rune): boolean {
     const { rune } = _parse(codePointOrRune);
-    return this.#regex?.test(rune) ?? false;
+    return this.#regex?.test(rune) ?? false; //TODO コンストラクタで0要素をエラーにすべき
   }
 }
 
@@ -182,26 +182,39 @@ abstract class _ComplexCondition extends _ConditionBase implements Condition {
 
   constructor(conditions: Array<Condition>) {
     super();
+    Type.assertArray(conditions, "conditions");
+    if (conditions.length < 1) {
+      throw new TypeError("`conditions` must have 1 or more conditions.");
+    }
+    if (conditions.every((con) => con instanceof _ConditionBase) !== true) {
+      throw new TypeError(
+        "`conditions[*]` must be a `RuneExpression.Condition`.",
+      );
+    }
     this._conditions = [...conditions];
   }
 }
 
 class _AndContion extends _ComplexCondition implements Condition {
   override isMatch(codePointOrRune: codepoint | rune): boolean {
-    throw new Error("not implementd");
+    return this._conditions.every((condition) =>
+      condition.isMatch(codePointOrRune)
+    );
   }
 }
 
 class _OrContion extends _ComplexCondition implements Condition {
   override isMatch(codePointOrRune: codepoint | rune): boolean {
-    throw new Error("not implementd");
+    return this._conditions.some((condition) =>
+      condition.isMatch(codePointOrRune)
+    );
   }
 }
 
-export function and(...conditions: Array<Condition>): Condition {
+export function and(conditions: Array<Condition>): Condition {
   return new _AndContion(conditions);
 }
 
-export function or(...conditions: Array<Condition>): Condition {
+export function or(conditions: Array<Condition>): Condition {
   return new _OrContion(conditions);
 }

@@ -42,7 +42,7 @@ Deno.test("Text.RuneExpression.fromScripts()", () => {
   );
 });
 
-Deno.test("Text.RuneExpression.prototype.isMatch() - _UnicodeScriptCondition codepoint", () => {
+Deno.test(" _UnicodeScriptCondition.prototype.isMatch() - codepoint", () => {
   const scs1 = RuneExpression.fromScripts(["Kana"]);
   assertStrictEquals(scs1.isMatch(0x30A2), true);
   assertStrictEquals(scs1.isMatch(0x3042), false);
@@ -65,7 +65,7 @@ Deno.test("Text.RuneExpression.prototype.isMatch() - _UnicodeScriptCondition cod
   );
 });
 
-Deno.test("Text.RuneExpression.prototype.isMatch() - _UnicodeScriptCondition rune", () => {
+Deno.test(" _UnicodeScriptCondition.prototype.isMatch() - rune", () => {
   const scs1 = RuneExpression.fromScripts(["Kana"]);
   assertStrictEquals(scs1.isMatch("ア"), true);
   assertStrictEquals(scs1.isMatch("あ"), false);
@@ -124,7 +124,7 @@ Deno.test("Text.RuneExpression.prototype.isMatch() - _UnicodeScriptCondition run
   assertStrictEquals(scs00.isMatch("a"), false);
 });
 
-Deno.test("Text.RuneExpression.prototype.findMatchedRunes() - _UnicodeScriptCondition", () => {
+Deno.test(" _UnicodeScriptCondition.prototype.findMatchedRunes()", () => {
   const s1 = RuneExpression.fromScripts(["Latn"]);
   const r1a = s1.findMatchedRunes("123DE6GhijE");
   assertStrictEquals(

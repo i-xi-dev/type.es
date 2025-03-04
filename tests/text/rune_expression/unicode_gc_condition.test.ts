@@ -42,7 +42,7 @@ Deno.test("Text.RuneExpression.fromGeneralCategories()", () => {
   );
 });
 
-Deno.test("Text.RuneExpression.prototype.isMatch() - _UnicodeGeneralCategoryCondition codepoint", () => {
+Deno.test(" _UnicodeGeneralCategoryCondition.prototype.isMatch() - codepoint", () => {
   const gcs1 = RuneExpression.fromGeneralCategories(["Lu"]);
   assertStrictEquals(gcs1.isMatch(0x4C), true);
   assertStrictEquals(gcs1.isMatch(0x6C), false);
@@ -67,7 +67,7 @@ Deno.test("Text.RuneExpression.prototype.isMatch() - _UnicodeGeneralCategoryCond
   );
 });
 
-Deno.test("Text.RuneExpression.prototype.isMatch() - _UnicodeGeneralCategoryCondition rune", () => {
+Deno.test(" _UnicodeGeneralCategoryCondition.prototype.isMatch() - rune", () => {
   const gcs1 = RuneExpression.fromGeneralCategories(["Lu"]);
   assertStrictEquals(gcs1.isMatch("L"), true);
   assertStrictEquals(gcs1.isMatch("l"), false);
@@ -124,7 +124,7 @@ Deno.test("Text.RuneExpression.prototype.isMatch() - _UnicodeGeneralCategoryCond
   );
 });
 
-Deno.test("Text.RuneExpression.prototype.findMatchedRunes() - _UnicodeGeneralCategoryCondition", () => {
+Deno.test(" _UnicodeGeneralCategoryCondition.prototype.findMatchedRunes()", () => {
   const s1 = RuneExpression.fromGeneralCategories(["Lu"]);
   const r1a = s1.findMatchedRunes("123DE6GhijE");
   assertStrictEquals(
