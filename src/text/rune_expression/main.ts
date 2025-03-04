@@ -15,8 +15,6 @@ import { CodePointRangeSet } from "../code_point_range_set/mod.ts";
 import { UnicodeGeneralCategorySet } from "../unicode_gc_set/mod.ts";
 import { UnicodeScriptSet } from "../unicode_sc_set/mod.ts";
 
-//TODO 否定条件
-
 function _parse(
   codePointOrRune: codepoint | rune,
 ): { codePoint: codepoint; rune: rune } {
@@ -44,8 +42,6 @@ export interface RuneExpression {
     text: usvstring,
     options?: RuneExpression.FindMatchedRunesOptions,
   ): RuneExpression.FindMatchedRunesResults;
-
-  //TODO findUnmatched
 
   //XXX findGraphemes
 }
@@ -76,33 +72,42 @@ abstract class _ExpressionBase implements RuneExpression {
 
 class _CodePointExpression extends _ExpressionBase implements RuneExpression {
   readonly #codePointRangeSet: CodePointRangeSet;
+  readonly #negative: boolean;
 
-  constructor(ranges: Iterable<intrange<codepoint>>) {
+  constructor(
+    ranges: Iterable<intrange<codepoint>>,
+    options?: RuneExpression.Options,
+  ) {
     super();
     this.#codePointRangeSet = CodePointRangeSet.fromRanges(ranges);
     if (this.#codePointRangeSet.size < 1) {
       throw new TypeError("`ranges` must have 1 or more ranges.");
     }
+    this.#negative = options?.not === true;
   }
 
   override isMatch(codePointOrRune: codepoint | rune): boolean {
     const { codePoint } = _parse(codePointOrRune);
-    return this.#codePointRangeSet.has(codePoint);
+    const positiveMatched = this.#codePointRangeSet.has(codePoint);
+    return (this.#negative === true) ? !positiveMatched : positiveMatched;
   }
 }
 
 abstract class _RegexExpressionBase extends _ExpressionBase
   implements RuneExpression {
   readonly #regex: RegExp;
+  readonly #negative: boolean;
 
-  protected constructor(regex: RegExp) {
+  protected constructor(regex: RegExp, options?: RuneExpression.Options) {
     super();
     this.#regex = regex;
+    this.#negative = options?.not === true;
   }
 
   override isMatch(codePointOrRune: codepoint | rune): boolean {
     const { rune } = _parse(codePointOrRune);
-    return this.#regex.test(rune);
+    const positiveMatched = this.#regex.test(rune);
+    return (this.#negative === true) ? !positiveMatched : positiveMatched;
   }
 }
 
@@ -122,13 +127,13 @@ class _ScriptExpression extends _RegexExpressionBase implements RuneExpression {
         : `\\p{sc=${script}}\\p{scx=${script}}`;
     }).join();
     const regex = new RegExp(`^[${pattern}]$`, "v");
-    super(regex);
+    super(regex, options);
   }
 }
 
 class _GeneralCategoryExpression extends _RegexExpressionBase
   implements RuneExpression {
-  constructor(gcs: Iterable<gc>) {
+  constructor(gcs: Iterable<gc>, options?: RuneExpression.Options) {
     const ugcSet = new UnicodeGeneralCategorySet(gcs);
     if (ugcSet.size < 1) {
       throw new TypeError(
@@ -138,7 +143,7 @@ class _GeneralCategoryExpression extends _RegexExpressionBase
 
     const pattern = [...ugcSet].map((gc) => `\\p{gc=${gc}}`).join();
     const regex = new RegExp(`^[${pattern}]$`, "v");
-    super(regex);
+    super(regex, options);
   }
 }
 
@@ -184,41 +189,50 @@ export namespace RuneExpression {
     runeIndex: safeint;
   };
 
-  export type FindMatchedRunesResults = Iterable<
-    RuneExpression.FindMatchedRunesResult
-  >;
+  export type FindMatchedRunesResults = Iterable<FindMatchedRunesResult>;
 
-  export type UnicodeScriptOptions = {
+  export type Options = {
+    not?: boolean;
+  };
+
+  export type UnicodeScriptOptions = Options & {
     excludeScx?: boolean;
   };
 
   export function fromCodePointRanges(
     ranges: Iterable<intrange<codepoint>>,
+    options?: Options,
   ): RuneExpression {
     // rangesはチェックされる
-    return new _CodePointExpression(ranges);
+    return new _CodePointExpression(ranges, options);
   }
 
-  export function fromCodePlanes(planes: Iterable<codeplane>): RuneExpression {
+  export function fromCodePlanes(
+    planes: Iterable<codeplane>,
+    options?: Options,
+  ): RuneExpression {
     Type.assertIterable(planes, "planes");
     const ranges = [];
     for (const plane of planes) {
       ranges.push(CodePointRange.ofCodePlane(plane));
     }
-    return new _CodePointExpression(ranges);
+    return new _CodePointExpression(ranges, options);
   }
 
   export function fromScripts(
     scripts: Iterable<script>,
-    options?: RuneExpression.UnicodeScriptOptions,
+    options?: UnicodeScriptOptions,
   ): RuneExpression {
     // scriptsはチェックされる
     return new _ScriptExpression(scripts, options);
   }
 
-  export function fromGeneralCategories(gcs: Iterable<gc>): RuneExpression {
+  export function fromGeneralCategories(
+    gcs: Iterable<gc>,
+    options?: Options,
+  ): RuneExpression {
     // gcsはチェックされる
-    return new _GeneralCategoryExpression(gcs);
+    return new _GeneralCategoryExpression(gcs, options);
   }
 
   export function and(expressions: Array<RuneExpression>): RuneExpression {

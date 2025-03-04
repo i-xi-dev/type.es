@@ -80,5 +80,6 @@ Deno.test(" _OrExpression.prototype.isMatch() - codepoint", () => {
   );
 });
 
+//TODO not
 //TODO _ComplexExpressionのネスト
 //TODO find～
