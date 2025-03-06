@@ -73,6 +73,29 @@ Deno.test(" _ScriptExpression.prototype.isMatch() - codepoint", () => {
   );
 });
 
+Deno.test(" _ScriptExpression.prototype.isMatch() - codepoint - not", () => {
+  const scs1 = RuneExpression.fromScripts(["Kana"], { not: true });
+  assertStrictEquals(scs1.isMatch(0x30A2), false);
+  assertStrictEquals(scs1.isMatch(0x3042), true);
+  assertStrictEquals(scs1.isMatch(0x30FC), false);
+  assertStrictEquals(scs1.isMatch(0x3099), false);
+
+  assertThrows(
+    () => {
+      scs1.isMatch(-1);
+    },
+    TypeError,
+    "`codePointOrRune` must be a code point or string representing a single code point.",
+  );
+  assertThrows(
+    () => {
+      scs1.isMatch(0x110000);
+    },
+    TypeError,
+    "`codePointOrRune` must be a code point or string representing a single code point.",
+  );
+});
+
 Deno.test(" _ScriptExpression.prototype.isMatch() - rune", () => {
   const scs1 = RuneExpression.fromScripts(["Kana"]);
   assertStrictEquals(scs1.isMatch("ア"), true);
@@ -132,12 +155,83 @@ Deno.test(" _ScriptExpression.prototype.isMatch() - rune", () => {
   // assertStrictEquals(scs00.isMatch("a"), false);
 });
 
+Deno.test(" _ScriptExpression.prototype.isMatch() - rune - not", () => {
+  const scs1 = RuneExpression.fromScripts(["Kana"], { not: true });
+  assertStrictEquals(scs1.isMatch("ア"), false);
+  assertStrictEquals(scs1.isMatch("あ"), true);
+  assertStrictEquals(scs1.isMatch("ー"), false);
+  assertStrictEquals(scs1.isMatch("\u3099"), false);
+
+  const scs2 = RuneExpression.fromScripts(["Hira"], { not: true });
+  assertStrictEquals(scs2.isMatch("ア"), true);
+  assertStrictEquals(scs2.isMatch("あ"), false);
+  assertStrictEquals(scs2.isMatch("ー"), false);
+  assertStrictEquals(scs2.isMatch("\u3099"), false);
+
+  const opEx = { excludeScx: true, not: true } as const;
+  const scs1x = RuneExpression.fromScripts(["Kana"], opEx);
+  assertStrictEquals(scs1x.isMatch("ア"), false);
+  assertStrictEquals(scs1x.isMatch("あ"), true);
+  assertStrictEquals(scs1x.isMatch("ー"), true);
+  assertStrictEquals(scs1x.isMatch("\u3099"), true);
+
+  const scs2x = RuneExpression.fromScripts(["Hira"], opEx);
+  assertStrictEquals(scs2x.isMatch("ア"), true);
+  assertStrictEquals(scs2x.isMatch("あ"), false);
+  assertStrictEquals(scs2x.isMatch("ー"), true);
+  assertStrictEquals(scs2x.isMatch("\u3099"), true);
+
+  const scs10 = RuneExpression.fromScripts(["Latn"], { not: true });
+  assertStrictEquals(scs10.isMatch("a"), false);
+  assertStrictEquals(scs10.isMatch("1"), true);
+  assertThrows(
+    () => {
+      scs10.isMatch("");
+    },
+    TypeError,
+    "`codePointOrRune` must be a code point or string representing a single code point.",
+  );
+  assertThrows(
+    () => {
+      scs10.isMatch("aa");
+    },
+    TypeError,
+    "`codePointOrRune` must be a code point or string representing a single code point.",
+  );
+
+  const scs11 = RuneExpression.fromScripts(["Latn", "Kana"], { not: true });
+  assertStrictEquals(scs11.isMatch("ア"), false);
+  assertStrictEquals(scs11.isMatch("あ"), true);
+  assertStrictEquals(scs11.isMatch("ー"), false);
+  assertStrictEquals(scs11.isMatch("\u3099"), false);
+  assertStrictEquals(scs11.isMatch("a"), false);
+});
+
 Deno.test(" _ScriptExpression.prototype.findMatchedRunes()", () => {
   const s1 = RuneExpression.fromScripts(["Latn"]);
   const r1a = s1.findMatchedRunes("123DE6GhijE");
   assertStrictEquals(
     JSON.stringify([...r1a]),
     `[{"rune":"D","runeIndex":3},{"rune":"E","runeIndex":4},{"rune":"G","runeIndex":6},{"rune":"h","runeIndex":7},{"rune":"i","runeIndex":8},{"rune":"j","runeIndex":9},{"rune":"E","runeIndex":10}]`,
+  );
+  const r1b = s1.findMatchedRunes("");
+  assertStrictEquals(JSON.stringify([...r1b]), `[]`);
+
+  assertThrows(
+    () => {
+      s1.findMatchedRunes("\uD800");
+    },
+    TypeError,
+    "`text` must be a `USVString`.",
+  );
+});
+
+Deno.test(" _ScriptExpression.prototype.findMatchedRunes() - not", () => {
+  const s1 = RuneExpression.fromScripts(["Latn"], { not: true });
+  const r1a = s1.findMatchedRunes("123DE6GhijE");
+  assertStrictEquals(
+    JSON.stringify([...r1a]),
+    `[{"rune":"1","runeIndex":0},{"rune":"2","runeIndex":1},{"rune":"3","runeIndex":2},{"rune":"6","runeIndex":5}]`,
   );
   const r1b = s1.findMatchedRunes("");
   assertStrictEquals(JSON.stringify([...r1b]), `[]`);

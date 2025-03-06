@@ -158,12 +158,91 @@ Deno.test(" _CodePointExpression.prototype.isMatch()", () => {
   );
 });
 
+Deno.test(" _CodePointExpression.prototype.isMatch() - not", () => {
+  const c1 = RuneExpression.fromCodePointRanges([[0x200, 0x204]], {
+    not: true,
+  });
+  assertStrictEquals(c1.isMatch(0x1FF), true);
+  assertStrictEquals(c1.isMatch(0x200), false);
+  assertStrictEquals(c1.isMatch(0x201), false);
+  assertStrictEquals(c1.isMatch(0x202), false);
+  assertStrictEquals(c1.isMatch(0x203), false);
+  assertStrictEquals(c1.isMatch(0x204), false);
+  assertStrictEquals(c1.isMatch(0x205), true);
+
+  assertStrictEquals(c1.isMatch("\u01FF"), true);
+  assertStrictEquals(c1.isMatch("\u0200"), false);
+  assertStrictEquals(c1.isMatch("\u0201"), false);
+  assertStrictEquals(c1.isMatch("\u0202"), false);
+  assertStrictEquals(c1.isMatch("\u0203"), false);
+  assertStrictEquals(c1.isMatch("\u0204"), false);
+  assertStrictEquals(c1.isMatch("\u0205"), true);
+
+  assertThrows(
+    () => {
+      c1.isMatch(-1);
+    },
+    TypeError,
+    "`codePointOrRune` must be a code point or string representing a single code point.",
+  );
+  assertThrows(
+    () => {
+      c1.isMatch(0x110000);
+    },
+    TypeError,
+    "`codePointOrRune` must be a code point or string representing a single code point.",
+  );
+  assertThrows(
+    () => {
+      c1.isMatch("");
+    },
+    TypeError,
+    "`codePointOrRune` must be a code point or string representing a single code point.",
+  );
+  assertThrows(
+    () => {
+      c1.isMatch("00");
+    },
+    TypeError,
+    "`codePointOrRune` must be a code point or string representing a single code point.",
+  );
+  assertThrows(
+    () => {
+      c1.isMatch(null as unknown as 0);
+    },
+    TypeError,
+    "`codePointOrRune` must be a code point or string representing a single code point.",
+  );
+
+  const c1xx = RuneExpression.fromCodePlanes([0], { not: true });
+  assertStrictEquals(c1xx.isMatch("\uFFFF"), false);
+});
+
 Deno.test(" _CodePointExpression.prototype.findMatchedRunes()", () => {
   const s1 = RuneExpression.fromCodePlanes([1]);
   const r1a = s1.findMatchedRunes("123D\u{10000}E\u{10000}6GhijE");
   assertStrictEquals(
     JSON.stringify([...r1a]),
     `[{"rune":"\u{10000}","runeIndex":4},{"rune":"\u{10000}","runeIndex":6}]`,
+  );
+  const r1b = s1.findMatchedRunes("");
+  assertStrictEquals(JSON.stringify([...r1b]), `[]`);
+
+  assertThrows(
+    () => {
+      s1.findMatchedRunes("\uD800");
+    },
+    TypeError,
+    "`text` must be a `USVString`.",
+  );
+});
+
+Deno.test(" _CodePointExpression.prototype.findMatchedRunes() - not", () => {
+  const s1 = RuneExpression.fromCodePlanes([1], { not: true });
+  const r1a = s1.findMatchedRunes("123D\u{10000}E\u{10000}6GhijE");
+  assertStrictEquals(
+    JSON.stringify([...r1a]),
+    `[{"rune":"1","runeIndex":0},{"rune":"2","runeIndex":1},{"rune":"3","runeIndex":2},{"rune":"D","runeIndex":3},{"rune":"E","runeIndex":5},{"rune":"6","runeIndex":7},{"rune":"G","runeIndex":8},{"rune":"h","runeIndex":9},{"rune":"i","runeIndex":10},{"rune":"j","runeIndex":11},{"rune":"E","runeIndex":12}]`,
   );
   const r1b = s1.findMatchedRunes("");
   assertStrictEquals(JSON.stringify([...r1b]), `[]`);
