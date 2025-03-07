@@ -172,7 +172,7 @@ class _Uint<T extends safeint> implements RangedInt<T> {
     this.#assert(b, "b");
 
     if (this.BIT_LENGTH < 32) {
-      return ((a & b) & this.MAX_VALUE) as T; //TODO 「& MAX_VALUE」はなんで付けたんだっけ？
+      return ((a & b) & this.MAX_VALUE) as T; //XXX 何故「& MAX_VALUE」を付けたんだっけ？
     } else if (this.BIT_LENGTH === 32) {
       return this.#bitOperateUint32(a, b, _BitOperation.AND) as T;
     }

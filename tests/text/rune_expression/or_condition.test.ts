@@ -122,5 +122,17 @@ Deno.test(" _OrExpression.prototype.isMatch() - not", () => {
   );
 });
 
-//TODO _ComplexExpressionのネスト
-//TODO find～
+Deno.test(" _OrExpression.prototype.findMatchedRunes()", () => {
+  const c2 = RuneExpression.or([
+    RuneExpression.fromScripts(["Latn"]),
+    RuneExpression.fromGeneralCategories(["Ll"]),
+  ]);
+
+  const c2r = c2.findMatchedRunes("tT4uU5");
+  assertStrictEquals(
+    JSON.stringify([...c2r]),
+    `[{"rune":"t","runeIndex":0},{"rune":"T","runeIndex":1},{"rune":"u","runeIndex":3},{"rune":"U","runeIndex":4}]`,
+  );
+});
+
+//XXX _ComplexExpressionのネスト
