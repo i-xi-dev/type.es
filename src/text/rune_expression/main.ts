@@ -40,18 +40,24 @@ export interface RuneExpression {
 
   findMatchedRunes(
     text: usvstring,
-    options?: RuneExpression.FindMatchedRunesOptions,
+    // options?: RuneExpression.FindMatchedRunesOptions,
   ): RuneExpression.FindMatchedRunesResults;
 
   //XXX findGraphemes
 }
 
 abstract class _ExpressionBase implements RuneExpression {
+  protected readonly _not: boolean;
+
+  protected constructor(options?: RuneExpression.Options) {
+    this._not = options?.not === true;
+  }
+
   abstract isMatch(codePointOrRune: codepoint | rune): boolean;
 
   findMatchedRunes(
     text: usvstring,
-    options?: RuneExpression.FindMatchedRunesOptions,
+    // options?: RuneExpression.FindMatchedRunesOptions,
   ): RuneExpression.FindMatchedRunesResults {
     Type.assertUSVString(text, "text");
 
@@ -72,42 +78,38 @@ abstract class _ExpressionBase implements RuneExpression {
 
 class _CodePointExpression extends _ExpressionBase implements RuneExpression {
   readonly #codePointRangeSet: CodePointRangeSet;
-  readonly #negative: boolean;
 
   constructor(
     ranges: Iterable<intrange<codepoint>>,
     options?: RuneExpression.Options,
   ) {
-    super();
+    super(options);
     this.#codePointRangeSet = CodePointRangeSet.fromRanges(ranges);
     if (this.#codePointRangeSet.size < 1) {
       throw new TypeError("`ranges` must have 1 or more ranges.");
     }
-    this.#negative = options?.not === true;
   }
 
   override isMatch(codePointOrRune: codepoint | rune): boolean {
     const { codePoint } = _parse(codePointOrRune);
     const positiveMatched = this.#codePointRangeSet.has(codePoint);
-    return (this.#negative === true) ? !positiveMatched : positiveMatched;
+    return (this._not === true) ? !positiveMatched : positiveMatched;
   }
 }
 
 abstract class _RegexExpressionBase extends _ExpressionBase
   implements RuneExpression {
   readonly #regex: RegExp;
-  readonly #negative: boolean;
 
   protected constructor(regex: RegExp, options?: RuneExpression.Options) {
-    super();
+    super(options);
     this.#regex = regex;
-    this.#negative = options?.not === true;
   }
 
   override isMatch(codePointOrRune: codepoint | rune): boolean {
     const { rune } = _parse(codePointOrRune);
     const positiveMatched = this.#regex.test(rune);
-    return (this.#negative === true) ? !positiveMatched : positiveMatched;
+    return (this._not === true) ? !positiveMatched : positiveMatched;
   }
 }
 
@@ -151,8 +153,11 @@ abstract class _ComplexExpression extends _ExpressionBase
   implements RuneExpression {
   protected readonly _exps: Array<RuneExpression>;
 
-  constructor(expressions: Array<RuneExpression>) {
-    super();
+  constructor(
+    expressions: Array<RuneExpression>,
+    options?: RuneExpression.Options,
+  ) {
+    super(options);
     Type.assertArray(expressions, "expressions");
     if (expressions.length < 1) {
       throw new TypeError("`expressions` must have 1 or more expressions.");
@@ -168,20 +173,24 @@ abstract class _ComplexExpression extends _ExpressionBase
 
 class _AndExpression extends _ComplexExpression implements RuneExpression {
   override isMatch(codePointOrRune: codepoint | rune): boolean {
-    return this._exps.every((expression) =>
+    const positiveMatched = this._exps.every((expression) =>
       expression.isMatch(codePointOrRune)
     );
+    return (this._not === true) ? !positiveMatched : positiveMatched;
   }
 }
 
 class _OrExpression extends _ComplexExpression implements RuneExpression {
   override isMatch(codePointOrRune: codepoint | rune): boolean {
-    return this._exps.some((expression) => expression.isMatch(codePointOrRune));
+    const positiveMatched = this._exps.some((expression) =>
+      expression.isMatch(codePointOrRune)
+    );
+    return (this._not === true) ? !positiveMatched : positiveMatched;
   }
 }
 
 export namespace RuneExpression {
-  export type FindMatchedRunesOptions = {};
+  // export type FindMatchedRunesOptions = {};
 
   // indexesはcharのindexではなく、runeのindex
   export type FindMatchedRunesResult = {
@@ -235,11 +244,17 @@ export namespace RuneExpression {
     return new _GeneralCategoryExpression(gcs, options);
   }
 
-  export function and(expressions: Array<RuneExpression>): RuneExpression {
-    return new _AndExpression(expressions);
+  export function and(
+    expressions: Array<RuneExpression>,
+    options?: Options,
+  ): RuneExpression {
+    return new _AndExpression(expressions, options);
   }
 
-  export function or(expressions: Array<RuneExpression>): RuneExpression {
-    return new _OrExpression(expressions);
+  export function or(
+    expressions: Array<RuneExpression>,
+    options?: Options,
+  ): RuneExpression {
+    return new _OrExpression(expressions, options);
   }
 }
