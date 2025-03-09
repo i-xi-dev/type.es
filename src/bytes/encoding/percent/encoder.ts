@@ -17,7 +17,6 @@ export class PercentEncoder implements Encoder {
    */
   constructor(options?: PercentOptions) {
     this.#options = _resolveOptions(options);
-    Object.freeze(this);
   }
 
   /**

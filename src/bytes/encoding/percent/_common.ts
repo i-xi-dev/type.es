@@ -14,7 +14,7 @@ export type _Options = {
    *
    * @see [https://url.spec.whatwg.org/#percent-encoded-bytes](https://url.spec.whatwg.org/#percent-encoded-bytes)
    */
-  encodeSet?: Readonly<Array<number>>;
+  encodeSet?: Array<number> | Readonly<Array<number>>;
 
   /**
    * Whether to output 0x20 as `"+"`.
@@ -28,6 +28,8 @@ export type _Options = {
 
 /**
  * 未設定項目の存在しないオプション
+ *
+ * Required<_Options>だけでなく、encodeSetをreadonlyにしnumberをuint8に制限
  */
 export type _ResolvedOptions = {
   /**

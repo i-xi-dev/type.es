@@ -22,7 +22,6 @@ export class PercentDecoder implements Decoder {
    */
   constructor(options?: PercentOptions) {
     this.#options = _resolveOptions(options);
-    Object.freeze(this);
   }
 
   /**
