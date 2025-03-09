@@ -36,19 +36,13 @@ export class Size {
 
   constructor(byteCount: safeint | bigint) {
     if (typeof byteCount === "bigint") {
-      if ((byteCount >= 0) && (byteCount <= Number.MAX_SAFE_INTEGER)) {
-        this.#byteCount = Number(byteCount);
-      } else {
-        throw new RangeError("byteCount");
-      }
+      Type.assertNonNegativeBigIntInSafeIntRange(byteCount, "byteCount");
+      this.#byteCount = Number(byteCount);
     } else if (typeof byteCount === "number") {
-      if (Type.isNonNegativeSafeInt(byteCount) === true) {
-        this.#byteCount = byteCount;
-      } else {
-        throw new RangeError("byteCount");
-      }
+      Type.assertNonNegativeSafeInt(byteCount, "byteCount");
+      this.#byteCount = byteCount;
     } else {
-      throw new TypeError("byteCount");
+      throw new TypeError("`byteCount` must be an integer.");
     }
   }
 
@@ -72,12 +66,8 @@ export class Size {
    * @returns The byte count expressed in specified unit.
    */
   to(unit: Unit): number {
-    if (typeof unit === "string") {
-      if (Object.values(Unit).includes(unit) !== true) {
-        throw new RangeError("unit");
-      }
-    } else {
-      throw new TypeError("unit");
+    if (Object.values(Unit).includes(unit) !== true) {
+      throw new TypeError("`unit` is unsupported.");
     }
 
     const lowerUnit = unit.toLowerCase();

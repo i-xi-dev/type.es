@@ -1,7 +1,7 @@
 import { assertStrictEquals, assertThrows } from "@std/assert";
 import { Bytes } from "../../../mod.ts";
 
-Deno.test("new Bytes.Size(number)", () => {
+Deno.test("new Bytes.Size()", () => {
   const bc0 = new Bytes.Size(0);
   assertStrictEquals(bc0.valueOf(), 0);
 
@@ -12,56 +12,52 @@ Deno.test("new Bytes.Size(number)", () => {
     () => {
       new Bytes.Size(1.1);
     },
-    RangeError,
-    "byteCount",
+    TypeError,
+    "`byteCount` must be a non-negative safe integer.",
   );
   assertThrows(
     () => {
       new Bytes.Size(-1);
     },
-    RangeError,
-    "byteCount",
+    TypeError,
+    "`byteCount` must be a non-negative safe integer.",
   );
-});
 
-Deno.test("new Bytes.Size(bigint)", () => {
-  const bc0 = new Bytes.Size(0n);
-  assertStrictEquals(bc0.valueOf(), 0);
+  const bbc0 = new Bytes.Size(0n);
+  assertStrictEquals(bbc0.valueOf(), 0);
 
   assertThrows(
     () => {
       new Bytes.Size(BigInt(Number.MAX_SAFE_INTEGER) + 1n);
     },
-    RangeError,
-    "byteCount",
+    TypeError,
+    "`byteCount` must be a non-negative `bigint` in the safe integer range.",
   );
   assertThrows(
     () => {
       new Bytes.Size(-1n);
     },
-    RangeError,
-    "byteCount",
+    TypeError,
+    "`byteCount` must be a non-negative `bigint` in the safe integer range.",
   );
-});
 
-Deno.test("new Bytes.Size(any)", () => {
   assertThrows(
     () => {
       new Bytes.Size(undefined as unknown as number);
     },
     TypeError,
-    "byteCount",
+    "`byteCount` must be an integer.",
   );
   assertThrows(
     () => {
       new Bytes.Size("1" as unknown as number);
     },
     TypeError,
-    "byteCount",
+    "`byteCount` must be an integer.",
   );
 });
 
-Deno.test("Bytes.Size.prototype.to(string)", () => {
+Deno.test("Bytes.Size.prototype.to()", () => {
   const bc0 = new Bytes.Size(0);
   assertStrictEquals(bc0.to(Bytes.Unit.B), 0);
   assertStrictEquals(bc0.to(Bytes.Unit.KIB), 0);
@@ -89,26 +85,24 @@ Deno.test("Bytes.Size.prototype.to(string)", () => {
     () => {
       bce1.to("" as unknown as Bytes.Unit);
     },
-    RangeError,
-    "unit",
+    TypeError,
+    "`unit` is unsupported.",
   );
   assertThrows(
     () => {
       bce1.to("b" as unknown as Bytes.Unit);
     },
-    RangeError,
-    "unit",
+    TypeError,
+    "`unit` is unsupported.",
   );
-});
 
-Deno.test("Bytes.Size.prototype.to(any)", () => {
-  const bce1 = new Bytes.Size(1);
+  const xbce1 = new Bytes.Size(1);
   assertThrows(
     () => {
-      bce1.to(undefined as unknown as Bytes.Unit);
+      xbce1.to(undefined as unknown as Bytes.Unit);
     },
     TypeError,
-    "unit",
+    "`unit` is unsupported.",
   );
 });
 

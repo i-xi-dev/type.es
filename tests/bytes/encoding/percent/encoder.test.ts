@@ -265,7 +265,7 @@ const x2 = Uint8Array.of(
 const x2b = Array.from(x2, (i) => String.fromCharCode(i)).join("");
 const x2bUtf8 = new TextEncoder().encode(x2b);
 
-Deno.test("Bytes.PercentEncoder.prototype.encode", () => {
+Deno.test("Bytes.PercentEncoder.prototype.encode()", () => {
   const encoder1 = new Bytes.PercentEncoder();
 
   assertStrictEquals(encoder1.encode(Uint8Array.of()), "");
@@ -283,7 +283,7 @@ Deno.test("Bytes.PercentEncoder.prototype.encode", () => {
   assertStrictEquals(encoder1.encode(Uint8Array.of(255)), "%FF");
 });
 
-Deno.test("Bytes.PercentEncoder.prototype.encode - encodeSet", () => {
+Deno.test("Bytes.PercentEncoder.prototype.encode() - encodeSet", () => {
   const encoder2 = new Bytes.PercentEncoder({ encodeSet: [] });
 
   assertStrictEquals(encoder2.encode(Uint8Array.of()), "");
@@ -298,7 +298,7 @@ Deno.test("Bytes.PercentEncoder.prototype.encode - encodeSet", () => {
   assertStrictEquals(encoder2.encode(Uint8Array.of(255)), "%FF");
 });
 
-Deno.test("Bytes.PercentEncoder.prototype.encode - encodeSet", () => {
+Deno.test("Bytes.PercentEncoder.prototype.encode() - encodeSet", () => {
   const encoder3 = new Bytes.PercentEncoder({
     encodeSet: [0x20, 0x22, 0x3C, 0x3E, 0x60],
   });
@@ -307,7 +307,7 @@ Deno.test("Bytes.PercentEncoder.prototype.encode - encodeSet", () => {
   assertStrictEquals(encoder3.encode(utf8Bytes1), "1%00%20!~%7F%E3%81%82+");
 });
 
-Deno.test("Bytes.PercentEncoder.prototype.encode - encodeSet", () => {
+Deno.test("Bytes.PercentEncoder.prototype.encode() - encodeSet", () => {
   const encoder4 = new Bytes.PercentEncoder({
     encodeSet: [
       0x20,
@@ -485,7 +485,7 @@ Deno.test("Bytes.PercentEncoder.prototype.encode - encodeSet", () => {
   );
 });
 
-Deno.test("Bytes.PercentEncoder.prototype.encode - encodeSet:[...],spaceAsPlus:true", () => {
+Deno.test("Bytes.PercentEncoder.prototype.encode() - encodeSet:[...],spaceAsPlus:true", () => {
   const encoder5 = new Bytes.PercentEncoder({
     encodeSet: [
       0x20,
@@ -535,7 +535,7 @@ Deno.test("Bytes.PercentEncoder.prototype.encode - encodeSet:[...],spaceAsPlus:t
   assertStrictEquals(encoder5.encode(x2bUtf8), e);
 });
 
-Deno.test("Bytes.PercentEncoder.prototype.encode - encodeSet:[],spaceAsPlus:true", () => {
+Deno.test("Bytes.PercentEncoder.prototype.encode() - encodeSet:[],spaceAsPlus:true", () => {
   assertThrows(
     () => {
       const encoder6 = new Bytes.PercentEncoder({

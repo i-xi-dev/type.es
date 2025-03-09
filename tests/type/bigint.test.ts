@@ -463,6 +463,8 @@ Deno.test("Type.isBigIntInSafeIntRange()", () => {
     Type.isBigIntInSafeIntRange(BigInt(SIMAX) + 1n),
     false,
   );
+  assertStrictEquals(Type.isBigIntInSafeIntRange(-1n), true);
+  assertStrictEquals(Type.isBigIntInSafeIntRange(1n), true);
 
   assertStrictEquals(Type.isBigIntInSafeIntRange(0), false);
   assertStrictEquals(Type.isBigIntInSafeIntRange(SIMAX), false);
@@ -487,6 +489,61 @@ Deno.test("Type.assertBigIntInSafeIntRange()", () => {
   }
   try {
     Type.assertBigIntInSafeIntRange(BigInt(SIMAX) + 1n, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+});
+
+Deno.test("Type.isNonNegativeBigIntInSafeIntRange()", () => {
+  assertStrictEquals(Type.isNonNegativeBigIntInSafeIntRange(0n), true);
+  assertStrictEquals(
+    Type.isNonNegativeBigIntInSafeIntRange(BigInt(SIMIN)),
+    false,
+  );
+  assertStrictEquals(
+    Type.isNonNegativeBigIntInSafeIntRange(BigInt(SIMIN) - 1n),
+    false,
+  );
+  assertStrictEquals(
+    Type.isNonNegativeBigIntInSafeIntRange(BigInt(SIMAX)),
+    true,
+  );
+  assertStrictEquals(
+    Type.isNonNegativeBigIntInSafeIntRange(BigInt(SIMAX) + 1n),
+    false,
+  );
+  assertStrictEquals(Type.isNonNegativeBigIntInSafeIntRange(-1n), false);
+  assertStrictEquals(Type.isNonNegativeBigIntInSafeIntRange(1n), true);
+
+  assertStrictEquals(Type.isNonNegativeBigIntInSafeIntRange(0), false);
+  assertStrictEquals(Type.isNonNegativeBigIntInSafeIntRange(SIMAX), false);
+  assertStrictEquals(Type.isNonNegativeBigIntInSafeIntRange(SIMAX), false);
+  assertStrictEquals(Type.isNonNegativeBigIntInSafeIntRange("0"), false);
+});
+
+Deno.test("Type.assertNonNegativeBigIntInSafeIntRange()", () => {
+  try {
+    Type.assertNonNegativeBigIntInSafeIntRange(0n, "test-1");
+    Type.assertNonNegativeBigIntInSafeIntRange(BigInt(SIMAX), "test-1");
+  } catch (exception) {
+    fail((exception as Error).toString());
+  }
+
+  try {
+    Type.assertNonNegativeBigIntInSafeIntRange(BigInt(SIMIN), "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+  try {
+    Type.assertNonNegativeBigIntInSafeIntRange(BigInt(SIMIN) - 1n, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+  try {
+    Type.assertNonNegativeBigIntInSafeIntRange(BigInt(SIMAX) + 1n, "test-1");
     unreachable();
   } catch {
     //

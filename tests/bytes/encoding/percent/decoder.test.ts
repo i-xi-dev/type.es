@@ -89,7 +89,7 @@ Deno.test("Bytes.PercentDecoder.prototype.decode()", () => {
   assertStrictEquals(JSON.stringify([...decoded57d]), "[255,102]");
 });
 
-Deno.test("Bytes.PercentDecoder.prototype.decode - spaceAsPlus", () => {
+Deno.test("Bytes.PercentDecoder.prototype.decode() - spaceAsPlus", () => {
   const decoder2 = new Bytes.PercentDecoder({ spaceAsPlus: true });
 
   const decoded11b = decoder2.decode("");
@@ -143,7 +143,7 @@ Deno.test("Bytes.PercentDecoder.prototype.decode - spaceAsPlus", () => {
   );
 });
 
-Deno.test("Bytes.PercentDecoder.prototype.decode - encodeSet", () => {
+Deno.test("Bytes.PercentDecoder.prototype.decode() - encodeSet", () => {
   const decoder3 = new Bytes.PercentDecoder();
   ({
     encodeSet: [

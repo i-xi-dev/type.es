@@ -109,3 +109,20 @@ export function assertBigIntInSafeIntRange(
     );
   }
 }
+
+export function isNonNegativeBigIntInSafeIntRange(
+  test: unknown,
+): test is bigint {
+  return isNonNegativeBigInt(test) && (Number.MAX_SAFE_INTEGER >= test);
+}
+
+export function assertNonNegativeBigIntInSafeIntRange(
+  test: unknown,
+  label: string,
+): void {
+  if (isNonNegativeBigIntInSafeIntRange(test) !== true) {
+    throw new TypeError(
+      `\`${label}\` must be a non-negative \`bigint\` in the safe integer range.`,
+    );
+  }
+}
