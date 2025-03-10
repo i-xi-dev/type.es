@@ -25,7 +25,7 @@ export class PercentEncoder implements Encoder {
    * @param toEncode The byte sequence to encode.
    * @returns A string containing the Percent-encoded characters.
    */
-  encode(toEncode: Uint8Array): string {
+  encode(toEncode: Uint8Array<ArrayBuffer>): string {
     return _encode(toEncode, this.#options);
   }
 }

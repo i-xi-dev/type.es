@@ -22,8 +22,8 @@ interface RangedBigInt<T extends bigint> {
   MAX_VALUE: T;
   BIT_LENGTH: safeint;
   BYTE_LENGTH: safeint;
-  fromBytes(bytes: Uint8Array, byteOrder?: byteorder): T;
-  toBytes(value: T, byteOrder?: byteorder): Uint8Array;
+  fromBytes(bytes: Uint8Array<ArrayBuffer>, byteOrder?: byteorder): T;
+  toBytes(value: T, byteOrder?: byteorder): Uint8Array<ArrayBuffer>;
   bitwiseAnd(a: T, b: T): T;
   bitwiseOr(a: T, b: T): T;
   bitwiseXOr(a: T, b: T): T;
@@ -64,7 +64,7 @@ class _BigUint<T extends bigint> implements RangedBigInt<T> {
   }
 
   fromBytes(
-    bytes: Uint8Array,
+    bytes: Uint8Array<ArrayBuffer>,
     byteOrder: byteorder = ByteOrder.nativeOrder,
   ): T {
     Type.assertUint8Array(bytes, "bytes");
@@ -98,7 +98,10 @@ class _BigUint<T extends bigint> implements RangedBigInt<T> {
     return result as T;
   }
 
-  toBytes(value: T, byteOrder: byteorder = ByteOrder.nativeOrder): Uint8Array {
+  toBytes(
+    value: T,
+    byteOrder: byteorder = ByteOrder.nativeOrder,
+  ): Uint8Array<ArrayBuffer> {
     this.#assert(value, "value");
     Type.assertByteOrder(byteOrder, "byteOrder");
 

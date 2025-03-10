@@ -114,7 +114,7 @@ Deno.test("Uint8Iterable.bytesStartsWith()", () => {
     () => {
       Uint8Iterable.elementsStartsWith(
         [0],
-        undefined as unknown as Uint8Array,
+        undefined as unknown as Uint8Array<ArrayBuffer>,
       );
     },
     TypeError,
@@ -212,7 +212,10 @@ Deno.test("Uint8Iterable.bytesEquals()", () => {
     "`other` must be a `Array<uint8>` or `Uint8Array` or `Uint8ClampedArray`.";
   assertThrows(
     () => {
-      Uint8Iterable.elementsEquals([0], undefined as unknown as Uint8Array);
+      Uint8Iterable.elementsEquals(
+        [0],
+        undefined as unknown as Uint8Array<ArrayBuffer>,
+      );
     },
     TypeError,
     e3,

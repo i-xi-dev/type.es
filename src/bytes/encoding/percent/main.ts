@@ -28,7 +28,7 @@ import { PercentOptions } from "./options.ts";
 export function percentDecode(
   encoded: string,
   options?: PercentOptions,
-): Uint8Array {
+): Uint8Array<ArrayBuffer> {
   const resolvedOptions = _resolveOptions(options);
   return _decode(encoded, resolvedOptions);
 }
@@ -53,7 +53,7 @@ export function percentDecode(
  * ```
  */
 export function percentEncode(
-  toEncode: Uint8Array,
+  toEncode: Uint8Array<ArrayBuffer>,
   options?: PercentOptions,
 ): string {
   const resolvedOptions = _resolveOptions(options);

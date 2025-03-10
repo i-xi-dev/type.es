@@ -7,7 +7,7 @@ const _DEFAULT_SIZE = 1_048_576;
 /** @deprecated */
 export class GrowableBuffer {
   #position: safeint;
-  #buffer: Uint8Array;
+  #buffer: Uint8Array<ArrayBuffer>;
 
   constructor(size: safeint = _DEFAULT_SIZE) {
     this.#position = ExNumber.ZERO;
@@ -48,11 +48,17 @@ export class GrowableBuffer {
     this.#position = this.#position + bytes.byteLength;
   }
 
-  subarray(begin = ExNumber.ZERO, end: safeint = this.#position): Uint8Array {
+  subarray(
+    begin = ExNumber.ZERO,
+    end: safeint = this.#position,
+  ): Uint8Array<ArrayBuffer> {
     return this.#buffer.subarray(begin, end);
   }
 
-  slice(begin = ExNumber.ZERO, end: safeint = this.#position): Uint8Array {
+  slice(
+    begin = ExNumber.ZERO,
+    end: safeint = this.#position,
+  ): Uint8Array<ArrayBuffer> {
     return this.#buffer.slice(begin, end);
   }
 }

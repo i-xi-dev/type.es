@@ -4,8 +4,8 @@ import { ZERO as NUMBER_ZERO } from "../_const/number.ts";
 
 type ArrayLikeOfExpectUint8 =
   | Array<safeint /* uint8 */>
-  | Uint8Array
-  | Uint8ClampedArray; //TODO
+  | Uint8Array<ArrayBuffer>
+  | Uint8ClampedArray<ArrayBuffer>; //TODO
 
 // Uint8SizedIterable
 

@@ -33,8 +33,8 @@ interface RangedInt<T extends safeint> {
   MAX_VALUE: T;
   BIT_LENGTH: safeint;
   BYTE_LENGTH: safeint;
-  fromBytes(bytes: Uint8Array, byteOrder?: byteorder): T;
-  toBytes(value: T, byteOrder?: byteorder): Uint8Array;
+  fromBytes(bytes: Uint8Array<ArrayBuffer>, byteOrder?: byteorder): T;
+  toBytes(value: T, byteOrder?: byteorder): Uint8Array<ArrayBuffer>;
   bitwiseAnd(a: T, b: T): T;
   bitwiseOr(a: T, b: T): T;
   bitwiseXOr(a: T, b: T): T;
@@ -73,8 +73,8 @@ class _Uint<T extends safeint> implements RangedInt<T> {
   readonly #assert: _AFunc;
   readonly #size: safeint;
   readonly #buffer: ArrayBuffer;
-  readonly #view32: Uint32Array;
-  readonly #view8: Uint8Array;
+  readonly #view32: Uint32Array<ArrayBuffer>;
+  readonly #view8: Uint8Array<ArrayBuffer>;
 
   constructor(info: _Info<T>, assert: _AFunc) {
     this.MIN_VALUE = info.MIN_VALUE;
@@ -110,7 +110,7 @@ class _Uint<T extends safeint> implements RangedInt<T> {
   }
 
   fromBytes(
-    bytes: Uint8Array,
+    bytes: Uint8Array<ArrayBuffer>,
     byteOrder: byteorder = ByteOrder.nativeOrder,
   ): T {
     Type.assertUint8Array(bytes, "bytes");
@@ -144,7 +144,10 @@ class _Uint<T extends safeint> implements RangedInt<T> {
     return result as T;
   }
 
-  toBytes(value: T, byteOrder: byteorder = ByteOrder.nativeOrder): Uint8Array {
+  toBytes(
+    value: T,
+    byteOrder: byteorder = ByteOrder.nativeOrder,
+  ): Uint8Array<ArrayBuffer> {
     this.#assert(value, "value");
     Type.assertByteOrder(byteOrder, "byteOrder");
 

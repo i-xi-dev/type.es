@@ -31,7 +31,7 @@ export class PercentDecoder implements Decoder {
    * @returns An `Uint8Array` containing the decoded byte sequence.
    * @throws {TypeError} The `encoded` is not Percent-encoded string.
    */
-  decode(encoded: string): Uint8Array {
+  decode(encoded: string): Uint8Array<ArrayBuffer> {
     return _decode(encoded, this.#options);
   }
 }

@@ -115,7 +115,7 @@ Deno.test("Numerics.BigUint64.fromBytes()", () => {
   const e0 = "`bytes` must be an `Uint8Array`.";
   assertThrows(
     () => {
-      BigUint64.fromBytes([0] as unknown as Uint8Array);
+      BigUint64.fromBytes([0] as unknown as Uint8Array<ArrayBuffer>);
     },
     TypeError,
     e0,

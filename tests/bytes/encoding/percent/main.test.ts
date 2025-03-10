@@ -2,7 +2,7 @@ import { assertStrictEquals, assertThrows } from "@std/assert";
 import { Bytes } from "../../../../mod.ts";
 
 const utf8 = new TextEncoder();
-const utf8Bytes1 = utf8.encode("1\u{0} !~\u{7F}あ+");
+const utf8Bytes1 = utf8.encode("1\u{0} !~\u{7F}あ+") as Uint8Array<ArrayBuffer>;
 
 Deno.test("Bytes.percentDecode()", () => {
   const decodedA11 = Bytes.percentDecode("");
@@ -532,7 +532,7 @@ const x2 = Uint8Array.of(
   255,
 );
 const x2b = Array.from(x2, (i) => String.fromCharCode(i)).join("");
-const x2bUtf8 = new TextEncoder().encode(x2b);
+const x2bUtf8 = new TextEncoder().encode(x2b) as Uint8Array<ArrayBuffer>;
 
 Deno.test("Bytes.percentEncode()", () => {
   assertStrictEquals(Bytes.percentEncode(Uint8Array.of()), "");

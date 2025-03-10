@@ -291,7 +291,7 @@ export const _FORM_URLENCODED_OPTIONS: _ResolvedOptions = Object.freeze({
 export function _decode(
   encoded: string,
   options: _ResolvedOptions,
-): Uint8Array {
+): Uint8Array<ArrayBuffer> {
   if (/^[\u0020-\u007E]*$/.test(encoded) !== true) {
     throw new TypeError(
       "`encoded` must be a string consisting of only U+0020 through U+007E.",
@@ -359,7 +359,7 @@ function _isByteIncludedInEncodeSet(
  * @param bytes バイト
  * @returns "%XX"の形の文字列
  */
-function _formatByte(bytes: Uint8Array): string {
+function _formatByte(bytes: Uint8Array<ArrayBuffer>): string {
   const byteStringArray = [...bytes].map((byte) => {
     return "%" + byte.toString(16).toUpperCase().padStart(2, "0");
   });
@@ -379,7 +379,7 @@ function _formatByte(bytes: Uint8Array): string {
  * @returns パーセント符号化された文字列
  */
 export function _encode(
-  toEncode: Uint8Array,
+  toEncode: Uint8Array<ArrayBuffer>,
   options: _ResolvedOptions,
 ): string {
   let work: Array<uint8> = [];

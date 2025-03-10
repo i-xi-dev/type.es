@@ -8,12 +8,15 @@ import * as Type from "../../type/mod.ts";
  * @returns A string that represents a byte sequence by the code point.
  */
 export function decode(input: BufferSource): string {
-  let bytes: Uint8Array;
+  let bytes: Uint8Array<ArrayBuffer> | undefined;
   if (ArrayBuffer.isView(input)) {
-    bytes = new Uint8Array(input.buffer);
+    if (input.buffer instanceof ArrayBuffer) {
+      bytes = new Uint8Array(input.buffer as ArrayBuffer);
+    }
   } else if (input instanceof ArrayBuffer) {
     bytes = new Uint8Array(input);
-  } else {
+  }
+  if (!bytes) {
     throw new TypeError("`input` must be a `BufferSource`.");
   }
 
@@ -37,7 +40,7 @@ export function decode(input: BufferSource): string {
  * @param input A string that does not contain code points greater than `U+00FF`.
  * @returns A byte sequence of isomorphic encoded `input`.
  */
-export function encode(input: string): Uint8Array {
+export function encode(input: string): Uint8Array<ArrayBuffer> {
   Type.assertString(input, "input");
 
   // deno-lint-ignore no-control-regex

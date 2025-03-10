@@ -8,7 +8,7 @@ export interface Decoder {
    * @param encoded An encoded string to decode.
    * @returns A decoded byte sequence.
    */
-  decode(encoded: string): Uint8Array;
+  decode(encoded: string): Uint8Array<ArrayBuffer>;
 }
 
 /**
@@ -21,7 +21,7 @@ export interface Encoder {
    * @param toEncode A byte sequence to encode.
    * @returns An encoded string.
    */
-  encode(toEncode: Uint8Array): string;
+  encode(toEncode: Uint8Array<ArrayBuffer>): string;
 }
 
 export interface DecoderStreamRegulator {
@@ -33,11 +33,11 @@ export interface DecoderStreamRegulator {
  * The `BytesEncoding.DecoderStream` converts a stream of string into byte sequence.
  */
 export abstract class DecoderStream
-  implements TransformStream<string, Uint8Array> {
-  readonly #stream: TransformStream<string, Uint8Array>;
+  implements TransformStream<string, Uint8Array<ArrayBuffer>> {
+  readonly #stream: TransformStream<string, Uint8Array<ArrayBuffer>>;
 
   constructor(decoder: Decoder, regulator: DecoderStreamRegulator) {
-    this.#stream = new TransformStream<string, Uint8Array>(
+    this.#stream = new TransformStream<string, Uint8Array<ArrayBuffer>>(
       DecoderStream._createTransformer(decoder, regulator),
     );
   }
@@ -45,11 +45,11 @@ export abstract class DecoderStream
   protected static _createTransformer(
     decoder: Decoder,
     regulator: DecoderStreamRegulator,
-  ): Transformer<string, Uint8Array> {
+  ): Transformer<string, Uint8Array<ArrayBuffer>> {
     return {
       transform(
         chunk: string,
-        controller: TransformStreamDefaultController<Uint8Array>,
+        controller: TransformStreamDefaultController<Uint8Array<ArrayBuffer>>,
       ): void {
         try {
           const toDecode = regulator.regulate(chunk);
@@ -59,7 +59,9 @@ export abstract class DecoderStream
           controller.error(exception);
         }
       },
-      flush(controller: TransformStreamDefaultController<Uint8Array>): void {
+      flush(
+        controller: TransformStreamDefaultController<Uint8Array<ArrayBuffer>>,
+      ): void {
         try {
           const toDecode = regulator.flush();
           if (toDecode.length > 0) {
@@ -83,25 +85,25 @@ export abstract class DecoderStream
   /**
    * @see [TransformStream.readable](https://developer.mozilla.org/en-US/docs/Web/API/TransformStream/readable)
    */
-  get readable(): ReadableStream<Uint8Array> {
+  get readable(): ReadableStream<Uint8Array<ArrayBuffer>> {
     return this.#stream.readable;
   }
 }
 
 export interface EncoderStreamRegulator {
-  regulate(chunk: Uint8Array): Uint8Array;
-  flush(): Uint8Array;
+  regulate(chunk: Uint8Array<ArrayBuffer>): Uint8Array<ArrayBuffer>;
+  flush(): Uint8Array<ArrayBuffer>;
 }
 
 /**
  * The `BytesEncoding.EncoderStream` converts a stream of byte sequence into string.
  */
 export abstract class EncoderStream
-  implements TransformStream<Uint8Array, string> {
-  readonly #stream: TransformStream<Uint8Array, string>;
+  implements TransformStream<Uint8Array<ArrayBuffer>, string> {
+  readonly #stream: TransformStream<Uint8Array<ArrayBuffer>, string>;
 
   constructor(encoder: Encoder, regulator: EncoderStreamRegulator) {
-    this.#stream = new TransformStream<Uint8Array, string>(
+    this.#stream = new TransformStream<Uint8Array<ArrayBuffer>, string>(
       EncoderStream._createTransformer(encoder, regulator),
     );
   }
@@ -109,10 +111,10 @@ export abstract class EncoderStream
   protected static _createTransformer(
     encoder: Encoder,
     regulator: EncoderStreamRegulator,
-  ): Transformer<Uint8Array, string> {
+  ): Transformer<Uint8Array<ArrayBuffer>, string> {
     return {
       transform(
-        chunk: Uint8Array,
+        chunk: Uint8Array<ArrayBuffer>,
         controller: TransformStreamDefaultController<string>,
       ): void {
         try {
@@ -140,7 +142,7 @@ export abstract class EncoderStream
   /**
    * @see [TransformStream.writable](https://developer.mozilla.org/en-US/docs/Web/API/TransformStream/writable)
    */
-  get writable(): WritableStream<Uint8Array> {
+  get writable(): WritableStream<Uint8Array<ArrayBuffer>> {
     return this.#stream.writable;
   }
 

@@ -12,3 +12,5 @@ export * as Type from "./src/type/mod.ts";
 export * from "./src/__2/growable_buffer.ts";
 export * as Uint8Iterable from "./src/__2/uint8_iterable.ts";
 export * as xText from "./src/__text/mod.ts";
+
+//TODO shareadarraybufferは一旦は一旦対象外にした
