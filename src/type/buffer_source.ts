@@ -39,6 +39,20 @@ export function assertUint8Array(test: unknown, label: string): void {
   }
 }
 
+export function isUint8ClampedArray(
+  test: unknown,
+): test is Uint8ClampedArray<ArrayBuffer> {
+  return (test instanceof Uint8ClampedArray) && isArrayBuffer(test.buffer);
+}
+
+export function assertUint8ClampedArray(test: unknown, label: string): void {
+  if (isUint8ClampedArray(test) !== true) {
+    throw new TypeError(
+      `\`${label}\` must be an \`Uint8ClampedArray<ArrayBuffer>\`.`,
+    );
+  }
+}
+
 //XXX isSharedUint8Array, assertSharedUint8Array
 
 export function isAllowSharedUint8Array(

@@ -98,6 +98,7 @@ Deno.test("Type.isUint8Array()", () => {
   );
   assertStrictEquals(Type.isUint8Array(Uint8Array.of(0).buffer), false);
   assertStrictEquals(Type.isUint8Array(new Uint8Array(0)), true);
+  assertStrictEquals(Type.isUint8Array(new Uint8ClampedArray(0)), false);
   assertStrictEquals(Type.isUint8Array([]), false);
   assertStrictEquals(Type.isUint8Array(null), false);
   assertStrictEquals(Type.isUint8Array(undefined), false);
@@ -119,6 +120,49 @@ Deno.test("Type.assertUint8Array()", () => {
   }
   try {
     Type.assertUint8Array(null, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+});
+
+Deno.test("Type.isUint8ClampedArray()", () => {
+  assertStrictEquals(Type.isUint8ClampedArray(new ArrayBuffer(0)), false);
+  assertStrictEquals(
+    Type.isUint8ClampedArray(new Uint8Array(new SharedArrayBuffer(0))),
+    false,
+  );
+  assertStrictEquals(Type.isUint8ClampedArray(Uint8Array.of(0).buffer), false);
+  assertStrictEquals(Type.isUint8ClampedArray(new Uint8Array(0)), false);
+  assertStrictEquals(Type.isUint8ClampedArray(new Uint8ClampedArray(0)), true);
+  assertStrictEquals(
+    Type.isUint8ClampedArray(new Uint8ClampedArray(new SharedArrayBuffer(0))),
+    false,
+  );
+  assertStrictEquals(Type.isUint8ClampedArray([]), false);
+  assertStrictEquals(Type.isUint8ClampedArray(null), false);
+  assertStrictEquals(Type.isUint8ClampedArray(undefined), false);
+});
+
+Deno.test("Type.assertUint8ClampedArray()", () => {
+  try {
+    Type.assertUint8ClampedArray(new Uint8ClampedArray(0), "test-1");
+    Type.assertUint8ClampedArray(Uint8ClampedArray.of(0), "test-1");
+  } catch (exception) {
+    fail((exception as Error).toString());
+  }
+
+  try {
+    Type.assertUint8ClampedArray(
+      new Uint8ClampedArray(new SharedArrayBuffer(0)),
+      "test-1",
+    );
+    unreachable();
+  } catch {
+    //
+  }
+  try {
+    Type.assertUint8ClampedArray(null, "test-1");
     unreachable();
   } catch {
     //

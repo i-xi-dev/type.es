@@ -109,7 +109,7 @@ Deno.test("Uint8Iterable.bytesStartsWith()", () => {
   );
 
   const e3 =
-    "`other` must be a `Array<uint8>` or `Uint8Array` or `Uint8ClampedArray`.";
+    "`other` must be a `Array<uint8>` or `Uint8Array<ArrayBuffer>` or `Uint8ClampedArray<ArrayBuffer>`.";
   assertThrows(
     () => {
       Uint8Iterable.elementsStartsWith(
@@ -209,7 +209,7 @@ Deno.test("Uint8Iterable.bytesEquals()", () => {
   );
 
   const e3 =
-    "`other` must be a `Array<uint8>` or `Uint8Array` or `Uint8ClampedArray`.";
+    "`other` must be a `Array<uint8>` or `Uint8Array<ArrayBuffer>` or `Uint8ClampedArray<ArrayBuffer>`.";
   assertThrows(
     () => {
       Uint8Iterable.elementsEquals(
