@@ -6,8 +6,6 @@ import {
   type uint8,
 } from "../../_typedef/mod.ts";
 
-//TODO throw確認
-
 /*XXX
 - text-encoding-$03
   Encoding Standardでコピーは強く推奨しないとされてるが、どうすべきか
@@ -15,7 +13,7 @@ import {
   一旦、SharedArrayBufferは弾くか
 */
 
-export const BOM = "\u{FEFF}";
+export const _BOM = "\u{FEFF}";
 
 const _ErrorMode = {
   EXCEPTION: Symbol("EXCEPTION"),
@@ -109,20 +107,20 @@ class _DecoderCommon extends _CoderCommon {
     removeBOM: boolean,
     inStreaming: boolean,
     previousPendingBytes: Array<uint8>,
-    srcBufferLike?: BufferSource,
+    srcBufferSource?: BufferSource,
   ): _DecoderDecodeResult {
     let srcBuffer: ArrayBuffer | undefined;
-    if (srcBufferLike === undefined) {
+    if (srcBufferSource === undefined) {
       srcBuffer = new ArrayBuffer(0); // TextDecoderにあわせた(つもり)
-    } else if (ArrayBuffer.isView(srcBufferLike)) {
-      if (srcBufferLike.buffer instanceof ArrayBuffer) {
-        srcBuffer = srcBufferLike.buffer;
-      }
-    } else if (srcBufferLike instanceof ArrayBuffer) {
-      srcBuffer = srcBufferLike;
+    } else if (Type.isArrayBufferView(srcBufferSource)) {
+      srcBuffer = srcBufferSource.buffer;
+    } else if (srcBufferSource instanceof ArrayBuffer) {
+      srcBuffer = srcBufferSource;
     }
+
+    // Type.assertArrayBuffer(srcBuffer, "");
     if (!srcBuffer) {
-      throw new TypeError("input");
+      throw new TypeError("`input` must be a `BufferSource`.");
     }
 
     const buffer = new ArrayBuffer(
@@ -148,7 +146,7 @@ class _DecoderCommon extends _CoderCommon {
     );
 
     let writtenRunesAsString: string;
-    if ((removeBOM === true) && (runes[0] === BOM)) {
+    if ((removeBOM === true) && (runes[0] === _BOM)) {
       writtenRunesAsString = runes.slice(1).join("");
     } else {
       writtenRunesAsString = runes.join("");
@@ -237,9 +235,7 @@ class _EncoderCommon extends _CoderCommon {
     dstBuffer?: ArrayBuffer,
   ): _EncoderEncodeResult {
     if (this.#strict === true) {
-      if (Type.isString(srcRunesAsString) !== true) {
-        throw new TypeError("srcRunesAsString");
-      }
+      Type.assertString(srcRunesAsString, "input");
     }
 
     const dstBufferSpecified = !!dstBuffer;
@@ -250,9 +246,9 @@ class _EncoderCommon extends _CoderCommon {
 
     if (
       (prependBOM === true) &&
-      (runesAsString.startsWith(BOM) !== true)
+      (runesAsString.startsWith(_BOM) !== true)
     ) {
-      runesAsString = BOM + runesAsString;
+      runesAsString = _BOM + runesAsString;
     } else {
       runesAsString = previousPendingChar + runesAsString;
     }
@@ -469,10 +465,7 @@ export abstract class Encoder /* implements TextEncoder (encodingが"utf-8"で�
     source: string,
     destination: Uint8Array<ArrayBuffer>,
   ): TextEncoderEncodeIntoResult {
-    if ((destination instanceof Uint8Array) !== true) {
-      // Uint8Array以外のArrayBufferViewやArrayBufferとかも受け付けない
-      throw new TypeError("destination");
-    }
+    Type.assertUint8Array(destination, "destination");
 
     const { readCharCount, writtenByteCount } = this.#common.encode(
       this.prependBOM,
