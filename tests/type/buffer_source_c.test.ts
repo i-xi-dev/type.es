@@ -3,6 +3,7 @@ import { Type } from "../../mod.ts";
 
 Deno.test("Type.isArrayBuffer()", () => {
   assertStrictEquals(Type.isArrayBuffer(new ArrayBuffer(0)), true);
+  assertStrictEquals(Type.isArrayBuffer(new SharedArrayBuffer(0)), false);
   assertStrictEquals(Type.isArrayBuffer(Uint8Array.of(0).buffer), true);
   assertStrictEquals(Type.isArrayBuffer(new Uint8Array(0)), false);
   assertStrictEquals(Type.isArrayBuffer([]), false);
@@ -26,6 +27,63 @@ Deno.test("Type.assertArrayBuffer()", () => {
   }
   try {
     Type.assertArrayBuffer(null, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+});
+
+Deno.test("Type.isSharedArrayBuffer()", () => {
+  assertStrictEquals(Type.isSharedArrayBuffer(new ArrayBuffer(0)), false);
+  assertStrictEquals(Type.isSharedArrayBuffer(new SharedArrayBuffer(0)), true);
+  assertStrictEquals(Type.isSharedArrayBuffer(Uint8Array.of(0).buffer), false);
+  assertStrictEquals(Type.isSharedArrayBuffer(new Uint8Array(0)), false);
+  assertStrictEquals(Type.isSharedArrayBuffer([]), false);
+  assertStrictEquals(Type.isSharedArrayBuffer(null), false);
+  assertStrictEquals(Type.isSharedArrayBuffer(undefined), false);
+});
+
+Deno.test("Type.assertSharedArrayBuffer()", () => {
+  try {
+    Type.assertSharedArrayBuffer(new SharedArrayBuffer(0), "test-1");
+  } catch (exception) {
+    fail((exception as Error).toString());
+  }
+
+  try {
+    Type.assertSharedArrayBuffer(new ArrayBuffer(0), "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+  try {
+    Type.assertSharedArrayBuffer(null, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+});
+
+Deno.test("Type.isArrayBufferLike()", () => {
+  assertStrictEquals(Type.isArrayBufferLike(new ArrayBuffer(0)), true);
+  assertStrictEquals(Type.isArrayBufferLike(new SharedArrayBuffer(0)), true);
+  assertStrictEquals(Type.isArrayBufferLike(Uint8Array.of(0).buffer), true);
+  assertStrictEquals(Type.isArrayBufferLike(new Uint8Array(0)), false);
+  assertStrictEquals(Type.isArrayBufferLike([]), false);
+  assertStrictEquals(Type.isArrayBufferLike(null), false);
+  assertStrictEquals(Type.isArrayBufferLike(undefined), false);
+});
+
+Deno.test("Type.assertArrayBufferLike()", () => {
+  try {
+    Type.assertArrayBufferLike(new ArrayBuffer(0), "test-1");
+    Type.assertArrayBufferLike(new SharedArrayBuffer(0), "test-1");
+  } catch (exception) {
+    fail((exception as Error).toString());
+  }
+
+  try {
+    Type.assertArrayBufferLike(null, "test-1");
     unreachable();
   } catch {
     //

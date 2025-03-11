@@ -8,6 +8,27 @@ export function assertArrayBuffer(test: unknown, label: string): void {
   }
 }
 
+export function isSharedArrayBuffer(test: unknown): test is SharedArrayBuffer {
+  // (globalThis.SharedArrayBuffer)は、ブラウザー向け
+  return globalThis.SharedArrayBuffer && (test instanceof SharedArrayBuffer);
+}
+
+export function assertSharedArrayBuffer(test: unknown, label: string): void {
+  if (isSharedArrayBuffer(test) !== true) {
+    throw new TypeError(`\`${label}\` must be an \`SharedArrayBuffer\`.`);
+  }
+}
+
+export function isArrayBufferLike(test: unknown): test is ArrayBufferLike {
+  return isArrayBuffer(test) || isSharedArrayBuffer(test);
+}
+
+export function assertArrayBufferLike(test: unknown, label: string): void {
+  if (isArrayBufferLike(test) !== true) {
+    throw new TypeError(`\`${label}\` must be an \`ArrayBufferLike\`.`);
+  }
+}
+
 export function isUint8Array(test: unknown): test is Uint8Array {
   return (test instanceof Uint8Array);
 }
