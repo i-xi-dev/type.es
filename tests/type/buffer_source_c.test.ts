@@ -92,6 +92,10 @@ Deno.test("Type.assertArrayBufferLike()", () => {
 
 Deno.test("Type.isUint8Array()", () => {
   assertStrictEquals(Type.isUint8Array(new ArrayBuffer(0)), false);
+  assertStrictEquals(
+    Type.isUint8Array(new Uint8Array(new SharedArrayBuffer(0))),
+    false,
+  );
   assertStrictEquals(Type.isUint8Array(Uint8Array.of(0).buffer), false);
   assertStrictEquals(Type.isUint8Array(new Uint8Array(0)), true);
   assertStrictEquals(Type.isUint8Array([]), false);
@@ -115,6 +119,48 @@ Deno.test("Type.assertUint8Array()", () => {
   }
   try {
     Type.assertUint8Array(null, "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+});
+
+Deno.test("Type.isAllowSharedUint8Array()", () => {
+  assertStrictEquals(Type.isAllowSharedUint8Array(new ArrayBuffer(0)), false);
+  assertStrictEquals(
+    Type.isAllowSharedUint8Array(new Uint8Array(new SharedArrayBuffer(0))),
+    true,
+  );
+  assertStrictEquals(
+    Type.isAllowSharedUint8Array(Uint8Array.of(0).buffer),
+    false,
+  );
+  assertStrictEquals(Type.isAllowSharedUint8Array(new Uint8Array(0)), true);
+  assertStrictEquals(Type.isAllowSharedUint8Array([]), false);
+  assertStrictEquals(Type.isAllowSharedUint8Array(null), false);
+  assertStrictEquals(Type.isAllowSharedUint8Array(undefined), false);
+});
+
+Deno.test("Type.assertAllowSharedUint8Array()", () => {
+  try {
+    Type.assertAllowSharedUint8Array(new Uint8Array(0), "test-1");
+    Type.assertAllowSharedUint8Array(
+      new Uint8Array(new SharedArrayBuffer(0)),
+      "test-1",
+    );
+    Type.assertAllowSharedUint8Array(Uint8Array.of(0), "test-1");
+  } catch (exception) {
+    fail((exception as Error).toString());
+  }
+
+  try {
+    Type.assertAllowSharedUint8Array(new ArrayBuffer(0), "test-1");
+    unreachable();
+  } catch {
+    //
+  }
+  try {
+    Type.assertAllowSharedUint8Array(null, "test-1");
     unreachable();
   } catch {
     //

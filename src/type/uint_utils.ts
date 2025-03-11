@@ -16,6 +16,7 @@ type ArrayOrTypedArrayOfUint8 =
   | Uint8Array
   | Uint8ClampedArray;
 
+//TODO AllowSharedで良いのか？
 export function isArrayOrTypedArrayOfUint8(
   test: unknown,
 ): test is ArrayOrTypedArrayOfUint8 {

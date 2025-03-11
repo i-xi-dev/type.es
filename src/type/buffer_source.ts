@@ -29,18 +29,51 @@ export function assertArrayBufferLike(test: unknown, label: string): void {
   }
 }
 
-export function isUint8Array(test: unknown): test is Uint8Array {
-  return (test instanceof Uint8Array);
+export function isUint8Array(test: unknown): test is Uint8Array<ArrayBuffer> {
+  return (test instanceof Uint8Array) && isArrayBuffer(test.buffer);
 }
 
 export function assertUint8Array(test: unknown, label: string): void {
   if (isUint8Array(test) !== true) {
+    throw new TypeError(`\`${label}\` must be an \`Uint8Array<ArrayBuffer>\`.`);
+  }
+}
+
+//XXX isSharedUint8Array, assertSharedUint8Array
+
+export function isAllowSharedUint8Array(
+  test: unknown,
+): test is Uint8Array<ArrayBufferLike> {
+  return (test instanceof Uint8Array);
+}
+
+export function assertAllowSharedUint8Array(
+  test: unknown,
+  label: string,
+): void {
+  if (isAllowSharedUint8Array(test) !== true) {
     throw new TypeError(`\`${label}\` must be an \`Uint8Array\`.`);
   }
 }
 
+export function isArrayBufferView(
+  test: unknown,
+): test is ArrayBufferView<ArrayBuffer> {
+  return ArrayBuffer.isView(test) && (test.buffer instanceof ArrayBuffer);
+}
+
+export function assertArrayBufferView(test: unknown, label: string): void {
+  if (isArrayBufferView(test) !== true) {
+    throw new TypeError(
+      `\`${label}\` must be an \`ArrayBufferView<ArrayBuffer>\`.`,
+    );
+  }
+}
+
+//XXX isAllowSharedArrayBufferView, assertAllowSharedArrayBufferView
+
 export function isBufferSource(test: unknown): test is BufferSource {
-  return (test instanceof ArrayBuffer) || ArrayBuffer.isView(test);
+  return isArrayBuffer(test) || isArrayBufferView(test);
 }
 
 export function assertBufferSource(test: unknown, label: string): void {
@@ -49,13 +82,8 @@ export function assertBufferSource(test: unknown, label: string): void {
   }
 }
 
-// isArrayBufferView → ArrayBuffer.isView
+//XXX isAllowSharedBufferSource, assertAllowSharedBufferSource
 
-export function assertArrayBufferView(test: unknown, label: string): void {
-  if (ArrayBuffer.isView(test) !== true) {
-    throw new TypeError(`\`${label}\` must be an \`ArrayBufferView\`.`);
-  }
-}
 // export type ArrayBufferViewConstructor =
 //   | TypedArrayConstructor
 //   | DataViewConstructor;

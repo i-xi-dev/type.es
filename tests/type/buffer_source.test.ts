@@ -38,6 +38,21 @@ Deno.test("Type.assertBufferSource()", () => {
   }
 });
 
+Deno.test("Type.isArrayBufferView()", () => {
+  assertStrictEquals(Type.isArrayBufferView(new ArrayBuffer(0)), false);
+  assertStrictEquals(Type.isArrayBufferView(new SharedArrayBuffer(0)), false);
+  assertStrictEquals(Type.isArrayBufferView(new Uint8Array(0)), true);
+  assertStrictEquals(
+    Type.isArrayBufferView(new Uint8Array(new ArrayBuffer(0))),
+    true,
+  );
+  assertStrictEquals(
+    Type.isArrayBufferView(new Uint8Array(new SharedArrayBuffer(0))),
+    false,
+  );
+  assertStrictEquals(Type.isArrayBufferView(null), false);
+});
+
 Deno.test("Type.assertArrayBufferView()", () => {
   try {
     Type.assertArrayBufferView(new Uint8Array(0), "test-1");

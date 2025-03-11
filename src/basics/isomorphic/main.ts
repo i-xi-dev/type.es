@@ -9,10 +9,8 @@ import * as Type from "../../type/mod.ts";
  */
 export function decode(input: BufferSource): string {
   let bytes: Uint8Array<ArrayBuffer> | undefined;
-  if (ArrayBuffer.isView(input)) {
-    if (input.buffer instanceof ArrayBuffer) {
-      bytes = new Uint8Array(input.buffer as ArrayBuffer);
-    }
+  if (Type.isArrayBufferView(input)) {
+    bytes = new Uint8Array(input.buffer as ArrayBuffer);
   } else if (input instanceof ArrayBuffer) {
     bytes = new Uint8Array(input);
   }

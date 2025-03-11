@@ -31,7 +31,7 @@ Deno.test("Numerics.Uint6.fromBytes()", () => {
   assertStrictEquals(Uint6.fromBytes(Uint8Array.of(0x3F), be), 0x3F);
   assertStrictEquals(Uint6.fromBytes(Uint8Array.of(0x3F), le), 0x3F);
 
-  const e0 = "`bytes` must be an `Uint8Array`.";
+  const e0 = "`bytes` must be an `Uint8Array<ArrayBuffer>`.";
   assertThrows(
     () => {
       Uint6.fromBytes([0] as unknown as Uint8Array<ArrayBuffer>);
