@@ -15,6 +15,8 @@ export type Utf32DecoderOptions = {
   // strict?: boolean;
 };
 
+//XXX 必要？BOMでBEかLEか判断する版
+
 /** @deprecated */
 export class Utf32BeDecoder extends Decoder {
   constructor(options: Utf32DecoderOptions = {}) {
