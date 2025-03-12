@@ -9,7 +9,7 @@ import {
 } from "./_common.ts";
 import { Encoder, EncoderStream } from "../main.ts";
 
-export type Utf16EncoderOptions = {
+export type Utf32EncoderOptions = {
   fatal?: boolean;
   prependBOM?: boolean;
   strict?: boolean;
@@ -18,8 +18,8 @@ export type Utf16EncoderOptions = {
 //XXX 必要？プラットフォームのバイトオーダーでエンコード
 
 /** @deprecated */
-export class Utf16BeEncoder extends Encoder {
-  constructor(options: Utf16EncoderOptions = {}) {
+export class Utf32BeEncoder extends Encoder {
+  constructor(options: Utf32EncoderOptions = {}) {
     super({
       name: _BE_LABEL,
       fatal: options?.fatal === true,
@@ -33,8 +33,8 @@ export class Utf16BeEncoder extends Encoder {
 }
 
 /** @deprecated */
-export class Utf16BeEncoderStream extends EncoderStream {
-  constructor(options: Utf16EncoderOptions = {}) {
+export class Utf32BeEncoderStream extends EncoderStream {
+  constructor(options: Utf32EncoderOptions = {}) {
     super({
       name: _BE_LABEL,
       fatal: options?.fatal === true,
@@ -47,13 +47,13 @@ export class Utf16BeEncoderStream extends EncoderStream {
   }
 
   get [Symbol.toStringTag](): string {
-    return "Utf16BeEncoderStream";
+    return "Utf32BeEncoderStream";
   }
 }
 
 /** @deprecated */
-export class Utf16LeEncoder extends Encoder {
-  constructor(options: Utf16EncoderOptions = {}) {
+export class Utf32LeEncoder extends Encoder {
+  constructor(options: Utf32EncoderOptions = {}) {
     super({
       name: _LE_LABEL,
       fatal: options?.fatal === true,
@@ -67,8 +67,8 @@ export class Utf16LeEncoder extends Encoder {
 }
 
 /** @deprecated */
-export class Utf16LeEncoderStream extends EncoderStream {
-  constructor(options: Utf16EncoderOptions = {}) {
+export class Utf32LeEncoderStream extends EncoderStream {
+  constructor(options: Utf32EncoderOptions = {}) {
     super({
       name: _LE_LABEL,
       fatal: options?.fatal === true,
@@ -81,6 +81,6 @@ export class Utf16LeEncoderStream extends EncoderStream {
   }
 
   get [Symbol.toStringTag](): string {
-    return "Utf16LeEncoderStream";
+    return "Utf32LeEncoderStream";
   }
 }
