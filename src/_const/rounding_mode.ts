@@ -1,5 +1,7 @@
 /* : roundingmode */
 
+//XXX TemporalのroundingModeによせる？
+
 export const UP = "up"; // TOWARD_POSITIVE_INFINITY
 
 export const DOWN = "down"; // TOWARD_NEGATIVE_INFINITY
