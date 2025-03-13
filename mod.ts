@@ -6,6 +6,7 @@ export * as Events from "./src/events/mod.ts";
 export * as I18n from "./src/i18n/mod.ts";
 export * as Numerics from "./src/numerics/mod.ts";
 export * as Text from "./src/text/mod.ts";
+export * as Time from "./src/time/mod.ts";
 export * as Type from "./src/type/mod.ts";
 
 //TODO
