@@ -1,2 +1,1 @@
-// export * as Duration from "./duration/mod.ts";
-export * as Milliseconds from "./duration/millis/mod.ts";
+export * from "./duration/mod.ts";

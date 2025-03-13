@@ -1,5 +1,5 @@
 import { assertStrictEquals, assertThrows } from "@std/assert";
-import { Time } from "../../../../mod.ts";
+import { Time } from "../../../mod.ts";
 
 const { Milliseconds } = Time;
 
@@ -135,6 +135,52 @@ Deno.test("Time.Milliseconds.toHours()", () => {
   assertThrows(
     () => {
       Milliseconds.toHours("1" as unknown as number);
+    },
+    TypeError,
+    "`millis` must be a finite `number`.",
+  );
+});
+
+Deno.test("Time.Milliseconds.ofDays()", () => {
+  assertStrictEquals(Milliseconds.ofDays(-1), -86400000);
+  assertStrictEquals(Milliseconds.ofDays(-0), 0);
+  assertStrictEquals(Milliseconds.ofDays(0), 0);
+  assertStrictEquals(Milliseconds.ofDays(1), 86400000);
+  assertStrictEquals(Milliseconds.ofDays(1.5), 129600000);
+
+  assertThrows(
+    () => {
+      Milliseconds.ofDays(Number.NaN);
+    },
+    TypeError,
+    "`days` must be a finite `number`.",
+  );
+  assertThrows(
+    () => {
+      Milliseconds.ofDays("1" as unknown as number);
+    },
+    TypeError,
+    "`days` must be a finite `number`.",
+  );
+});
+
+Deno.test("Time.Milliseconds.toDays()", () => {
+  assertStrictEquals(Milliseconds.toDays(-86400000), -1);
+  assertStrictEquals(Milliseconds.toDays(-0), 0);
+  assertStrictEquals(Milliseconds.toDays(0), 0);
+  assertStrictEquals(Milliseconds.toDays(86400000), 1);
+  assertStrictEquals(Milliseconds.toDays(129600000), 1.5);
+
+  assertThrows(
+    () => {
+      Milliseconds.toDays(Number.NaN);
+    },
+    TypeError,
+    "`millis` must be a finite `number`.",
+  );
+  assertThrows(
+    () => {
+      Milliseconds.toDays("1" as unknown as number);
     },
     TypeError,
     "`millis` must be a finite `number`.",

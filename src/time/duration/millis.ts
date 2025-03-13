@@ -1,11 +1,13 @@
-import * as Type from "../../../type/mod.ts";
-import { Number as ExNumber } from "../../../numerics/mod.ts";
+import * as Type from "../../type/mod.ts";
+import { Number as ExNumber } from "../../numerics/mod.ts";
 
 const _SECOND = 1_000;
 
 const _MINUTE = 60_000;
 
 const _HOUR = 3_600_000;
+
+const _DAY = 86_400_000;
 
 export function ofSeconds(seconds: number): number {
   Type.assertFiniteNumber(seconds, "seconds");
@@ -35,4 +37,14 @@ export function ofHours(hours: number): number {
 export function toHours(millis: number): number {
   Type.assertFiniteNumber(millis, "millis");
   return ExNumber.normalize(millis / _HOUR);
+}
+
+export function ofDays(days: number): number {
+  Type.assertFiniteNumber(days, "days");
+  return ExNumber.normalize(days * _DAY);
+}
+
+export function toDays(millis: number): number {
+  Type.assertFiniteNumber(millis, "millis");
+  return ExNumber.normalize(millis / _DAY);
 }

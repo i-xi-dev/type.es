@@ -1,1 +1,1 @@
-export * as Milliseconds from "./millis/mod.ts";
+export * as Milliseconds from "./millis.ts";
