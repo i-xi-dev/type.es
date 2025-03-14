@@ -1,6 +1,6 @@
 import * as Type from "../../type/mod.ts";
 import { Number as ExNumber } from "../../numerics/mod.ts";
-import { String as ExString } from "../../basics/mod.ts";
+import { Radix, String as ExString } from "../../basics/mod.ts";
 import { ToStringOptions, Unit } from "./_common.ts";
 
 const _SECOND = 1_000;
@@ -51,11 +51,64 @@ export function toDays(millis: number): number {
   return ExNumber.normalize(millis / _DAY);
 }
 
-//TODO
-// export function fromString(str:string):number{
+// Temporal.Durationと同形式のシリアライズ/デシリアライズを供するが、
+// 当モジュールの「時間」はTemporal.Durationとは異なり絶対長を表しているので注意
 
-// }
+// Y(年),M(月),W(週)には対応しない。Dを最大単位とする
+//XXX 秒の小数部は一旦3桁までとする
+export function fromString(value: string): number {
+  Type.assertNonEmptyString(value, "value");
 
+  const parts =
+    /^(?<sign>[\-+]?)P(?<day>[0-9]+D)?(?:T(?<hr>[0-9]+H)?(?<min>[0-9]+M)?(?<sec>[0-9]+(?:[\.,]?[0-9]+)?S)?)?$/
+      .exec(value);
+
+  if (parts?.groups) {
+    const { sign, day, hr, min, sec } = parts.groups;
+    // d,h,m,sいずれも無ければフォーマット不正
+    if (day || hr || min || sec) {
+      const negative = sign === "-";
+      const days = _p(day);
+      const hours = _p(hr);
+      const minutes = _p(min);
+      const { seconds, millis } = _pS(sec);
+      const total = ofDays(days) + ofHours(hours) + ofMinutes(minutes) +
+        ofSeconds(seconds) + millis;
+      return (negative === true) ? -total : total;
+    }
+  }
+
+  throw new RangeError("`value` is invalid format.");
+}
+
+function _p(str?: string): number {
+  // 接尾辞はparseIntが無視するので付けたまま
+  return Type.isNonEmptyString(str)
+    ? Number.parseInt(str, Radix.DECIMAL)
+    : ExNumber.ZERO;
+}
+
+function _pS(str?: string): { seconds: number; millis: number } {
+  if (Type.isNonEmptyString(str)) {
+    const [sec, msec] = str.replace(",", ".").split(".");
+    const seconds = _p(sec);
+    const millis = Type.isNonEmptyString(msec)
+      ? Number.parseInt(msec.substring(0, 3).padEnd(3, "0"), Radix.DECIMAL)
+      : ExNumber.ZERO;
+
+    return {
+      seconds,
+      millis,
+    };
+  }
+
+  return {
+    seconds: ExNumber.ZERO,
+    millis: ExNumber.ZERO,
+  };
+}
+
+// Y(年),M(月),W(週)には対応しない。Dを最大単位とする
 export function toString(millis: number, options?: ToStringOptions): string {
   Type.assertFiniteNumber(millis, "millis");
 
