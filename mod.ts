@@ -2,6 +2,7 @@ export type * from "./src/_typedef/mod.ts";
 export * from "./src/basics/mod.ts";
 export * as Buffer from "./src/buffer/mod.ts";
 export * as Bytes from "./src/bytes/mod.ts";
+export * as Collections from "./src/collections/mod.ts";
 export * as Events from "./src/events/mod.ts";
 export * as I18n from "./src/i18n/mod.ts";
 export * as Numerics from "./src/numerics/mod.ts";
