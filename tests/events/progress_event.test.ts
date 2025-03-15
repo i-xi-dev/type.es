@@ -1,5 +1,7 @@
 import { assertStrictEquals, assertThrows } from "@std/assert";
-import { EventFactory, EventType } from "../../mod.ts";
+import { Events } from "../../mod.ts";
+
+const { EventFactory, EventType } = Events;
 
 Deno.test("Events.EventFactory.createProgressEvent()", () => {
   const event1 = EventFactory.create(EventType.PROGRESS, "progress-x");
@@ -16,7 +18,7 @@ Deno.test("Events.EventFactory.createProgressEvent()", () => {
 
   assertThrows(
     () => {
-      EventFactory.create("x" as EventType, "progress-x", {});
+      EventFactory.create("x" as Events.EventType, "progress-x", {});
     },
     TypeError,
     "`eventType` unknown.",
