@@ -1,5 +1,6 @@
 import * as Type from "../../type/mod.ts";
 import { Number as ExNumber, Uint8 } from "../../numerics/mod.ts";
+import { QuotaExceededError } from "../../basics/mod.ts";
 import { type safeint, type uint8 } from "../../_typedef/mod.ts";
 
 const _DEFAULT_CAPACITY = 1_048_576;
@@ -90,7 +91,7 @@ export class BytesBuilder {
 
   #growIfNeeded(byteLength: safeint): void {
     if (this.length >= this.#buffer.buffer.maxByteLength) {
-      throw new Error("Max byte length exceeded.");
+      throw new QuotaExceededError("Max byte length exceeded.");
     }
 
     if ((this.#length + byteLength) > this.#buffer.byteLength) {

@@ -41,17 +41,23 @@ export abstract class Task<T> extends EventTarget {
   protected constructor(options?: Options) {
     super();
 
-    const total: safeint | undefined = options?.total;
-    if (typeof total === "number") {
-      Type.assertNonNegativeSafeInt(total, "options.total");
-    } else if (total === undefined) {
+    const total: safeint | undefined = options?.total ?? undefined; // nullでもokとする
+    if (total === undefined) {
       // ok
     } else {
-      throw new TypeError("options.total");
+      Type.assertNonNegativeSafeInt(total, "options.total");
+      this.#total = total;
     }
 
-    this.#total = total;
-    this._signal = options?.signal;
+    const signal: AbortSignal | undefined = options?.signal ?? undefined; // nullでもokとする
+    if (signal === undefined) {
+      // ok
+    } else if (signal instanceof AbortSignal) {
+      this._signal = signal;
+    } else {
+      throw new TypeError("`options.signal` must be an `AbortSignal`.");
+    }
+
     this._status = Status.READY;
     this._loaded = 0;
     this.#lastProgressNotifiedAt = -1;
