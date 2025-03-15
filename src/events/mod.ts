@@ -1,1 +1,2 @@
-export * as EventFactory from "./event_factory.ts";
+export * as EventFactory from "./factory.ts";
+export * from "./type.ts";
