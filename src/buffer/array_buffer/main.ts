@@ -9,7 +9,7 @@ import {
   type uint32,
   type uint8,
 } from "../../_typedef/mod.ts";
-import { GrowableBuffer } from "../../__2/growable_buffer.ts";
+import { BytesBuilder } from "../bytes_builder/mod.ts";
 import { Number as ExNumber } from "../../numerics/mod.ts";
 
 // const _DEFAULT_BYTE_LENGTH = 1_024;
@@ -38,15 +38,14 @@ export async function fromUint8AsyncIterable(
 ): Promise<ArrayBuffer> {
   Type.assertAsyncIterable(value, "value");
 
-  //XXX resizable ArrayBufferが広く実装されたらそちらに変更する
-  const gb = new GrowableBuffer();
+  const builder = new BytesBuilder();
   let index = 0;
   for await (const byte of value) {
     Type.assertUint8(byte, `value[${index}]`);
-    gb.put(byte as uint8);
+    builder.append(byte as uint8);
     index++;
   }
-  return gb.slice().buffer as ArrayBuffer;
+  return builder.toArrayBuffer();
 }
 
 export function toUint8Iterable(value: ArrayBuffer): Iterable<uint8> {
@@ -74,7 +73,7 @@ function _fromUint8xIterable<T extends int>(
 ): ArrayBuffer {
   Type.assertByteOrder(byteOrder, "byteOrder");
 
-  const gb = new GrowableBuffer();
+  const builder = new BytesBuilder();
   const isLittleEndian = byteOrder === ByteOrder.LITTLE_ENDIAN;
   const tmp = new ArrayBuffer(uint8xArrayCtor.BYTES_PER_ELEMENT);
   const tmpView = new DataView(tmp);
@@ -83,10 +82,10 @@ function _fromUint8xIterable<T extends int>(
   for (const i of value) {
     assertElement(i, `value[${index}]`);
     viewSetter(tmpView, i, isLittleEndian);
-    gb.putRange(tmpView);
+    builder.append(tmpView);
     index++;
   }
-  return gb.slice().buffer as ArrayBuffer;
+  return builder.toArrayBuffer();
 }
 
 async function _fromUint8xAsyncIterable<T extends int>(
@@ -98,7 +97,7 @@ async function _fromUint8xAsyncIterable<T extends int>(
 ): Promise<ArrayBuffer> {
   Type.assertByteOrder(byteOrder, "byteOrder");
 
-  const gb = new GrowableBuffer();
+  const builder = new BytesBuilder();
   const isLittleEndian = byteOrder === ByteOrder.LITTLE_ENDIAN;
   const tmp = new ArrayBuffer(uint8xArrayCtor.BYTES_PER_ELEMENT);
   const tmpView = new DataView(tmp);
@@ -107,10 +106,10 @@ async function _fromUint8xAsyncIterable<T extends int>(
   for await (const i of value) {
     assertElement(i, `value[${index}]`);
     viewSetter(tmpView, i, isLittleEndian);
-    gb.putRange(tmpView);
+    builder.append(tmpView);
     index++;
   }
-  return gb.slice().buffer as ArrayBuffer;
+  return builder.toArrayBuffer();
 }
 
 type _Getter<T extends int> = (
@@ -200,17 +199,16 @@ export async function fromUint16AsyncIterable(
   } else {
     // 実行環境のバイトオーダー
 
-    //XXX resizable ArrayBufferが広く実装されたらそちらに変更する
-    const gb = new GrowableBuffer();
+    const builder = new BytesBuilder();
     const tmpView = new Uint16Array(1);
     let index = 0;
     for await (const i of value) {
       Type.assertUint16(i, `value[${index}]`);
       tmpView[0] = i;
-      gb.putRange(tmpView);
+      builder.append(tmpView);
       index++;
     }
-    return gb.slice().buffer as ArrayBuffer;
+    return builder.toArrayBuffer();
   }
 }
 
@@ -270,16 +268,16 @@ export async function fromUint32AsyncIterable(
   } else {
     // 実行環境のバイトオーダー
 
-    const gb = new GrowableBuffer();
+    const builder = new BytesBuilder();
     const tmpView = new Uint32Array(1);
     let index = 0;
     for await (const i of value) {
       Type.assertUint32(i, `value[${index}]`);
       tmpView[0] = i;
-      gb.putRange(tmpView);
+      builder.append(tmpView);
       index++;
     }
-    return gb.slice().buffer as ArrayBuffer;
+    return builder.toArrayBuffer();
   }
 }
 
@@ -317,7 +315,7 @@ export function fromBigUint64Iterable(
         Type.assertBigUint64(i, `value[${index}]`);
         return i;
       },
-    ).buffer as ArrayBuffer;
+    ).buffer as ArrayBuffer; //XXX ArrayBufferLikeになりえないのでは？？
   }
 }
 
@@ -339,16 +337,16 @@ export async function fromBigUint64AsyncIterable(
   } else {
     // 実行環境のバイトオーダー
 
-    const gb = new GrowableBuffer();
+    const builder = new BytesBuilder();
     const tmpView = new BigUint64Array(1);
     let index = 0;
     for await (const i of value) {
       Type.assertBigUint64(i, `value[${index}]`);
       tmpView[0] = i;
-      gb.putRange(tmpView);
+      builder.append(tmpView);
       index++;
     }
-    return gb.slice().buffer as ArrayBuffer;
+    return builder.toArrayBuffer();
   }
 }
 

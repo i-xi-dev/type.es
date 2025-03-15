@@ -12,6 +12,5 @@ export * as Time from "./src/time/mod.ts";
 export * as Type from "./src/type/mod.ts";
 
 //TODO
-export * from "./src/__2/growable_buffer.ts";
 export * as Uint8Iterable from "./src/__2/uint8_iterable.ts";
 export * as xText from "./src/__text/mod.ts";
