@@ -91,6 +91,10 @@ class _Uint<T extends safeint> implements RangedInt<T> {
     this.#view8 = new Uint8Array(this.#buffer);
   }
 
+  get [Symbol.toStringTag](): string {
+    return `Uint${this.BIT_LENGTH}`;
+  }
+
   #bitOperateUint32(a: uint32, b: uint32, op: _BitOperation): uint32 {
     // #buffer の 1～4バイトをa, 5～8をb, 9～12を結果 として使用
     this.#view32[0] = a;

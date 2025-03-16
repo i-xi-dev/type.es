@@ -22,6 +22,13 @@ Deno.test("Numerics.Uint8.BYTE_LENGTH", () => {
   assertStrictEquals(Uint8.BYTE_LENGTH, 1);
 });
 
+Deno.test("Numerics.Uint8[Symbol.toStringTag]", () => {
+  assertStrictEquals(
+    (Uint8 as unknown as { [Symbol.toStringTag]: string })[Symbol.toStringTag],
+    "Uint8",
+  );
+});
+
 const le = "little-endian";
 const be = "big-endian";
 

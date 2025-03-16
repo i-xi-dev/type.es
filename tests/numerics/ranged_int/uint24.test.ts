@@ -19,6 +19,13 @@ Deno.test("Numerics.Uint24.BYTE_LENGTH", () => {
   assertStrictEquals(Uint24.BYTE_LENGTH, 3);
 });
 
+Deno.test("Numerics.Uint24[Symbol.toStringTag]", () => {
+  assertStrictEquals(
+    (Uint24 as unknown as { [Symbol.toStringTag]: string })[Symbol.toStringTag],
+    "Uint24",
+  );
+});
+
 const le = "little-endian";
 const be = "big-endian";
 

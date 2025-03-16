@@ -63,6 +63,10 @@ class _BigUint<T extends bigint> implements RangedBigInt<T> {
     this.#size = info.MAX_VALUE + 1n; // Uintの場合、最小は0なので最大+1で固定
   }
 
+  get [Symbol.toStringTag](): string {
+    return `BigUint${this.BIT_LENGTH}`;
+  }
+
   fromBytes(
     bytes: Uint8Array<ArrayBuffer>,
     byteOrder: byteorder = ByteOrder.nativeOrder,
