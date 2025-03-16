@@ -124,7 +124,7 @@ export class ReadingTask extends Loading.Task<_Bytes> {
       this._status = Loading.Status.COMPLETED;
       // this._notifyProgress("load"); resolveされるのでわかる
 
-      return builder.toUint8Array();
+      return builder.takeAsUint8Array();
     } catch (exception) {
       if ((exception instanceof Error) && (exception.name === "AbortError")) {
         // ・呼び出し側のAbortControllerでreason省略でabortした場合

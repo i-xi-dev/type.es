@@ -1,6 +1,6 @@
 import * as Type from "../../type/mod.ts";
 import { Number as ExNumber, Uint8 } from "../../numerics/mod.ts";
-import { QuotaExceededError } from "../../basics/mod.ts";
+import { InvalidStateError, QuotaExceededError } from "../../basics/mod.ts";
 import { type safeint, type uint8 } from "../../_typedef/mod.ts";
 
 const _DEFAULT_CAPACITY = 1_048_576;
@@ -28,7 +28,7 @@ function _computeSize(
 
   const capacity = Type.isSafeInt(init?.capacity)
     ? init.capacity
-    : _DEFAULT_CAPACITY;
+    : Math.min(capacityMax, _DEFAULT_CAPACITY);
   Type.assertSafeIntInRange(capacity, "init.capacity", [0, capacityMax]);
 
   return { capacity, capacityMax };
@@ -36,27 +36,43 @@ function _computeSize(
 
 export class BytesBuilder {
   #length: safeint;
-  readonly #buffer: Uint8Array<ArrayBuffer>;
+  #buffer: Uint8Array<ArrayBuffer> | null;
 
   constructor(init?: Init) {
     const { capacity, capacityMax } = _computeSize(init);
 
     this.#length = ExNumber.ZERO;
-    this.#buffer = new Uint8Array(
-      new ArrayBuffer(capacity, { maxByteLength: capacityMax }),
-    );
+    let buffer: ArrayBuffer;
+    if (capacity === capacityMax) {
+      buffer = new ArrayBuffer(capacity);
+    } else {
+      buffer = new ArrayBuffer(capacity, { maxByteLength: capacityMax });
+    }
+    this.#buffer = new Uint8Array(buffer);
   }
 
   get capacity(): safeint {
-    return this.#buffer.byteLength;
+    return this.#isValidState() ? this.#buffer!.byteLength : -1;
   }
 
   get length(): safeint {
-    return this.#length;
+    return this.#isValidState() ? this.#length : -1;
+  }
+
+  get growable(): boolean {
+    return this.#isValidState()
+      ? (this.#buffer!.buffer.resizable === true)
+      : false;
+  }
+
+  get [Symbol.toStringTag](): string {
+    return "BytesBuilder";
   }
 
   //XXX Iterable<uint8>も受け付ける
   append(byteOrBytes: uint8 | BufferSource): this {
+    this.#assertValidState();
+
     if (Type.isBufferSource(byteOrBytes)) {
       return this.#appendBytes(byteOrBytes);
     } else if (Type.isUint8(byteOrBytes)) {
@@ -68,11 +84,21 @@ export class BytesBuilder {
     );
   }
 
+  #isValidState(): boolean {
+    return (this.#buffer !== null);
+  }
+
+  #assertValidState(): void {
+    if (this.#isValidState() !== true) {
+      throw new InvalidStateError("TODO");
+    }
+  }
+
   #appendByte(byte: uint8): this {
     Type.assertUint8(byte, "byte");
 
     this.#growIfNeeded(Uint8.BYTE_LENGTH);
-    this.#buffer[this.#length] = byte;
+    this.#buffer![this.#length] = byte;
     this.#length = this.#length + Uint8.BYTE_LENGTH;
     return this;
   }
@@ -81,7 +107,7 @@ export class BytesBuilder {
     Type.assertBufferSource(bytes, "bytes");
 
     this.#growIfNeeded(bytes.byteLength);
-    this.#buffer.set(
+    this.#buffer!.set(
       new Uint8Array(("buffer" in bytes) ? bytes.buffer : bytes),
       this.#length,
     );
@@ -90,11 +116,11 @@ export class BytesBuilder {
   }
 
   #growIfNeeded(byteLength: safeint): void {
-    if (this.length >= this.#buffer.buffer.maxByteLength) {
+    if (this.length >= this.#buffer!.buffer.maxByteLength) {
       throw new QuotaExceededError("Max byte length exceeded.");
     }
 
-    if ((this.#length + byteLength) > this.#buffer.byteLength) {
+    if ((this.#length + byteLength) > this.#buffer!.byteLength) {
       const extent = Math.max(byteLength, _DEFAULT_CAPACITY); //XXX どのくらいが適正？
       this.#grow(this.#length + extent);
     }
@@ -102,7 +128,7 @@ export class BytesBuilder {
 
   #grow(newCapacity: safeint): void {
     // if (_RESIZABLE === true) {
-    const buffer = this.#buffer.buffer;
+    const buffer = this.#buffer!.buffer;
     buffer.resize(
       (newCapacity > buffer.maxByteLength) ? buffer.maxByteLength : newCapacity,
     );
@@ -114,18 +140,31 @@ export class BytesBuilder {
     // }
   }
 
-  // subarray(
-  //   begin = ExNumber.ZERO,
-  //   end: safeint = this.#length,
-  // ): Uint8Array<ArrayBuffer> {
-  //   return this.#buffer.subarray(begin, end);
+  takeAsArrayBuffer(): ArrayBuffer {
+    this.#assertValidState();
+
+    const buffer = this.#buffer!.buffer;
+    this.#buffer = null;
+
+    buffer.resize(this.#length);
+    return buffer;
+  }
+
+  takeAsUint8Array(): Uint8Array<ArrayBuffer> {
+    return new Uint8Array(this.takeAsArrayBuffer());
+  }
+
+  copyToArrayBuffer(): ArrayBuffer {
+    this.#assertValidState();
+    return this.#buffer!.buffer.slice(ExNumber.ZERO, this.#length);
+  }
+
+  copyToUint8Array(): Uint8Array<ArrayBuffer> {
+    this.#assertValidState();
+    return new Uint8Array(this.copyToArrayBuffer());
+  }
+
+  //XXX 要る？
+  // toString(): string {
   // }
-
-  toArrayBuffer(): ArrayBuffer {
-    return this.#buffer.buffer.slice(ExNumber.ZERO, this.#length);
-  }
-
-  toUint8Array(): Uint8Array<ArrayBuffer> {
-    return this.#buffer.slice(ExNumber.ZERO, this.#length);
-  }
 }

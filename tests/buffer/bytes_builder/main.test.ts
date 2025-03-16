@@ -15,17 +15,17 @@ Deno.test("new Buffer.BytesBuilder()/capacity/length/append() - number", () => {
   b.append(255);
   assertStrictEquals(b.capacity, 2);
   assertStrictEquals(b.length, 1);
-  assertStrictEquals(b.toArrayBuffer().byteLength, 1);
+  assertStrictEquals(b.copyToArrayBuffer().byteLength, 1);
 
   b.append(255);
   assertStrictEquals(b.capacity, 2);
   assertStrictEquals(b.length, 2);
-  assertStrictEquals(b.toArrayBuffer().byteLength, 2);
+  assertStrictEquals(b.copyToArrayBuffer().byteLength, 2);
 
   b.append(255);
   assertStrictEquals(b.capacity, 1048576 + 2);
   assertStrictEquals(b.length, 3);
-  assertStrictEquals(b.toArrayBuffer().byteLength, 3);
+  assertStrictEquals(b.copyToArrayBuffer().byteLength, 3);
 });
 
 Deno.test("new Buffer.BytesBuilder()/capacity/length/append() - BufferSource", () => {
@@ -42,7 +42,7 @@ Deno.test("new Buffer.BytesBuilder()/capacity/length/append() - BufferSource", (
   assertStrictEquals(b.capacity, 1_048_576);
   assertStrictEquals(b.length, 24);
 
-  const b2 = b.toUint8Array();
+  const b2 = b.copyToUint8Array();
   assertStrictEquals(
     JSON.stringify(Array.from(b2)),
     "[1,2,3,4,5,6,7,8,9,10,11,12,1,2,3,4,5,6,7,8,9,10,11,12]",
@@ -100,9 +100,9 @@ Deno.test("new Buffer.BytesBuilder()/capacity/length/append()", () => {
   //   "1,2,3,4,5,6,7,8,9,10,11,12,1,2,3,4,5,6,7,8,9,10,11,12",
   // );
 
-  const copy2 = b.toUint8Array();
-  assertNotStrictEquals(copy2, b.toUint8Array());
-  assertNotStrictEquals(copy2.buffer, b.toUint8Array().buffer);
+  const copy2 = b.copyToUint8Array();
+  assertNotStrictEquals(copy2, b.copyToUint8Array());
+  assertNotStrictEquals(copy2.buffer, b.copyToUint8Array().buffer);
   assertStrictEquals(copy2.byteLength, 24);
   assertStrictEquals(copy2.buffer.byteLength, 24);
   assertStrictEquals(
@@ -139,6 +139,73 @@ Deno.test("new Buffer.BytesBuilder() - capacityMax", () => {
   );
 });
 
+Deno.test("new Buffer.BytesBuilder() - err", () => {
+  assertThrows(
+    () => {
+      new BytesBuilder({ capacityMax: 536_870_913 });
+    },
+    Error,
+    "`init.capacityMax` must be a safe integer in the range 0-536870912.",
+  );
+
+  const b2 = new BytesBuilder({ capacityMax: 1n as unknown as number });
+  assertStrictEquals(b2.capacity, 1_048_576);
+
+  assertThrows(
+    () => {
+      new BytesBuilder({ capacity: 536_870_913 });
+    },
+    Error,
+    "`init.capacity` must be a safe integer in the range 0-536870912.",
+  );
+
+  const b3 = new BytesBuilder({ capacity: 1n as unknown as number });
+  assertStrictEquals(b3.capacity, 1_048_576);
+});
+
+Deno.test("Buffer.BytesBuilder.prototype.growable", () => {
+  const b1 = new BytesBuilder();
+  assertStrictEquals(b1.growable, true);
+  assertStrictEquals(b1.capacity, 1_048_576);
+
+  const b2 = new BytesBuilder({ capacity: 100 });
+  assertStrictEquals(b2.growable, true);
+  assertStrictEquals(b2.capacity, 100);
+
+  const b3 = new BytesBuilder({ /* capacity:100 */ capacityMax: 100 });
+  assertStrictEquals(b3.growable, false);
+  assertStrictEquals(b3.capacity, 100);
+
+  const b4 = new BytesBuilder({ capacity: 100, capacityMax: 100 });
+  assertStrictEquals(b4.growable, false);
+  assertStrictEquals(b4.capacity, 100);
+
+  const b5 = new BytesBuilder({ capacity: 100, capacityMax: 200 });
+  assertStrictEquals(b5.growable, true);
+  assertStrictEquals(b5.capacity, 100);
+
+  assertThrows(
+    () => {
+      new BytesBuilder({ capacity: 200, capacityMax: 100 });
+    },
+    Error,
+    "`init.capacity` must be a safe integer in the range 0-100.",
+  );
+
+  const b6 = new BytesBuilder({ capacityMax: 536_870_912 });
+  assertStrictEquals(b6.growable, true);
+  assertStrictEquals(b6.capacity, 1_048_576);
+
+  const b7 = new BytesBuilder({ capacity: 536_870_912 });
+  assertStrictEquals(b7.growable, false);
+  assertStrictEquals(b7.capacity, 536_870_912);
+});
+
+Deno.test("Buffer.BytesBuilder.prototype[Symbol.toStringTag]", () => {
+  const b1 = new BytesBuilder();
+  assertStrictEquals(b1[Symbol.toStringTag], "BytesBuilder");
+});
+
 Deno.test("Buffer.BytesBuilder.prototype.append()", () => {
   const b = new BytesBuilder();
   b.append(255);
@@ -152,3 +219,6 @@ Deno.test("Buffer.BytesBuilder.prototype.append()", () => {
     "`byteOrBytes` must be a `BufferSource` or an 8-bit unsigned integer.",
   );
 });
+
+//TODO takeAsArrayBuffer
+//TODO takeAsUint8Array

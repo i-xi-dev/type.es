@@ -12,6 +12,8 @@ import {
 import { BytesBuilder } from "../bytes_builder/mod.ts";
 import { Number as ExNumber } from "../../numerics/mod.ts";
 
+//TODO BytesBuilderにまとめる
+
 // const _DEFAULT_BYTE_LENGTH = 1_024;
 // const _DEFAULT_MAX_BYTE_LENGTH = 1_048_576;
 
@@ -45,7 +47,7 @@ export async function fromUint8AsyncIterable(
     builder.append(byte as uint8);
     index++;
   }
-  return builder.toArrayBuffer();
+  return builder.takeAsArrayBuffer();
 }
 
 export function toUint8Iterable(value: ArrayBuffer): Iterable<uint8> {
@@ -85,7 +87,7 @@ function _fromUint8xIterable<T extends int>(
     builder.append(tmpView);
     index++;
   }
-  return builder.toArrayBuffer();
+  return builder.takeAsArrayBuffer();
 }
 
 async function _fromUint8xAsyncIterable<T extends int>(
@@ -109,7 +111,7 @@ async function _fromUint8xAsyncIterable<T extends int>(
     builder.append(tmpView);
     index++;
   }
-  return builder.toArrayBuffer();
+  return builder.takeAsArrayBuffer();
 }
 
 type _Getter<T extends int> = (
@@ -208,7 +210,7 @@ export async function fromUint16AsyncIterable(
       builder.append(tmpView);
       index++;
     }
-    return builder.toArrayBuffer();
+    return builder.takeAsArrayBuffer();
   }
 }
 
@@ -277,7 +279,7 @@ export async function fromUint32AsyncIterable(
       builder.append(tmpView);
       index++;
     }
-    return builder.toArrayBuffer();
+    return builder.takeAsArrayBuffer();
   }
 }
 
@@ -346,7 +348,7 @@ export async function fromBigUint64AsyncIterable(
       builder.append(tmpView);
       index++;
     }
-    return builder.toArrayBuffer();
+    return builder.takeAsArrayBuffer();
   }
 }
 
