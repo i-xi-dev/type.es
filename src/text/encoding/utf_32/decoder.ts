@@ -30,6 +30,10 @@ export class Utf32BeDecoder extends Decoder {
       maxBytesPerRune: _MAX_BYTES_PER_RUNE,
     });
   }
+
+  override get [Symbol.toStringTag](): string {
+    return "Utf32BeDecoder";
+  }
 }
 
 //XXX Utf32BeDecoderStream
@@ -46,6 +50,10 @@ export class Utf32LeDecoder extends Decoder {
       // strict: options?.strict === true,
       maxBytesPerRune: _MAX_BYTES_PER_RUNE,
     });
+  }
+
+  override get [Symbol.toStringTag](): string {
+    return "Utf32LeDecoder";
   }
 }
 

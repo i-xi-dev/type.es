@@ -1,6 +1,11 @@
 import { assertStrictEquals, assertThrows } from "@std/assert";
 import { Text } from "../../../../mod.ts";
 
+Deno.test("Text.Utf32BeEncoder.prototype[Symbol.toStringTag]", () => {
+  const encoder = new Text.Utf32BeEncoder();
+  assertStrictEquals(encoder[Symbol.toStringTag], "Utf32BeEncoder");
+});
+
 Deno.test("Text.Utf32BeEncoder.encode()", () => {
   const encoder = new Text.Utf32BeEncoder();
 

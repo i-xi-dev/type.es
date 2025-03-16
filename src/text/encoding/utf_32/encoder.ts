@@ -30,6 +30,10 @@ export class Utf32BeEncoder extends Encoder {
       maxBytesPerRune: _MAX_BYTES_PER_RUNE,
     });
   }
+
+  override get [Symbol.toStringTag](): string {
+    return "Utf32BeEncoder";
+  }
 }
 
 /** @deprecated */
@@ -46,7 +50,7 @@ export class Utf32BeEncoderStream extends EncoderStream {
     });
   }
 
-  get [Symbol.toStringTag](): string {
+  override get [Symbol.toStringTag](): string {
     return "Utf32BeEncoderStream";
   }
 }
@@ -64,6 +68,10 @@ export class Utf32LeEncoder extends Encoder {
       maxBytesPerRune: _MAX_BYTES_PER_RUNE,
     });
   }
+
+  override get [Symbol.toStringTag](): string {
+    return "Utf32LeEncoder";
+  }
 }
 
 /** @deprecated */
@@ -80,7 +88,7 @@ export class Utf32LeEncoderStream extends EncoderStream {
     });
   }
 
-  get [Symbol.toStringTag](): string {
+  override get [Symbol.toStringTag](): string {
     return "Utf32LeEncoderStream";
   }
 }

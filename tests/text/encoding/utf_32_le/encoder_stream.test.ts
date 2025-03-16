@@ -628,3 +628,8 @@ Deno.test("Text.Utf32LeEncoderStream.prototype.readable,writable - fatal:true хн
     expected,
   );
 });
+
+Deno.test("Text.Utf32LeEncoderStream.prototype[Symbol.toStringTag]", () => {
+  const encoder = new Text.Utf32LeEncoderStream();
+  assertStrictEquals(encoder[Symbol.toStringTag], "Utf32LeEncoderStream");
+});
