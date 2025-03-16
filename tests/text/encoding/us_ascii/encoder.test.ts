@@ -3,6 +3,11 @@ import { Text } from "../../../../mod.ts";
 
 const utf8Encoder = new TextEncoder();
 
+Deno.test("Text.UsAsciiEncoder.prototype[Symbol.toStringTag]", () => {
+  const encoder = new Text.UsAsciiEncoder();
+  assertStrictEquals(encoder[Symbol.toStringTag], "UsAsciiEncoder");
+});
+
 Deno.test("Text.UsAsciiEncoder.encode()", () => {
   const encoder = new Text.UsAsciiEncoder();
 

@@ -25,6 +25,10 @@ export class UsAsciiDecoder extends Decoder {
       maxBytesPerRune: _MAX_BYTES_PER_RUNE,
     });
   }
+
+  override get [Symbol.toStringTag](): string {
+    return "UsAsciiDecoder";
+  }
 }
 
 export class UsAsciiDecoderStream extends DecoderStream {

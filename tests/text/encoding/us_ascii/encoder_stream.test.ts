@@ -430,3 +430,8 @@ Deno.test("Text.UsAsciiEncoderStream.prototype.readable,writable - fatal:true", 
   ];
   assertStrictEquals(JSON.stringify(result), JSON.stringify(expected));
 });
+
+Deno.test("Text.UsAsciiEncoderStream.prototype[Symbol.toStringTag]", () => {
+  const encoder = new Text.UsAsciiEncoderStream();
+  assertStrictEquals(encoder[Symbol.toStringTag], "UsAsciiEncoderStream");
+});

@@ -29,6 +29,10 @@ export class UsAsciiEncoder extends Encoder {
       maxBytesPerRune: _MAX_BYTES_PER_RUNE,
     });
   }
+
+  override get [Symbol.toStringTag](): string {
+    return "UsAsciiEncoder";
+  }
 }
 
 export class UsAsciiEncoderStream extends EncoderStream {

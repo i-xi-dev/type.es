@@ -484,3 +484,8 @@ Deno.test("Text.UsAsciiDecoderStream.prototype.readable,writable - fatal:true", 
 //     console.log(e);
 //   }
 // });
+
+Deno.test("Text.UsAsciiDecoderStream.prototype[Symbol.toStringTag]", () => {
+  const encoder = new Text.UsAsciiDecoderStream();
+  assertStrictEquals(encoder[Symbol.toStringTag], "UsAsciiDecoderStream");
+});
