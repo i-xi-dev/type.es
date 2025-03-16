@@ -106,6 +106,28 @@ Deno.test("Bytes.Size.prototype.to()", () => {
   );
 });
 
+Deno.test("Bytes.Size.prototype.toString()", () => {
+  const bc0 = new Bytes.Size(0);
+  assertStrictEquals(bc0.toString(), "0");
+
+  const bc1 = new Bytes.Size(1000);
+  assertStrictEquals(bc1.toString(), "1000");
+
+  const bc1i = new Bytes.Size(1024);
+  assertStrictEquals(bc1i.toString(), "1024");
+});
+
+Deno.test("Bytes.Size.prototype.toJSON()", () => {
+  const bc0 = new Bytes.Size(0);
+  assertStrictEquals(bc0.toJSON(), 0);
+
+  const bc1 = new Bytes.Size(1000);
+  assertStrictEquals(bc1.toJSON(), 1000);
+
+  const bc1i = new Bytes.Size(1024);
+  assertStrictEquals(bc1i.toJSON(), 1024);
+});
+
 Deno.test("Bytes.Size.prototype.valueOf()", () => {
   const bc0 = new Bytes.Size(0);
   assertStrictEquals(bc0.valueOf(), 0);

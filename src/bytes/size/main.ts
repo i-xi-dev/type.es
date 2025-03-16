@@ -1,5 +1,6 @@
 import * as Type from "../../type/mod.ts";
-import { type safeint } from "../../_typedef/mod.ts";
+import { type int, type safeint } from "../../_typedef/mod.ts";
+import { SafeInt } from "../../numerics/mod.ts";
 import { Unit } from "../unit/mod.ts";
 
 const _BYTES: Record<Unit, safeint> = {
@@ -34,11 +35,11 @@ const _BYTES: Record<Unit, safeint> = {
 export class Size {
   #byteCount: safeint;
 
-  constructor(byteCount: safeint | bigint) {
-    if (typeof byteCount === "bigint") {
+  constructor(byteCount: int) {
+    if (Type.isBigInt(byteCount)) {
       Type.assertNonNegativeBigIntInSafeIntRange(byteCount, "byteCount");
       this.#byteCount = Number(byteCount);
-    } else if (typeof byteCount === "number") {
+    } else if (Type.isNumber(byteCount)) {
       Type.assertNonNegativeSafeInt(byteCount, "byteCount");
       this.#byteCount = byteCount;
     } else {
@@ -78,6 +79,14 @@ export class Size {
       return this.#byteCount / _BYTES[found];
     }
     return undefined as never;
+  }
+
+  toString(): string {
+    return SafeInt.toString(this.#byteCount);
+  }
+
+  toJSON(): number {
+    return this.#byteCount;
   }
 
   valueOf(): number {

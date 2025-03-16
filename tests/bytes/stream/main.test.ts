@@ -1,4 +1,4 @@
-import { assertStrictEquals } from "@std/assert";
+import { assertStrictEquals, unreachable } from "@std/assert";
 import { Bytes } from "../../../mod.ts";
 
 function createStream(length: number) {
@@ -34,7 +34,7 @@ Deno.test("Bytes.ReadingTask.create() - ReadableStream", async () => {
 
   try {
     await task1.run();
-    throw new Error();
+    unreachable();
   } catch (e) {
     const err = e as Error;
     assertStrictEquals(err.name, "InvalidStateError");
@@ -70,7 +70,7 @@ Deno.test("Bytes.ReadingTask.create() - argumenterror", async () => {
       3 as unknown as AsyncIterable<Uint8Array<ArrayBuffer>>,
     );
     await task1.run();
-    throw new Error();
+    unreachable();
   } catch (e) {
     const err = e as Error;
     assertStrictEquals(err.name, "TypeError");
@@ -94,6 +94,14 @@ Deno.test("Bytes.ReadingTask.create() - Iterable", async () => {
   assertStrictEquals(bs2.byteLength, 0);
 });
 
+Deno.test("Bytes.ReadingTask.prototype[Symbol.toStringTag]", async () => {
+  const task1 = Bytes.ReadingTask.create([
+    Uint8Array.of(1),
+    Uint8Array.of(2, 3),
+  ]);
+  assertStrictEquals(task1[Symbol.toStringTag], "ReadingTask");
+});
+
 Deno.test("Bytes.ReadingTask.prototype.run() - typeerror of chunk", async () => {
   const ai1 = async function* () {
     yield 1;
@@ -104,7 +112,7 @@ Deno.test("Bytes.ReadingTask.prototype.run() - typeerror of chunk", async () => 
   );
   try {
     await task1.run();
-    throw new Error();
+    unreachable();
   } catch (e) {
     const err = e as Error;
     assertStrictEquals(err.name, "TypeError");
@@ -121,7 +129,7 @@ Deno.test("Bytes.ReadingTask.prototype.run() - typeerror of chunk", async () => 
       [3] as unknown as Iterable<Uint8Array<ArrayBuffer>>,
     );
     await task1.run();
-    throw new Error();
+    unreachable();
   } catch (e) {
     const err = e as Error;
     assertStrictEquals(err.name, "TypeError");
@@ -175,7 +183,7 @@ Deno.test("Bytes.ReadingTask.create() - signal:AbortController.abort()", async (
       ac1.abort();
     }, 5);
     await task1.run();
-    throw new Error();
+    unreachable();
   } catch (e) {
     const err = e as Error;
     assertStrictEquals(err.name, "AbortError");
@@ -191,7 +199,7 @@ Deno.test("Bytes.ReadingTask.create() - signal:already aborted", async () => {
   });
   try {
     await task1.run();
-    throw new Error();
+    unreachable();
   } catch (e) {
     const err = e as Error;
     assertStrictEquals(err.name, "AbortError");
@@ -208,7 +216,7 @@ Deno.test("Bytes.ReadingTask.create() - signal:already aborted", async () => {
   const task1 = Bytes.ReadingTask.create(s2, { signal: ac2.signal });
   try {
     await task1.run();
-    throw new Error();
+    unreachable();
   } catch (e) {
     const err = e as Error;
     assertStrictEquals(err.name, "AbortError");
@@ -224,7 +232,7 @@ Deno.test("Bytes.ReadingTask.create() - signal:already aborted", async () => {
   const task1 = Bytes.ReadingTask.create(s2, { signal: ac2.signal });
   try {
     await task1.run();
-    throw new Error();
+    unreachable();
   } catch (e) {
     const err = e as Error;
     assertStrictEquals(err.name, "AbortError");
@@ -239,7 +247,7 @@ Deno.test("Bytes.ReadingTask.create() - signal:AbortSignal.timeout", async () =>
   });
   try {
     await task1.run();
-    throw new Error();
+    unreachable();
   } catch (e) {
     const err = e as Error;
     assertStrictEquals(err.name, "TimeoutError");
@@ -350,7 +358,7 @@ Deno.test("Bytes.ReadingTask.prototype.addEventListener() - abort", async () => 
   }, 20);
   try {
     await task1.run();
-    throw new Error();
+    unreachable();
   } catch (ex) {
     void ex;
   }
@@ -427,7 +435,7 @@ Deno.test("Bytes.ReadingTask.prototype.loaded/total/indetrminate - abort", async
       ac1.abort();
     }, 5);
     await task1.run();
-    throw new Error();
+    unreachable();
   } catch (e) {
     const err = e as Error;
     assertStrictEquals(err.name, "AbortError");

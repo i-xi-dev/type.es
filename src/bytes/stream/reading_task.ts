@@ -59,6 +59,10 @@ export class ReadingTask extends Loading.Task<_Bytes> {
     }
   }
 
+  override get [Symbol.toStringTag](): string {
+    return "ReadingTask";
+  }
+
   static create(stream: ReadingSource, options?: Loading.Options): ReadingTask {
     return new ReadingTask(stream, options);
   }
