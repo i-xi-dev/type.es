@@ -33,6 +33,11 @@ Deno.test("new Text.UnicodeGeneralCategorySet()", () => {
   );
 });
 
+Deno.test("Text.UnicodeGeneralCategorySet.prototype[Symbol.toStringTag]", () => {
+  const encoder = new UnicodeGeneralCategorySet([]);
+  assertStrictEquals(encoder[Symbol.toStringTag], "UnicodeGeneralCategorySet");
+});
+
 Deno.test("Text.UnicodeGeneralCategorySet.prototype.size", () => {
   const gcs0 = new UnicodeGeneralCategorySet([]);
   assertStrictEquals(gcs0.size, 0);

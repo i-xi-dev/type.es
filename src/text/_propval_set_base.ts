@@ -11,6 +11,8 @@ export abstract class _PropertyValueSetBase<T> implements ReadonlySetLike<T> {
     return this._set.size;
   }
 
+  abstract get [Symbol.toStringTag](): string;
+
   abstract union(other: Iterable<T>): _PropertyValueSetBase<T>;
 
   has(value: unknown): boolean {

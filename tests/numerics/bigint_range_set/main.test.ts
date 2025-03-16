@@ -14,6 +14,11 @@ function _i(r: bigint[]): string {
   return r.map((i) => i.toString()).join(",");
 }
 
+Deno.test("Numerics.BigIntRangeSet.prototype[Symbol.toStringTag]", () => {
+  const rs0 = BigIntRangeSet.fromRanges([]);
+  assertStrictEquals(rs0[Symbol.toStringTag], "BigIntRangeSet");
+});
+
 Deno.test("Numerics.BigIntRangeSet.fromRanges()", () => {
   const rs1 = BigIntRangeSet.fromRanges([[0n, 0n], [0n, 0n]]);
   assertStrictEquals([...rs1.toRanges()].map((r) => _s(r)).join("|"), "0,0");

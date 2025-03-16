@@ -8,6 +8,10 @@ import {
 import { _IntRangeSet } from "../_int_range_set.ts";
 
 export class BigIntRangeSet<T extends bigint = bigint> extends _IntRangeSet<T> {
+  override get [Symbol.toStringTag](): string {
+    return "BigIntRangeSet";
+  }
+
   static fromRanges<T extends bigint = bigint>(
     subranges: Iterable<intrange<T>>,
   ): BigIntRangeSet<T> {

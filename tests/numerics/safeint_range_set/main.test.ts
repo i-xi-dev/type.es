@@ -14,6 +14,11 @@ function _i(r: number[]): string {
   return r.map((i) => i.toString()).join(",");
 }
 
+Deno.test("Numerics.SafeIntRangeSet.prototype[Symbol.toStringTag]", () => {
+  const rs0 = SafeIntRangeSet.fromRanges([]);
+  assertStrictEquals(rs0[Symbol.toStringTag], "SafeIntRangeSet");
+});
+
 Deno.test("Numerics.SafeIntRangeSet.fromRanges()", () => {
   const rs1 = SafeIntRangeSet.fromRanges([[0, 0], [0, 0]]);
   assertStrictEquals([...rs1.toRanges()].map((r) => _s(r)).join("|"), "0,0");

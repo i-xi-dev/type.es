@@ -15,6 +15,10 @@ export class UnicodeScriptSet extends _PropertyValueSetBase<script> {
     super(array.sort());
   }
 
+  override get [Symbol.toStringTag](): string {
+    return "UnicodeScriptSet";
+  }
+
   override union(other: Iterable<script>): UnicodeScriptSet {
     Type.assertIterable(other, "other");
     return Reflect.construct(this.constructor, [[...this, ...other]]);

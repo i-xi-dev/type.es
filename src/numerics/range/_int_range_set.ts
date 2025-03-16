@@ -19,6 +19,8 @@ export abstract class _IntRangeSet<T extends int> { //XXX implements Set<T>
     return this.#size;
   }
 
+  abstract get [Symbol.toStringTag](): string;
+
   has(value: unknown): boolean {
     this._assertValue(value as T); //XXX falseで返すべき？
     for (const subrange of this._set) {

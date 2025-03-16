@@ -41,6 +41,11 @@ Deno.test("new Text.UnicodeScriptSet()", () => {
   );
 });
 
+Deno.test("Text.UnicodeScriptSet.prototype[Symbol.toStringTag]", () => {
+  const encoder = new UnicodeScriptSet([]);
+  assertStrictEquals(encoder[Symbol.toStringTag], "UnicodeScriptSet");
+});
+
 Deno.test("Text.UnicodeScriptSet.prototype.size", () => {
   const gcs0 = new UnicodeScriptSet([]);
   assertStrictEquals(gcs0.size, 0);

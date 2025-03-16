@@ -9,6 +9,10 @@ import { _IntRangeSet } from "../_int_range_set.ts";
 
 export class SafeIntRangeSet<T extends safeint = safeint>
   extends _IntRangeSet<T> {
+  override get [Symbol.toStringTag](): string {
+    return "SafeIntRangeSet";
+  }
+
   static fromRanges<T extends safeint = safeint>(
     subranges: Iterable<intrange<T>>,
   ): SafeIntRangeSet<T> {

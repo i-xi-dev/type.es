@@ -15,6 +15,10 @@ export class UnicodeGeneralCategorySet extends _PropertyValueSetBase<gc> {
     super(array.sort());
   }
 
+  override get [Symbol.toStringTag](): string {
+    return "UnicodeGeneralCategorySet";
+  }
+
   override union(other: Iterable<gc>): UnicodeGeneralCategorySet {
     Type.assertIterable(other, "other");
     return Reflect.construct(this.constructor, [[...this, ...other]]);
