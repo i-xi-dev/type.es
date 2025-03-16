@@ -9,6 +9,10 @@ Deno.test("Events.EventFactory.createProgressEvent()", () => {
   assertStrictEquals(event1.loaded, 0);
   assertStrictEquals(event1.total, 0);
   assertStrictEquals(event1.type, "progress-x");
+  assertStrictEquals(
+    (event1 as unknown as { [Symbol.toStringTag]: string })[Symbol.toStringTag],
+    "ProgressEvent",
+  );
 
   const event2 = EventFactory.create(EventType.PROGRESS, "progress-x", {});
   assertStrictEquals(event2.lengthComputable, false);

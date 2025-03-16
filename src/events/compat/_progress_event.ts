@@ -61,4 +61,8 @@ export class _ProgressEvent extends Event
   get total(): safeint {
     return this.#total;
   }
+
+  get [Symbol.toStringTag](): string {
+    return "ProgressEvent";
+  }
 }

@@ -3,6 +3,11 @@ import { Text } from "../../../../mod.ts";
 
 const decoder = new TextDecoder("utf-16le");
 
+Deno.test("Text.Utf16LeEncoder.prototype[Symbol.toStringTag]", () => {
+  const encoder = new Text.Utf16LeEncoder();
+  assertStrictEquals(encoder[Symbol.toStringTag], "Utf16LeEncoder");
+});
+
 Deno.test("Text.Utf16LeEncoder.encode()", () => {
   const encoder = new Text.Utf16LeEncoder();
 

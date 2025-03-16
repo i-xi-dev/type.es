@@ -577,3 +577,8 @@ Deno.test("Text.Utf16LeEncoderStream.prototype.readable,writable - fatal:true хн
     expected,
   );
 });
+
+Deno.test("Text.Utf16LeEncoderStream.prototype[Symbol.toStringTag]", () => {
+  const encoder = new Text.Utf16LeEncoderStream();
+  assertStrictEquals(encoder[Symbol.toStringTag], "Utf16LeEncoderStream");
+});

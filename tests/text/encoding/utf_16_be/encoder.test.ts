@@ -3,6 +3,11 @@ import { Text } from "../../../../mod.ts";
 
 const decoder = new TextDecoder("utf-16be");
 
+Deno.test("Text.Utf16BeEncoder.prototype[Symbol.toStringTag]", () => {
+  const encoder = new Text.Utf16BeEncoder();
+  assertStrictEquals(encoder[Symbol.toStringTag], "Utf16BeEncoder");
+});
+
 Deno.test("Text.Utf16BeEncoder.encode()", () => {
   const encoder = new Text.Utf16BeEncoder();
 
