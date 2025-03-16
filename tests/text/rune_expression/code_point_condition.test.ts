@@ -103,6 +103,14 @@ Deno.test("Text.RuneExpression.fromCodePlanes()", () => {
   );
 });
 
+Deno.test(" _CodePointExpression.prototype[Symbol.toStringTag]", () => {
+  const c1 = RuneExpression.fromCodePointRanges([[0x200, 0x204]]);
+  assertStrictEquals(
+    (c1 as unknown as { [Symbol.toStringTag]: string })[Symbol.toStringTag],
+    "RuneExpression",
+  );
+});
+
 Deno.test(" _CodePointExpression.prototype.isMatch()", () => {
   const c1 = RuneExpression.fromCodePointRanges([[0x200, 0x204]]);
   assertStrictEquals(c1.isMatch(0x1FF), false);

@@ -50,6 +50,14 @@ Deno.test("Text.RuneExpression.fromGeneralCategories()", () => {
   );
 });
 
+Deno.test(" _GeneralCategoryExpression.prototype[Symbol.toStringTag]", () => {
+  const c1 = RuneExpression.fromGeneralCategories(["Lu"]);
+  assertStrictEquals(
+    (c1 as unknown as { [Symbol.toStringTag]: string })[Symbol.toStringTag],
+    "RuneExpression",
+  );
+});
+
 Deno.test(" _GeneralCategoryExpression.prototype.isMatch() - codepoint", () => {
   const gcs1 = RuneExpression.fromGeneralCategories(["Lu"]);
   assertStrictEquals(gcs1.isMatch(0x4C), true);

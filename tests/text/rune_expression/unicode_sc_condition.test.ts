@@ -50,6 +50,14 @@ Deno.test("Text.RuneExpression.fromScripts()", () => {
   );
 });
 
+Deno.test(" _ScriptExpression.prototype[Symbol.toStringTag]", () => {
+  const c1 = RuneExpression.fromScripts(["Kana"]);
+  assertStrictEquals(
+    (c1 as unknown as { [Symbol.toStringTag]: string })[Symbol.toStringTag],
+    "RuneExpression",
+  );
+});
+
 Deno.test(" _ScriptExpression.prototype.isMatch() - codepoint", () => {
   const scs1 = RuneExpression.fromScripts(["Kana"]);
   assertStrictEquals(scs1.isMatch(0x30A2), true);

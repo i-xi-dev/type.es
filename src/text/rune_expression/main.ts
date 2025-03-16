@@ -53,6 +53,10 @@ abstract class _ExpressionBase implements RuneExpression {
     this._not = options?.not === true;
   }
 
+  get [Symbol.toStringTag](): string {
+    return "RuneExpression";
+  }
+
   abstract isMatch(codePointOrRune: codepoint | rune): boolean;
 
   findMatchedRunes(

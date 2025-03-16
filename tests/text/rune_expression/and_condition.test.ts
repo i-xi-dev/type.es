@@ -38,6 +38,16 @@ Deno.test("Text.RuneExpression.and()", () => {
   );
 });
 
+Deno.test(" _AndExpression.prototype[Symbol.toStringTag]", () => {
+  const c1 = RuneExpression.and([
+    RuneExpression.fromScripts(["Latn"]),
+  ]);
+  assertStrictEquals(
+    (c1 as unknown as { [Symbol.toStringTag]: string })[Symbol.toStringTag],
+    "RuneExpression",
+  );
+});
+
 Deno.test(" _AndExpression.prototype.isMatch()", () => {
   const c1 = RuneExpression.and([
     RuneExpression.fromScripts(["Latn"]),

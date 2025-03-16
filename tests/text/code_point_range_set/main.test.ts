@@ -14,6 +14,11 @@ function _i(r: number[]): string {
   return r.map((i) => i.toString()).join(",");
 }
 
+Deno.test("Text.CodePointRangeSet.prototype[Symbol.toStringTag]", () => {
+  const rs1 = CodePointRangeSet.fromRanges([]);
+  assertStrictEquals(rs1[Symbol.toStringTag], "CodePointRangeSet");
+});
+
 Deno.test("Text.CodePointRangeSet.fromRanges()", () => {
   const rs1 = CodePointRangeSet.fromRanges([[0, 0], [0, 0]]);
   assertStrictEquals([...rs1.toRanges()].map((r) => _s(r)).join("|"), "0,0");
