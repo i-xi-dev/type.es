@@ -265,6 +265,11 @@ const x2 = Uint8Array.of(
 const x2b = Array.from(x2, (i) => String.fromCharCode(i)).join("");
 const x2bUtf8 = new TextEncoder().encode(x2b) as Uint8Array<ArrayBuffer>;
 
+Deno.test("Bytes.PercentEncoder.prototype[Symbol.toStringTag]", () => {
+  const decoder1 = new Bytes.PercentEncoder();
+  assertStrictEquals(decoder1[Symbol.toStringTag], "PercentEncoder");
+});
+
 Deno.test("Bytes.PercentEncoder.prototype.encode()", () => {
   const encoder1 = new Bytes.PercentEncoder();
 

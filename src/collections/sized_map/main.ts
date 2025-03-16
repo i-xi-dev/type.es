@@ -11,6 +11,10 @@ export class SizedMap<K, V> extends Map<K, V> {
     this.#maxSize = maxSize;
   }
 
+  override get [Symbol.toStringTag](): string {
+    return "SizedMap";
+  }
+
   override set(key: K, value: V): this {
     super.set(key, value);
     if (this.size > this.#maxSize) {

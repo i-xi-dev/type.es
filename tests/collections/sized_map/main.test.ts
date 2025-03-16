@@ -40,6 +40,11 @@ Deno.test("new Collections.SizedMap()", () => {
   assertStrictEquals(m0 instanceof Map, true);
 });
 
+Deno.test("Collections.SizedMap.prototype[Symbol.toStringTag]", () => {
+  const m0 = new SizedMap<string, string>(0);
+  assertStrictEquals(m0[Symbol.toStringTag], "SizedMap");
+});
+
 Deno.test("Collections.SizedMap.prototype.set() - 0", () => {
   const m0 = new SizedMap<string, string>(0);
   assertStrictEquals(m0.size, 0);

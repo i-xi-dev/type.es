@@ -85,6 +85,10 @@ export abstract class Task<T> extends EventTarget {
     return this._loaded;
   }
 
+  get [Symbol.toStringTag](): string {
+    return "Task";
+  }
+
   /**
    * Dispatch the `ProgressEvent` to notify progress.
    * @param name - The name of `ProgressEvent`.

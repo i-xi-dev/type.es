@@ -2,6 +2,8 @@
  * The decoder that converts a string into a byte sequence.
  */
 export interface Decoder {
+  get [Symbol.toStringTag](): string;
+
   /**
    * Converts a string into a byte sequence.
    *
@@ -15,6 +17,8 @@ export interface Decoder {
  * The encoder that converts a byte sequence into a string.
  */
 export interface Encoder {
+  get [Symbol.toStringTag](): string;
+
   /**
    * Converts a byte sequence into a string.
    *
@@ -88,6 +92,8 @@ export abstract class DecoderStream
   get readable(): ReadableStream<Uint8Array<ArrayBuffer>> {
     return this.#stream.readable;
   }
+
+  abstract get [Symbol.toStringTag](): string;
 }
 
 export interface EncoderStreamRegulator {
@@ -152,4 +158,6 @@ export abstract class EncoderStream
   get readable(): ReadableStream<string> {
     return this.#stream.readable;
   }
+
+  abstract get [Symbol.toStringTag](): string;
 }

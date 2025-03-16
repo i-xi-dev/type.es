@@ -317,6 +317,8 @@ export abstract class Decoder implements TextDecoder {
     return this.#common.ignoreBOM;
   }
 
+  abstract get [Symbol.toStringTag](): string;
+
   decode(input?: BufferSource, options?: TextDecodeOptions): string {
     const removeBOM = this.#common.ignoreBOM !== true;
     const inStreaming = options?.stream === true;
@@ -440,6 +442,8 @@ export abstract class Encoder /* implements TextEncoder (encodingが"utf-8"で�
   get prependBOM(): boolean {
     return this.#common.prependBOM;
   }
+
+  abstract get [Symbol.toStringTag](): string;
 
   //XXX throws TypeError: strict:true、かつ、入力がstring型ではないとき
   //XXX throws TypeError: fatal:true、かつ、入力に符号化方式で符号化できない文字が含まれるとき

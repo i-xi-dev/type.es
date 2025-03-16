@@ -4,6 +4,11 @@ import { Bytes } from "../../../../mod.ts";
 const utf8 = new TextEncoder();
 const utf8Bytes1 = utf8.encode("1\u{0} !~\u{7F}あ+");
 
+Deno.test("Bytes.PercentDecoder.prototype[Symbol.toStringTag]", () => {
+  const decoder1 = new Bytes.PercentDecoder();
+  assertStrictEquals(decoder1[Symbol.toStringTag], "PercentDecoder");
+});
+
 Deno.test("Bytes.PercentDecoder.prototype.decode()", () => {
   const decoder1 = new Bytes.PercentDecoder();
 

@@ -19,6 +19,10 @@ export class PercentEncoder implements Encoder {
     this.#options = _resolveOptions(options);
   }
 
+  get [Symbol.toStringTag](): string {
+    return "PercentEncoder";
+  }
+
   /**
    * Encodes the specified byte sequence into a string.
    *

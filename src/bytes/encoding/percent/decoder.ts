@@ -24,6 +24,10 @@ export class PercentDecoder implements Decoder {
     this.#options = _resolveOptions(options);
   }
 
+  get [Symbol.toStringTag](): string {
+    return "PercentDecoder";
+  }
+
   /**
    * Decodes a Percent-encoded string into an `Uint8Array`.
    *
