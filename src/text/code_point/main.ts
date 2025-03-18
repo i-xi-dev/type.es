@@ -5,7 +5,7 @@ import { SafeInt } from "../../numerics/mod.ts";
 
 const _toStringOptions: SafeInt.ToStringOptions = {
   // lowerCase: false,
-  minIntegralDigits: 4,
+  minIntegerDigits: 4,
   radix: Radix.HEXADECIMAL,
 } as const;
 

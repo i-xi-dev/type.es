@@ -103,21 +103,23 @@ Deno.test("Spatial.Angle.prototype.toRadians()", () => {
   assertStrictEquals(a450.toDegrees(), 90);
 });
 
+Deno.test("Spatial.Angle.prototype.toString()", () => {
+  const a0 = Spatial.Angle.ofDegrees(0);
+  assertStrictEquals(a0.toString(), "0 rad");
+
+  const a180 = Spatial.Angle.ofDegrees(180);
+  assertStrictEquals(a180.toString(), "3.141592653589793 rad");
+
+  const a360 = Spatial.Angle.ofDegrees(360);
+  assertStrictEquals(a360.toString(), "0 rad");
+});
+
 Deno.test("Spatial.Angle.prototype.valueOf()", () => {
   const a0 = Spatial.Angle.ofDegrees(0);
   assertStrictEquals(a0.valueOf(), 0);
 
-  const a01 = Spatial.Angle.ofDegrees(0.1);
-  assertStrictEquals(a01.valueOf(), 0.1);
-
-  const a1 = Spatial.Angle.ofDegrees(1);
-  assertStrictEquals(a1.valueOf(), 1);
-
-  const a359 = Spatial.Angle.ofDegrees(359);
-  assertStrictEquals(a359.valueOf(), 359);
-
-  const a3599 = Spatial.Angle.ofDegrees(359.9);
-  assertStrictEquals(a3599.valueOf(), 359.9);
+  const a180 = Spatial.Angle.ofDegrees(180);
+  assertStrictEquals(a180.valueOf(), Math.PI);
 
   const a360 = Spatial.Angle.ofDegrees(360);
   assertStrictEquals(a360.valueOf(), 0);

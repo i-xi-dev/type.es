@@ -1,4 +1,5 @@
 import * as Type from "../../type/mod.ts";
+import { Radix } from "../../basics/mod.ts";
 
 type _degs = number;
 type _rads = number;
@@ -21,11 +22,19 @@ function _degreesToRadians(degrees: _degs): _rads {
   return _normalizeDegrees(degrees) * (Math.PI / 180);
 }
 
-export namespace Angle {
-}
+/*XXX クラス分ける？
+  RadiansFormat
+    小数部桁数min,max
+  DegreesFormat
+    0.0° | 0°0′0.0″
+    小数部桁数min,max
+
+  */
 
 export class Angle {
   #degrees: _degs;
+  //XXX とりあえず無加工で整数部が一番大きいdegreeで持ったが
+  // turn (× 10X)とかで持つ？ (turn × 2piでradian)
 
   private constructor(degrees: _degs) {
     this.#degrees = _normalizeDegrees(degrees);
@@ -49,12 +58,13 @@ export class Angle {
     return _degreesToRadians(this.#degrees);
   }
 
-  //toString():string {
-  //TODO
-  //}
+  // 小数部桁数は Number.prototype.toStringに依存
+  toString(): string {
+    return `${this.toRadians().toString(Radix.DECIMAL)} rad`;
+  }
 
   valueOf(): _degs {
-    return this.#degrees;
+    return _degreesToRadians(this.#degrees);
   }
 
   plusDegrees(degrees: _degs): Angle {

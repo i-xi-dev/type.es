@@ -22,7 +22,7 @@ export type _UsAsciiCharBytes = Array<uint8>; // [uint8] ;
 // }
 
 const _formatOptions = {
-  minIntegralDigits: 2,
+  minIntegerDigits: 2,
   radix: Radix.HEXADECIMAL,
 } as const;
 

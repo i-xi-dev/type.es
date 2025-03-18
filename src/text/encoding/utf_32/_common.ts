@@ -18,7 +18,7 @@ export const _MAX_BYTES_PER_RUNE = 4;
 type _RuneBytes = Array<uint8>; // [uint8, uint8, uint8, uint8] ;
 
 const _formatOptions = {
-  minIntegralDigits: 8,
+  minIntegerDigits: 8,
   radix: Radix.HEXADECIMAL,
 } as const;
 

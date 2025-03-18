@@ -55,7 +55,7 @@ export function fromString(
 
 export type ToStringOptions = {
   lowerCase?: boolean;
-  minIntegralDigits?: number;
+  minIntegerDigits?: number;
   radix?: radix;
 };
 
@@ -70,9 +70,9 @@ export function toString(value: safeint, options?: ToStringOptions): string {
     result = result.toUpperCase();
   }
 
-  const minIntegralDigits = options?.minIntegralDigits;
-  if (Type.isPositiveNumber(minIntegralDigits)) {
-    result = result.padStart(minIntegralDigits, "0");
+  const minIntegerDigits = options?.minIntegerDigits;
+  if (Type.isPositiveNumber(minIntegerDigits)) {
+    result = result.padStart(minIntegerDigits, "0");
   }
 
   return result;
