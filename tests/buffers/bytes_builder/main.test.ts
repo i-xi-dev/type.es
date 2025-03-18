@@ -3,11 +3,11 @@ import {
   assertStrictEquals,
   assertThrows,
 } from "@std/assert";
-import { Buffer } from "../../../mod.ts";
+import { Buffers } from "../../../mod.ts";
 
-const { BytesBuilder } = Buffer;
+const { BytesBuilder } = Buffers;
 
-Deno.test("new Buffer.BytesBuilder()/capacity/length/append() - number", () => {
+Deno.test("new Buffers.BytesBuilder()/capacity/length/append() - number", () => {
   const b = new BytesBuilder({ capacity: 2 });
   assertStrictEquals(b.capacity, 2);
   assertStrictEquals(b.length, 0);
@@ -28,7 +28,7 @@ Deno.test("new Buffer.BytesBuilder()/capacity/length/append() - number", () => {
   assertStrictEquals(b.copyToArrayBuffer().byteLength, 3);
 });
 
-Deno.test("new Buffer.BytesBuilder()/capacity/length/append() - BufferSource", () => {
+Deno.test("new Buffers.BytesBuilder()/capacity/length/append() - BufferSource", () => {
   const b = new BytesBuilder();
 
   assertStrictEquals(b.capacity, 1_048_576);
@@ -49,7 +49,7 @@ Deno.test("new Buffer.BytesBuilder()/capacity/length/append() - BufferSource", (
   );
 });
 
-Deno.test("new Buffer.BytesBuilder()/capacity/length/append() - 2", () => {
+Deno.test("new Buffers.BytesBuilder()/capacity/length/append() - 2", () => {
   const b = new BytesBuilder();
 
   assertStrictEquals(b.capacity, 1_048_576);
@@ -77,7 +77,7 @@ Deno.test("new Buffer.BytesBuilder()/capacity/length/append() - 2", () => {
   // }
 });
 
-Deno.test("new Buffer.BytesBuilder()/capacity/length/append()", () => {
+Deno.test("new Buffers.BytesBuilder()/capacity/length/append()", () => {
   const b = new BytesBuilder({ capacity: 10 });
 
   assertStrictEquals(b.capacity, 10);
@@ -111,7 +111,7 @@ Deno.test("new Buffer.BytesBuilder()/capacity/length/append()", () => {
   );
 });
 
-Deno.test("new Buffer.BytesBuilder() - capacityMax", () => {
+Deno.test("new Buffers.BytesBuilder() - capacityMax", () => {
   const b = new BytesBuilder({ capacity: 4, capacityMax: 8 });
   b.append(255);
   assertStrictEquals(b.length, 1);
@@ -139,7 +139,7 @@ Deno.test("new Buffer.BytesBuilder() - capacityMax", () => {
   );
 });
 
-Deno.test("new Buffer.BytesBuilder() - err", () => {
+Deno.test("new Buffers.BytesBuilder() - err", () => {
   assertThrows(
     () => {
       new BytesBuilder({ capacityMax: 536_870_913 });
@@ -163,7 +163,7 @@ Deno.test("new Buffer.BytesBuilder() - err", () => {
   assertStrictEquals(b3.capacity, 1_048_576);
 });
 
-Deno.test("Buffer.BytesBuilder.prototype.growable", () => {
+Deno.test("Buffers.BytesBuilder.prototype.growable", () => {
   const b1 = new BytesBuilder();
   assertStrictEquals(b1.growable, true);
   assertStrictEquals(b1.capacity, 1_048_576);
@@ -201,12 +201,12 @@ Deno.test("Buffer.BytesBuilder.prototype.growable", () => {
   assertStrictEquals(b7.capacity, 536_870_912);
 });
 
-Deno.test("Buffer.BytesBuilder.prototype[Symbol.toStringTag]", () => {
+Deno.test("Buffers.BytesBuilder.prototype[Symbol.toStringTag]", () => {
   const b1 = new BytesBuilder();
   assertStrictEquals(b1[Symbol.toStringTag], "BytesBuilder");
 });
 
-Deno.test("Buffer.BytesBuilder.prototype.append()", () => {
+Deno.test("Buffers.BytesBuilder.prototype.append()", () => {
   const b = new BytesBuilder();
   b.append(255);
   b.append(Uint8Array.of(255));
@@ -220,5 +220,136 @@ Deno.test("Buffer.BytesBuilder.prototype.append()", () => {
   );
 });
 
-//TODO takeAsArrayBuffer
-//TODO takeAsUint8Array
+Deno.test("Buffers.BytesBuilder.prototype.copyToArrayBuffer()", () => {
+  const b = new BytesBuilder();
+  const bc1 = b.copyToArrayBuffer();
+  assertStrictEquals(bc1.byteLength, 0);
+
+  b.append(255);
+  assertStrictEquals(bc1.byteLength, 0);
+  const bc2 = b.copyToArrayBuffer();
+  assertStrictEquals(bc2.byteLength, 1);
+});
+
+Deno.test("Buffers.BytesBuilder.prototype.copyToUint8Array()", () => {
+  const b = new BytesBuilder();
+  const bc1 = b.copyToUint8Array();
+  assertStrictEquals(bc1.byteLength, 0);
+
+  b.append(255);
+  assertStrictEquals(bc1.byteLength, 0);
+  const bc2 = b.copyToUint8Array();
+  assertStrictEquals(bc2.byteLength, 1);
+  assertStrictEquals(bc2[0], 255);
+});
+
+Deno.test("Buffers.BytesBuilder.prototype.takeAsArrayBuffer()", () => {
+  const b = new BytesBuilder();
+  const bc1 = b.takeAsArrayBuffer();
+  assertStrictEquals(bc1.byteLength, 0);
+
+  assertThrows(
+    () => {
+      b.append(255);
+    },
+    Error,
+    "This BytesBuilder is no longer available.",
+  );
+
+  assertThrows(
+    () => {
+      b.append(255);
+    },
+    Error,
+    "This BytesBuilder is no longer available.",
+  );
+  assertThrows(
+    () => {
+      b.copyToArrayBuffer();
+    },
+    Error,
+    "This BytesBuilder is no longer available.",
+  );
+  assertThrows(
+    () => {
+      b.copyToUint8Array();
+    },
+    Error,
+    "This BytesBuilder is no longer available.",
+  );
+  assertThrows(
+    () => {
+      b.takeAsArrayBuffer();
+    },
+    Error,
+    "This BytesBuilder is no longer available.",
+  );
+  assertThrows(
+    () => {
+      b.takeAsUint8Array();
+    },
+    Error,
+    "This BytesBuilder is no longer available.",
+  );
+
+  const b2 = new BytesBuilder();
+  b2.append(255);
+  const b2c2 = b2.takeAsArrayBuffer();
+  assertStrictEquals(b2c2.byteLength, 1);
+});
+
+Deno.test("Buffers.BytesBuilder.prototype.takeAsUint8Array()", () => {
+  const b = new BytesBuilder();
+  const bc1 = b.takeAsUint8Array();
+  assertStrictEquals(bc1.byteLength, 0);
+
+  assertThrows(
+    () => {
+      b.append(255);
+    },
+    Error,
+    "This BytesBuilder is no longer available.",
+  );
+
+  assertThrows(
+    () => {
+      b.append(255);
+    },
+    Error,
+    "This BytesBuilder is no longer available.",
+  );
+  assertThrows(
+    () => {
+      b.copyToArrayBuffer();
+    },
+    Error,
+    "This BytesBuilder is no longer available.",
+  );
+  assertThrows(
+    () => {
+      b.copyToUint8Array();
+    },
+    Error,
+    "This BytesBuilder is no longer available.",
+  );
+  assertThrows(
+    () => {
+      b.takeAsArrayBuffer();
+    },
+    Error,
+    "This BytesBuilder is no longer available.",
+  );
+  assertThrows(
+    () => {
+      b.takeAsUint8Array();
+    },
+    Error,
+    "This BytesBuilder is no longer available.",
+  );
+
+  const b2 = new BytesBuilder();
+  b2.append(255);
+  const b2c2 = b2.takeAsUint8Array();
+  assertStrictEquals(b2c2.byteLength, 1);
+  assertStrictEquals(b2c2[0], 255);
+});

@@ -90,7 +90,7 @@ export class BytesBuilder {
 
   #assertValidState(): void {
     if (this.#isValidState() !== true) {
-      throw new InvalidStateError("TODO");
+      throw new InvalidStateError("This BytesBuilder is no longer available.");
     }
   }
 
