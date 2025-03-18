@@ -22,18 +22,6 @@ import { Number as ExNumber } from "../../numerics/mod.ts";
 //   maxByteLength?: safeint;
 // };
 
-export function fromUint8Iterable(
-  value: Iterable<safeint /* uint8 */>,
-  // options?: FromUint8IterableOptions,
-): ArrayBuffer {
-  Type.assertIterable(value, "value");
-
-  return Uint8Array.from(value, (byte, index) => {
-    Type.assertUint8(byte, `value[${index}]`);
-    return byte;
-  }).buffer;
-}
-
 export async function fromUint8AsyncIterable(
   value: AsyncIterable<safeint /* uint8 */>,
   // options?: FromUint8IterableOptions,

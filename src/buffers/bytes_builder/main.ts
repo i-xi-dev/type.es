@@ -69,14 +69,13 @@ export class BytesBuilder {
     return "BytesBuilder";
   }
 
-  //XXX Iterable<uint8>も受け付ける
-  append(byteOrBytes: uint8 | BufferSource): this {
+  append(byteOrBytes: /* uint8 */ safeint | BufferSource): this {
     this.#assertValidState();
 
     if (Type.isBufferSource(byteOrBytes)) {
-      return this.#appendBytes(byteOrBytes);
+      return this.#appendBytes(byteOrBytes, "byteOrBytes");
     } else if (Type.isUint8(byteOrBytes)) {
-      return this.#appendByte(byteOrBytes);
+      return this.#appendByte(byteOrBytes, "byteOrBytes");
     }
 
     throw new TypeError(
@@ -94,8 +93,8 @@ export class BytesBuilder {
     }
   }
 
-  #appendByte(byte: uint8): this {
-    Type.assertUint8(byte, "byte");
+  #appendByte(byte: uint8, assertionLabel: string): this {
+    Type.assertUint8(byte, assertionLabel);
 
     this.#growIfNeeded(Uint8.BYTE_LENGTH);
     this.#buffer![this.#length] = byte;
@@ -103,8 +102,8 @@ export class BytesBuilder {
     return this;
   }
 
-  #appendBytes(bytes: BufferSource): this {
-    Type.assertBufferSource(bytes, "bytes");
+  #appendBytes(bytes: BufferSource, assertionLabel: string): this {
+    Type.assertBufferSource(bytes, assertionLabel);
 
     this.#growIfNeeded(bytes.byteLength);
     this.#buffer!.set(
@@ -164,7 +163,20 @@ export class BytesBuilder {
     return new Uint8Array(this.copyToArrayBuffer());
   }
 
-  //XXX 要る？
-  // toString(): string {
+  //XXX optionsで最大サイズ
+  loadFromUint8Iterable(value: Iterable<safeint /* uint8 */>): void {
+    Type.assertIterable(value, "value");
+
+    const loaded = new BytesBuilder();
+    for (const uint8Expected of value) {
+      loaded.#appendByte(uint8Expected as uint8, "value[*]");
+      // uint8ではなかった場合、#appendByteで例外になる
+    }
+    this.append(loaded.takeAsArrayBuffer());
+  }
+
+  //XXX optionsで最大サイズ
+  // async loadFromUint8AsyncIterable(value: AsyncIterable<safeint /* uint8 */>): Promise<void> {
+  //   TODO
   // }
 }

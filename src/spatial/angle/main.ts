@@ -25,6 +25,7 @@ function _degreesToRadians(degrees: _degs): _rads {
 /*XXX クラス分ける？
   RadiansFormat
     小数部桁数min,max
+    分数表記用
   DegreesFormat
     0.0° | 0°0′0.0″
     小数部桁数min,max
@@ -33,8 +34,6 @@ function _degreesToRadians(degrees: _degs): _rads {
 
 export class Angle {
   #degrees: _degs;
-  //XXX とりあえず無加工で整数部が一番大きいdegreeで持ったが
-  // turn (× 10X)とかで持つ？ (turn × 2piでradian)
 
   private constructor(degrees: _degs) {
     this.#degrees = _normalizeDegrees(degrees);
