@@ -102,7 +102,7 @@ export abstract class Task<T> extends EventTarget {
       this.#lastProgressNotifiedAt = now;
     }
 
-    const event = EventFactory.create(EventType.PROGRESS, name, {
+    const event = EventFactory.create<ProgressEvent>(EventType.PROGRESS, name, {
       total: this.#total,
       lengthComputable: (this.indeterminate !== true),
       loaded: this._loaded,

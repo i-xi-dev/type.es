@@ -19,8 +19,8 @@ function _initAmount(value?: number): safeint {
  *
  * Implements the [`ProgressEvent`](https://developer.mozilla.org/en-US/docs/Web/API/ProgressEvent) interface.
  */
-export class _ProgressEvent extends Event
-  implements ProgressEvent<EventTarget> {
+export class _ProgressEvent<T extends EventTarget = EventTarget> extends Event
+  implements ProgressEvent<T> {
   #lengthComputable: boolean;
   #loaded: safeint;
   #total: safeint;
@@ -39,6 +39,10 @@ export class _ProgressEvent extends Event
       : false;
     this.#loaded = _initAmount(init?.loaded);
     this.#total = _initAmount(init?.total);
+  }
+
+  override get target(): T | null {
+    return super.target as T | null;
   }
 
   /**
