@@ -72,9 +72,14 @@ class _Uint<T extends safeint> implements RangedInt<T> {
   readonly BYTE_LENGTH: safeint; // (1 | 2 | 3 | 4 | 5 | 6)
   readonly #assert: _AFunc;
   readonly #size: safeint;
-  readonly #buffer: ArrayBuffer;
-  readonly #view32: Uint32Array<ArrayBuffer>;
-  readonly #view8: Uint8Array<ArrayBuffer>;
+
+  readonly #bwoBuffer: ArrayBuffer;
+  readonly #bwoView32: Uint32Array<ArrayBuffer>;
+  readonly #bwoView8: Uint8Array<ArrayBuffer>;
+
+  // readonly #tbBuffer: ArrayBuffer;
+  // readonly #tbView32: Uint32Array<ArrayBuffer>;
+  // readonly #tbView: DataView<ArrayBuffer>;
 
   constructor(info: _Info<T>, assert: _AFunc) {
     this.MIN_VALUE = info.MIN_VALUE;
@@ -86,9 +91,14 @@ class _Uint<T extends safeint> implements RangedInt<T> {
     }
     this.#assert = assert;
     this.#size = info.MAX_VALUE + 1; // Uintの場合、最小は0なので最大+1で固定（= 2 ** bitLength）
-    this.#buffer = new ArrayBuffer(4 * 3); // 一旦Uint32 3つ分
-    this.#view32 = new Uint32Array(this.#buffer);
-    this.#view8 = new Uint8Array(this.#buffer);
+
+    this.#bwoBuffer = new ArrayBuffer(4 * 3); // 一旦Uint32 3つ分
+    this.#bwoView32 = new Uint32Array(this.#bwoBuffer);
+    this.#bwoView8 = new Uint8Array(this.#bwoBuffer);
+
+    // this.#tbBuffer = new ArrayBuffer(4); // Uint32 1つ分
+    // this.#tbView32 = new Uint32Array(this.#tbBuffer);
+    // this.#tbView = new DataView(this.#tbBuffer);
   }
 
   get [Symbol.toStringTag](): string {
@@ -96,21 +106,21 @@ class _Uint<T extends safeint> implements RangedInt<T> {
   }
 
   #bitOperateUint32(a: uint32, b: uint32, op: _BitOperation): uint32 {
-    // #buffer の 1～4バイトをa, 5～8をb, 9～12を結果 として使用
-    this.#view32[0] = a;
-    this.#view32[1] = b;
-    this.#view32[2] = ExNumber.ZERO;
+    // #bwoBuffer の 1～4バイトをa, 5～8をb, 9～12を結果 として使用
+    this.#bwoView32[0] = a;
+    this.#bwoView32[1] = b;
+    this.#bwoView32[2] = ExNumber.ZERO;
     for (let i = 0; i < 4; i++) {
       if (op === _BitOperation.AND) {
-        this.#view8[i + 8] = this.#view8[i + 0] & this.#view8[i + 4];
+        this.#bwoView8[i + 8] = this.#bwoView8[i + 0] & this.#bwoView8[i + 4];
       } else if (op === _BitOperation.OR) {
-        this.#view8[i + 8] = this.#view8[i + 0] | this.#view8[i + 4];
+        this.#bwoView8[i + 8] = this.#bwoView8[i + 0] | this.#bwoView8[i + 4];
       } else if (op === _BitOperation.XOR) {
-        this.#view8[i + 8] = this.#view8[i + 0] ^ this.#view8[i + 4];
+        this.#bwoView8[i + 8] = this.#bwoView8[i + 0] ^ this.#bwoView8[i + 4];
       }
     }
 
-    return this.#view32[2];
+    return this.#bwoView32[2];
   }
 
   fromBytes(
@@ -166,12 +176,23 @@ class _Uint<T extends safeint> implements RangedInt<T> {
         bytes.push(_getByteByPosition(value, i));
       }
     }
-
     return Uint8Array.from(
       (byteOrder === ByteOrder.LITTLE_ENDIAN) ? bytes : bytes.reverse(),
     );
 
-    //XXX 32以下はUint32Arrayにした方が多分速い
+    // 遅い
+    // if (byteOrder === ByteOrder.nativeOrder) {
+    //   this.#tbView32[0] = value;
+    // } else {
+    //   this.#tbView.setUint32(0, value, byteOrder === ByteOrder.LITTLE_ENDIAN);
+    // }
+    // const sliced = (byteOrder === ByteOrder.LITTLE_ENDIAN)
+    //   ? this.#tbBuffer.slice(0, this.BYTE_LENGTH)
+    //   : this.#tbBuffer.slice(
+    //     Uint32.BYTE_LENGTH - this.BYTE_LENGTH,
+    //     Uint32.BYTE_LENGTH,
+    //   );
+    // return new Uint8Array(sliced);
   }
 
   bitwiseAnd(a: T, b: T): T {

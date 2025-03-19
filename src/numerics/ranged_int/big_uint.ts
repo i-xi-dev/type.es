@@ -124,13 +124,6 @@ class _BigUint<T extends bigint> implements RangedBigInt<T> {
     return Uint8Array.from(
       (byteOrder === ByteOrder.LITTLE_ENDIAN) ? bytes : bytes.reverse(),
     );
-
-    // this.#bufferView.setBigUint64( //XXX 64以下はこれを基にした方が多分速い
-    //   ExNumber.ZERO,
-    //   value,
-    //   byteOrder === ByteOrder.LITTLE_ENDIAN,
-    // );
-    // return Uint8Array.from(this.#bufferUint8View);
   }
 
   bitwiseAnd(a: T, b: T): T {
