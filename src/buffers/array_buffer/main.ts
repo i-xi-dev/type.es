@@ -12,32 +12,7 @@ import {
 import { BytesBuilder } from "../bytes_builder/mod.ts";
 import { Number as ExNumber } from "../../numerics/mod.ts";
 
-//TODO BytesBuilderにまとめる
-
-// const _DEFAULT_BYTE_LENGTH = 1_024;
-// const _DEFAULT_MAX_BYTE_LENGTH = 1_048_576;
-
-//XXX
-// export type FromUint8IterableOptions = {
-//   maxByteLength?: safeint;
-// };
-
-export async function fromUint8AsyncIterable(
-  value: AsyncIterable<safeint /* uint8 */>,
-  // options?: FromUint8IterableOptions,
-): Promise<ArrayBuffer> {
-  Type.assertAsyncIterable(value, "value");
-
-  const builder = new BytesBuilder();
-  let index = 0;
-  for await (const byte of value) {
-    Type.assertUint8(byte, `value[${index}]`);
-    builder.append(byte as uint8);
-    index++;
-  }
-  return builder.takeAsArrayBuffer();
-}
-
+//XXX Uint8Arrayにすれば良いだけなので不要では
 export function toUint8Iterable(value: ArrayBuffer): Iterable<uint8> {
   Type.assertArrayBuffer(value, "value");
   return (new Uint8Array(value))[Symbol.iterator]() as Iterable<uint8>;

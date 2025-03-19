@@ -176,7 +176,16 @@ export class BytesBuilder {
   }
 
   //XXX optionsで最大サイズ
-  // async loadFromUint8AsyncIterable(value: AsyncIterable<safeint /* uint8 */>): Promise<void> {
-  //   TODO
-  // }
+  async loadFromUint8AsyncIterable(
+    value: AsyncIterable<safeint /* uint8 */>,
+  ): Promise<void> {
+    Type.assertAsyncIterable(value, "value");
+
+    const loaded = new BytesBuilder();
+    for await (const uint8Expected of value) {
+      loaded.#appendByte(uint8Expected as uint8, "value[*]");
+      // uint8ではなかった場合、#appendByteで例外になる
+    }
+    this.append(loaded.takeAsArrayBuffer());
+  }
 }
