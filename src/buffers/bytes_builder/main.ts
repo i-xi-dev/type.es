@@ -1,7 +1,16 @@
 import * as Type from "../../type/mod.ts";
-import { Number as ExNumber, Uint8 } from "../../numerics/mod.ts";
-import { InvalidStateError, QuotaExceededError } from "../../basics/mod.ts";
-import { type safeint, type uint8 } from "../../_typedef/mod.ts";
+import {
+  ByteOrder,
+  InvalidStateError,
+  QuotaExceededError,
+} from "../../basics/mod.ts";
+import {
+  type byteorder,
+  type safeint,
+  type uint16,
+  type uint8,
+} from "../../_typedef/mod.ts";
+import { Number as ExNumber, Uint16, Uint8 } from "../../numerics/mod.ts";
 
 const _DEFAULT_CAPACITY = 1_048_576;
 
@@ -32,6 +41,12 @@ function _computeSize(
   Type.assertSafeIntInRange(capacity, "init.capacity", [0, capacityMax]);
 
   return { capacity, capacityMax };
+}
+
+export namespace BytesBuilder {
+  export type LoadOptions = {
+    byteOrder?: byteorder; // uint8の場合は無視
+  };
 }
 
 export class BytesBuilder {
@@ -73,9 +88,10 @@ export class BytesBuilder {
     this.#assertValidState();
 
     if (Type.isBufferSource(byteOrBytes)) {
-      return this.#appendBytes(byteOrBytes, "byteOrBytes");
+      return this.#appendBytes(byteOrBytes);
     } else if (Type.isUint8(byteOrBytes)) {
-      return this.#appendByte(byteOrBytes, "byteOrBytes");
+      Type.assertUint8(byteOrBytes, "byteOrBytes");
+      return this.#appendByte(byteOrBytes);
     }
 
     throw new TypeError(
@@ -93,17 +109,15 @@ export class BytesBuilder {
     }
   }
 
-  #appendByte(byte: uint8, assertionLabel: string): this {
-    Type.assertUint8(byte, assertionLabel);
-
+  #appendByte(byte: uint8): this {
     this.#growIfNeeded(Uint8.BYTE_LENGTH);
     this.#buffer![this.#length] = byte;
     this.#length = this.#length + Uint8.BYTE_LENGTH;
     return this;
   }
 
-  #appendBytes(bytes: BufferSource, assertionLabel: string): this {
-    Type.assertBufferSource(bytes, assertionLabel);
+  #appendBytes(bytes: BufferSource): this {
+    // Type.assertBufferSource(bytes, assertionLabel);
 
     this.#growIfNeeded(bytes.byteLength);
     this.#buffer!.set(
@@ -169,8 +183,8 @@ export class BytesBuilder {
 
     const loaded = new BytesBuilder();
     for (const uint8Expected of value) {
-      loaded.#appendByte(uint8Expected as uint8, "value[*]");
-      // uint8ではなかった場合、#appendByteで例外になる
+      Type.assertUint8(uint8Expected, "value[*]");
+      loaded.#appendByte(uint8Expected as uint8);
     }
     this.append(loaded.takeAsArrayBuffer());
   }
@@ -183,9 +197,92 @@ export class BytesBuilder {
 
     const loaded = new BytesBuilder();
     for await (const uint8Expected of value) {
-      loaded.#appendByte(uint8Expected as uint8, "value[*]");
-      // uint8ではなかった場合、#appendByteで例外になる
+      Type.assertUint8(uint8Expected, "value[*]");
+      loaded.#appendByte(uint8Expected as uint8);
     }
     this.append(loaded.takeAsArrayBuffer());
   }
+
+  //XXX optionsで最大サイズ
+  loadFromUint16Iterable(
+    value: Iterable<uint16>,
+    options?: BytesBuilder.LoadOptions,
+  ): void {
+    // Type.assertIterable(value, "value");
+    // const byteOrder = options?.byteOrder ?? ByteOrder.nativeOrder;
+    // const loaded = new BytesBuilder();
+    // if (byteOrder === ByteOrder.nativeOrder) {
+    //   const v = new Uint16Array(1);
+    //   for (const uint16Expected of value) {
+    //     Type.assertUint16(uint16Expected, "value[*]");
+    //     v[0] = uint16Expected;
+    //     loaded.#appendBytes(v);
+    //   }
+    // } else {
+    //   const v = new DataView(new ArrayBuffer(Uint16.BYTE_LENGTH));
+    //   for (const uint16Expected of value) {
+    //     Type.assertUint16(uint16Expected, "value[*]");
+    //     v.setUint16(0, uint16Expected, byteOrder === ByteOrder.LITTLE_ENDIAN);
+    //     loaded.#appendBytes(v);
+    //   }
+    // }
+    // this.append(loaded.takeAsArrayBuffer());
+
+    this.#loadFromUint8xIterable<uint16>(value, {
+      typedArrayCtor: Uint16Array,
+      assertElement: Type.assertUint16,
+      setterName: "setUint16",
+      byteLength: Uint16.BYTE_LENGTH,
+    }, options);
+  }
+
+  #loadFromUint8xIterable<T extends number>(
+    value: Iterable<T>,
+    init: {
+      typedArrayCtor: Uint16ArrayConstructor | Uint32ArrayConstructor;
+      assertElement: (test: unknown, label: string) => void;
+      setterName: "setUint16" | "setUint32";
+      byteLength: safeint;
+    },
+    options?: BytesBuilder.LoadOptions,
+  ) {
+    Type.assertIterable(value, "value");
+
+    const byteOrder = options?.byteOrder ?? ByteOrder.nativeOrder;
+    const loaded = new BytesBuilder();
+    if (byteOrder === ByteOrder.nativeOrder) {
+      const v = new init.typedArrayCtor(1);
+      for (const uint8xExpected of value) {
+        init.assertElement(uint8xExpected, "value[*]");
+        v[0] = uint8xExpected;
+        loaded.#appendBytes(v);
+      }
+    } else {
+      const v = new DataView(new ArrayBuffer(init.byteLength));
+      for (const uint8xExpected of value) {
+        init.assertElement(uint8xExpected, "value[*]");
+        v[init.setterName](
+          0,
+          uint8xExpected,
+          byteOrder === ByteOrder.LITTLE_ENDIAN,
+        );
+        loaded.#appendBytes(v);
+      }
+    }
+
+    this.append(loaded.takeAsArrayBuffer());
+  }
+
+  // 遅い
+  // loadFromUint16Iterable_2(
+  //   value: Iterable<uint16>,
+  //   options?: BytesBuilder.LoadOptions,
+  // ): void {
+  //   Type.assertIterable(value, "value");
+  //   const byteOrder = options?.byteOrder ?? ByteOrder.nativeOrder;
+  //   for (const uint16Expected of value) {
+  //     Type.assertUint16(uint16Expected, "value[*]");
+  //     this.#appendBytes(Uint16.toBytes(uint16Expected, byteOrder));
+  //   }
+  // }
 }
