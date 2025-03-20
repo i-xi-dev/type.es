@@ -235,3 +235,131 @@ Deno.test("Buffers.BytesBuilder.prototype.loadFromUint16Iterable() - Generator<u
     assertStrictEquals(a1x[5], 255);
   }
 });
+
+Deno.test("Buffers.BytesBuilder.prototype.loadFromUint16AsyncIterable() - Array<uint16>", async () => {
+  const b1 = new BytesBuilder();
+  await assertRejects(
+    async () => {
+      await b1.loadFromUint16AsyncIterable(
+        0 as unknown as AsyncIterable<number>,
+      );
+    },
+    TypeError,
+    "`value` must implement `Symbol.asyncIterator`.",
+  );
+
+  await assertRejects(
+    async () => {
+      await b1.loadFromUint16AsyncIterable(
+        1 as unknown as AsyncIterable<number>,
+      );
+    },
+    TypeError,
+    "`value` must implement `Symbol.asyncIterator`.",
+  );
+
+  await assertRejects(
+    async () => {
+      await b1.loadFromUint16AsyncIterable(
+        [-1] as unknown as AsyncIterable<number>,
+      );
+    },
+    TypeError,
+    "`value` must implement `Symbol.asyncIterator`.",
+  );
+  await assertRejects(
+    async () => {
+      await b1.loadFromUint16AsyncIterable(
+        ["0"] as unknown as AsyncIterable<number>,
+      );
+    },
+    TypeError,
+    "`value` must implement `Symbol.asyncIterator`.",
+  );
+  await assertRejects(
+    async () => {
+      await b1.loadFromUint16AsyncIterable(
+        [256] as unknown as AsyncIterable<number>,
+      );
+    },
+    TypeError,
+    "`value` must implement `Symbol.asyncIterator`.",
+  );
+  await assertRejects(
+    async () => {
+      await b1.loadFromUint16AsyncIterable(
+        [0, 256] as unknown as AsyncIterable<number>,
+      );
+    },
+    TypeError,
+    "`value` must implement `Symbol.asyncIterator`.",
+  );
+});
+
+Deno.test("Buffers.BytesBuilder.prototype.loadFromUint16AsyncIterable() - AsyncGenerator<Uint16>", async () => {
+  const b1 = new BytesBuilder();
+  const g0 = (async function* () {
+  })();
+  await b1.loadFromUint16AsyncIterable(g0);
+  assertStrictEquals(b1.copyToUint8Array().byteLength, 0);
+
+  const g1 = (async function* () {
+    yield 0;
+    yield 1;
+    yield 0xFFFF;
+  })();
+  await b1.loadFromUint16AsyncIterable(g1);
+
+  const a1 = new Uint16Array(b1.copyToArrayBuffer());
+  assertStrictEquals(a1.length, 3);
+  assertStrictEquals(a1[0], 0);
+  assertStrictEquals(a1[1], 1);
+  assertStrictEquals(a1[2], 0xFFFF);
+});
+
+Deno.test("Buffers.BytesBuilder.prototype.loadFromUint16AsyncIterable() - AsyncGenerator", async () => {
+  const b1 = new BytesBuilder();
+  const g1 = (async function* () {
+    yield 0;
+    yield 1;
+    yield "a";
+  })();
+
+  await assertRejects(
+    async () => {
+      await b1.loadFromUint16AsyncIterable(
+        g1 as unknown as AsyncGenerator<number>,
+      );
+    },
+    TypeError,
+    "`value[*]` must be a 16-bit unsigned integer.",
+  );
+
+  const g2 = (async function* () {
+    yield 0;
+    yield 1;
+    yield 0x10000;
+  })();
+
+  await assertRejects(
+    async () => {
+      await b1.loadFromUint16AsyncIterable(g2);
+    },
+    TypeError,
+    "`value[*]` must be a 16-bit unsigned integer.",
+  );
+
+  const g3 = (async function* () {
+    yield 0;
+    yield 1;
+    yield -1;
+  })();
+
+  await assertRejects(
+    async () => {
+      await b1.loadFromUint16AsyncIterable(g3);
+    },
+    TypeError,
+    "`value[*]` must be a 16-bit unsigned integer.",
+  );
+});

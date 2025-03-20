@@ -236,6 +236,19 @@ export class BytesBuilder {
     }, options);
   }
 
+  //XXX optionsで最大サイズ
+  async loadFromUint16AsyncIterable(
+    value: AsyncIterable<uint16>,
+    options?: BytesBuilder.LoadOptions,
+  ): Promise<void> {
+    await this.#loadFromUint8xAsyncIterable<uint16>(value, {
+      typedArrayCtor: Uint16Array,
+      assertElement: Type.assertUint16,
+      setterName: "setUint16",
+      byteLength: Uint16.BYTE_LENGTH,
+    }, options);
+  }
+
   #loadFromUint8xIterable<T extends number>(
     value: Iterable<T>,
     init: {
@@ -245,7 +258,7 @@ export class BytesBuilder {
       byteLength: safeint;
     },
     options?: BytesBuilder.LoadOptions,
-  ) {
+  ): void {
     Type.assertIterable(value, "value");
 
     const byteOrder = options?.byteOrder ?? ByteOrder.nativeOrder;
@@ -260,6 +273,43 @@ export class BytesBuilder {
     } else {
       const v = new DataView(new ArrayBuffer(init.byteLength));
       for (const uint8xExpected of value) {
+        init.assertElement(uint8xExpected, "value[*]");
+        v[init.setterName](
+          0,
+          uint8xExpected,
+          byteOrder === ByteOrder.LITTLE_ENDIAN,
+        );
+        loaded.#appendBytes(v);
+      }
+    }
+
+    this.append(loaded.takeAsArrayBuffer());
+  }
+
+  async #loadFromUint8xAsyncIterable<T extends number>(
+    value: AsyncIterable<T>,
+    init: {
+      typedArrayCtor: Uint16ArrayConstructor | Uint32ArrayConstructor;
+      assertElement: (test: unknown, label: string) => void;
+      setterName: "setUint16" | "setUint32";
+      byteLength: safeint;
+    },
+    options?: BytesBuilder.LoadOptions,
+  ): Promise<void> {
+    Type.assertAsyncIterable(value, "value");
+
+    const byteOrder = options?.byteOrder ?? ByteOrder.nativeOrder;
+    const loaded = new BytesBuilder();
+    if (byteOrder === ByteOrder.nativeOrder) {
+      const v = new init.typedArrayCtor(1);
+      for await (const uint8xExpected of value) {
+        init.assertElement(uint8xExpected, "value[*]");
+        v[0] = uint8xExpected;
+        loaded.#appendBytes(v);
+      }
+    } else {
+      const v = new DataView(new ArrayBuffer(init.byteLength));
+      for await (const uint8xExpected of value) {
         init.assertElement(uint8xExpected, "value[*]");
         v[init.setterName](
           0,

@@ -292,7 +292,7 @@ class _EncoderCommon extends _CoderCommon {
       writtenBuffer: buffer,
       pendingChar,
     };
-  }
+  } //TODO BytesBuilder利用に変更する(そうすればBE/LEはBytesBuilder側にやらせればよくなる)
 }
 
 export abstract class Decoder implements TextDecoder {

@@ -121,62 +121,6 @@ export type FromUint8xIterableOptions = {
   // maxByteLength?: safeint;
 };
 
-export function fromUint16Iterable(
-  value: Iterable<uint16>,
-  options?: FromUint8xIterableOptions,
-): ArrayBuffer {
-  Type.assertIterable(value, "value");
-
-  const byteOrder = options?.byteOrder ?? ByteOrder.nativeOrder;
-  if (byteOrder !== ByteOrder.nativeOrder) {
-    return _fromUint8xIterable<uint16>(
-      value,
-      Uint16Array,
-      (t, l) => Type.assertUint16(t, l),
-      (v, i, e) => v.setUint16(0, i, e),
-      byteOrder,
-    );
-  } else {
-    // 実行環境のバイトオーダー
-
-    return Uint16Array.from(value, (i, index) => {
-      Type.assertUint16(i, `value[${index}]`);
-      return i;
-    }).buffer;
-  }
-}
-
-export async function fromUint16AsyncIterable(
-  value: AsyncIterable<uint16>,
-  options?: FromUint8xIterableOptions,
-): Promise<ArrayBuffer> {
-  Type.assertAsyncIterable(value, "value");
-
-  const byteOrder = options?.byteOrder ?? ByteOrder.nativeOrder;
-  if (byteOrder !== ByteOrder.nativeOrder) {
-    return _fromUint8xAsyncIterable<uint16>(
-      value,
-      Uint16Array,
-      (t, l) => Type.assertUint16(t, l),
-      (v, i, e) => v.setUint16(0, i, e),
-      byteOrder,
-    );
-  } else {
-    // 実行環境のバイトオーダー
-
-    const builder = new BytesBuilder();
-    const tmpView = new Uint16Array(1);
-    let index = 0;
-    for await (const i of value) {
-      Type.assertUint16(i, `value[${index}]`);
-      tmpView[0] = i;
-      builder.append(tmpView);
-      index++;
-    }
-    return builder.takeAsArrayBuffer();
-  }
-}
-
 export type ToUint8xIterableOptions = {
   byteOrder?: byteorder;
 };
