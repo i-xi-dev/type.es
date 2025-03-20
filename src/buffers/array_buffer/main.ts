@@ -29,30 +29,6 @@ type _Setter<T extends int> = (
   isLittleEndian: boolean,
 ) => void;
 
-function _fromUint8xIterable<T extends int>(
-  value: Iterable<T>,
-  uint8xArrayCtor: _Uint8xArrayCtor,
-  assertElement: (i: unknown, label: string) => void,
-  viewSetter: _Setter<T>,
-  byteOrder: byteorder = ByteOrder.nativeOrder,
-): ArrayBuffer {
-  Type.assertByteOrder(byteOrder, "byteOrder");
-
-  const builder = new BytesBuilder();
-  const isLittleEndian = byteOrder === ByteOrder.LITTLE_ENDIAN;
-  const tmp = new ArrayBuffer(uint8xArrayCtor.BYTES_PER_ELEMENT);
-  const tmpView = new DataView(tmp);
-
-  let index = 0;
-  for (const i of value) {
-    assertElement(i, `value[${index}]`);
-    viewSetter(tmpView, i, isLittleEndian);
-    builder.append(tmpView);
-    index++;
-  }
-  return builder.takeAsArrayBuffer();
-}
-
 async function _fromUint8xAsyncIterable<T extends int>(
   value: AsyncIterable<T>,
   uint8xArrayCtor: _Uint8xArrayCtor,
@@ -141,35 +117,6 @@ export function toUint32Iterable(
   return _toUint8xIterable<uint32>(value, Uint32Array, (v, o, e) => {
     return v.getUint32(o, e);
   }, options?.byteOrder);
-}
-
-export function fromBigUint64Iterable(
-  value: Iterable<biguint64>,
-  options?: FromUint8xIterableOptions,
-): ArrayBuffer {
-  Type.assertIterable(value, "value");
-
-  const byteOrder = options?.byteOrder ?? ByteOrder.nativeOrder;
-  if (byteOrder !== ByteOrder.nativeOrder) {
-    return _fromUint8xIterable<biguint64>(
-      value,
-      BigUint64Array,
-      (t, l) => Type.assertBigUint64(t, l),
-      (v, i, e) => v.setBigUint64(0, i, e),
-      byteOrder,
-    );
-  } else {
-    // 実行環境のバイトオーダー
-
-    //XXX ArrayLikeでないとビルドできない、仕様はIterableでは？？
-    return BigUint64Array.from(
-      value as unknown as ArrayLike<bigint>,
-      (i, index) => {
-        Type.assertBigUint64(i, `value[${index}]`);
-        return i;
-      },
-    ).buffer as ArrayBuffer; //XXX ArrayBufferLikeになりえないのでは？？
-  }
 }
 
 export async function fromBigUint64AsyncIterable(

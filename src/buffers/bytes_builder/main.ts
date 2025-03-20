@@ -14,6 +14,7 @@ import {
   type uint8,
 } from "../../_typedef/mod.ts";
 import {
+  BigUint64,
   Number as ExNumber,
   Uint16,
   Uint32,
@@ -282,10 +283,22 @@ export class BytesBuilder {
     options?: BytesBuilder.LoadOptions,
   ): void {
     this.#loadFromUint8xIterable<biguint64>(value, {
-      typedArrayCtor: Uint32Array,
-      assertElement: Type.assertUint32,
-      setterName: "setUint32",
-      byteLength: Uint32.BYTE_LENGTH,
+      typedArrayCtor: BigUint64Array,
+      assertElement: Type.assertBigUint64,
+      setterName: "setBigUint64",
+      byteLength: BigUint64.BYTE_LENGTH,
+    }, options);
+  }
+
+  async loadFromBigUint64AsyncIterable(
+    value: AsyncIterable<biguint64>,
+    options?: BytesBuilder.LoadOptions,
+  ): Promise<void> {
+    await this.#loadFromUint8xAsyncIterable<biguint64>(value, {
+      typedArrayCtor: BigUint64Array,
+      assertElement: Type.assertBigUint64,
+      setterName: "setBigUint64",
+      byteLength: BigUint64.BYTE_LENGTH,
     }, options);
   }
 

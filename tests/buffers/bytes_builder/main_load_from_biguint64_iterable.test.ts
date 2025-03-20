@@ -1,0 +1,455 @@
+import { assertRejects, assertStrictEquals, assertThrows } from "@std/assert";
+import { Buffers, ByteOrder } from "../../../mod.ts";
+
+const { BytesBuilder } = Buffers;
+
+Deno.test("Buffers.BytesBuilder.prototype.loadFromBigUint64Iterable - Array<biguint64>", () => {
+  const b1 = new BytesBuilder();
+  assertThrows(
+    () => {
+      b1.loadFromBigUint64Iterable(0 as unknown as Array<bigint>);
+    },
+    TypeError,
+    "`value` must implement \`Symbol.iterator\`.",
+  );
+
+  assertThrows(
+    () => {
+      b1.loadFromBigUint64Iterable(1 as unknown as Array<bigint>);
+    },
+    TypeError,
+    "`value` must implement \`Symbol.iterator\`.",
+  );
+
+  assertThrows(
+    () => {
+      b1.loadFromBigUint64Iterable(
+        [-1] as unknown as Array<bigint>,
+      );
+    },
+    TypeError,
+    "`value[*]` must be a 64-bit unsigned integer.",
+  );
+  assertThrows(
+    () => {
+      b1.loadFromBigUint64Iterable(
+        ["0"] as unknown as Array<bigint>,
+      );
+    },
+    TypeError,
+    "`value[*]` must be a 64-bit unsigned integer.",
+  );
+  assertThrows(
+    () => {
+      b1.loadFromBigUint64Iterable(
+        [0x1_0000_0000_0000_0000n] as unknown as Array<bigint>,
+      );
+    },
+    TypeError,
+    "`value[*]` must be a 64-bit unsigned integer.",
+  );
+  assertThrows(
+    () => {
+      b1.loadFromBigUint64Iterable(
+        [0n, 0x1_0000_0000_0000_0000n] as unknown as Array<bigint>,
+      );
+    },
+    TypeError,
+    "`value[*]` must be a 64-bit unsigned integer.",
+  );
+  assertThrows(
+    () => {
+      b1.loadFromBigUint64Iterable(
+        [0n, -1n] as unknown as Array<bigint>,
+      );
+    },
+    TypeError,
+    "`value[*]` must be a 64-bit unsigned integer.",
+  );
+
+  b1.loadFromBigUint64Iterable([]);
+  assertStrictEquals(b1.copyToArrayBuffer().byteLength, 0);
+
+  b1.loadFromBigUint64Iterable([0n, 1n, 0xFFFF_FFFF_FFFF_FFFFn], {
+    byteOrder: "big-endian",
+  });
+  const a1be = b1.copyToUint8Array();
+  assertStrictEquals(a1be.length, 24);
+  assertStrictEquals(a1be[0], 0);
+  assertStrictEquals(a1be[1], 0);
+  assertStrictEquals(a1be[2], 0);
+  assertStrictEquals(a1be[3], 0);
+  assertStrictEquals(a1be[4], 0);
+  assertStrictEquals(a1be[5], 0);
+  assertStrictEquals(a1be[6], 0);
+  assertStrictEquals(a1be[7], 0);
+  assertStrictEquals(a1be[8], 0);
+  assertStrictEquals(a1be[9], 0);
+  assertStrictEquals(a1be[10], 0);
+  assertStrictEquals(a1be[11], 0);
+  assertStrictEquals(a1be[12], 0);
+  assertStrictEquals(a1be[13], 0);
+  assertStrictEquals(a1be[14], 0);
+  assertStrictEquals(a1be[15], 1);
+  assertStrictEquals(a1be[16], 255);
+  assertStrictEquals(a1be[17], 255);
+  assertStrictEquals(a1be[18], 255);
+  assertStrictEquals(a1be[19], 255);
+  assertStrictEquals(a1be[20], 255);
+  assertStrictEquals(a1be[21], 255);
+  assertStrictEquals(a1be[22], 255);
+  assertStrictEquals(a1be[23], 255);
+
+  const b2 = new BytesBuilder();
+  b2.loadFromBigUint64Iterable([0n, 1n, 0xFFFF_FFFF_FFFF_FFFFn], {
+    byteOrder: "little-endian",
+  });
+  const a1le = b2.copyToUint8Array();
+  assertStrictEquals(a1le.length, 24);
+  assertStrictEquals(a1le[0], 0);
+  assertStrictEquals(a1le[1], 0);
+  assertStrictEquals(a1le[2], 0);
+  assertStrictEquals(a1le[3], 0);
+  assertStrictEquals(a1le[4], 0);
+  assertStrictEquals(a1le[5], 0);
+  assertStrictEquals(a1le[6], 0);
+  assertStrictEquals(a1le[7], 0);
+  assertStrictEquals(a1le[8], 1);
+  assertStrictEquals(a1le[9], 0);
+  assertStrictEquals(a1le[10], 0);
+  assertStrictEquals(a1le[11], 0);
+  assertStrictEquals(a1le[12], 0);
+  assertStrictEquals(a1le[13], 0);
+  assertStrictEquals(a1le[14], 0);
+  assertStrictEquals(a1le[15], 0);
+  assertStrictEquals(a1le[16], 255);
+  assertStrictEquals(a1le[17], 255);
+  assertStrictEquals(a1le[18], 255);
+  assertStrictEquals(a1le[19], 255);
+  assertStrictEquals(a1le[20], 255);
+  assertStrictEquals(a1le[21], 255);
+  assertStrictEquals(a1le[22], 255);
+  assertStrictEquals(a1le[23], 255);
+
+  const b3 = new BytesBuilder();
+  b3.loadFromBigUint64Iterable([0n, 1n, 0xFFFF_FFFF_FFFF_FFFFn]);
+  const a1x = b3.copyToUint8Array();
+  assertStrictEquals(a1x.length, 24);
+  if (ByteOrder.nativeOrder === "big-endian") {
+    assertStrictEquals(a1x[0], 0);
+    assertStrictEquals(a1x[1], 0);
+    assertStrictEquals(a1x[2], 0);
+    assertStrictEquals(a1x[3], 0);
+    assertStrictEquals(a1x[4], 0);
+    assertStrictEquals(a1x[5], 0);
+    assertStrictEquals(a1x[6], 0);
+    assertStrictEquals(a1x[7], 0);
+    assertStrictEquals(a1x[8], 0);
+    assertStrictEquals(a1x[9], 0);
+    assertStrictEquals(a1x[10], 0);
+    assertStrictEquals(a1x[11], 0);
+    assertStrictEquals(a1x[12], 0);
+    assertStrictEquals(a1x[13], 0);
+    assertStrictEquals(a1x[14], 0);
+    assertStrictEquals(a1x[15], 1);
+    assertStrictEquals(a1x[16], 255);
+    assertStrictEquals(a1x[17], 255);
+    assertStrictEquals(a1x[18], 255);
+    assertStrictEquals(a1x[19], 255);
+    assertStrictEquals(a1x[20], 255);
+    assertStrictEquals(a1x[21], 255);
+    assertStrictEquals(a1x[22], 255);
+    assertStrictEquals(a1x[23], 255);
+  } else {
+    assertStrictEquals(a1x[0], 0);
+    assertStrictEquals(a1x[1], 0);
+    assertStrictEquals(a1x[2], 0);
+    assertStrictEquals(a1x[3], 0);
+    assertStrictEquals(a1x[4], 0);
+    assertStrictEquals(a1x[5], 0);
+    assertStrictEquals(a1x[6], 0);
+    assertStrictEquals(a1x[7], 0);
+    assertStrictEquals(a1x[8], 1);
+    assertStrictEquals(a1x[9], 0);
+    assertStrictEquals(a1x[10], 0);
+    assertStrictEquals(a1x[11], 0);
+    assertStrictEquals(a1x[12], 0);
+    assertStrictEquals(a1x[13], 0);
+    assertStrictEquals(a1x[14], 0);
+    assertStrictEquals(a1x[15], 0);
+    assertStrictEquals(a1x[16], 255);
+    assertStrictEquals(a1x[17], 255);
+    assertStrictEquals(a1x[18], 255);
+    assertStrictEquals(a1x[19], 255);
+    assertStrictEquals(a1x[20], 255);
+    assertStrictEquals(a1x[21], 255);
+    assertStrictEquals(a1x[22], 255);
+    assertStrictEquals(a1x[23], 255);
+  }
+});
+
+Deno.test("Buffers.BytesBuilder.prototype.loadFromBigUint64Iterable - BigUint64Array", () => {
+  const b1 = new BytesBuilder();
+  b1.loadFromBigUint64Iterable(BigUint64Array.of());
+  assertStrictEquals(b1.copyToUint8Array().byteLength, 0);
+
+  b1.loadFromBigUint64Iterable(
+    BigUint64Array.of(0n, 1n, 0xFFFF_FFFF_FFFF_FFFFn),
+    { byteOrder: "big-endian" },
+  );
+  const a1be = b1.copyToUint8Array();
+  assertStrictEquals(a1be.length, 24);
+  assertStrictEquals(a1be[0], 0);
+  assertStrictEquals(a1be[1], 0);
+  assertStrictEquals(a1be[2], 0);
+  assertStrictEquals(a1be[3], 0);
+  assertStrictEquals(a1be[4], 0);
+  assertStrictEquals(a1be[5], 0);
+  assertStrictEquals(a1be[6], 0);
+  assertStrictEquals(a1be[7], 0);
+  assertStrictEquals(a1be[8], 0);
+  assertStrictEquals(a1be[9], 0);
+  assertStrictEquals(a1be[10], 0);
+  assertStrictEquals(a1be[11], 0);
+  assertStrictEquals(a1be[12], 0);
+  assertStrictEquals(a1be[13], 0);
+  assertStrictEquals(a1be[14], 0);
+  assertStrictEquals(a1be[15], 1);
+  assertStrictEquals(a1be[16], 255);
+  assertStrictEquals(a1be[17], 255);
+  assertStrictEquals(a1be[18], 255);
+  assertStrictEquals(a1be[19], 255);
+  assertStrictEquals(a1be[20], 255);
+  assertStrictEquals(a1be[21], 255);
+  assertStrictEquals(a1be[22], 255);
+  assertStrictEquals(a1be[23], 255);
+
+  const b2 = new BytesBuilder();
+  b2.loadFromBigUint64Iterable(
+    BigUint64Array.of(0n, 1n, 0xFFFF_FFFF_FFFF_FFFFn),
+    { byteOrder: "little-endian" },
+  );
+  const a1le = b2.copyToUint8Array();
+  assertStrictEquals(a1le.length, 24);
+  assertStrictEquals(a1le[0], 0);
+  assertStrictEquals(a1le[1], 0);
+  assertStrictEquals(a1le[2], 0);
+  assertStrictEquals(a1le[3], 0);
+  assertStrictEquals(a1le[4], 0);
+  assertStrictEquals(a1le[5], 0);
+  assertStrictEquals(a1le[6], 0);
+  assertStrictEquals(a1le[7], 0);
+  assertStrictEquals(a1le[8], 1);
+  assertStrictEquals(a1le[9], 0);
+  assertStrictEquals(a1le[10], 0);
+  assertStrictEquals(a1le[11], 0);
+  assertStrictEquals(a1le[12], 0);
+  assertStrictEquals(a1le[13], 0);
+  assertStrictEquals(a1le[14], 0);
+  assertStrictEquals(a1le[15], 0);
+  assertStrictEquals(a1le[16], 255);
+  assertStrictEquals(a1le[17], 255);
+  assertStrictEquals(a1le[18], 255);
+  assertStrictEquals(a1le[19], 255);
+  assertStrictEquals(a1le[20], 255);
+  assertStrictEquals(a1le[21], 255);
+  assertStrictEquals(a1le[22], 255);
+  assertStrictEquals(a1le[23], 255);
+
+  const b3 = new BytesBuilder();
+  b3.loadFromBigUint64Iterable(
+    BigUint64Array.of(0n, 1n, 0xFFFF_FFFF_FFFF_FFFFn),
+  );
+  const a1x = b3.copyToUint8Array();
+  assertStrictEquals(a1x.length, 24);
+  if (ByteOrder.nativeOrder === "big-endian") {
+    assertStrictEquals(a1x[0], 0);
+    assertStrictEquals(a1x[1], 0);
+    assertStrictEquals(a1x[2], 0);
+    assertStrictEquals(a1x[3], 0);
+    assertStrictEquals(a1x[4], 0);
+    assertStrictEquals(a1x[5], 0);
+    assertStrictEquals(a1x[6], 0);
+    assertStrictEquals(a1x[7], 0);
+    assertStrictEquals(a1x[8], 0);
+    assertStrictEquals(a1x[9], 0);
+    assertStrictEquals(a1x[10], 0);
+    assertStrictEquals(a1x[11], 0);
+    assertStrictEquals(a1x[12], 0);
+    assertStrictEquals(a1x[13], 0);
+    assertStrictEquals(a1x[14], 0);
+    assertStrictEquals(a1x[15], 1);
+    assertStrictEquals(a1x[16], 255);
+    assertStrictEquals(a1x[17], 255);
+    assertStrictEquals(a1x[18], 255);
+    assertStrictEquals(a1x[19], 255);
+    assertStrictEquals(a1x[20], 255);
+    assertStrictEquals(a1x[21], 255);
+    assertStrictEquals(a1x[22], 255);
+    assertStrictEquals(a1x[23], 255);
+  } else {
+    assertStrictEquals(a1x[0], 0);
+    assertStrictEquals(a1x[1], 0);
+    assertStrictEquals(a1x[2], 0);
+    assertStrictEquals(a1x[3], 0);
+    assertStrictEquals(a1x[4], 0);
+    assertStrictEquals(a1x[5], 0);
+    assertStrictEquals(a1x[6], 0);
+    assertStrictEquals(a1x[7], 0);
+    assertStrictEquals(a1x[8], 1);
+    assertStrictEquals(a1x[9], 0);
+    assertStrictEquals(a1x[10], 0);
+    assertStrictEquals(a1x[11], 0);
+    assertStrictEquals(a1x[12], 0);
+    assertStrictEquals(a1x[13], 0);
+    assertStrictEquals(a1x[14], 0);
+    assertStrictEquals(a1x[15], 0);
+    assertStrictEquals(a1x[16], 255);
+    assertStrictEquals(a1x[17], 255);
+    assertStrictEquals(a1x[18], 255);
+    assertStrictEquals(a1x[19], 255);
+    assertStrictEquals(a1x[20], 255);
+    assertStrictEquals(a1x[21], 255);
+    assertStrictEquals(a1x[22], 255);
+    assertStrictEquals(a1x[23], 255);
+  }
+});
+
+Deno.test("Buffers.BytesBuilder.prototype.loadFromBigUint64Iterable - Generator<biguint64>", () => {
+  const b1 = new BytesBuilder();
+  const g0 = (function* () {
+  })();
+  b1.loadFromBigUint64Iterable(g0);
+  assertStrictEquals(b1.copyToArrayBuffer().byteLength, 0);
+
+  const g1 = (function* () {
+    yield 0n;
+    yield 1n;
+    yield 0xFFFF_FFFF_FFFF_FFFFn;
+  })();
+  b1.loadFromBigUint64Iterable(g1, { byteOrder: "big-endian" });
+
+  const a1be = b1.copyToUint8Array();
+  assertStrictEquals(a1be.length, 24);
+  assertStrictEquals(a1be[0], 0);
+  assertStrictEquals(a1be[1], 0);
+  assertStrictEquals(a1be[2], 0);
+  assertStrictEquals(a1be[3], 0);
+  assertStrictEquals(a1be[4], 0);
+  assertStrictEquals(a1be[5], 0);
+  assertStrictEquals(a1be[6], 0);
+  assertStrictEquals(a1be[7], 0);
+  assertStrictEquals(a1be[8], 0);
+  assertStrictEquals(a1be[9], 0);
+  assertStrictEquals(a1be[10], 0);
+  assertStrictEquals(a1be[11], 0);
+  assertStrictEquals(a1be[12], 0);
+  assertStrictEquals(a1be[13], 0);
+  assertStrictEquals(a1be[14], 0);
+  assertStrictEquals(a1be[15], 1);
+  assertStrictEquals(a1be[16], 255);
+  assertStrictEquals(a1be[17], 255);
+  assertStrictEquals(a1be[18], 255);
+  assertStrictEquals(a1be[19], 255);
+  assertStrictEquals(a1be[20], 255);
+  assertStrictEquals(a1be[21], 255);
+  assertStrictEquals(a1be[22], 255);
+  assertStrictEquals(a1be[23], 255);
+
+  const b2 = new BytesBuilder();
+  const g2 = (function* () {
+    yield 0n;
+    yield 1n;
+    yield 0xFFFF_FFFF_FFFF_FFFFn;
+  })();
+  b2.loadFromBigUint64Iterable(g2, { byteOrder: "little-endian" });
+
+  const a1le = b2.copyToUint8Array();
+  assertStrictEquals(a1le.length, 24);
+  assertStrictEquals(a1le[0], 0);
+  assertStrictEquals(a1le[1], 0);
+  assertStrictEquals(a1le[2], 0);
+  assertStrictEquals(a1le[3], 0);
+  assertStrictEquals(a1le[4], 0);
+  assertStrictEquals(a1le[5], 0);
+  assertStrictEquals(a1le[6], 0);
+  assertStrictEquals(a1le[7], 0);
+  assertStrictEquals(a1le[8], 1);
+  assertStrictEquals(a1le[9], 0);
+  assertStrictEquals(a1le[10], 0);
+  assertStrictEquals(a1le[11], 0);
+  assertStrictEquals(a1le[12], 0);
+  assertStrictEquals(a1le[13], 0);
+  assertStrictEquals(a1le[14], 0);
+  assertStrictEquals(a1le[15], 0);
+  assertStrictEquals(a1le[16], 255);
+  assertStrictEquals(a1le[17], 255);
+  assertStrictEquals(a1le[18], 255);
+  assertStrictEquals(a1le[19], 255);
+  assertStrictEquals(a1le[20], 255);
+  assertStrictEquals(a1le[21], 255);
+  assertStrictEquals(a1le[22], 255);
+  assertStrictEquals(a1le[23], 255);
+
+  const b3 = new BytesBuilder();
+  const g3 = (function* () {
+    yield 0n;
+    yield 1n;
+    yield 0xFFFF_FFFF_FFFF_FFFFn;
+  })();
+  b3.loadFromBigUint64Iterable(g3);
+
+  const a1x = b3.copyToUint8Array();
+  assertStrictEquals(a1x.length, 24);
+  if (ByteOrder.nativeOrder === "big-endian") {
+    assertStrictEquals(a1x[0], 0);
+    assertStrictEquals(a1x[1], 0);
+    assertStrictEquals(a1x[2], 0);
+    assertStrictEquals(a1x[3], 0);
+    assertStrictEquals(a1x[4], 0);
+    assertStrictEquals(a1x[5], 0);
+    assertStrictEquals(a1x[6], 0);
+    assertStrictEquals(a1x[7], 0);
+    assertStrictEquals(a1x[8], 0);
+    assertStrictEquals(a1x[9], 0);
+    assertStrictEquals(a1x[10], 0);
+    assertStrictEquals(a1x[11], 0);
+    assertStrictEquals(a1x[12], 0);
+    assertStrictEquals(a1x[13], 0);
+    assertStrictEquals(a1x[14], 0);
+    assertStrictEquals(a1x[15], 1);
+    assertStrictEquals(a1x[16], 255);
+    assertStrictEquals(a1x[17], 255);
+    assertStrictEquals(a1x[18], 255);
+    assertStrictEquals(a1x[19], 255);
+    assertStrictEquals(a1x[20], 255);
+    assertStrictEquals(a1x[21], 255);
+    assertStrictEquals(a1x[22], 255);
+    assertStrictEquals(a1x[23], 255);
+  } else {
+    assertStrictEquals(a1x[0], 0);
+    assertStrictEquals(a1x[1], 0);
+    assertStrictEquals(a1x[2], 0);
+    assertStrictEquals(a1x[3], 0);
+    assertStrictEquals(a1x[4], 0);
+    assertStrictEquals(a1x[5], 0);
+    assertStrictEquals(a1x[6], 0);
+    assertStrictEquals(a1x[7], 0);
+    assertStrictEquals(a1x[8], 1);
+    assertStrictEquals(a1x[9], 0);
+    assertStrictEquals(a1x[10], 0);
+    assertStrictEquals(a1x[11], 0);
+    assertStrictEquals(a1x[12], 0);
+    assertStrictEquals(a1x[13], 0);
+    assertStrictEquals(a1x[14], 0);
+    assertStrictEquals(a1x[15], 0);
+    assertStrictEquals(a1x[16], 255);
+    assertStrictEquals(a1x[17], 255);
+    assertStrictEquals(a1x[18], 255);
+    assertStrictEquals(a1x[19], 255);
+    assertStrictEquals(a1x[20], 255);
+    assertStrictEquals(a1x[21], 255);
+    assertStrictEquals(a1x[22], 255);
+    assertStrictEquals(a1x[23], 255);
+  }
+});
