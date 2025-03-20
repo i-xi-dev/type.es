@@ -8,9 +8,15 @@ import {
   type byteorder,
   type safeint,
   type uint16,
+  type uint32,
   type uint8,
 } from "../../_typedef/mod.ts";
-import { Number as ExNumber, Uint16, Uint8 } from "../../numerics/mod.ts";
+import {
+  Number as ExNumber,
+  Uint16,
+  Uint32,
+  Uint8,
+} from "../../numerics/mod.ts";
 
 const _DEFAULT_CAPACITY = 1_048_576;
 
@@ -208,26 +214,6 @@ export class BytesBuilder {
     value: Iterable<uint16>,
     options?: BytesBuilder.LoadOptions,
   ): void {
-    // Type.assertIterable(value, "value");
-    // const byteOrder = options?.byteOrder ?? ByteOrder.nativeOrder;
-    // const loaded = new BytesBuilder();
-    // if (byteOrder === ByteOrder.nativeOrder) {
-    //   const v = new Uint16Array(1);
-    //   for (const uint16Expected of value) {
-    //     Type.assertUint16(uint16Expected, "value[*]");
-    //     v[0] = uint16Expected;
-    //     loaded.#appendBytes(v);
-    //   }
-    // } else {
-    //   const v = new DataView(new ArrayBuffer(Uint16.BYTE_LENGTH));
-    //   for (const uint16Expected of value) {
-    //     Type.assertUint16(uint16Expected, "value[*]");
-    //     v.setUint16(0, uint16Expected, byteOrder === ByteOrder.LITTLE_ENDIAN);
-    //     loaded.#appendBytes(v);
-    //   }
-    // }
-    // this.append(loaded.takeAsArrayBuffer());
-
     this.#loadFromUint8xIterable<uint16>(value, {
       typedArrayCtor: Uint16Array,
       assertElement: Type.assertUint16,
@@ -246,6 +232,32 @@ export class BytesBuilder {
       assertElement: Type.assertUint16,
       setterName: "setUint16",
       byteLength: Uint16.BYTE_LENGTH,
+    }, options);
+  }
+
+  //XXX optionsで最大サイズ
+  loadFromUint32Iterable(
+    value: Iterable<uint32>,
+    options?: BytesBuilder.LoadOptions,
+  ): void {
+    this.#loadFromUint8xIterable<uint32>(value, {
+      typedArrayCtor: Uint32Array,
+      assertElement: Type.assertUint32,
+      setterName: "setUint32",
+      byteLength: Uint32.BYTE_LENGTH,
+    }, options);
+  }
+
+  //XXX optionsで最大サイズ
+  async loadFromUint32AsyncIterable(
+    value: AsyncIterable<uint32>,
+    options?: BytesBuilder.LoadOptions,
+  ): Promise<void> {
+    await this.#loadFromUint8xAsyncIterable<uint32>(value, {
+      typedArrayCtor: Uint32Array,
+      assertElement: Type.assertUint32,
+      setterName: "setUint32",
+      byteLength: Uint32.BYTE_LENGTH,
     }, options);
   }
 
