@@ -5,7 +5,9 @@ import {
   QuotaExceededError,
 } from "../../basics/mod.ts";
 import {
+  type biguint64,
   type byteorder,
+  type int,
   type safeint,
   type uint16,
   type uint32,
@@ -52,8 +54,28 @@ function _computeSize(
 export namespace BytesBuilder {
   export type LoadOptions = {
     byteOrder?: byteorder; // uint8の場合は無視
+    //XXX 見込サイズ,
+    //    超えたらabortするサイズ,
   };
 }
+
+type _LoadFromUint8xIterableConfig = {
+  typedArrayCtor: Uint16ArrayConstructor | Uint32ArrayConstructor;
+  assertElement: (test: unknown, label: string) => void;
+  setterName: "setUint16" | "setUint32";
+  byteLength: safeint;
+};
+
+type _LoadFromBigUint8xIterableConfig = {
+  typedArrayCtor: BigUint64ArrayConstructor;
+  assertElement: (test: unknown, label: string) => void;
+  setterName: "setBigUint64";
+  byteLength: safeint;
+};
+
+type _LoadConfig =
+  | _LoadFromUint8xIterableConfig
+  | _LoadFromBigUint8xIterableConfig;
 
 export class BytesBuilder {
   #length: safeint;
@@ -183,7 +205,6 @@ export class BytesBuilder {
     return new Uint8Array(this.copyToArrayBuffer());
   }
 
-  //XXX optionsで最大サイズ
   loadFromUint8Iterable(value: Iterable<safeint /* uint8 */>): void {
     Type.assertIterable(value, "value");
 
@@ -195,7 +216,6 @@ export class BytesBuilder {
     this.append(loaded.takeAsArrayBuffer());
   }
 
-  //XXX optionsで最大サイズ
   async loadFromUint8AsyncIterable(
     value: AsyncIterable<safeint /* uint8 */>,
   ): Promise<void> {
@@ -209,7 +229,6 @@ export class BytesBuilder {
     this.append(loaded.takeAsArrayBuffer());
   }
 
-  //XXX optionsで最大サイズ
   loadFromUint16Iterable(
     value: Iterable<uint16>,
     options?: BytesBuilder.LoadOptions,
@@ -222,7 +241,6 @@ export class BytesBuilder {
     }, options);
   }
 
-  //XXX optionsで最大サイズ
   async loadFromUint16AsyncIterable(
     value: AsyncIterable<uint16>,
     options?: BytesBuilder.LoadOptions,
@@ -235,7 +253,6 @@ export class BytesBuilder {
     }, options);
   }
 
-  //XXX optionsで最大サイズ
   loadFromUint32Iterable(
     value: Iterable<uint32>,
     options?: BytesBuilder.LoadOptions,
@@ -248,7 +265,6 @@ export class BytesBuilder {
     }, options);
   }
 
-  //XXX optionsで最大サイズ
   async loadFromUint32AsyncIterable(
     value: AsyncIterable<uint32>,
     options?: BytesBuilder.LoadOptions,
@@ -261,14 +277,21 @@ export class BytesBuilder {
     }, options);
   }
 
-  #loadFromUint8xIterable<T extends number>(
+  loadFromBigUint64Iterable(
+    value: Iterable<biguint64>,
+    options?: BytesBuilder.LoadOptions,
+  ): void {
+    this.#loadFromUint8xIterable<biguint64>(value, {
+      typedArrayCtor: Uint32Array,
+      assertElement: Type.assertUint32,
+      setterName: "setUint32",
+      byteLength: Uint32.BYTE_LENGTH,
+    }, options);
+  }
+
+  #loadFromUint8xIterable<T extends int>(
     value: Iterable<T>,
-    init: {
-      typedArrayCtor: Uint16ArrayConstructor | Uint32ArrayConstructor;
-      assertElement: (test: unknown, label: string) => void;
-      setterName: "setUint16" | "setUint32";
-      byteLength: safeint;
-    },
+    init: _LoadConfig,
     options?: BytesBuilder.LoadOptions,
   ): void {
     Type.assertIterable(value, "value");
@@ -284,13 +307,17 @@ export class BytesBuilder {
       }
     } else {
       const v = new DataView(new ArrayBuffer(init.byteLength));
+      const isLittleEndian = byteOrder === ByteOrder.LITTLE_ENDIAN;
       for (const uint8xExpected of value) {
         init.assertElement(uint8xExpected, "value[*]");
-        v[init.setterName](
+
+        v[init.setterName as "setUint16"](
           0,
-          uint8xExpected,
-          byteOrder === ByteOrder.LITTLE_ENDIAN,
+          uint8xExpected as number,
+          isLittleEndian,
         );
+        // as "setUint16"とas numberは、uint8xExpectedがneverになるのでトランスパイル出来ないのの回避（neverにしない為に分岐する方が無駄なので）
+
         loaded.#appendBytes(v);
       }
     }
@@ -298,14 +325,9 @@ export class BytesBuilder {
     this.append(loaded.takeAsArrayBuffer());
   }
 
-  async #loadFromUint8xAsyncIterable<T extends number>(
+  async #loadFromUint8xAsyncIterable<T extends int>(
     value: AsyncIterable<T>,
-    init: {
-      typedArrayCtor: Uint16ArrayConstructor | Uint32ArrayConstructor;
-      assertElement: (test: unknown, label: string) => void;
-      setterName: "setUint16" | "setUint32";
-      byteLength: safeint;
-    },
+    init: _LoadConfig,
     options?: BytesBuilder.LoadOptions,
   ): Promise<void> {
     Type.assertAsyncIterable(value, "value");
@@ -323,11 +345,14 @@ export class BytesBuilder {
       const v = new DataView(new ArrayBuffer(init.byteLength));
       for await (const uint8xExpected of value) {
         init.assertElement(uint8xExpected, "value[*]");
-        v[init.setterName](
+
+        v[init.setterName as "setUint16"](
           0,
-          uint8xExpected,
+          uint8xExpected as number,
           byteOrder === ByteOrder.LITTLE_ENDIAN,
         );
+        // as "setUint16"とas numberは、uint8xExpectedがneverになるのでトランスパイル出来ないのの回避（neverにしない為に分岐する方が無駄なので）
+
         loaded.#appendBytes(v);
       }
     }

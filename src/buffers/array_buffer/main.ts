@@ -134,37 +134,6 @@ export function toUint16Iterable(
   }, options?.byteOrder);
 }
 
-export async function fromUint32AsyncIterable(
-  value: AsyncIterable<uint32>,
-  options?: FromUint8xIterableOptions,
-): Promise<ArrayBuffer> {
-  Type.assertAsyncIterable(value, "value");
-
-  const byteOrder = options?.byteOrder ?? ByteOrder.nativeOrder;
-  if (byteOrder !== ByteOrder.nativeOrder) {
-    return _fromUint8xAsyncIterable<uint32>(
-      value,
-      Uint32Array,
-      (t, l) => Type.assertUint32(t, l),
-      (v, i, e) => v.setUint32(0, i, e),
-      byteOrder,
-    );
-  } else {
-    // 実行環境のバイトオーダー
-
-    const builder = new BytesBuilder();
-    const tmpView = new Uint32Array(1);
-    let index = 0;
-    for await (const i of value) {
-      Type.assertUint32(i, `value[${index}]`);
-      tmpView[0] = i;
-      builder.append(tmpView);
-      index++;
-    }
-    return builder.takeAsArrayBuffer();
-  }
-}
-
 export function toUint32Iterable(
   value: ArrayBuffer,
   options?: ToUint8xIterableOptions,

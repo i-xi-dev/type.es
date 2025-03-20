@@ -299,3 +299,132 @@ Deno.test("Buffers.BytesBuilder.prototype.loadFromUint32Iterable() - Generator<u
     assertStrictEquals(a1x[11], 255);
   }
 });
+
+Deno.test("Buffers.BytesBuilder.prototype.loadFromUint32AsyncIterable() - Array<uint32>", async () => {
+  const b1 = new BytesBuilder();
+  await assertRejects(
+    async () => {
+      await b1.loadFromUint32AsyncIterable(
+        0 as unknown as AsyncIterable<number>,
+      );
+    },
+    TypeError,
+    "`value` must implement `Symbol.asyncIterator`.",
+  );
+
+  await assertRejects(
+    async () => {
+      await b1.loadFromUint32AsyncIterable(
+        1 as unknown as AsyncIterable<number>,
+      );
+    },
+    TypeError,
+    "`value` must implement `Symbol.asyncIterator`.",
+  );
+
+  await assertRejects(
+    async () => {
+      await b1.loadFromUint32AsyncIterable(
+        [-1] as unknown as AsyncIterable<number>,
+      );
+    },
+    TypeError,
+    "`value` must implement `Symbol.asyncIterator`.",
+  );
+  await assertRejects(
+    async () => {
+      await b1.loadFromUint32AsyncIterable(
+        ["0"] as unknown as AsyncIterable<number>,
+      );
+    },
+    TypeError,
+    "`value` must implement `Symbol.asyncIterator`.",
+  );
+  await assertRejects(
+    async () => {
+      await b1.loadFromUint32AsyncIterable(
+        [256] as unknown as AsyncIterable<number>,
+      );
+    },
+    TypeError,
+    "`value` must implement `Symbol.asyncIterator`.",
+  );
+  await assertRejects(
+    async () => {
+      await b1.loadFromUint32AsyncIterable(
+        [0, 256] as unknown as AsyncIterable<number>,
+      );
+    },
+    TypeError,
+    "`value` must implement `Symbol.asyncIterator`.",
+  );
+});
+
+Deno.test("Buffers.BytesBuilder.prototype.loadFromUint32AsyncIterable() - AsyncGenerator<uint32>", async () => {
+  const b1 = new BytesBuilder();
+  const g0 = (async function* () {
+  })();
+  await b1.loadFromUint32AsyncIterable(g0);
+  assertStrictEquals(b1.copyToUint8Array().byteLength, 0);
+
+  const b2 = new BytesBuilder();
+  const g1 = (async function* () {
+    yield 0;
+    yield 1;
+    yield 0xFFFFFFFF;
+  })();
+  await b2.loadFromUint32AsyncIterable(g1);
+
+  const a1 = new Uint32Array(b2.copyToArrayBuffer());
+  assertStrictEquals(a1.length, 3);
+  assertStrictEquals(a1[0], 0);
+  assertStrictEquals(a1[1], 1);
+  assertStrictEquals(a1[2], 0xFFFFFFFF);
+});
+
+Deno.test("Buffers.BytesBuilder.prototype.loadFromUint32AsyncIterable() - AsyncGenerator", async () => {
+  const b1 = new BytesBuilder();
+  const g1 = (async function* () {
+    yield 0;
+    yield 1;
+    yield "a";
+  })();
+
+  await assertRejects(
+    async () => {
+      await b1.loadFromUint32AsyncIterable(
+        g1 as unknown as AsyncGenerator<number>,
+      );
+    },
+    TypeError,
+    "`value[*]` must be a 32-bit unsigned integer.",
+  );
+
+  const g2 = (async function* () {
+    yield 0;
+    yield 1;
+    yield 0x100000000;
+  })();
+
+  await assertRejects(
+    async () => {
+      await b1.loadFromUint32AsyncIterable(g2);
+    },
+    TypeError,
+    "`value[*]` must be a 32-bit unsigned integer.",
+  );
+
+  const g3 = (async function* () {
+    yield 0;
+    yield 1;
+    yield -1;
+  })();
+
+  await assertRejects(
+    async () => {
+      await b1.loadFromUint32AsyncIterable(g3);
+    },
+    TypeError,
+    "`value[*]` must be a 32-bit unsigned integer.",
+  );
+});
