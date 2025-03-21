@@ -1,7 +1,7 @@
 import * as Loading from "../../loading/mod.ts";
 import * as Type from "../../type/mod.ts";
-import { BytesBuilder } from "../../buffers/mod.ts";
 import { AbortError, InvalidStateError } from "../../basics/mod.ts";
+import { Builder as BytesBuilder } from "../../bytes/mod.ts";
 
 async function* _streamToAsyncGenerator<T>(
   stream: ReadableStream<T>,

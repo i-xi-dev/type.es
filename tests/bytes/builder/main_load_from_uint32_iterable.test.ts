@@ -1,10 +1,10 @@
 import { assertRejects, assertStrictEquals, assertThrows } from "@std/assert";
-import { Buffers, ByteOrder } from "../../../mod.ts";
+import { ByteOrder, Bytes } from "../../../mod.ts";
 
-const { BytesBuilder } = Buffers;
+const { Builder } = Bytes;
 
-Deno.test("Buffers.BytesBuilder.prototype.loadFromUint32Iterable() - Array<uint32>", () => {
-  const b1 = new BytesBuilder();
+Deno.test("Bytes.Builder.prototype.loadFromUint32Iterable() - Array", () => {
+  const b1 = new Builder();
   assertThrows(
     () => {
       b1.loadFromUint32Iterable(0 as unknown as Array<number>);
@@ -81,7 +81,7 @@ Deno.test("Buffers.BytesBuilder.prototype.loadFromUint32Iterable() - Array<uint3
   assertStrictEquals(a1be[10], 255);
   assertStrictEquals(a1be[11], 255);
 
-  const b2 = new BytesBuilder();
+  const b2 = new Builder();
   b2.loadFromUint32Iterable(
     [0, 1, 0xFFFFFFFF],
     { byteOrder: "little-endian" },
@@ -101,7 +101,7 @@ Deno.test("Buffers.BytesBuilder.prototype.loadFromUint32Iterable() - Array<uint3
   assertStrictEquals(a1le[10], 255);
   assertStrictEquals(a1le[11], 255);
 
-  const b3 = new BytesBuilder();
+  const b3 = new Builder();
   b3.loadFromUint32Iterable([0, 1, 0xFFFFFFFF]);
   const a1x = b3.copyToUint8Array();
   assertStrictEquals(a1x.length, 12);
@@ -134,8 +134,8 @@ Deno.test("Buffers.BytesBuilder.prototype.loadFromUint32Iterable() - Array<uint3
   }
 });
 
-Deno.test("Buffers.BytesBuilder.prototype.loadFromUint32Iterable() - Uint32Array", () => {
-  const b1 = new BytesBuilder();
+Deno.test("Bytes.Builder.prototype.loadFromUint32Iterable() - Uint32Array", () => {
+  const b1 = new Builder();
   b1.loadFromUint32Iterable(Uint32Array.of());
   assertStrictEquals(b1.copyToUint8Array().byteLength, 0);
 
@@ -157,7 +157,7 @@ Deno.test("Buffers.BytesBuilder.prototype.loadFromUint32Iterable() - Uint32Array
   assertStrictEquals(a1be[10], 255);
   assertStrictEquals(a1be[11], 255);
 
-  const b2 = new BytesBuilder();
+  const b2 = new Builder();
   b2.loadFromUint32Iterable(Uint32Array.of(0, 1, 0xFFFFFFFF), {
     byteOrder: "little-endian",
   });
@@ -176,7 +176,7 @@ Deno.test("Buffers.BytesBuilder.prototype.loadFromUint32Iterable() - Uint32Array
   assertStrictEquals(a1le[10], 255);
   assertStrictEquals(a1le[11], 255);
 
-  const b3 = new BytesBuilder();
+  const b3 = new Builder();
   b3.loadFromUint32Iterable(Uint32Array.of(0, 1, 0xFFFFFFFF));
   const a1x = b3.copyToUint8Array();
   assertStrictEquals(a1x.length, 12);
@@ -209,8 +209,8 @@ Deno.test("Buffers.BytesBuilder.prototype.loadFromUint32Iterable() - Uint32Array
   }
 });
 
-Deno.test("Buffers.BytesBuilder.prototype.loadFromUint32Iterable() - Generator<uint32>", () => {
-  const b1 = new BytesBuilder();
+Deno.test("Bytes.Builder.prototype.loadFromUint32Iterable() - Generator", () => {
+  const b1 = new Builder();
   const g0 = (function* () {
   })();
   b1.loadFromUint32Iterable(g0);
@@ -238,7 +238,7 @@ Deno.test("Buffers.BytesBuilder.prototype.loadFromUint32Iterable() - Generator<u
   assertStrictEquals(a1be[10], 255);
   assertStrictEquals(a1be[11], 255);
 
-  const b2 = new BytesBuilder();
+  const b2 = new Builder();
   const g2 = (function* () {
     yield 0;
     yield 1;
@@ -261,7 +261,7 @@ Deno.test("Buffers.BytesBuilder.prototype.loadFromUint32Iterable() - Generator<u
   assertStrictEquals(a1le[10], 255);
   assertStrictEquals(a1le[11], 255);
 
-  const b3 = new BytesBuilder();
+  const b3 = new Builder();
   const g3 = (function* () {
     yield 0;
     yield 1;
@@ -300,8 +300,8 @@ Deno.test("Buffers.BytesBuilder.prototype.loadFromUint32Iterable() - Generator<u
   }
 });
 
-Deno.test("Buffers.BytesBuilder.prototype.loadFromUint32AsyncIterable() - Array<uint32>", async () => {
-  const b1 = new BytesBuilder();
+Deno.test("Bytes.Builder.prototype.loadFromUint32AsyncIterable() - Array", async () => {
+  const b1 = new Builder();
   await assertRejects(
     async () => {
       await b1.loadFromUint32AsyncIterable(
@@ -360,14 +360,14 @@ Deno.test("Buffers.BytesBuilder.prototype.loadFromUint32AsyncIterable() - Array<
   );
 });
 
-Deno.test("Buffers.BytesBuilder.prototype.loadFromUint32AsyncIterable() - AsyncGenerator<uint32>", async () => {
-  const b1 = new BytesBuilder();
+Deno.test("Bytes.Builder.prototype.loadFromUint32AsyncIterable() - AsyncGenerator", async () => {
+  const b1 = new Builder();
   const g0 = (async function* () {
   })();
   await b1.loadFromUint32AsyncIterable(g0);
   assertStrictEquals(b1.copyToUint8Array().byteLength, 0);
 
-  const b2 = new BytesBuilder();
+  const b2 = new Builder();
   const g1 = (async function* () {
     yield 0;
     yield 1;
@@ -382,8 +382,8 @@ Deno.test("Buffers.BytesBuilder.prototype.loadFromUint32AsyncIterable() - AsyncG
   assertStrictEquals(a1[2], 0xFFFFFFFF);
 });
 
-Deno.test("Buffers.BytesBuilder.prototype.loadFromUint32AsyncIterable() - AsyncGenerator", async () => {
-  const b1 = new BytesBuilder();
+Deno.test("Bytes.Builder.prototype.loadFromUint32AsyncIterable() - AsyncGenerator", async () => {
+  const b1 = new Builder();
   const g1 = (async function* () {
     yield 0;
     yield 1;

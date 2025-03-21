@@ -52,7 +52,7 @@ function _computeSize(
   return { capacity, capacityMax };
 }
 
-export namespace BytesBuilder {
+export namespace Builder {
   export type LoadOptions = {
     byteOrder?: byteorder; // uint8の場合は無視
     //XXX 見込サイズ,
@@ -78,7 +78,7 @@ type _LoadConfig =
   | _LoadFromUint8xIterableConfig
   | _LoadFromBigUint8xIterableConfig;
 
-export class BytesBuilder {
+export class Builder {
   #length: safeint;
   #buffer: Uint8Array<ArrayBuffer> | null;
 
@@ -110,7 +110,7 @@ export class BytesBuilder {
   }
 
   get [Symbol.toStringTag](): string {
-    return "BytesBuilder";
+    return "Builder";
   }
 
   append(byteOrBytes: /* uint8 */ safeint | BufferSource): this {
@@ -134,7 +134,7 @@ export class BytesBuilder {
 
   #assertValidState(): void {
     if (this.#isValidState() !== true) {
-      throw new InvalidStateError("This BytesBuilder is no longer available.");
+      throw new InvalidStateError("This Builder is no longer available.");
     }
   }
 
@@ -186,7 +186,7 @@ export class BytesBuilder {
     this.#assertValidState();
 
     const buffer = this.#buffer!.buffer;
-    this.#buffer = null;
+    this.#buffer = null; //XXX transferはNode.jsが未実装
 
     buffer.resize(this.#length);
     return buffer;
@@ -209,7 +209,7 @@ export class BytesBuilder {
   loadFromUint8Iterable(value: Iterable<safeint /* uint8 */>): void {
     Type.assertIterable(value, "value");
 
-    const loaded = new BytesBuilder();
+    const loaded = new Builder();
     for (const uint8Expected of value) {
       Type.assertUint8(uint8Expected, "value[*]");
       loaded.#appendByte(uint8Expected as uint8);
@@ -222,7 +222,7 @@ export class BytesBuilder {
   ): Promise<void> {
     Type.assertAsyncIterable(value, "value");
 
-    const loaded = new BytesBuilder();
+    const loaded = new Builder();
     for await (const uint8Expected of value) {
       Type.assertUint8(uint8Expected, "value[*]");
       loaded.#appendByte(uint8Expected as uint8);
@@ -232,7 +232,7 @@ export class BytesBuilder {
 
   loadFromUint16Iterable(
     value: Iterable<uint16>,
-    options?: BytesBuilder.LoadOptions,
+    options?: Builder.LoadOptions,
   ): void {
     this.#loadFromUint8xIterable<uint16>(value, {
       typedArrayCtor: Uint16Array,
@@ -244,7 +244,7 @@ export class BytesBuilder {
 
   async loadFromUint16AsyncIterable(
     value: AsyncIterable<uint16>,
-    options?: BytesBuilder.LoadOptions,
+    options?: Builder.LoadOptions,
   ): Promise<void> {
     await this.#loadFromUint8xAsyncIterable<uint16>(value, {
       typedArrayCtor: Uint16Array,
@@ -256,7 +256,7 @@ export class BytesBuilder {
 
   loadFromUint32Iterable(
     value: Iterable<uint32>,
-    options?: BytesBuilder.LoadOptions,
+    options?: Builder.LoadOptions,
   ): void {
     this.#loadFromUint8xIterable<uint32>(value, {
       typedArrayCtor: Uint32Array,
@@ -268,7 +268,7 @@ export class BytesBuilder {
 
   async loadFromUint32AsyncIterable(
     value: AsyncIterable<uint32>,
-    options?: BytesBuilder.LoadOptions,
+    options?: Builder.LoadOptions,
   ): Promise<void> {
     await this.#loadFromUint8xAsyncIterable<uint32>(value, {
       typedArrayCtor: Uint32Array,
@@ -280,7 +280,7 @@ export class BytesBuilder {
 
   loadFromBigUint64Iterable(
     value: Iterable<biguint64>,
-    options?: BytesBuilder.LoadOptions,
+    options?: Builder.LoadOptions,
   ): void {
     this.#loadFromUint8xIterable<biguint64>(value, {
       typedArrayCtor: BigUint64Array,
@@ -292,7 +292,7 @@ export class BytesBuilder {
 
   async loadFromBigUint64AsyncIterable(
     value: AsyncIterable<biguint64>,
-    options?: BytesBuilder.LoadOptions,
+    options?: Builder.LoadOptions,
   ): Promise<void> {
     await this.#loadFromUint8xAsyncIterable<biguint64>(value, {
       typedArrayCtor: BigUint64Array,
@@ -305,12 +305,12 @@ export class BytesBuilder {
   #loadFromUint8xIterable<T extends int>(
     value: Iterable<T>,
     init: _LoadConfig,
-    options?: BytesBuilder.LoadOptions,
+    options?: Builder.LoadOptions,
   ): void {
     Type.assertIterable(value, "value");
 
     const byteOrder = options?.byteOrder ?? ByteOrder.nativeOrder;
-    const loaded = new BytesBuilder();
+    const loaded = new Builder();
     if (byteOrder === ByteOrder.nativeOrder) {
       const v = new init.typedArrayCtor(1);
       for (const uint8xExpected of value) {
@@ -341,12 +341,12 @@ export class BytesBuilder {
   async #loadFromUint8xAsyncIterable<T extends int>(
     value: AsyncIterable<T>,
     init: _LoadConfig,
-    options?: BytesBuilder.LoadOptions,
+    options?: Builder.LoadOptions,
   ): Promise<void> {
     Type.assertAsyncIterable(value, "value");
 
     const byteOrder = options?.byteOrder ?? ByteOrder.nativeOrder;
-    const loaded = new BytesBuilder();
+    const loaded = new Builder();
     if (byteOrder === ByteOrder.nativeOrder) {
       const v = new init.typedArrayCtor(1);
       for await (const uint8xExpected of value) {
@@ -376,7 +376,7 @@ export class BytesBuilder {
   // 遅い
   // loadFromUint16Iterable_2(
   //   value: Iterable<uint16>,
-  //   options?: BytesBuilder.LoadOptions,
+  //   options?: Builder.LoadOptions,
   // ): void {
   //   Type.assertIterable(value, "value");
   //   const byteOrder = options?.byteOrder ?? ByteOrder.nativeOrder;
