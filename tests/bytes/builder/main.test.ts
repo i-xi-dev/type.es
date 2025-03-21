@@ -42,7 +42,7 @@ Deno.test("new Bytes.Builder()/capacity/length/append() - BufferSource", () => {
   assertStrictEquals(b.capacity, 1_048_576);
   assertStrictEquals(b.length, 24);
 
-  const b2 = b.copyToUint8Array();
+  const b2 = b.cloneAsUint8Array();
   assertStrictEquals(
     JSON.stringify(Array.from(b2)),
     "[1,2,3,4,5,6,7,8,9,10,11,12,1,2,3,4,5,6,7,8,9,10,11,12]",
@@ -100,9 +100,9 @@ Deno.test("new Bytes.Builder()/capacity/length/append()", () => {
   //   "1,2,3,4,5,6,7,8,9,10,11,12,1,2,3,4,5,6,7,8,9,10,11,12",
   // );
 
-  const copy2 = b.copyToUint8Array();
-  assertNotStrictEquals(copy2, b.copyToUint8Array());
-  assertNotStrictEquals(copy2.buffer, b.copyToUint8Array().buffer);
+  const copy2 = b.cloneAsUint8Array();
+  assertNotStrictEquals(copy2, b.cloneAsUint8Array());
+  assertNotStrictEquals(copy2.buffer, b.cloneAsUint8Array().buffer);
   assertStrictEquals(copy2.byteLength, 24);
   assertStrictEquals(copy2.buffer.byteLength, 24);
   assertStrictEquals(
@@ -231,14 +231,14 @@ Deno.test("Bytes.Builder.prototype.cloneAsArrayBuffer()", () => {
   assertStrictEquals(bc2.byteLength, 1);
 });
 
-Deno.test("Bytes.Builder.prototype.copyToUint8Array()", () => {
+Deno.test("Bytes.Builder.prototype.cloneAsUint8Array()", () => {
   const b = new Builder();
-  const bc1 = b.copyToUint8Array();
+  const bc1 = b.cloneAsUint8Array();
   assertStrictEquals(bc1.byteLength, 0);
 
   b.append(255);
   assertStrictEquals(bc1.byteLength, 0);
-  const bc2 = b.copyToUint8Array();
+  const bc2 = b.cloneAsUint8Array();
   assertStrictEquals(bc2.byteLength, 1);
   assertStrictEquals(bc2[0], 255);
 });
@@ -272,7 +272,7 @@ Deno.test("Bytes.Builder.prototype.toArrayBuffer()", () => {
   );
   assertThrows(
     () => {
-      b.copyToUint8Array();
+      b.cloneAsUint8Array();
     },
     Error,
     "This Builder is no longer available.",

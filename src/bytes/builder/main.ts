@@ -209,14 +209,13 @@ export class Builder {
     return this.#buffer!.buffer.slice(ExNumber.ZERO, this.#length);
   }
 
+  cloneAsUint8Array(): Uint8Array<ArrayBuffer> {
+    return new Uint8Array(this.cloneAsArrayBuffer());
+  }
+
   /*
   copyToArrayBuffer(ArrayBuffer)
   */
-
-  copyToUint8Array(): Uint8Array<ArrayBuffer> {
-    this.#assertValidState();
-    return new Uint8Array(this.cloneAsArrayBuffer());
-  }
 
   loadFromUint8Iterable(value: Iterable<safeint /* uint8 */>): void {
     Type.assertIterable(value, "value");
