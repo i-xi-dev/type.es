@@ -125,6 +125,7 @@ export class Builder {
 
   // }
 
+  // BufferSourceの部分範囲だけ追加したければsubarray()などしてから渡せば良い
   append(byteOrBytes: /* uint8 */ safeint | BufferSource): this {
     this.#assertValidState();
 
@@ -204,18 +205,26 @@ export class Builder {
     return buffer;
   }
 
-  cloneAsArrayBuffer(): ArrayBuffer {
+  toUint8Array(): Uint8Array<ArrayBuffer> {
+    return new Uint8Array(this.toArrayBuffer());
+  }
+
+  duplicateAsArrayBuffer(): ArrayBuffer {
     this.#assertValidState();
     return this.#buffer!.buffer.slice(ExNumber.ZERO, this.#length);
   }
 
-  cloneAsUint8Array(): Uint8Array<ArrayBuffer> {
-    return new Uint8Array(this.cloneAsArrayBuffer());
+  duplicateAsUint8Array(): Uint8Array<ArrayBuffer> {
+    return new Uint8Array(this.duplicateAsArrayBuffer());
   }
 
-  /*
-  copyToArrayBuffer(ArrayBuffer)
-  */
+  // copyTo(destination: ArrayBuffer, offset: safeint = ExNumber.ZERO): void {
+  //   Type.assertArrayBuffer(destination, "destination");
+
+  //   const dstBytes = new Uint8Array(destination);
+  //   this.#assertValidState();
+  //   dstBytes.set(this.#buffer!, offset);
+  // }
 
   loadFromUint8Iterable(value: Iterable<safeint /* uint8 */>): void {
     Type.assertIterable(value, "value");

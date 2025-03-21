@@ -63,10 +63,10 @@ Deno.test("Bytes.Builder.prototype.loadFromUint32Iterable() - Array", () => {
     "`value[*]` must be a 32-bit unsigned integer.",
   );
 
-  assertStrictEquals(b1.cloneAsArrayBuffer().byteLength, 0);
+  assertStrictEquals(b1.duplicateAsArrayBuffer().byteLength, 0);
 
   b1.loadFromUint32Iterable([0, 1, 0xFFFFFFFF], { byteOrder: "big-endian" });
-  const a1be = b1.cloneAsUint8Array();
+  const a1be = b1.duplicateAsUint8Array();
   assertStrictEquals(a1be.length, 12);
   assertStrictEquals(a1be[0], 0);
   assertStrictEquals(a1be[1], 0);
@@ -86,7 +86,7 @@ Deno.test("Bytes.Builder.prototype.loadFromUint32Iterable() - Array", () => {
     [0, 1, 0xFFFFFFFF],
     { byteOrder: "little-endian" },
   );
-  const a1le = b2.cloneAsUint8Array();
+  const a1le = b2.duplicateAsUint8Array();
   assertStrictEquals(a1le.length, 12);
   assertStrictEquals(a1le[0], 0);
   assertStrictEquals(a1le[1], 0);
@@ -103,7 +103,7 @@ Deno.test("Bytes.Builder.prototype.loadFromUint32Iterable() - Array", () => {
 
   const b3 = new Builder();
   b3.loadFromUint32Iterable([0, 1, 0xFFFFFFFF]);
-  const a1x = b3.cloneAsUint8Array();
+  const a1x = b3.duplicateAsUint8Array();
   assertStrictEquals(a1x.length, 12);
   if (ByteOrder.nativeOrder === "big-endian") {
     assertStrictEquals(a1x[0], 0);
@@ -137,12 +137,12 @@ Deno.test("Bytes.Builder.prototype.loadFromUint32Iterable() - Array", () => {
 Deno.test("Bytes.Builder.prototype.loadFromUint32Iterable() - Uint32Array", () => {
   const b1 = new Builder();
   b1.loadFromUint32Iterable(Uint32Array.of());
-  assertStrictEquals(b1.cloneAsUint8Array().byteLength, 0);
+  assertStrictEquals(b1.duplicateAsUint8Array().byteLength, 0);
 
   b1.loadFromUint32Iterable(Uint32Array.of(0, 1, 0xFFFFFFFF), {
     byteOrder: "big-endian",
   });
-  const a1be = b1.cloneAsUint8Array();
+  const a1be = b1.duplicateAsUint8Array();
   assertStrictEquals(a1be.length, 12);
   assertStrictEquals(a1be[0], 0);
   assertStrictEquals(a1be[1], 0);
@@ -161,7 +161,7 @@ Deno.test("Bytes.Builder.prototype.loadFromUint32Iterable() - Uint32Array", () =
   b2.loadFromUint32Iterable(Uint32Array.of(0, 1, 0xFFFFFFFF), {
     byteOrder: "little-endian",
   });
-  const a1le = b2.cloneAsUint8Array();
+  const a1le = b2.duplicateAsUint8Array();
   assertStrictEquals(a1le.length, 12);
   assertStrictEquals(a1le[0], 0);
   assertStrictEquals(a1le[1], 0);
@@ -178,7 +178,7 @@ Deno.test("Bytes.Builder.prototype.loadFromUint32Iterable() - Uint32Array", () =
 
   const b3 = new Builder();
   b3.loadFromUint32Iterable(Uint32Array.of(0, 1, 0xFFFFFFFF));
-  const a1x = b3.cloneAsUint8Array();
+  const a1x = b3.duplicateAsUint8Array();
   assertStrictEquals(a1x.length, 12);
   if (ByteOrder.nativeOrder === "big-endian") {
     assertStrictEquals(a1x[0], 0);
@@ -214,7 +214,7 @@ Deno.test("Bytes.Builder.prototype.loadFromUint32Iterable() - Generator", () => 
   const g0 = (function* () {
   })();
   b1.loadFromUint32Iterable(g0);
-  assertStrictEquals(b1.cloneAsUint8Array().byteLength, 0);
+  assertStrictEquals(b1.duplicateAsUint8Array().byteLength, 0);
 
   const g1 = (function* () {
     yield 0;
@@ -223,7 +223,7 @@ Deno.test("Bytes.Builder.prototype.loadFromUint32Iterable() - Generator", () => 
   })();
   b1.loadFromUint32Iterable(g1, { byteOrder: "big-endian" });
 
-  const a1be = b1.cloneAsUint8Array();
+  const a1be = b1.duplicateAsUint8Array();
   assertStrictEquals(a1be.length, 12);
   assertStrictEquals(a1be[0], 0);
   assertStrictEquals(a1be[1], 0);
@@ -246,7 +246,7 @@ Deno.test("Bytes.Builder.prototype.loadFromUint32Iterable() - Generator", () => 
   })();
   b2.loadFromUint32Iterable(g2, { byteOrder: "little-endian" });
 
-  const a1le = b2.cloneAsUint8Array();
+  const a1le = b2.duplicateAsUint8Array();
   assertStrictEquals(a1le.length, 12);
   assertStrictEquals(a1le[0], 0);
   assertStrictEquals(a1le[1], 0);
@@ -269,7 +269,7 @@ Deno.test("Bytes.Builder.prototype.loadFromUint32Iterable() - Generator", () => 
   })();
   b3.loadFromUint32Iterable(g3);
 
-  const a1x = b3.cloneAsUint8Array();
+  const a1x = b3.duplicateAsUint8Array();
   assertStrictEquals(a1x.length, 12);
   if (ByteOrder.nativeOrder === "big-endian") {
     assertStrictEquals(a1x[0], 0);
@@ -365,7 +365,7 @@ Deno.test("Bytes.Builder.prototype.loadFromUint32AsyncIterable() - AsyncGenerato
   const g0 = (async function* () {
   })();
   await b1.loadFromUint32AsyncIterable(g0);
-  assertStrictEquals(b1.cloneAsUint8Array().byteLength, 0);
+  assertStrictEquals(b1.duplicateAsUint8Array().byteLength, 0);
 
   const b2 = new Builder();
   const g1 = (async function* () {
@@ -375,7 +375,7 @@ Deno.test("Bytes.Builder.prototype.loadFromUint32AsyncIterable() - AsyncGenerato
   })();
   await b2.loadFromUint32AsyncIterable(g1);
 
-  const a1 = new Uint32Array(b2.cloneAsArrayBuffer());
+  const a1 = new Uint32Array(b2.duplicateAsArrayBuffer());
   assertStrictEquals(a1.length, 3);
   assertStrictEquals(a1[0], 0);
   assertStrictEquals(a1[1], 1);

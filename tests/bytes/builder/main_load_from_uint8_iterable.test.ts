@@ -58,10 +58,10 @@ Deno.test("Bytes.Builder.prototype.loadFromUint8Iterable() - Array", () => {
   );
 
   b1.loadFromUint8Iterable([]);
-  assertStrictEquals(b1.cloneAsArrayBuffer().byteLength, 0);
+  assertStrictEquals(b1.duplicateAsArrayBuffer().byteLength, 0);
 
   b1.loadFromUint8Iterable([0, 1, 255]);
-  const b1c1 = b1.cloneAsUint8Array();
+  const b1c1 = b1.duplicateAsUint8Array();
   assertStrictEquals(b1c1.length, 3);
   assertStrictEquals(b1c1[0], 0);
   assertStrictEquals(b1c1[1], 1);
@@ -71,10 +71,10 @@ Deno.test("Bytes.Builder.prototype.loadFromUint8Iterable() - Array", () => {
 Deno.test("Bytes.Builder.prototype.loadFromUint8Iterable() - Uint8Array", () => {
   const b1 = new Builder();
   b1.loadFromUint8Iterable(new Uint8Array(0));
-  assertStrictEquals(b1.cloneAsArrayBuffer().byteLength, 0);
+  assertStrictEquals(b1.duplicateAsArrayBuffer().byteLength, 0);
 
   b1.loadFromUint8Iterable(Uint8Array.of(0, 1, 255));
-  const b1c1 = b1.cloneAsUint8Array();
+  const b1c1 = b1.duplicateAsUint8Array();
   assertStrictEquals(b1c1.length, 3);
   assertStrictEquals(b1c1[0], 0);
   assertStrictEquals(b1c1[1], 1);
@@ -86,7 +86,7 @@ Deno.test("Bytes.Builder.prototype.loadFromUint8Iterable() - Generator", () => {
   })();
   const b1 = new Builder();
   b1.loadFromUint8Iterable(g0);
-  assertStrictEquals(b1.cloneAsArrayBuffer().byteLength, 0);
+  assertStrictEquals(b1.duplicateAsArrayBuffer().byteLength, 0);
 
   const g1 = (function* () {
     yield 0;
@@ -94,7 +94,7 @@ Deno.test("Bytes.Builder.prototype.loadFromUint8Iterable() - Generator", () => {
     yield 255;
   })();
   b1.loadFromUint8Iterable(g1);
-  const b1c1 = b1.cloneAsUint8Array();
+  const b1c1 = b1.duplicateAsUint8Array();
   assertStrictEquals(b1c1.length, 3);
   assertStrictEquals(b1c1[0], 0);
   assertStrictEquals(b1c1[1], 1);
@@ -168,10 +168,7 @@ Deno.test("Bytes.Builder.prototype.loadFromUint8AsyncIterable() - AsyncGenerator
   const b1 = new Builder();
 
   await b1.loadFromUint8AsyncIterable(g0);
-  assertStrictEquals(
-    b1.cloneAsArrayBuffer().byteLength,
-    0,
-  );
+  assertStrictEquals(b1.duplicateAsArrayBuffer().byteLength, 0);
 
   const g1 = (async function* () {
     yield 0;
@@ -180,7 +177,7 @@ Deno.test("Bytes.Builder.prototype.loadFromUint8AsyncIterable() - AsyncGenerator
   })();
 
   await b1.loadFromUint8AsyncIterable(g1);
-  const b1c1 = b1.cloneAsUint8Array();
+  const b1c1 = b1.duplicateAsUint8Array();
   assertStrictEquals(b1c1.length, 3);
   assertStrictEquals(b1c1[0], 0);
   assertStrictEquals(b1c1[1], 1);
@@ -218,7 +215,7 @@ Deno.test("Bytes.Builder.prototype.loadFromUint8AsyncIterable() - AsyncGenerator
     TypeError,
     "`value[*]` must be an 8-bit unsigned integer.",
   );
-  assertStrictEquals(b1.cloneAsUint8Array().length, 0);
+  assertStrictEquals(b1.duplicateAsUint8Array().length, 0);
 
   const g3 = (async function* () {
     yield 0;
@@ -233,5 +230,5 @@ Deno.test("Bytes.Builder.prototype.loadFromUint8AsyncIterable() - AsyncGenerator
     TypeError,
     "`value[*]` must be an 8-bit unsigned integer.",
   );
-  assertStrictEquals(b1.cloneAsUint8Array().length, 0);
+  assertStrictEquals(b1.duplicateAsUint8Array().length, 0);
 });
