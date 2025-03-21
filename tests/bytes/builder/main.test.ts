@@ -15,17 +15,17 @@ Deno.test("new Bytes.Builder()/capacity/length/append() - number", () => {
   b.append(255);
   assertStrictEquals(b.capacity, 2);
   assertStrictEquals(b.length, 1);
-  assertStrictEquals(b.copyToArrayBuffer().byteLength, 1);
+  assertStrictEquals(b.cloneAsArrayBuffer().byteLength, 1);
 
   b.append(255);
   assertStrictEquals(b.capacity, 2);
   assertStrictEquals(b.length, 2);
-  assertStrictEquals(b.copyToArrayBuffer().byteLength, 2);
+  assertStrictEquals(b.cloneAsArrayBuffer().byteLength, 2);
 
   b.append(255);
   assertStrictEquals(b.capacity, 1048576 + 2);
   assertStrictEquals(b.length, 3);
-  assertStrictEquals(b.copyToArrayBuffer().byteLength, 3);
+  assertStrictEquals(b.cloneAsArrayBuffer().byteLength, 3);
 });
 
 Deno.test("new Bytes.Builder()/capacity/length/append() - BufferSource", () => {
@@ -220,14 +220,14 @@ Deno.test("Bytes.Builder.prototype.append()", () => {
   );
 });
 
-Deno.test("Bytes.Builder.prototype.copyToArrayBuffer()", () => {
+Deno.test("Bytes.Builder.prototype.cloneAsArrayBuffer()", () => {
   const b = new Builder();
-  const bc1 = b.copyToArrayBuffer();
+  const bc1 = b.cloneAsArrayBuffer();
   assertStrictEquals(bc1.byteLength, 0);
 
   b.append(255);
   assertStrictEquals(bc1.byteLength, 0);
-  const bc2 = b.copyToArrayBuffer();
+  const bc2 = b.cloneAsArrayBuffer();
   assertStrictEquals(bc2.byteLength, 1);
 });
 
@@ -243,9 +243,9 @@ Deno.test("Bytes.Builder.prototype.copyToUint8Array()", () => {
   assertStrictEquals(bc2[0], 255);
 });
 
-Deno.test("Bytes.Builder.prototype.takeAsArrayBuffer()", () => {
+Deno.test("Bytes.Builder.prototype.toArrayBuffer()", () => {
   const b = new Builder();
-  const bc1 = b.takeAsArrayBuffer();
+  const bc1 = b.toArrayBuffer();
   assertStrictEquals(bc1.byteLength, 0);
 
   assertThrows(
@@ -265,7 +265,7 @@ Deno.test("Bytes.Builder.prototype.takeAsArrayBuffer()", () => {
   );
   assertThrows(
     () => {
-      b.copyToArrayBuffer();
+      b.cloneAsArrayBuffer();
     },
     Error,
     "This Builder is no longer available.",
@@ -279,14 +279,7 @@ Deno.test("Bytes.Builder.prototype.takeAsArrayBuffer()", () => {
   );
   assertThrows(
     () => {
-      b.takeAsArrayBuffer();
-    },
-    Error,
-    "This Builder is no longer available.",
-  );
-  assertThrows(
-    () => {
-      b.takeAsUint8Array();
+      b.toArrayBuffer();
     },
     Error,
     "This Builder is no longer available.",
@@ -294,62 +287,7 @@ Deno.test("Bytes.Builder.prototype.takeAsArrayBuffer()", () => {
 
   const b2 = new Builder();
   b2.append(255);
-  const b2c2 = b2.takeAsArrayBuffer();
+  const b2c2 = b2.toArrayBuffer();
   assertStrictEquals(b2c2.byteLength, 1);
-});
-
-Deno.test("Bytes.Builder.prototype.takeAsUint8Array()", () => {
-  const b = new Builder();
-  const bc1 = b.takeAsUint8Array();
-  assertStrictEquals(bc1.byteLength, 0);
-
-  assertThrows(
-    () => {
-      b.append(255);
-    },
-    Error,
-    "This Builder is no longer available.",
-  );
-
-  assertThrows(
-    () => {
-      b.append(255);
-    },
-    Error,
-    "This Builder is no longer available.",
-  );
-  assertThrows(
-    () => {
-      b.copyToArrayBuffer();
-    },
-    Error,
-    "This Builder is no longer available.",
-  );
-  assertThrows(
-    () => {
-      b.copyToUint8Array();
-    },
-    Error,
-    "This Builder is no longer available.",
-  );
-  assertThrows(
-    () => {
-      b.takeAsArrayBuffer();
-    },
-    Error,
-    "This Builder is no longer available.",
-  );
-  assertThrows(
-    () => {
-      b.takeAsUint8Array();
-    },
-    Error,
-    "This Builder is no longer available.",
-  );
-
-  const b2 = new Builder();
-  b2.append(255);
-  const b2c2 = b2.takeAsUint8Array();
-  assertStrictEquals(b2c2.byteLength, 1);
-  assertStrictEquals(b2c2[0], 255);
+  assertStrictEquals(new Uint8Array(b2c2)[0], 255);
 });

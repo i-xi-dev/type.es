@@ -113,6 +113,18 @@ export class Builder {
     return "Builder";
   }
 
+  // static create(init?: Init): Builder {
+
+  // }
+
+  // static wrap(buffer: ArrayBuffer): Builder {
+
+  // }
+
+  // dispose(): void {
+
+  // }
+
   append(byteOrBytes: /* uint8 */ safeint | BufferSource): this {
     this.#assertValidState();
 
@@ -182,7 +194,7 @@ export class Builder {
     // }
   }
 
-  takeAsArrayBuffer(): ArrayBuffer {
+  toArrayBuffer(): ArrayBuffer {
     this.#assertValidState();
 
     const buffer = this.#buffer!.buffer;
@@ -192,18 +204,18 @@ export class Builder {
     return buffer;
   }
 
-  takeAsUint8Array(): Uint8Array<ArrayBuffer> {
-    return new Uint8Array(this.takeAsArrayBuffer());
-  }
-
-  copyToArrayBuffer(): ArrayBuffer {
+  cloneAsArrayBuffer(): ArrayBuffer {
     this.#assertValidState();
     return this.#buffer!.buffer.slice(ExNumber.ZERO, this.#length);
   }
 
+  /*
+  copyToArrayBuffer(ArrayBuffer)
+  */
+
   copyToUint8Array(): Uint8Array<ArrayBuffer> {
     this.#assertValidState();
-    return new Uint8Array(this.copyToArrayBuffer());
+    return new Uint8Array(this.cloneAsArrayBuffer());
   }
 
   loadFromUint8Iterable(value: Iterable<safeint /* uint8 */>): void {
@@ -214,7 +226,7 @@ export class Builder {
       Type.assertUint8(uint8Expected, "value[*]");
       loaded.#appendByte(uint8Expected as uint8);
     }
-    this.append(loaded.takeAsArrayBuffer());
+    this.append(loaded.toArrayBuffer());
   }
 
   async loadFromUint8AsyncIterable(
@@ -227,7 +239,7 @@ export class Builder {
       Type.assertUint8(uint8Expected, "value[*]");
       loaded.#appendByte(uint8Expected as uint8);
     }
-    this.append(loaded.takeAsArrayBuffer());
+    this.append(loaded.toArrayBuffer());
   }
 
   loadFromUint16Iterable(
@@ -335,7 +347,7 @@ export class Builder {
       }
     }
 
-    this.append(loaded.takeAsArrayBuffer());
+    this.append(loaded.toArrayBuffer());
   }
 
   async #loadFromUint8xAsyncIterable<T extends int>(
@@ -370,7 +382,7 @@ export class Builder {
       }
     }
 
-    this.append(loaded.takeAsArrayBuffer());
+    this.append(loaded.toArrayBuffer());
   }
 
   // 遅い

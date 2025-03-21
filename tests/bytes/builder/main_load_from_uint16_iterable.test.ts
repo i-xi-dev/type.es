@@ -310,7 +310,7 @@ Deno.test("Bytes.Builder.prototype.loadFromUint16AsyncIterable() - AsyncGenerato
   })();
   await b1.loadFromUint16AsyncIterable(g1);
 
-  const a1 = new Uint16Array(b1.copyToArrayBuffer());
+  const a1 = new Uint16Array(b1.cloneAsArrayBuffer());
   assertStrictEquals(a1.length, 3);
   assertStrictEquals(a1[0], 0);
   assertStrictEquals(a1[1], 1);

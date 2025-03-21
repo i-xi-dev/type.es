@@ -63,7 +63,7 @@ Deno.test("Bytes.Builder.prototype.loadFromUint32Iterable() - Array", () => {
     "`value[*]` must be a 32-bit unsigned integer.",
   );
 
-  assertStrictEquals(b1.copyToArrayBuffer().byteLength, 0);
+  assertStrictEquals(b1.cloneAsArrayBuffer().byteLength, 0);
 
   b1.loadFromUint32Iterable([0, 1, 0xFFFFFFFF], { byteOrder: "big-endian" });
   const a1be = b1.copyToUint8Array();
@@ -375,7 +375,7 @@ Deno.test("Bytes.Builder.prototype.loadFromUint32AsyncIterable() - AsyncGenerato
   })();
   await b2.loadFromUint32AsyncIterable(g1);
 
-  const a1 = new Uint32Array(b2.copyToArrayBuffer());
+  const a1 = new Uint32Array(b2.cloneAsArrayBuffer());
   assertStrictEquals(a1.length, 3);
   assertStrictEquals(a1[0], 0);
   assertStrictEquals(a1[1], 1);
