@@ -9,7 +9,6 @@ import {
   type uint32,
   type uint8,
 } from "../../_typedef/mod.ts";
-import { BytesBuilder } from "../bytes_builder/mod.ts";
 import { Number as ExNumber } from "../../numerics/mod.ts";
 
 //XXX Uint8Arrayにすれば良いだけなので不要では
@@ -22,36 +21,6 @@ type _Uint8xArrayCtor =
   | Uint16ArrayConstructor
   | Uint32ArrayConstructor
   | BigUint64ArrayConstructor;
-
-type _Setter<T extends int> = (
-  dataView: DataView,
-  value: T,
-  isLittleEndian: boolean,
-) => void;
-
-async function _fromUint8xAsyncIterable<T extends int>(
-  value: AsyncIterable<T>,
-  uint8xArrayCtor: _Uint8xArrayCtor,
-  assertElement: (i: unknown, label: string) => void,
-  viewSetter: _Setter<T>,
-  byteOrder: byteorder = ByteOrder.nativeOrder,
-): Promise<ArrayBuffer> {
-  Type.assertByteOrder(byteOrder, "byteOrder");
-
-  const builder = new BytesBuilder();
-  const isLittleEndian = byteOrder === ByteOrder.LITTLE_ENDIAN;
-  const tmp = new ArrayBuffer(uint8xArrayCtor.BYTES_PER_ELEMENT);
-  const tmpView = new DataView(tmp);
-
-  let index = 0;
-  for await (const i of value) {
-    assertElement(i, `value[${index}]`);
-    viewSetter(tmpView, i, isLittleEndian);
-    builder.append(tmpView);
-    index++;
-  }
-  return builder.takeAsArrayBuffer();
-}
 
 type _Getter<T extends int> = (
   dataView: DataView,
@@ -92,11 +61,6 @@ function _toUint8xIterable<T extends int>(
   }
 }
 
-export type FromUint8xIterableOptions = {
-  byteOrder?: byteorder;
-  // maxByteLength?: safeint;
-};
-
 export type ToUint8xIterableOptions = {
   byteOrder?: byteorder;
 };
@@ -117,37 +81,6 @@ export function toUint32Iterable(
   return _toUint8xIterable<uint32>(value, Uint32Array, (v, o, e) => {
     return v.getUint32(o, e);
   }, options?.byteOrder);
-}
-
-export async function fromBigUint64AsyncIterable(
-  value: AsyncIterable<biguint64>,
-  options?: FromUint8xIterableOptions,
-): Promise<ArrayBuffer> {
-  Type.assertAsyncIterable(value, "value");
-
-  const byteOrder = options?.byteOrder ?? ByteOrder.nativeOrder;
-  if (byteOrder !== ByteOrder.nativeOrder) {
-    return _fromUint8xAsyncIterable<biguint64>(
-      value,
-      BigUint64Array,
-      (t, l) => Type.assertBigUint64(t, l),
-      (v, i, e) => v.setBigUint64(0, i, e),
-      byteOrder,
-    );
-  } else {
-    // 実行環境のバイトオーダー
-
-    const builder = new BytesBuilder();
-    const tmpView = new BigUint64Array(1);
-    let index = 0;
-    for await (const i of value) {
-      Type.assertBigUint64(i, `value[${index}]`);
-      tmpView[0] = i;
-      builder.append(tmpView);
-      index++;
-    }
-    return builder.takeAsArrayBuffer();
-  }
 }
 
 export function toBigUint64Iterable(

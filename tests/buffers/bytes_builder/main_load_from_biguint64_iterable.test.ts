@@ -3,7 +3,7 @@ import { Buffers, ByteOrder } from "../../../mod.ts";
 
 const { BytesBuilder } = Buffers;
 
-Deno.test("Buffers.BytesBuilder.prototype.loadFromBigUint64Iterable - Array<biguint64>", () => {
+Deno.test("Buffers.BytesBuilder.prototype.loadFromBigUint64Iterable() - Array", () => {
   const b1 = new BytesBuilder();
   assertThrows(
     () => {
@@ -188,7 +188,7 @@ Deno.test("Buffers.BytesBuilder.prototype.loadFromBigUint64Iterable - Array<bigu
   }
 });
 
-Deno.test("Buffers.BytesBuilder.prototype.loadFromBigUint64Iterable - BigUint64Array", () => {
+Deno.test("Buffers.BytesBuilder.prototype.loadFromBigUint64Iterable() - BigUint64Array", () => {
   const b1 = new BytesBuilder();
   b1.loadFromBigUint64Iterable(BigUint64Array.of());
   assertStrictEquals(b1.copyToUint8Array().byteLength, 0);
@@ -315,7 +315,7 @@ Deno.test("Buffers.BytesBuilder.prototype.loadFromBigUint64Iterable - BigUint64A
   }
 });
 
-Deno.test("Buffers.BytesBuilder.prototype.loadFromBigUint64Iterable - Generator<biguint64>", () => {
+Deno.test("Buffers.BytesBuilder.prototype.loadFromBigUint64Iterable() - Generator", () => {
   const b1 = new BytesBuilder();
   const g0 = (function* () {
   })();
@@ -452,4 +452,130 @@ Deno.test("Buffers.BytesBuilder.prototype.loadFromBigUint64Iterable - Generator<
     assertStrictEquals(a1x[22], 255);
     assertStrictEquals(a1x[23], 255);
   }
+});
+
+Deno.test("Buffers.BytesBuilder.prototype.loadFromBigUint64AsyncIterable() - Array", async () => {
+  const b1 = new BytesBuilder();
+  await assertRejects(
+    async () => {
+      await b1.loadFromBigUint64AsyncIterable(
+        0 as unknown as AsyncIterable<bigint>,
+      );
+    },
+    TypeError,
+    "`value` must implement `Symbol.asyncIterator`.",
+  );
+
+  await assertRejects(
+    async () => {
+      await b1.loadFromBigUint64AsyncIterable(
+        1 as unknown as AsyncIterable<bigint>,
+      );
+    },
+    TypeError,
+    "`value` must implement `Symbol.asyncIterator`.",
+  );
+
+  await assertRejects(
+    async () => {
+      await b1.loadFromBigUint64AsyncIterable(
+        [-1] as unknown as AsyncIterable<bigint>,
+      );
+    },
+    TypeError,
+    "`value` must implement `Symbol.asyncIterator`.",
+  );
+  await assertRejects(
+    async () => {
+      await b1.loadFromBigUint64AsyncIterable(
+        ["0"] as unknown as AsyncIterable<bigint>,
+      );
+    },
+    TypeError,
+    "`value` must implement `Symbol.asyncIterator`.",
+  );
+  await assertRejects(
+    async () => {
+      await b1.loadFromBigUint64AsyncIterable(
+        [256] as unknown as AsyncIterable<bigint>,
+      );
+    },
+    TypeError,
+    "`value` must implement `Symbol.asyncIterator`.",
+  );
+  await assertRejects(
+    async () => {
+      await b1.loadFromBigUint64AsyncIterable(
+        [0, 256] as unknown as AsyncIterable<bigint>,
+      );
+    },
+    TypeError,
+    "`value` must implement `Symbol.asyncIterator`.",
+  );
+});
+
+Deno.test("Buffers.BytesBuilder.prototype.loadFromBigUint64AsyncIterable() - AsyncGenerator", async () => {
+  const b1 = new BytesBuilder();
+  const g0 = (async function* () {
+  })();
+  await b1.loadFromBigUint64AsyncIterable(g0);
+  assertStrictEquals(b1.copyToArrayBuffer().byteLength, 0);
+
+  const g1 = (async function* () {
+    yield 0n;
+    yield 1n;
+    yield 0xFFFF_FFFF_FFFF_FFFFn;
+  })();
+  await b1.loadFromBigUint64AsyncIterable(g1);
+
+  const a1 = new BigUint64Array(b1.copyToArrayBuffer());
+  assertStrictEquals(a1.length, 3);
+  assertStrictEquals(a1[0], 0n);
+  assertStrictEquals(a1[1], 1n);
+  assertStrictEquals(a1[2], 0xFFFF_FFFF_FFFF_FFFFn);
+});
+
+Deno.test("Buffers.BytesBuilder.prototype.loadFromBigUint64AsyncIterable() - AsyncGenerator", async () => {
+  const b1 = new BytesBuilder();
+  const g1 = (async function* () {
+    yield 0n;
+    yield 1n;
+    yield "a";
+  })();
+
+  await assertRejects(
+    async () => {
+      await b1.loadFromBigUint64AsyncIterable(g1 as AsyncIterable<bigint>);
+    },
+    TypeError,
+    "`value[*]` must be a 64-bit unsigned integer.",
+  );
+
+  const g2 = (async function* () {
+    yield 0n;
+    yield 1n;
+    yield 0x1_0000_0000_0000_0000n;
+  })();
+
+  await assertRejects(
+    async () => {
+      await b1.loadFromBigUint64AsyncIterable(g2);
+    },
+    TypeError,
+    "`value[*]` must be a 64-bit unsigned integer.",
+  );
+
+  const g3 = (async function* () {
+    yield 0n;
+    yield 1n;
+    yield -1n;
+  })();
+
+  await assertRejects(
+    async () => {
+      await b1.loadFromBigUint64AsyncIterable(g3);
+    },
+    TypeError,
+    "`value[*]` must be a 64-bit unsigned integer.",
+  );
 });
