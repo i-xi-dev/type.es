@@ -9,7 +9,6 @@ import {
   type uint32,
   type uint8,
 } from "../../_typedef/mod.ts";
-import { Number as ExNumber } from "../../numerics/mod.ts";
 
 //XXX Uint8Arrayにすれば良いだけなので不要では
 export function toUint8Iterable(value: ArrayBuffer): Iterable<uint8> {
@@ -38,7 +37,7 @@ function _toUint8xIterable<T extends int>(
   Type.assertByteOrder(byteOrder, "byteOrder");
 
   const bytesPerElement = uint8xArrayCtor.BYTES_PER_ELEMENT;
-  if ((value.byteLength % bytesPerElement) !== ExNumber.ZERO) {
+  if ((value.byteLength % bytesPerElement) !== 0) {
     throw new RangeError(
       `The byte length of \`value\` must be divisible by ${bytesPerElement}.`,
     );

@@ -1,7 +1,7 @@
-import * as Byte from "../../basics/byte/mod.ts";
-import * as ByteOrder from "../../basics/byte_order/mod.ts";
+import * as SafeInt from "../safeint/mod.ts";
 import * as Type from "../../type/mod.ts";
 import { type _AFunc, _normalizeOffset } from "./_utils.ts";
+import { BITS_PER_BYTE, ByteOrder } from "../../basics/mod.ts";
 import {
   type byteorder,
   type safeint,
@@ -12,7 +12,6 @@ import {
   type uint7,
   type uint8,
 } from "../../_typedef/mod.ts";
-import { Number as ExNumber, SafeInt } from "../../numerics/mod.ts";
 import {
   Uint16 as Uint16Info,
   Uint24 as Uint24Info,
@@ -85,7 +84,7 @@ class _Uint<T extends safeint> implements RangedInt<T> {
     this.MIN_VALUE = info.MIN_VALUE;
     this.MAX_VALUE = info.MAX_VALUE;
     this.BIT_LENGTH = info.BIT_LENGTH;
-    this.BYTE_LENGTH = Math.ceil(info.BIT_LENGTH / Byte.BITS_PER_BYTE);
+    this.BYTE_LENGTH = Math.ceil(info.BIT_LENGTH / BITS_PER_BYTE);
     if (this.BYTE_LENGTH > 48) {
       throw new RangeError("byte length overflowed.");
     }
@@ -109,14 +108,14 @@ class _Uint<T extends safeint> implements RangedInt<T> {
     // #bwoBuffer の 1～4バイトをa, 5～8をb, 9～12を結果 として使用
     this.#bwoView32[0] = a;
     this.#bwoView32[1] = b;
-    this.#bwoView32[2] = ExNumber.ZERO;
+    this.#bwoView32[2] = 0;
     for (let i = 0; i < 4; i++) {
       if (op === _BitOperation.AND) {
-        this.#bwoView8[i + 8] = this.#bwoView8[i + 0] & this.#bwoView8[i + 4];
+        this.#bwoView8[i + 8] = this.#bwoView8[i] & this.#bwoView8[i + 4];
       } else if (op === _BitOperation.OR) {
-        this.#bwoView8[i + 8] = this.#bwoView8[i + 0] | this.#bwoView8[i + 4];
+        this.#bwoView8[i + 8] = this.#bwoView8[i] | this.#bwoView8[i + 4];
       } else if (op === _BitOperation.XOR) {
-        this.#bwoView8[i + 8] = this.#bwoView8[i + 0] ^ this.#bwoView8[i + 4];
+        this.#bwoView8[i + 8] = this.#bwoView8[i] ^ this.#bwoView8[i + 4];
       }
     }
 
@@ -172,7 +171,7 @@ class _Uint<T extends safeint> implements RangedInt<T> {
     const bytes: Array<uint8> = [];
     bytes.push((value % 0x100) as uint8);
     for (let i = 2; i <= 6; i++) { // 16-48
-      if (this.BIT_LENGTH >= (Byte.BITS_PER_BYTE * i)) {
+      if (this.BIT_LENGTH >= (BITS_PER_BYTE * i)) {
         bytes.push(_getByteByPosition(value, i));
       }
     }
@@ -260,7 +259,7 @@ class _Uint<T extends safeint> implements RangedInt<T> {
     Type.assertSafeInt(offset, "offset");
 
     const normalizedOffset = _normalizeOffset(offset, this.BIT_LENGTH);
-    if (normalizedOffset === ExNumber.ZERO) {
+    if (normalizedOffset === 0) {
       return value;
     }
 
@@ -282,11 +281,11 @@ class _Uint<T extends safeint> implements RangedInt<T> {
   truncate(value: safeint): T {
     Type.assertSafeInt(value, "value");
 
-    if ((value >= ExNumber.ZERO) && (value <= this.MAX_VALUE)) {
+    if ((value >= 0) && (value <= this.MAX_VALUE)) {
       return value as T;
     }
 
-    if (value > ExNumber.ZERO) {
+    if (value > 0) {
       return (value % this.#size) as T;
     } else {
       return (this.#size + (value % this.#size)) as T;

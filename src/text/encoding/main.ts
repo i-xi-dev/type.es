@@ -5,6 +5,9 @@ import {
   type safeint,
   type uint8,
 } from "../../_typedef/mod.ts";
+import { String as ExString } from "../../basics/mod.ts";
+
+const { EMPTY } = ExString;
 
 /*XXX
 - text-encoding-$03
@@ -118,7 +121,7 @@ class _DecoderCommon extends _CoderCommon {
       srcBuffer = srcBufferSource;
     }
 
-    // Type.assertArrayBuffer(srcBuffer, "");
+    // Type.assertArrayBuffer(srcBuffer, "-");
     if (!srcBuffer) {
       throw new TypeError("`input` must be a `BufferSource`.");
     }
@@ -147,9 +150,9 @@ class _DecoderCommon extends _CoderCommon {
 
     let writtenRunesAsString: string;
     if ((removeBOM === true) && (runes[0] === _BOM)) {
-      writtenRunesAsString = runes.slice(1).join("");
+      writtenRunesAsString = runes.slice(1).join(EMPTY);
     } else {
-      writtenRunesAsString = runes.join("");
+      writtenRunesAsString = runes.join(EMPTY);
     }
 
     return {
@@ -241,7 +244,7 @@ class _EncoderCommon extends _CoderCommon {
     const dstBufferSpecified = !!dstBuffer;
 
     let runesAsString = (srcRunesAsString === undefined)
-      ? ""
+      ? EMPTY
       : String(srcRunesAsString); // TextEncoder,TextEncoderStreamにあわせた(つもり)
 
     if (
@@ -253,7 +256,7 @@ class _EncoderCommon extends _CoderCommon {
       runesAsString = previousPendingChar + runesAsString;
     }
 
-    let pendingChar = "";
+    let pendingChar = EMPTY;
     if (inStreaming === true) {
       if (runesAsString.length > 0) {
         const lastChar = runesAsString.slice(-1);
@@ -454,7 +457,7 @@ export abstract class Encoder /* implements TextEncoder (encodingが"utf-8"で�
     const { writtenBuffer } = this.#common.encode(
       this.prependBOM,
       false,
-      "",
+      EMPTY,
       input,
     );
     return new Uint8Array(writtenBuffer);
@@ -474,7 +477,7 @@ export abstract class Encoder /* implements TextEncoder (encodingが"utf-8"で�
     const { readCharCount, writtenByteCount } = this.#common.encode(
       this.prependBOM,
       false,
-      "",
+      EMPTY,
       source,
       destination.buffer,
     );
@@ -531,7 +534,7 @@ export abstract class EncoderStream
     this.#stream = new TransformStream<string, Uint8Array<ArrayBuffer>>(
       transformer,
     );
-    this.#pendingChar = "";
+    this.#pendingChar = EMPTY;
     this.#firstChunkLoaded = false;
   }
 

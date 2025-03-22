@@ -2,6 +2,8 @@ import * as ExString from "../string/mod.ts";
 import * as Radix from "../../_const/radix.ts";
 import { type radix } from "../../_typedef/mod.ts";
 
+const { EMPTY } = ExString;
+
 const _supportedRadixes = [
   Radix.BINARY,
   Radix.OCTAL,
@@ -31,13 +33,13 @@ export function integerPatternOf(
 ): string {
   assertSupportedRadix(radix, "radix");
 
-  let signPattern = ExString.EMPTY;
+  let signPattern = EMPTY;
   if (options?.includesSign) {
     signPattern = "[-+]?";
   }
 
   // 2-36でなく2|8|10|16なので算出せずに固定値を返す
-  let digitsPattern = ExString.EMPTY;
+  let digitsPattern = EMPTY;
   switch (radix) {
     case Radix.BINARY:
       digitsPattern = "[01]+";
@@ -65,10 +67,10 @@ export function prefixOf(radix: radix): string {
     case Radix.OCTAL:
       return "0o";
     // case Radix.DECIMAL:
-    //   return ExString.EMPTY;
+    //   return EMPTY;
     case Radix.HEXADECIMAL:
       return "0x";
     default:
-      return ExString.EMPTY;
+      return EMPTY;
   }
 }

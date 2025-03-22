@@ -1,5 +1,8 @@
 import * as Type from "../../../type/mod.ts";
+import { String as ExString } from "../../../basics/mod.ts";
 import { type uint8 } from "../../../_typedef/mod.ts";
+
+const { EMPTY } = ExString;
 
 /**
  * The object with the following optional fields.
@@ -363,7 +366,7 @@ function _formatByte(bytes: Uint8Array<ArrayBuffer>): string {
   const byteStringArray = [...bytes].map((byte) => {
     return "%" + byte.toString(16).toUpperCase().padStart(2, "0");
   });
-  return byteStringArray.join("");
+  return byteStringArray.join(EMPTY);
 }
 
 /**
@@ -383,7 +386,7 @@ export function _encode(
   options: _ResolvedOptions,
 ): string {
   let work: Array<uint8> = [];
-  let encoded = "";
+  let encoded = EMPTY;
   for (const byte of toEncode) {
     if (_isByteIncludedInEncodeSet(byte as uint8, options.encodeSet)) {
       if (byte === 0x20) {

@@ -1,7 +1,9 @@
-import * as ExString from "../basics/string/mod.ts";
 import * as Type from "../type/mod.ts";
 import _regions from "../../dat/i18n/region_map.json" with { type: "json" };
 import { type region } from "../_typedef/mod.ts";
+import { String as ExString } from "../basics/mod.ts";
+
+const { EMPTY } = ExString;
 
 export type RegionInfo = {
   /** ISO 3166-1 Alpha-2 code. */
@@ -63,5 +65,5 @@ export function _getRegionName(
     _regionNamesRef = new WeakRef(regionNames);
   }
 
-  return regionNames!.of(region) ?? ExString.EMPTY;
+  return regionNames!.of(region) ?? EMPTY;
 }

@@ -1,3 +1,4 @@
+export * from "./byte/mod.ts";
 export * from "./exception/mod.ts";
 export * as ByteOrder from "./byte_order/mod.ts";
 export * as Isomorphic from "./isomorphic/mod.ts";

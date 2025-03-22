@@ -1,6 +1,7 @@
 import {
   _FORM_URLENCODED_OPTIONS,
   _MIN_OPTIONS,
+  _Options,
   _URI_COMPONENT_OPTIONS,
   _URI_FRAGMENT_OPTIONS,
   _URI_PATH_OPTIONS,
@@ -12,27 +13,7 @@ import {
 /**
  * The object with the following optional fields.
  */
-export type PercentOptions = {
-  /**
-   * The byte set to be encoded except 0x00-0x1F, 0x25, 0x7F-0xFF.
-   * The default is 0x20-0x24, 0x26-0x7E.
-   *
-   * The following restrictions apply:
-   * - The `encodeSet` must not contain duplicate bytes.
-   *
-   * @see [https://url.spec.whatwg.org/#percent-encoded-bytes](https://url.spec.whatwg.org/#percent-encoded-bytes)
-   */
-  encodeSet?: Readonly<Array<number>>;
-
-  /**
-   * Whether to output 0x20 as `"+"`.
-   * The default is `false`.
-   *
-   * The following restrictions apply:
-   * - If `true`, `encodeSet` must contain `0x2B`.
-   */
-  spaceAsPlus?: boolean;
-};
+export type PercentOptions = _Options;
 
 export namespace PercentOptions {
   /**

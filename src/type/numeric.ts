@@ -1,5 +1,4 @@
 import { type numeric } from "../_typedef/mod.ts";
-import { ZERO as NUMBER_ZERO } from "../_const/number.ts";
 
 export function isNumeric(test: unknown): test is numeric {
   return (typeof test === "number") || (typeof test === "bigint");
@@ -12,7 +11,7 @@ export function assertNumeric(test: unknown, label: string): void {
 }
 
 export function isPositiveNumeric(test: unknown): test is numeric {
-  return isNumeric(test) && (test > NUMBER_ZERO);
+  return isNumeric(test) && (test > 0);
 }
 
 export function assertPositiveNumeric(test: unknown, label: string): void {
@@ -24,7 +23,7 @@ export function assertPositiveNumeric(test: unknown, label: string): void {
 }
 
 export function isNonNegativeNumeric(test: unknown): test is numeric {
-  return isNumeric(test) && (test >= NUMBER_ZERO);
+  return isNumeric(test) && (test >= 0);
 }
 
 export function assertNonNegativeNumeric(test: unknown, label: string): void {
@@ -36,7 +35,7 @@ export function assertNonNegativeNumeric(test: unknown, label: string): void {
 }
 
 export function isNonPositiveNumeric(test: unknown): test is numeric {
-  return isNumeric(test) && (test <= NUMBER_ZERO);
+  return isNumeric(test) && (test <= 0);
 }
 
 export function assertNonPositiveNumeric(test: unknown, label: string): void {
@@ -48,7 +47,7 @@ export function assertNonPositiveNumeric(test: unknown, label: string): void {
 }
 
 export function isNegativeNumeric(test: unknown): test is numeric {
-  return isNumeric(test) && (test < NUMBER_ZERO);
+  return isNumeric(test) && (test < 0);
 }
 
 export function assertNegativeNumeric(test: unknown, label: string): void {

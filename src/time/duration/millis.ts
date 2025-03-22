@@ -3,6 +3,8 @@ import { Number as ExNumber } from "../../numerics/mod.ts";
 import { Radix, String as ExString } from "../../basics/mod.ts";
 import { ToStringOptions, Unit } from "./_common.ts";
 
+const { EMPTY } = ExString;
+
 const _SECOND = 1_000;
 
 const _MINUTE = 60_000;
@@ -83,9 +85,7 @@ export function fromString(value: string): number {
 
 function _p(str?: string): number {
   // 接尾辞はparseIntが無視するので付けたまま
-  return Type.isNonEmptyString(str)
-    ? Number.parseInt(str, Radix.DECIMAL)
-    : ExNumber.ZERO;
+  return Type.isNonEmptyString(str) ? Number.parseInt(str, Radix.DECIMAL) : 0;
 }
 
 function _pS(str?: string): { seconds: number; millis: number } {
@@ -94,7 +94,7 @@ function _pS(str?: string): { seconds: number; millis: number } {
     const seconds = _p(sec);
     const millis = Type.isNonEmptyString(msec)
       ? Number.parseInt(msec.substring(0, 3).padEnd(3, "0"), Radix.DECIMAL)
-      : ExNumber.ZERO;
+      : 0;
 
     return {
       seconds,
@@ -103,8 +103,8 @@ function _pS(str?: string): { seconds: number; millis: number } {
   }
 
   return {
-    seconds: ExNumber.ZERO,
-    millis: ExNumber.ZERO,
+    seconds: 0,
+    millis: 0,
   };
 }
 
@@ -114,7 +114,7 @@ export function toString(millis: number, options?: ToStringOptions): string {
 
   const absMillis = Math.abs(Math.trunc(millis)); //XXX 一旦秒の小数部3桁固定(ミリ秒)とするのでmillisの小数部は切り捨てる
   const largestUnit = _resolveLargestUnit(absMillis, options);
-  const sign = (millis < 0) ? "-" : ExString.EMPTY;
+  const sign = (millis < 0) ? "-" : EMPTY;
 
   let result = sign + "P";
   let work = absMillis;

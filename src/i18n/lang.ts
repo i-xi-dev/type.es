@@ -1,7 +1,9 @@
-import * as ExString from "../basics/string/mod.ts";
 import * as Type from "../type/mod.ts";
 import _langs from "../../dat/i18n/lang_map.json" with { type: "json" };
 import { type lang } from "../_typedef/mod.ts";
+import { String as ExString } from "../basics/mod.ts";
+
+const { EMPTY } = ExString;
 
 export const LanguageScope = {
   COLLECTIVE: "collective",
@@ -22,7 +24,7 @@ export const LanguageType = {
   HISTORICAL: "historical",
   LIVING: "living",
   SPECIAL: "special",
-  UNASSIGNED: ExString.EMPTY,
+  UNASSIGNED: EMPTY,
 } as const;
 
 export type LanguageType = typeof LanguageType[keyof typeof LanguageType];
@@ -105,7 +107,7 @@ export function _getLanguageName(
     _languageNamesRef = new WeakRef(languageNames);
   }
 
-  return languageNames!.of(language) ?? ExString.EMPTY;
+  return languageNames!.of(language) ?? EMPTY;
 }
 
 function _scope(scopeSrc: string): LanguageScope {

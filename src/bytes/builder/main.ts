@@ -13,13 +13,7 @@ import {
   type uint32,
   type uint8,
 } from "../../_typedef/mod.ts";
-import {
-  BigUint64,
-  Number as ExNumber,
-  Uint16,
-  Uint32,
-  Uint8,
-} from "../../numerics/mod.ts";
+import { BigUint64, Uint16, Uint32, Uint8 } from "../../numerics/mod.ts";
 
 const _DEFAULT_CAPACITY = 1_048_576;
 
@@ -53,10 +47,12 @@ function _computeSize(
 }
 
 export namespace Builder {
-  export type LoadOptions = {
+  export type LoadFromIterableOptions = {
     byteOrder?: byteorder; // uint8の場合は無視
+    //TODO 範囲外はエラーにするかsaturateにするかtruncateにするか
     //XXX 見込サイズ,
-    //    超えたらabortするサイズ,
+    //XXX 超えたらabortするサイズ,
+    //XXX 逐次追加するか、すべてエラーなしの場合のみ追加するか
   };
 }
 
@@ -170,10 +166,11 @@ export class Builder {
       buffer = new ArrayBuffer(capacity, { maxByteLength: capacityMax });
     }
 
-    return new Builder(buffer, ExNumber.ZERO);
+    return new Builder(buffer, 0);
   }
 
   //XXX オプションでfill(repeat)
+  //TODO オプションで範囲外はエラーにするかsaturateにするかtruncateにするか
   appendByte(byte: /* uint8 */ safeint): this {
     Type.assertUint8(byte, "byte");
     this.#appendByte(byte as uint8);
@@ -234,7 +231,7 @@ export class Builder {
     // }
     // else {
     //   const newBuffer = new Uint8Array(～);
-    //   newBuffer.set(this.#bytes, ExNumber.ZERO);
+    //   newBuffer.set(this.#bytes, 0);
     //   this.#bytes = newBuffer;
     // }
   }
@@ -255,7 +252,7 @@ export class Builder {
 
   duplicateAsArrayBuffer(): ArrayBuffer {
     this.#assertValidState();
-    return this.#bytes!.buffer.slice(ExNumber.ZERO, this.#length);
+    return this.#bytes!.buffer.slice(0, this.#length);
   }
 
   duplicateAsUint8Array(): Uint8Array<ArrayBuffer> {
@@ -263,7 +260,7 @@ export class Builder {
   }
 
   // - SharedArrayBufferはBufferSourceに含まれない（がjsから実行した場合は弾かれない）
-  copyTo(destination: BufferSource, offset: safeint = ExNumber.ZERO): void {
+  copyTo(destination: BufferSource, offset: safeint = 0): void {
     Type.assertBufferSource(destination, "destination");
     Type.assertNonNegativeSafeInt(offset, "offset");
 
@@ -307,7 +304,7 @@ export class Builder {
 
   loadFromUint16Iterable(
     value: Iterable<uint16>,
-    options?: Builder.LoadOptions,
+    options?: Builder.LoadFromIterableOptions,
   ): void {
     this.#loadFromUint8xIterable<uint16, Uint16Array<ArrayBuffer>>(
       value,
@@ -318,7 +315,7 @@ export class Builder {
 
   async loadFromUint16AsyncIterable(
     value: AsyncIterable<uint16>,
-    options?: Builder.LoadOptions,
+    options?: Builder.LoadFromIterableOptions,
   ): Promise<void> {
     await this.#loadFromUint8xAsyncIterable<uint16, Uint16Array<ArrayBuffer>>(
       value,
@@ -329,7 +326,7 @@ export class Builder {
 
   loadFromUint32Iterable(
     value: Iterable<uint32>,
-    options?: Builder.LoadOptions,
+    options?: Builder.LoadFromIterableOptions,
   ): void {
     this.#loadFromUint8xIterable<uint32, Uint32Array<ArrayBuffer>>(
       value,
@@ -340,7 +337,7 @@ export class Builder {
 
   async loadFromUint32AsyncIterable(
     value: AsyncIterable<uint32>,
-    options?: Builder.LoadOptions,
+    options?: Builder.LoadFromIterableOptions,
   ): Promise<void> {
     await this.#loadFromUint8xAsyncIterable<uint32, Uint32Array<ArrayBuffer>>(
       value,
@@ -351,7 +348,7 @@ export class Builder {
 
   loadFromBigUint64Iterable(
     value: Iterable<biguint64>,
-    options?: Builder.LoadOptions,
+    options?: Builder.LoadFromIterableOptions,
   ): void {
     this.#loadFromUint8xIterable<biguint64, BigUint64Array<ArrayBuffer>>(
       value,
@@ -362,7 +359,7 @@ export class Builder {
 
   async loadFromBigUint64AsyncIterable(
     value: AsyncIterable<biguint64>,
-    options?: Builder.LoadOptions,
+    options?: Builder.LoadFromIterableOptions,
   ): Promise<void> {
     await this.#loadFromUint8xAsyncIterable<
       biguint64,
@@ -376,7 +373,7 @@ export class Builder {
   >(
     value: Iterable<T>,
     init: _LoadConfig<T, U>,
-    options?: Builder.LoadOptions,
+    options?: Builder.LoadFromIterableOptions,
   ): void {
     Type.assertIterable(value, "value");
 
@@ -407,7 +404,7 @@ export class Builder {
   >(
     value: AsyncIterable<T>,
     init: _LoadConfig<T, U>,
-    options?: Builder.LoadOptions,
+    options?: Builder.LoadFromIterableOptions,
   ): Promise<void> {
     Type.assertAsyncIterable(value, "value");
 

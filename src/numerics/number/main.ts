@@ -1,10 +1,9 @@
 import * as Type from "../../type/mod.ts";
 import { type numberrange } from "../../_typedef/mod.ts";
-import { ZERO as NUMBER_ZERO } from "../../_const/number.ts";
 
 export function normalize(value: number): number {
   Type.assertNumber(value, "value");
-  return ((value === NUMBER_ZERO) ? (value + NUMBER_ZERO) : value); // -0を0
+  return ((value === 0) ? (value + 0) : value); // -0を0
 }
 
 export function clampToRange(value: number, range: numberrange): number {

@@ -4,7 +4,6 @@ import {
   type numberrange,
   type safeint,
 } from "../_typedef/mod.ts";
-import { ZERO as NUMBER_ZERO } from "../_const/number.ts";
 
 export function isNumber(test: unknown): test is number {
   return (typeof test === "number");
@@ -25,7 +24,7 @@ export function assertFiniteNumber(test: unknown, label: string): void {
 }
 
 export function isPositiveNumber(test: unknown): test is number {
-  return isNumber(test) && (test > NUMBER_ZERO);
+  return isNumber(test) && (test > 0);
 }
 
 export function assertPositiveNumber(test: unknown, label: string): void {
@@ -35,7 +34,7 @@ export function assertPositiveNumber(test: unknown, label: string): void {
 }
 
 export function isNonNegativeNumber(test: unknown): test is number {
-  return isNumber(test) && (test >= NUMBER_ZERO);
+  return isNumber(test) && (test >= 0);
 }
 
 export function assertNonNegativeNumber(test: unknown, label: string): void {
@@ -45,7 +44,7 @@ export function assertNonNegativeNumber(test: unknown, label: string): void {
 }
 
 export function isNonPositiveNumber(test: unknown): test is number {
-  return isNumber(test) && (test <= NUMBER_ZERO);
+  return isNumber(test) && (test <= 0);
 }
 
 export function assertNonPositiveNumber(test: unknown, label: string): void {
@@ -55,7 +54,7 @@ export function assertNonPositiveNumber(test: unknown, label: string): void {
 }
 
 export function isNegativeNumber(test: unknown): test is number {
-  return isNumber(test) && (test < NUMBER_ZERO);
+  return isNumber(test) && (test < 0);
 }
 
 export function assertNegativeNumber(test: unknown, label: string): void {
@@ -99,7 +98,7 @@ export function assertSafeInt(test: unknown, label: string): void {
 }
 
 export function isPositiveSafeInt(test: unknown): test is safeint {
-  return isSafeInt(test) && (test > NUMBER_ZERO);
+  return isSafeInt(test) && (test > 0);
 }
 
 export function assertPositiveSafeInt(test: unknown, label: string): void {
@@ -109,7 +108,7 @@ export function assertPositiveSafeInt(test: unknown, label: string): void {
 }
 
 export function isNonNegativeSafeInt(test: unknown): test is safeint {
-  return isSafeInt(test) && (test >= NUMBER_ZERO);
+  return isSafeInt(test) && (test >= 0);
 }
 
 export function assertNonNegativeSafeInt(
@@ -122,7 +121,7 @@ export function assertNonNegativeSafeInt(
 }
 
 export function isNonPositiveSafeInt(test: unknown): test is safeint {
-  return isSafeInt(test) && (test <= NUMBER_ZERO);
+  return isSafeInt(test) && (test <= 0);
 }
 
 export function assertNonPositiveSafeInt(
@@ -135,7 +134,7 @@ export function assertNonPositiveSafeInt(
 }
 
 export function isNegativeSafeInt(test: unknown): test is safeint {
-  return isSafeInt(test) && (test < NUMBER_ZERO);
+  return isSafeInt(test) && (test < 0);
 }
 
 export function assertNegativeSafeInt(test: unknown, label: string): void {
@@ -145,7 +144,7 @@ export function assertNegativeSafeInt(test: unknown, label: string): void {
 }
 
 export function isOddSafeInt(test: unknown): test is safeint {
-  return isSafeInt(test) && ((test % 2) !== NUMBER_ZERO);
+  return isSafeInt(test) && ((test % 2) !== 0);
 }
 
 export function assertOddSafeInt(test: unknown, label: string): void {
@@ -155,7 +154,7 @@ export function assertOddSafeInt(test: unknown, label: string): void {
 }
 
 export function isEvenSafeInt(test: unknown): test is safeint {
-  return isSafeInt(test) && ((test % 2) === NUMBER_ZERO);
+  return isSafeInt(test) && ((test % 2) === 0);
 }
 
 export function assertEvenSafeInt(test: unknown, label: string): void {

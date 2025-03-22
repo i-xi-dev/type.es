@@ -1,6 +1,4 @@
 import * as CodePoint from "../../code_point/mod.ts";
-import * as Radix from "../../../basics/radix/mod.ts";
-import * as SafeInt from "../../../numerics/safeint/mod.ts";
 import * as Type from "../../../type/mod.ts";
 import { _DecodeResult, _EncodeResult } from "../main.ts";
 import {
@@ -8,7 +6,8 @@ import {
   type rune,
   type uint8,
 } from "../../../_typedef/mod.ts";
-import { Uint32, Uint8 } from "../../../numerics/ranged_int/mod.ts";
+import { SafeInt, Uint32, Uint8 } from "../../../numerics/mod.ts";
+import { Radix } from "../../../basics/mod.ts";
 
 export const _BE_LABEL = "UTF-32BE";
 export const _LE_LABEL = "UTF-32LE";

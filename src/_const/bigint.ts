@@ -1,1 +1,1 @@
-export const ZERO = 0n;
+// export const ZERO = 0n;

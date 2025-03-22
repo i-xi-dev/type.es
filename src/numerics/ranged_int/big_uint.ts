@@ -1,8 +1,7 @@
-import * as Byte from "../../basics/byte/mod.ts";
-import * as ByteOrder from "../../basics/byte_order/mod.ts";
+import * as ExBigInt from "../bigint/mod.ts";
 import * as Type from "../../type/mod.ts";
 import { type _AFunc, _normalizeOffset } from "./_utils.ts";
-import { BigInt as ExBigInt, Number as ExNumber } from "../../numerics/mod.ts";
+import { BITS_PER_BYTE, ByteOrder } from "../../basics/mod.ts";
 import {
   type biguint64,
   type byteorder,
@@ -58,7 +57,7 @@ class _BigUint<T extends bigint> implements RangedBigInt<T> {
     this.MIN_VALUE = info.MIN_VALUE;
     this.MAX_VALUE = info.MAX_VALUE;
     this.BIT_LENGTH = info.BIT_LENGTH;
-    this.BYTE_LENGTH = Math.ceil(info.BIT_LENGTH / Byte.BITS_PER_BYTE);
+    this.BYTE_LENGTH = Math.ceil(info.BIT_LENGTH / BITS_PER_BYTE);
     this.#assert = assert;
     this.#size = info.MAX_VALUE + 1n; // Uintの場合、最小は0なので最大+1で固定
   }
@@ -116,7 +115,7 @@ class _BigUint<T extends bigint> implements RangedBigInt<T> {
     const bytes: Array<uint8> = [];
     bytes.push(Number(value % 0x100n) as uint8);
     for (let i = 2; i <= 16; i++) { // 16-128 一旦128を上限とする
-      if (this.BIT_LENGTH >= (Byte.BITS_PER_BYTE * i)) {
+      if (this.BIT_LENGTH >= (BITS_PER_BYTE * i)) {
         bytes.push(_getByteByPosition(value, i));
       }
     }
@@ -155,7 +154,7 @@ class _BigUint<T extends bigint> implements RangedBigInt<T> {
     Type.assertSafeInt(offset, "offset");
 
     const normalizedOffset = _normalizeOffset(offset, this.BIT_LENGTH);
-    if (normalizedOffset === ExNumber.ZERO) {
+    if (normalizedOffset === 0) {
       return value;
     }
 
@@ -168,11 +167,11 @@ class _BigUint<T extends bigint> implements RangedBigInt<T> {
   truncate(value: bigint): T {
     Type.assertBigInt(value, "value");
 
-    if ((value >= ExBigInt.ZERO) && (value <= this.MAX_VALUE)) {
+    if ((value >= 0n) && (value <= this.MAX_VALUE)) {
       return value as T;
     }
 
-    if (value > ExBigInt.ZERO) {
+    if (value > 0n) {
       return (value % this.#size) as T;
     } else {
       return (this.#size + (value % this.#size)) as T;

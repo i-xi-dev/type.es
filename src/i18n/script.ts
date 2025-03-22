@@ -1,7 +1,9 @@
-import * as ExString from "../basics/string/mod.ts";
 import * as Type from "../type/mod.ts";
 import _scripts from "../../dat/i18n/script_map.json" with { type: "json" };
 import { type script } from "../_typedef/mod.ts";
+import { String as ExString } from "../basics/mod.ts";
+
+const { EMPTY } = ExString;
 
 export type ScriptInfo = {
   /** ISO 15924 Alpha-4 code. */
@@ -62,5 +64,5 @@ export function _getScriptName(
     _scriptNamesRef = new WeakRef(scriptNames);
   }
 
-  return scriptNames!.of(script) ?? ExString.EMPTY;
+  return scriptNames!.of(script) ?? EMPTY;
 }

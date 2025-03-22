@@ -28,12 +28,12 @@ export function clampToPositive(value: safeint): safeint {
 
 export function clampToNonNegative(value: safeint): safeint {
   Type.assertSafeInt(value, "value");
-  return ExNumber.normalize(Math.max(value, ExNumber.ZERO));
+  return ExNumber.normalize(Math.max(value, 0));
 }
 
 export function clampToNonPositive(value: safeint): safeint {
   Type.assertSafeInt(value, "value");
-  return ExNumber.normalize(Math.min(value, ExNumber.ZERO));
+  return ExNumber.normalize(Math.min(value, 0));
 }
 
 export function clampToNegative(value: safeint): safeint {
@@ -107,7 +107,7 @@ export function round(value: number, roundingMode?: roundingmode): safeint {
 
   const nearestP = ExNumber.normalize(Math.ceil(value));
   const nearestN = ExNumber.normalize(Math.floor(value));
-  const sourceIsNegative = value < ExNumber.ZERO;
+  const sourceIsNegative = value < 0;
   const nearestPH = nearestP - 0.5;
   const nearestNH = nearestN + 0.5;
 
@@ -158,6 +158,6 @@ export function round(value: number, roundingMode?: roundingmode): safeint {
       return halfUp();
 
     default:
-      return ExNumber.ZERO as never;
+      return 0 as never;
   }
 }

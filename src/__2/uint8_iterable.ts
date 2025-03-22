@@ -1,6 +1,5 @@
 import * as Type from "../type/mod.ts";
 import { type safeint } from "../_typedef/mod.ts";
-import { ZERO as NUMBER_ZERO } from "../_const/number.ts";
 
 type ArrayLikeOfExpectUint8 =
   | Array<safeint /* uint8 */>
@@ -22,12 +21,12 @@ export function elementsStartsWith(
   Type.assertIterable(self, "self");
   Type.assertArrayOrTypedArrayOfUint8(other, "other");
 
-  if (other.length <= NUMBER_ZERO) {
+  if (other.length <= 0) {
     return true;
   }
 
   const otherLastIndex = other.length - 1;
-  let i = NUMBER_ZERO;
+  let i = 0;
   for (const byte of self) {
     if (i > otherLastIndex) {
       return true;
@@ -56,7 +55,7 @@ export function elementsEquals(
   Type.assertArrayOrTypedArrayOfUint8(other, "other");
 
   const otherLastIndex = other.length - 1;
-  let i = NUMBER_ZERO;
+  let i = 0;
   for (const byte of self) {
     if (i > otherLastIndex) {
       return false;

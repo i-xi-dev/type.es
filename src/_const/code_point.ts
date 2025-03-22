@@ -1,5 +1,3 @@
-import { ZERO } from "./number.ts";
-
-export const MIN_VALUE = ZERO;
+export const MIN_VALUE = 0;
 
 export const MAX_VALUE = 0x10FFFF;

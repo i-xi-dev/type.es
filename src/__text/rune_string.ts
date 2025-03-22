@@ -1,4 +1,3 @@
-import * as ExNumber from "../numerics/number/mod.ts";
 import * as Type from "../type/mod.ts";
 import {
   type codepoint,
@@ -59,7 +58,7 @@ export function fromCodePoints(
 
   let runes = EMPTY_STRING;
   let rune: rune;
-  let i = ExNumber.ZERO;
+  let i = 0;
   for (const codePoint of value) {
     Type.assertCodePoint(codePoint, `value[${i}]`);
     rune = String.fromCodePoint(codePoint);
@@ -90,7 +89,7 @@ export function toCodePoints(
 
   return (function* (runes) {
     for (const rune of runes) {
-      yield rune.codePointAt(ExNumber.ZERO)!;
+      yield rune.codePointAt(0)!;
     }
   })(value);
 }
@@ -110,7 +109,7 @@ export function belongsToScripts(
   options?: BelongsToScriptsOptions,
 ): test is usvstring {
   let scriptSet: script[];
-  if (Array.isArray(scripts) && (scripts.length > ExNumber.ZERO)) {
+  if (Array.isArray(scripts) && (scripts.length > 0)) {
     scriptSet = [...new Set(scripts)];
     for (const script of scriptSet) {
       Type.assertUnicodeScript(script, script);
@@ -123,7 +122,7 @@ export function belongsToScripts(
     return false;
   }
 
-  if (test.length <= ExNumber.ZERO) {
+  if (test.length <= 0) {
     // Array#every等に合わせた
     return true;
   }
@@ -141,7 +140,7 @@ export function belongsToScripts(
     "v",
   );
 
-  let runeCount = ExNumber.ZERO;
+  let runeCount = 0;
   for (const rune of test) {
     runeCount += 1;
 

@@ -6,7 +6,7 @@ import {
   type rune,
   type uint8,
 } from "../../../_typedef/mod.ts";
-import { Uint16, Uint8 } from "../../../numerics/ranged_int/mod.ts";
+import { Uint16, Uint8 } from "../../../numerics/mod.ts";
 
 export const _BE_LABEL = "UTF-16BE";
 export const _LE_LABEL = "UTF-16LE";
