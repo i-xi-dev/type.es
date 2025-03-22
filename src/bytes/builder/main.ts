@@ -11,6 +11,7 @@ import {
   type safeint,
   type uint16,
   type uint32,
+  type uint8,
 } from "../../_typedef/mod.ts";
 import {
   BigUint64,
@@ -120,12 +121,16 @@ export class Builder {
   //XXX オプションでfill(repeat)
   appendByte(byte: /* uint8 */ safeint): this {
     Type.assertUint8(byte, "byte");
+    this.#appendByte(byte as uint8);
+    return this;
+  }
+
+  #appendByte(byte: uint8): void {
     this.#assertValidState();
 
     this.#growIfNeeded(Uint8.BYTE_LENGTH);
     this.#bytes![this.#length] = byte;
     this.#length = this.#length + Uint8.BYTE_LENGTH;
-    return this;
   }
 
   // TypedArrayであるかに関係なくArrayBufferのbyte順通りにuint8で読み取る
@@ -224,12 +229,12 @@ export class Builder {
   loadFromUint8Iterable(value: Iterable<safeint /* uint8 */>): void {
     Type.assertIterable(value, "value");
 
-    const loaded = Builder.create();
+    const loadedBytes = Builder.create();
     for (const uint8Expected of value) {
       Type.assertUint8(uint8Expected, "value[*]");
-      loaded.appendByte(uint8Expected);
+      loadedBytes.#appendByte(uint8Expected as uint8);
     }
-    this.loadFromBufferSource(loaded.toArrayBuffer());
+    this.loadFromBufferSource(loadedBytes.toArrayBuffer());
   }
 
   async loadFromUint8AsyncIterable(
@@ -237,12 +242,12 @@ export class Builder {
   ): Promise<void> {
     Type.assertAsyncIterable(value, "value");
 
-    const loaded = Builder.create();
+    const loadedBytes = Builder.create();
     for await (const uint8Expected of value) {
       Type.assertUint8(uint8Expected, "value[*]");
-      loaded.appendByte(uint8Expected);
+      loadedBytes.#appendByte(uint8Expected as uint8);
     }
-    this.loadFromBufferSource(loaded.toArrayBuffer());
+    this.loadFromBufferSource(loadedBytes.toArrayBuffer());
   }
 
   loadFromUint16Iterable(
@@ -325,13 +330,13 @@ export class Builder {
     Type.assertIterable(value, "value");
 
     const byteOrder = options?.byteOrder ?? ByteOrder.nativeOrder;
-    const loaded = Builder.create();
+    const loadedBytes = Builder.create();
     if (byteOrder === ByteOrder.nativeOrder) {
       const v = new init.typedArrayCtor(1);
       for (const uint8xExpected of value) {
         init.assertElement(uint8xExpected, "value[*]");
         v[0] = uint8xExpected;
-        loaded.loadFromBufferSource(v);
+        loadedBytes.loadFromBufferSource(v);
       }
     } else {
       const v = new DataView(new ArrayBuffer(init.byteLength));
@@ -346,11 +351,11 @@ export class Builder {
         );
         // as "setUint16"とas numberは、uint8xExpectedがneverになるのでトランスパイル出来ないのの回避（neverにしない為に分岐する方が無駄なので）
 
-        loaded.loadFromBufferSource(v);
+        loadedBytes.loadFromBufferSource(v);
       }
     }
 
-    this.loadFromBufferSource(loaded.toArrayBuffer());
+    this.loadFromBufferSource(loadedBytes.toArrayBuffer());
   }
 
   async #loadFromUint8xAsyncIterable<T extends int>(
@@ -361,13 +366,13 @@ export class Builder {
     Type.assertAsyncIterable(value, "value");
 
     const byteOrder = options?.byteOrder ?? ByteOrder.nativeOrder;
-    const loaded = Builder.create();
+    const loadedBytes = Builder.create();
     if (byteOrder === ByteOrder.nativeOrder) {
       const v = new init.typedArrayCtor(1);
       for await (const uint8xExpected of value) {
         init.assertElement(uint8xExpected, "value[*]");
         v[0] = uint8xExpected;
-        loaded.loadFromBufferSource(v);
+        loadedBytes.loadFromBufferSource(v);
       }
     } else {
       const v = new DataView(new ArrayBuffer(init.byteLength));
@@ -381,11 +386,11 @@ export class Builder {
         );
         // as "setUint16"とas numberは、uint8xExpectedがneverになるのでトランスパイル出来ないのの回避（neverにしない為に分岐する方が無駄なので）
 
-        loaded.loadFromBufferSource(v);
+        loadedBytes.loadFromBufferSource(v);
       }
     }
 
-    this.loadFromBufferSource(loaded.toArrayBuffer());
+    this.loadFromBufferSource(loadedBytes.toArrayBuffer());
   }
 
   //TODO 渡したArrayBufferにloadFromUint16Iterable等と同じことを行うstaticメソッド
