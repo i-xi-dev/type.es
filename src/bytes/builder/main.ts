@@ -135,18 +135,20 @@ export class Builder {
     return this;
   }
 
+  // TypedArrayであるかに関係なくArrayBufferのbyte順通りにuint8で読み取る
   // - BufferSourceの部分範囲だけ追加したければsubarray()などしてから渡せば良い
   // - SharedArrayBufferはBufferSourceに含まれない（がjsから実行した場合は弾かれない）
-  append(byteOrBytes: BufferSource): this { //TODO 型で分離する
+  loadFromBufferSource(bytes: BufferSource): this {
+    Type.assertBufferSource(bytes, "bytes");
     this.#assertValidState();
 
-    if (Type.isBufferSource(byteOrBytes)) {
-      return this.#appendBytes(byteOrBytes);
-    }
-
-    throw new TypeError(
-      "`byteOrBytes` must be a `BufferSource` or an 8-bit unsigned integer.",
+    this.#growIfNeeded(bytes.byteLength);
+    this.#bytes!.set(
+      new Uint8Array(("buffer" in bytes) ? bytes.buffer : bytes),
+      this.#length,
     );
+    this.#length = this.#length + bytes.byteLength;
+    return this;
   }
 
   #isValidState(): boolean {
@@ -157,18 +159,6 @@ export class Builder {
     if (this.#isValidState() !== true) {
       throw new InvalidStateError("This Builder is no longer available.");
     }
-  }
-
-  #appendBytes(bytes: BufferSource): this {
-    // Type.assertBufferSource(bytes, assertionLabel);
-
-    this.#growIfNeeded(bytes.byteLength);
-    this.#bytes!.set(
-      new Uint8Array(("buffer" in bytes) ? bytes.buffer : bytes),
-      this.#length,
-    );
-    this.#length = this.#length + bytes.byteLength;
-    return this;
   }
 
   #growIfNeeded(byteLength: safeint): void {
@@ -246,7 +236,7 @@ export class Builder {
       Type.assertUint8(uint8Expected, "value[*]");
       loaded.appendByte(uint8Expected);
     }
-    this.append(loaded.toArrayBuffer());
+    this.loadFromBufferSource(loaded.toArrayBuffer());
   }
 
   async loadFromUint8AsyncIterable(
@@ -259,7 +249,7 @@ export class Builder {
       Type.assertUint8(uint8Expected, "value[*]");
       loaded.appendByte(uint8Expected);
     }
-    this.append(loaded.toArrayBuffer());
+    this.loadFromBufferSource(loaded.toArrayBuffer());
   }
 
   loadFromUint16Iterable(
@@ -348,7 +338,7 @@ export class Builder {
       for (const uint8xExpected of value) {
         init.assertElement(uint8xExpected, "value[*]");
         v[0] = uint8xExpected;
-        loaded.#appendBytes(v);
+        loaded.loadFromBufferSource(v);
       }
     } else {
       const v = new DataView(new ArrayBuffer(init.byteLength));
@@ -363,11 +353,11 @@ export class Builder {
         );
         // as "setUint16"とas numberは、uint8xExpectedがneverになるのでトランスパイル出来ないのの回避（neverにしない為に分岐する方が無駄なので）
 
-        loaded.#appendBytes(v);
+        loaded.loadFromBufferSource(v);
       }
     }
 
-    this.append(loaded.toArrayBuffer());
+    this.loadFromBufferSource(loaded.toArrayBuffer());
   }
 
   async #loadFromUint8xAsyncIterable<T extends int>(
@@ -384,7 +374,7 @@ export class Builder {
       for await (const uint8xExpected of value) {
         init.assertElement(uint8xExpected, "value[*]");
         v[0] = uint8xExpected;
-        loaded.#appendBytes(v);
+        loaded.loadFromBufferSource(v);
       }
     } else {
       const v = new DataView(new ArrayBuffer(init.byteLength));
@@ -398,11 +388,11 @@ export class Builder {
         );
         // as "setUint16"とas numberは、uint8xExpectedがneverになるのでトランスパイル出来ないのの回避（neverにしない為に分岐する方が無駄なので）
 
-        loaded.#appendBytes(v);
+        loaded.loadFromBufferSource(v);
       }
     }
 
-    this.append(loaded.toArrayBuffer());
+    this.loadFromBufferSource(loaded.toArrayBuffer());
   }
 
   // 遅い

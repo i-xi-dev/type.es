@@ -3,7 +3,7 @@ import {
   assertStrictEquals,
   assertThrows,
 } from "@std/assert";
-import { Bytes } from "../../../mod.ts";
+import { ByteOrder, Bytes } from "../../../mod.ts";
 
 const { Builder } = Bytes;
 
@@ -57,17 +57,17 @@ Deno.test("new Bytes.Builder()/capacity/length/appendByte()", () => {
   );
 });
 
-Deno.test("new Bytes.Builder()/capacity/length/append() - BufferSource", () => {
+Deno.test("new Bytes.Builder()/capacity/length/loadFromBufferSource()", () => {
   const b = new Builder();
 
   assertStrictEquals(b.capacity, 1_048_576);
   assertStrictEquals(b.length, 0);
 
-  b.append(Uint8Array.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12));
+  b.loadFromBufferSource(Uint8Array.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12));
   assertStrictEquals(b.capacity, 1_048_576);
   assertStrictEquals(b.length, 12);
 
-  b.append(Uint8Array.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12));
+  b.loadFromBufferSource(Uint8Array.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12));
   assertStrictEquals(b.capacity, 1_048_576);
   assertStrictEquals(b.length, 24);
 
@@ -78,45 +78,45 @@ Deno.test("new Bytes.Builder()/capacity/length/append() - BufferSource", () => {
   );
 });
 
-Deno.test("new Bytes.Builder()/capacity/length/append() - 2", () => {
+Deno.test("new Bytes.Builder()/capacity/length/loadFromBufferSource() - 2", () => {
   const b = new Builder();
 
   assertStrictEquals(b.capacity, 1_048_576);
   assertStrictEquals(b.length, 0);
 
-  b.append(Uint16Array.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12));
+  b.loadFromBufferSource(Uint16Array.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12));
   assertStrictEquals(b.capacity, 1_048_576);
   assertStrictEquals(b.length, 24);
 
-  b.append(Uint16Array.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12));
+  b.loadFromBufferSource(Uint16Array.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12));
   assertStrictEquals(b.capacity, 1_048_576);
   assertStrictEquals(b.length, 48);
 
-  // const b2 = b.slice();
-  // if (BufferUtils.isBigEndian()) {
-  //   assertStrictEquals(
-  //     JSON.stringify(Array.from(b2)),
-  //     "[0,1,0,2,0,3,0,4,0,5,0,6,0,7,0,8,0,9,0,10,0,11,0,12,0,1,0,2,0,3,0,4,0,5,0,6,0,7,0,8,0,9,0,10,0,11,0,12]",
-  //   );
-  // } else {
-  //   assertStrictEquals(
-  //     JSON.stringify(Array.from(b2)),
-  //     "[1,0,2,0,3,0,4,0,5,0,6,0,7,0,8,0,9,0,10,0,11,0,12,0,1,0,2,0,3,0,4,0,5,0,6,0,7,0,8,0,9,0,10,0,11,0,12,0]",
-  //   );
-  // }
+  const b2 = b.toUint8Array();
+  if (ByteOrder.nativeOrder === ByteOrder.BIG_ENDIAN) {
+    assertStrictEquals(
+      JSON.stringify(Array.from(b2)),
+      "[0,1,0,2,0,3,0,4,0,5,0,6,0,7,0,8,0,9,0,10,0,11,0,12,0,1,0,2,0,3,0,4,0,5,0,6,0,7,0,8,0,9,0,10,0,11,0,12]",
+    );
+  } else {
+    assertStrictEquals(
+      JSON.stringify(Array.from(b2)),
+      "[1,0,2,0,3,0,4,0,5,0,6,0,7,0,8,0,9,0,10,0,11,0,12,0,1,0,2,0,3,0,4,0,5,0,6,0,7,0,8,0,9,0,10,0,11,0,12,0]",
+    );
+  }
 });
 
-Deno.test("new Bytes.Builder()/capacity/length/append()", () => {
+Deno.test("new Bytes.Builder()/capacity/length/loadFromBufferSource()", () => {
   const b = new Builder({ capacity: 10 });
 
   assertStrictEquals(b.capacity, 10);
   assertStrictEquals(b.length, 0);
 
-  b.append(Uint8Array.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12));
+  b.loadFromBufferSource(Uint8Array.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12));
   assertStrictEquals(b.capacity, 1048576);
   assertStrictEquals(b.length, 12);
 
-  b.append(Uint8Array.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12));
+  b.loadFromBufferSource(Uint8Array.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12));
   assertStrictEquals(b.capacity, 1048576);
   assertStrictEquals(b.length, 24);
 
@@ -235,16 +235,16 @@ Deno.test("Bytes.Builder.prototype[Symbol.toStringTag]", () => {
   assertStrictEquals(b1[Symbol.toStringTag], "Builder");
 });
 
-Deno.test("Bytes.Builder.prototype.append()", () => {
+Deno.test("Bytes.Builder.prototype.loadFromBufferSource()", () => {
   const b = new Builder();
-  b.append(Uint8Array.of(255));
+  b.loadFromBufferSource(Uint8Array.of(255));
 
   assertThrows(
     () => {
-      b.append([255] as unknown as Uint8Array);
+      b.loadFromBufferSource([255] as unknown as Uint8Array);
     },
     Error,
-    "`byteOrBytes` must be a `BufferSource` or an 8-bit unsigned integer.",
+    "`bytes` must be a `BufferSource`.",
   );
 });
 
