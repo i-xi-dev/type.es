@@ -360,7 +360,7 @@ function _isEncoded(work: string, options: _ResolvedOptions): boolean {
       options.paddingChar.charCodeAt(0).toString(16)
     }}`;
     regex = new RegExp(
-      `^(${tablePattern}+${paddingPattern}*|${tablePattern}*)$`,
+      `^(?:${tablePattern}+${paddingPattern}*|${tablePattern}*)$`,
       "u",
     );
   } else {
@@ -566,8 +566,7 @@ export function _resolveOptions(
     ]) as Readonly<_Base64Table>;
   } else if (("rawTable" in options) && _isBase64Table(options.rawTable)) {
     rawTable = Object.freeze([...options.rawTable]) as Readonly<_Base64Table>;
-  }
-  {
+  } else {
     rawTable = defaultOptions.rawTable;
   }
 
