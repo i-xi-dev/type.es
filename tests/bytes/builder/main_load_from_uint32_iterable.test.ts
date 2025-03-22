@@ -4,7 +4,7 @@ import { ByteOrder, Bytes } from "../../../mod.ts";
 const { Builder } = Bytes;
 
 Deno.test("Bytes.Builder.prototype.loadFromUint32Iterable() - Array", () => {
-  const b1 = new Builder();
+  const b1 = Builder.create();
   assertThrows(
     () => {
       b1.loadFromUint32Iterable(0 as unknown as Array<number>);
@@ -81,7 +81,7 @@ Deno.test("Bytes.Builder.prototype.loadFromUint32Iterable() - Array", () => {
   assertStrictEquals(a1be[10], 255);
   assertStrictEquals(a1be[11], 255);
 
-  const b2 = new Builder();
+  const b2 = Builder.create();
   b2.loadFromUint32Iterable(
     [0, 1, 0xFFFFFFFF],
     { byteOrder: "little-endian" },
@@ -101,7 +101,7 @@ Deno.test("Bytes.Builder.prototype.loadFromUint32Iterable() - Array", () => {
   assertStrictEquals(a1le[10], 255);
   assertStrictEquals(a1le[11], 255);
 
-  const b3 = new Builder();
+  const b3 = Builder.create();
   b3.loadFromUint32Iterable([0, 1, 0xFFFFFFFF]);
   const a1x = b3.duplicateAsUint8Array();
   assertStrictEquals(a1x.length, 12);
@@ -135,7 +135,7 @@ Deno.test("Bytes.Builder.prototype.loadFromUint32Iterable() - Array", () => {
 });
 
 Deno.test("Bytes.Builder.prototype.loadFromUint32Iterable() - Uint32Array", () => {
-  const b1 = new Builder();
+  const b1 = Builder.create();
   b1.loadFromUint32Iterable(Uint32Array.of());
   assertStrictEquals(b1.duplicateAsUint8Array().byteLength, 0);
 
@@ -157,7 +157,7 @@ Deno.test("Bytes.Builder.prototype.loadFromUint32Iterable() - Uint32Array", () =
   assertStrictEquals(a1be[10], 255);
   assertStrictEquals(a1be[11], 255);
 
-  const b2 = new Builder();
+  const b2 = Builder.create();
   b2.loadFromUint32Iterable(Uint32Array.of(0, 1, 0xFFFFFFFF), {
     byteOrder: "little-endian",
   });
@@ -176,7 +176,7 @@ Deno.test("Bytes.Builder.prototype.loadFromUint32Iterable() - Uint32Array", () =
   assertStrictEquals(a1le[10], 255);
   assertStrictEquals(a1le[11], 255);
 
-  const b3 = new Builder();
+  const b3 = Builder.create();
   b3.loadFromUint32Iterable(Uint32Array.of(0, 1, 0xFFFFFFFF));
   const a1x = b3.duplicateAsUint8Array();
   assertStrictEquals(a1x.length, 12);
@@ -210,7 +210,7 @@ Deno.test("Bytes.Builder.prototype.loadFromUint32Iterable() - Uint32Array", () =
 });
 
 Deno.test("Bytes.Builder.prototype.loadFromUint32Iterable() - Generator", () => {
-  const b1 = new Builder();
+  const b1 = Builder.create();
   const g0 = (function* () {
   })();
   b1.loadFromUint32Iterable(g0);
@@ -238,7 +238,7 @@ Deno.test("Bytes.Builder.prototype.loadFromUint32Iterable() - Generator", () => 
   assertStrictEquals(a1be[10], 255);
   assertStrictEquals(a1be[11], 255);
 
-  const b2 = new Builder();
+  const b2 = Builder.create();
   const g2 = (function* () {
     yield 0;
     yield 1;
@@ -261,7 +261,7 @@ Deno.test("Bytes.Builder.prototype.loadFromUint32Iterable() - Generator", () => 
   assertStrictEquals(a1le[10], 255);
   assertStrictEquals(a1le[11], 255);
 
-  const b3 = new Builder();
+  const b3 = Builder.create();
   const g3 = (function* () {
     yield 0;
     yield 1;
@@ -301,7 +301,7 @@ Deno.test("Bytes.Builder.prototype.loadFromUint32Iterable() - Generator", () => 
 });
 
 Deno.test("Bytes.Builder.prototype.loadFromUint32AsyncIterable() - Array", async () => {
-  const b1 = new Builder();
+  const b1 = Builder.create();
   await assertRejects(
     async () => {
       await b1.loadFromUint32AsyncIterable(
@@ -361,13 +361,13 @@ Deno.test("Bytes.Builder.prototype.loadFromUint32AsyncIterable() - Array", async
 });
 
 Deno.test("Bytes.Builder.prototype.loadFromUint32AsyncIterable() - AsyncGenerator", async () => {
-  const b1 = new Builder();
+  const b1 = Builder.create();
   const g0 = (async function* () {
   })();
   await b1.loadFromUint32AsyncIterable(g0);
   assertStrictEquals(b1.duplicateAsUint8Array().byteLength, 0);
 
-  const b2 = new Builder();
+  const b2 = Builder.create();
   const g1 = (async function* () {
     yield 0;
     yield 1;
@@ -383,7 +383,7 @@ Deno.test("Bytes.Builder.prototype.loadFromUint32AsyncIterable() - AsyncGenerato
 });
 
 Deno.test("Bytes.Builder.prototype.loadFromUint32AsyncIterable() - AsyncGenerator", async () => {
-  const b1 = new Builder();
+  const b1 = Builder.create();
   const g1 = (async function* () {
     yield 0;
     yield 1;

@@ -4,7 +4,7 @@ import { ByteOrder, Bytes } from "../../../mod.ts";
 const { Builder } = Bytes;
 
 Deno.test("Bytes.Builder.prototype.loadFromBigUint64Iterable() - Array", () => {
-  const b1 = new Builder();
+  const b1 = Builder.create();
   assertThrows(
     () => {
       b1.loadFromBigUint64Iterable(0 as unknown as Array<bigint>);
@@ -100,7 +100,7 @@ Deno.test("Bytes.Builder.prototype.loadFromBigUint64Iterable() - Array", () => {
   assertStrictEquals(a1be[22], 255);
   assertStrictEquals(a1be[23], 255);
 
-  const b2 = new Builder();
+  const b2 = Builder.create();
   b2.loadFromBigUint64Iterable([0n, 1n, 0xFFFF_FFFF_FFFF_FFFFn], {
     byteOrder: "little-endian",
   });
@@ -131,7 +131,7 @@ Deno.test("Bytes.Builder.prototype.loadFromBigUint64Iterable() - Array", () => {
   assertStrictEquals(a1le[22], 255);
   assertStrictEquals(a1le[23], 255);
 
-  const b3 = new Builder();
+  const b3 = Builder.create();
   b3.loadFromBigUint64Iterable([0n, 1n, 0xFFFF_FFFF_FFFF_FFFFn]);
   const a1x = b3.duplicateAsUint8Array();
   assertStrictEquals(a1x.length, 24);
@@ -189,7 +189,7 @@ Deno.test("Bytes.Builder.prototype.loadFromBigUint64Iterable() - Array", () => {
 });
 
 Deno.test("Bytes.Builder.prototype.loadFromBigUint64Iterable() - BigUint64Array", () => {
-  const b1 = new Builder();
+  const b1 = Builder.create();
   b1.loadFromBigUint64Iterable(BigUint64Array.of());
   assertStrictEquals(b1.duplicateAsUint8Array().byteLength, 0);
 
@@ -224,7 +224,7 @@ Deno.test("Bytes.Builder.prototype.loadFromBigUint64Iterable() - BigUint64Array"
   assertStrictEquals(a1be[22], 255);
   assertStrictEquals(a1be[23], 255);
 
-  const b2 = new Builder();
+  const b2 = Builder.create();
   b2.loadFromBigUint64Iterable(
     BigUint64Array.of(0n, 1n, 0xFFFF_FFFF_FFFF_FFFFn),
     { byteOrder: "little-endian" },
@@ -256,7 +256,7 @@ Deno.test("Bytes.Builder.prototype.loadFromBigUint64Iterable() - BigUint64Array"
   assertStrictEquals(a1le[22], 255);
   assertStrictEquals(a1le[23], 255);
 
-  const b3 = new Builder();
+  const b3 = Builder.create();
   b3.loadFromBigUint64Iterable(
     BigUint64Array.of(0n, 1n, 0xFFFF_FFFF_FFFF_FFFFn),
   );
@@ -316,7 +316,7 @@ Deno.test("Bytes.Builder.prototype.loadFromBigUint64Iterable() - BigUint64Array"
 });
 
 Deno.test("Bytes.Builder.prototype.loadFromBigUint64Iterable() - Generator", () => {
-  const b1 = new Builder();
+  const b1 = Builder.create();
   const g0 = (function* () {
   })();
   b1.loadFromBigUint64Iterable(g0);
@@ -356,7 +356,7 @@ Deno.test("Bytes.Builder.prototype.loadFromBigUint64Iterable() - Generator", () 
   assertStrictEquals(a1be[22], 255);
   assertStrictEquals(a1be[23], 255);
 
-  const b2 = new Builder();
+  const b2 = Builder.create();
   const g2 = (function* () {
     yield 0n;
     yield 1n;
@@ -391,7 +391,7 @@ Deno.test("Bytes.Builder.prototype.loadFromBigUint64Iterable() - Generator", () 
   assertStrictEquals(a1le[22], 255);
   assertStrictEquals(a1le[23], 255);
 
-  const b3 = new Builder();
+  const b3 = Builder.create();
   const g3 = (function* () {
     yield 0n;
     yield 1n;
@@ -455,7 +455,7 @@ Deno.test("Bytes.Builder.prototype.loadFromBigUint64Iterable() - Generator", () 
 });
 
 Deno.test("Bytes.Builder.prototype.loadFromBigUint64AsyncIterable() - Array", async () => {
-  const b1 = new Builder();
+  const b1 = Builder.create();
   await assertRejects(
     async () => {
       await b1.loadFromBigUint64AsyncIterable(
@@ -515,7 +515,7 @@ Deno.test("Bytes.Builder.prototype.loadFromBigUint64AsyncIterable() - Array", as
 });
 
 Deno.test("Bytes.Builder.prototype.loadFromBigUint64AsyncIterable() - AsyncGenerator", async () => {
-  const b1 = new Builder();
+  const b1 = Builder.create();
   const g0 = (async function* () {
   })();
   await b1.loadFromBigUint64AsyncIterable(g0);
@@ -536,7 +536,7 @@ Deno.test("Bytes.Builder.prototype.loadFromBigUint64AsyncIterable() - AsyncGener
 });
 
 Deno.test("Bytes.Builder.prototype.loadFromBigUint64AsyncIterable() - AsyncGenerator", async () => {
-  const b1 = new Builder();
+  const b1 = Builder.create();
   const g1 = (async function* () {
     yield 0n;
     yield 1n;

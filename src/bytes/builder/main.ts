@@ -81,16 +81,8 @@ export class Builder {
   #length: safeint;
   #bytes: Uint8Array<ArrayBuffer> | null;
 
-  constructor(init?: Init) {
-    const { capacity, capacityMax } = _computeSize(init);
-
-    this.#length = ExNumber.ZERO;
-    let buffer: ArrayBuffer;
-    if (capacity === capacityMax) {
-      buffer = new ArrayBuffer(capacity);
-    } else {
-      buffer = new ArrayBuffer(capacity, { maxByteLength: capacityMax });
-    }
+  private constructor(buffer: ArrayBuffer, offset: safeint) {
+    this.#length = offset;
     this.#bytes = new Uint8Array(buffer);
   }
 
@@ -112,17 +104,18 @@ export class Builder {
     return "Builder";
   }
 
-  // static create(init?: Init): Builder {
+  static create(init?: Init): Builder {
+    const { capacity, capacityMax } = _computeSize(init);
 
-  // }
+    let buffer: ArrayBuffer;
+    if (capacity === capacityMax) {
+      buffer = new ArrayBuffer(capacity);
+    } else {
+      buffer = new ArrayBuffer(capacity, { maxByteLength: capacityMax });
+    }
 
-  // static wrap(buffer: ArrayBuffer): Builder {
-
-  // }
-
-  // dispose(): void {
-
-  // }
+    return new Builder(buffer, ExNumber.ZERO);
+  }
 
   //XXX オプションでfill(repeat)
   appendByte(byte: /* uint8 */ safeint): this {
@@ -231,7 +224,7 @@ export class Builder {
   loadFromUint8Iterable(value: Iterable<safeint /* uint8 */>): void {
     Type.assertIterable(value, "value");
 
-    const loaded = new Builder();
+    const loaded = Builder.create();
     for (const uint8Expected of value) {
       Type.assertUint8(uint8Expected, "value[*]");
       loaded.appendByte(uint8Expected);
@@ -244,7 +237,7 @@ export class Builder {
   ): Promise<void> {
     Type.assertAsyncIterable(value, "value");
 
-    const loaded = new Builder();
+    const loaded = Builder.create();
     for await (const uint8Expected of value) {
       Type.assertUint8(uint8Expected, "value[*]");
       loaded.appendByte(uint8Expected);
@@ -332,7 +325,7 @@ export class Builder {
     Type.assertIterable(value, "value");
 
     const byteOrder = options?.byteOrder ?? ByteOrder.nativeOrder;
-    const loaded = new Builder();
+    const loaded = Builder.create();
     if (byteOrder === ByteOrder.nativeOrder) {
       const v = new init.typedArrayCtor(1);
       for (const uint8xExpected of value) {
@@ -368,7 +361,7 @@ export class Builder {
     Type.assertAsyncIterable(value, "value");
 
     const byteOrder = options?.byteOrder ?? ByteOrder.nativeOrder;
-    const loaded = new Builder();
+    const loaded = Builder.create();
     if (byteOrder === ByteOrder.nativeOrder) {
       const v = new init.typedArrayCtor(1);
       for await (const uint8xExpected of value) {
@@ -394,6 +387,8 @@ export class Builder {
 
     this.loadFromBufferSource(loaded.toArrayBuffer());
   }
+
+  //TODO 渡したArrayBufferにloadFromUint16Iterable等と同じことを行うstaticメソッド
 
   // 遅い
   // loadFromUint16Iterable_2(

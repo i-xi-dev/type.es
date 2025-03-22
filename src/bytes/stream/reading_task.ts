@@ -101,7 +101,7 @@ export class ReadingTask extends Loading.Task<_Bytes> {
     }
     this._status = Loading.Status.RUNNING;
 
-    const builder = new BytesBuilder(
+    const builder = BytesBuilder.create(
       (this.indeterminate === true) ? undefined : { capacity: this.total },
     );
 
