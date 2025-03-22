@@ -146,7 +146,7 @@ export class Builder {
     return this.#isValidState() ? this.#bytes!.byteLength : -1;
   }
 
-  get length(): safeint {
+  get byteLength(): safeint {
     return this.#isValidState() ? this.#length : -1;
   }
 
@@ -215,7 +215,7 @@ export class Builder {
   }
 
   #growIfNeeded(byteLength: safeint): void {
-    if (this.length >= this.#bytes!.buffer.maxByteLength) {
+    if (this.#length >= this.#bytes!.buffer.maxByteLength) {
       throw new QuotaExceededError("Max byte length exceeded.");
     }
 
@@ -272,10 +272,10 @@ export class Builder {
       offset, // offsetがdestinationの範囲外なら、new Uint8Array()でRangeErrorになる
     );
     this.#assertValidState();
-    if (dstBytes.length < this.#length) {
+    if (dstBytes.byteLength < this.#length) {
       // Uint8Array#setでRangeErrorになるが、メッセージが割と意味不明なので
       throw new RangeError(
-        "The length of the `destination` is not long enough.",
+        "The byteLength of the `destination` is not long enough.",
       );
     }
     dstBytes.set(this.#bytes!.subarray(0, this.#length));

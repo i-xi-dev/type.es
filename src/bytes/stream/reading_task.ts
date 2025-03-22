@@ -116,7 +116,7 @@ export class ReadingTask extends Loading.Task<_Bytes> {
         Type.assertUint8Array(chunk, "chunk");
 
         builder.loadFromBufferSource(chunk);
-        this._loaded = builder.length;
+        this._loaded = builder.byteLength;
         this._notifyProgress("progress");
       }
 
