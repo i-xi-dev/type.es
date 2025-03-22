@@ -46,11 +46,11 @@ export function _decode(
     // if ((writtenRuneCount + 1) > xxx) {
     //   break;
     // }
-    readByteCount = readByteCount + Uint8.BYTE_LENGTH;
+    readByteCount += Uint8.BYTE_LENGTH;
 
     if (Type.isUint7(byte)) {
       dstRunes.push(String.fromCharCode(byte));
-      writtenRuneCount = writtenRuneCount + 1;
+      writtenRuneCount += 1;
     } else {
       if (options.fatal === true) {
         throw new TypeError(
@@ -58,7 +58,7 @@ export function _decode(
         );
       } else {
         dstRunes.push(options.replacementRune);
-        writtenRuneCount = writtenRuneCount + 1;
+        writtenRuneCount += 1;
       }
     }
   }
@@ -89,11 +89,11 @@ export function _encode(
     if ((writtenByteCount + 1) > dstView.length) {
       break;
     }
-    readCharCount = readCharCount + rune.length;
+    readCharCount += rune.length;
 
     if (Type.isUint7(codePoint)) {
       dstView[writtenByteCount] = codePoint;
-      writtenByteCount = writtenByteCount + 1;
+      writtenByteCount += 1;
     } else {
       if (options.fatal === true) {
         throw new TypeError(
@@ -101,7 +101,7 @@ export function _encode(
         );
       } else {
         dstView[writtenByteCount] = options.replacementBytes[0];
-        writtenByteCount = writtenByteCount + 1;
+        writtenByteCount += 1;
       }
     }
   }

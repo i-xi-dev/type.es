@@ -38,7 +38,7 @@ function _encodeShared(
     ) {
       break;
     }
-    readCharCount = readCharCount + rune.length;
+    readCharCount += rune.length;
 
     if (Type.isSurrogateCodePoint(codePoint) !== true) {
       for (let i = 0; i < rune.length; i++) {
@@ -47,7 +47,7 @@ function _encodeShared(
           rune.charCodeAt(i),
           littleEndian,
         );
-        writtenByteCount = writtenByteCount + Uint16.BYTE_LENGTH;
+        writtenByteCount += Uint16.BYTE_LENGTH;
       }
     } else {
       if (options.fatal === true) {
@@ -57,7 +57,7 @@ function _encodeShared(
       } else {
         for (const byte of options.replacementBytes) {
           dstView.setUint8(writtenByteCount, byte);
-          writtenByteCount = writtenByteCount + Uint8.BYTE_LENGTH;
+          writtenByteCount += Uint8.BYTE_LENGTH;
         }
       }
     }

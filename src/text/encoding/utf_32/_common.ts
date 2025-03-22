@@ -68,11 +68,11 @@ function _decodeShared(
     // if ((writtenRuneCount + 1) > xxx) {
     //   break;
     // }
-    readByteCount = readByteCount + Uint32.BYTE_LENGTH;
+    readByteCount += Uint32.BYTE_LENGTH;
 
     if (Type.isCodePoint(uint32)) {
       dstRunes.push(String.fromCodePoint(uint32));
-      writtenRuneCount = writtenRuneCount + 1;
+      writtenRuneCount += 1;
     } else {
       if (options.fatal === true) {
         throw new TypeError(
@@ -82,7 +82,7 @@ function _decodeShared(
         );
       } else {
         dstRunes.push(options.replacementRune);
-        writtenRuneCount = writtenRuneCount + 1;
+        writtenRuneCount += 1;
       }
     }
 
@@ -145,7 +145,7 @@ function _encodeShared(
     ) {
       break;
     }
-    readCharCount = readCharCount + rune.length;
+    readCharCount += rune.length;
 
     if (Type.isSurrogateCodePoint(codePoint) !== true) {
       dstView.setUint32(
@@ -153,7 +153,7 @@ function _encodeShared(
         rune.codePointAt(0) as codepoint,
         littleEndian,
       );
-      writtenByteCount = writtenByteCount + Uint32.BYTE_LENGTH;
+      writtenByteCount += Uint32.BYTE_LENGTH;
     } else {
       if (options.fatal === true) {
         throw new TypeError(
@@ -162,7 +162,7 @@ function _encodeShared(
       } else {
         for (const byte of options.replacementBytes) {
           dstView.setUint8(writtenByteCount, byte);
-          writtenByteCount = writtenByteCount + Uint8.BYTE_LENGTH;
+          writtenByteCount += Uint8.BYTE_LENGTH;
         }
       }
     }

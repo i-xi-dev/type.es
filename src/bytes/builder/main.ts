@@ -392,6 +392,7 @@ export class Builder {
       const v = new DataView(new ArrayBuffer(init.byteLength));
       const isLittleEndian = byteOrder === ByteOrder.LITTLE_ENDIAN;
       for (const uint8xExpected of value) {
+        // this.#appendBytes(Uint16.toBytes(uint16Expected, byteOrder)); だとArrayBufferがloop毎に生成されるので遅い
         init.resetView2(v, uint8xExpected, isLittleEndian);
         loadedBytes.loadFromBufferSource(v);
       }
@@ -429,19 +430,4 @@ export class Builder {
 
     this.loadFromBufferSource(loadedBytes.toArrayBuffer());
   }
-
-  //TODO 渡したArrayBufferにloadFromUint16Iterable等と同じことを行うstaticメソッド
-
-  // 遅い
-  // loadFromUint16Iterable_2(
-  //   value: Iterable<uint16>,
-  //   options?: Builder.LoadOptions,
-  // ): void {
-  //   Type.assertIterable(value, "value");
-  //   const byteOrder = options?.byteOrder ?? ByteOrder.nativeOrder;
-  //   for (const uint16Expected of value) {
-  //     Type.assertUint16(uint16Expected, "value[*]");
-  //     this.#appendBytes(Uint16.toBytes(uint16Expected, byteOrder));
-  //   }
-  // }
 }
