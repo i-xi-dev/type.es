@@ -60,23 +60,78 @@ export namespace Builder {
   };
 }
 
-type _LoadFromUint8xIterableConfig = {
-  typedArrayCtor: Uint16ArrayConstructor | Uint32ArrayConstructor;
-  assertElement: (test: unknown, label: string) => void;
-  setterName: "setUint16" | "setUint32";
+// type _Uint8xArray =
+//   | Uint16Array<ArrayBuffer>
+//   | Uint32Array<ArrayBuffer>
+//   | BigUint64Array<ArrayBuffer>;
+
+type _LoadConfig<
+  T extends int,
+  U extends /* _Uint8xArray */ ArrayBufferView<ArrayBuffer>,
+> = {
+  typedArrayCtor:
+    | Uint16ArrayConstructor
+    | Uint32ArrayConstructor
+    | BigUint64ArrayConstructor;
   byteLength: safeint;
+  resetView1: (view: U, uint8xExpected: T) => void;
+  resetView2: (
+    view: DataView,
+    uint8xExpected: T,
+    littleEndian: boolean,
+  ) => void;
 };
 
-type _LoadFromBigUint8xIterableConfig = {
-  typedArrayCtor: BigUint64ArrayConstructor;
-  assertElement: (test: unknown, label: string) => void;
-  setterName: "setBigUint64";
-  byteLength: safeint;
-};
+const _U16Conf: _LoadConfig<safeint, Uint16Array<ArrayBuffer>> = {
+  typedArrayCtor: Uint16Array,
+  byteLength: Uint16.BYTE_LENGTH,
+  resetView1(view: Uint16Array<ArrayBuffer>, uint16Expected: safeint) {
+    Type.assertUint16(uint16Expected, "value[*]");
+    view[0] = uint16Expected;
+  },
+  resetView2(
+    view: DataView,
+    uint16Expected: safeint,
+    littleEndian: boolean,
+  ) {
+    Type.assertUint16(uint16Expected, "value[*]");
+    view.setUint16(0, uint16Expected, littleEndian);
+  },
+} as const;
 
-type _LoadConfig =
-  | _LoadFromUint8xIterableConfig
-  | _LoadFromBigUint8xIterableConfig;
+const _U32Conf: _LoadConfig<safeint, Uint32Array<ArrayBuffer>> = {
+  typedArrayCtor: Uint32Array,
+  byteLength: Uint32.BYTE_LENGTH,
+  resetView1(view: Uint32Array<ArrayBuffer>, uint32Expected: safeint) {
+    Type.assertUint32(uint32Expected, "value[*]");
+    view[0] = uint32Expected;
+  },
+  resetView2(
+    view: DataView,
+    uint32Expected: safeint,
+    littleEndian: boolean,
+  ) {
+    Type.assertUint32(uint32Expected, "value[*]");
+    view.setUint32(0, uint32Expected, littleEndian);
+  },
+} as const;
+
+const _U64Conf: _LoadConfig<bigint, BigUint64Array<ArrayBuffer>> = {
+  typedArrayCtor: BigUint64Array,
+  byteLength: BigUint64.BYTE_LENGTH,
+  resetView1(view: BigUint64Array<ArrayBuffer>, uint64Expected: bigint) {
+    Type.assertBigUint64(uint64Expected, "value[*]");
+    view[0] = uint64Expected;
+  },
+  resetView2(
+    view: DataView,
+    uint64Expected: bigint,
+    littleEndian: boolean,
+  ) {
+    Type.assertBigUint64(uint64Expected, "value[*]");
+    view.setBigUint64(0, uint64Expected, littleEndian);
+  },
+} as const;
 
 export class Builder {
   #length: safeint;
@@ -254,77 +309,73 @@ export class Builder {
     value: Iterable<uint16>,
     options?: Builder.LoadOptions,
   ): void {
-    this.#loadFromUint8xIterable<uint16>(value, {
-      typedArrayCtor: Uint16Array,
-      assertElement: Type.assertUint16,
-      setterName: "setUint16",
-      byteLength: Uint16.BYTE_LENGTH,
-    }, options);
+    this.#loadFromUint8xIterable<uint16, Uint16Array<ArrayBuffer>>(
+      value,
+      _U16Conf,
+      options,
+    );
   }
 
   async loadFromUint16AsyncIterable(
     value: AsyncIterable<uint16>,
     options?: Builder.LoadOptions,
   ): Promise<void> {
-    await this.#loadFromUint8xAsyncIterable<uint16>(value, {
-      typedArrayCtor: Uint16Array,
-      assertElement: Type.assertUint16,
-      setterName: "setUint16",
-      byteLength: Uint16.BYTE_LENGTH,
-    }, options);
+    await this.#loadFromUint8xAsyncIterable<uint16, Uint16Array<ArrayBuffer>>(
+      value,
+      _U16Conf,
+      options,
+    );
   }
 
   loadFromUint32Iterable(
     value: Iterable<uint32>,
     options?: Builder.LoadOptions,
   ): void {
-    this.#loadFromUint8xIterable<uint32>(value, {
-      typedArrayCtor: Uint32Array,
-      assertElement: Type.assertUint32,
-      setterName: "setUint32",
-      byteLength: Uint32.BYTE_LENGTH,
-    }, options);
+    this.#loadFromUint8xIterable<uint32, Uint32Array<ArrayBuffer>>(
+      value,
+      _U32Conf,
+      options,
+    );
   }
 
   async loadFromUint32AsyncIterable(
     value: AsyncIterable<uint32>,
     options?: Builder.LoadOptions,
   ): Promise<void> {
-    await this.#loadFromUint8xAsyncIterable<uint32>(value, {
-      typedArrayCtor: Uint32Array,
-      assertElement: Type.assertUint32,
-      setterName: "setUint32",
-      byteLength: Uint32.BYTE_LENGTH,
-    }, options);
+    await this.#loadFromUint8xAsyncIterable<uint32, Uint32Array<ArrayBuffer>>(
+      value,
+      _U32Conf,
+      options,
+    );
   }
 
   loadFromBigUint64Iterable(
     value: Iterable<biguint64>,
     options?: Builder.LoadOptions,
   ): void {
-    this.#loadFromUint8xIterable<biguint64>(value, {
-      typedArrayCtor: BigUint64Array,
-      assertElement: Type.assertBigUint64,
-      setterName: "setBigUint64",
-      byteLength: BigUint64.BYTE_LENGTH,
-    }, options);
+    this.#loadFromUint8xIterable<biguint64, BigUint64Array<ArrayBuffer>>(
+      value,
+      _U64Conf,
+      options,
+    );
   }
 
   async loadFromBigUint64AsyncIterable(
     value: AsyncIterable<biguint64>,
     options?: Builder.LoadOptions,
   ): Promise<void> {
-    await this.#loadFromUint8xAsyncIterable<biguint64>(value, {
-      typedArrayCtor: BigUint64Array,
-      assertElement: Type.assertBigUint64,
-      setterName: "setBigUint64",
-      byteLength: BigUint64.BYTE_LENGTH,
-    }, options);
+    await this.#loadFromUint8xAsyncIterable<
+      biguint64,
+      BigUint64Array<ArrayBuffer>
+    >(value, _U64Conf, options);
   }
 
-  #loadFromUint8xIterable<T extends int>(
+  #loadFromUint8xIterable<
+    T extends int,
+    U extends ArrayBufferView<ArrayBuffer>,
+  >(
     value: Iterable<T>,
-    init: _LoadConfig,
+    init: _LoadConfig<T, U>,
     options?: Builder.LoadOptions,
   ): void {
     Type.assertIterable(value, "value");
@@ -334,23 +385,14 @@ export class Builder {
     if (byteOrder === ByteOrder.nativeOrder) {
       const v = new init.typedArrayCtor(1);
       for (const uint8xExpected of value) {
-        init.assertElement(uint8xExpected, "value[*]");
-        v[0] = uint8xExpected;
+        init.resetView1(v as unknown as U, uint8xExpected);
         loadedBytes.loadFromBufferSource(v);
       }
     } else {
       const v = new DataView(new ArrayBuffer(init.byteLength));
       const isLittleEndian = byteOrder === ByteOrder.LITTLE_ENDIAN;
       for (const uint8xExpected of value) {
-        init.assertElement(uint8xExpected, "value[*]");
-
-        v[init.setterName as "setUint16"](
-          0,
-          uint8xExpected as number,
-          isLittleEndian,
-        );
-        // as "setUint16"とas numberは、uint8xExpectedがneverになるのでトランスパイル出来ないのの回避（neverにしない為に分岐する方が無駄なので）
-
+        init.resetView2(v, uint8xExpected, isLittleEndian);
         loadedBytes.loadFromBufferSource(v);
       }
     }
@@ -358,9 +400,12 @@ export class Builder {
     this.loadFromBufferSource(loadedBytes.toArrayBuffer());
   }
 
-  async #loadFromUint8xAsyncIterable<T extends int>(
+  async #loadFromUint8xAsyncIterable<
+    T extends int,
+    U extends ArrayBufferView<ArrayBuffer>,
+  >(
     value: AsyncIterable<T>,
-    init: _LoadConfig,
+    init: _LoadConfig<T, U>,
     options?: Builder.LoadOptions,
   ): Promise<void> {
     Type.assertAsyncIterable(value, "value");
@@ -370,22 +415,14 @@ export class Builder {
     if (byteOrder === ByteOrder.nativeOrder) {
       const v = new init.typedArrayCtor(1);
       for await (const uint8xExpected of value) {
-        init.assertElement(uint8xExpected, "value[*]");
-        v[0] = uint8xExpected;
+        init.resetView1(v as unknown as U, uint8xExpected);
         loadedBytes.loadFromBufferSource(v);
       }
     } else {
       const v = new DataView(new ArrayBuffer(init.byteLength));
+      const isLittleEndian = byteOrder === ByteOrder.LITTLE_ENDIAN;
       for await (const uint8xExpected of value) {
-        init.assertElement(uint8xExpected, "value[*]");
-
-        v[init.setterName as "setUint16"](
-          0,
-          uint8xExpected as number,
-          byteOrder === ByteOrder.LITTLE_ENDIAN,
-        );
-        // as "setUint16"とas numberは、uint8xExpectedがneverになるのでトランスパイル出来ないのの回避（neverにしない為に分岐する方が無駄なので）
-
+        init.resetView2(v, uint8xExpected, isLittleEndian);
         loadedBytes.loadFromBufferSource(v);
       }
     }
