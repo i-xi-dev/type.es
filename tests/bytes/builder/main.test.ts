@@ -7,25 +7,54 @@ import { Bytes } from "../../../mod.ts";
 
 const { Builder } = Bytes;
 
-Deno.test("new Bytes.Builder()/capacity/length/append() - number", () => {
+Deno.test("new Bytes.Builder()/capacity/length/appendByte()", () => {
   const b = new Builder({ capacity: 2 });
   assertStrictEquals(b.capacity, 2);
   assertStrictEquals(b.length, 0);
 
-  b.append(255);
+  b.appendByte(255);
   assertStrictEquals(b.capacity, 2);
   assertStrictEquals(b.length, 1);
   assertStrictEquals(b.duplicateAsArrayBuffer().byteLength, 1);
 
-  b.append(255);
+  b.appendByte(255);
   assertStrictEquals(b.capacity, 2);
   assertStrictEquals(b.length, 2);
   assertStrictEquals(b.duplicateAsArrayBuffer().byteLength, 2);
 
-  b.append(255);
+  b.appendByte(255);
   assertStrictEquals(b.capacity, 1048576 + 2);
   assertStrictEquals(b.length, 3);
   assertStrictEquals(b.duplicateAsArrayBuffer().byteLength, 3);
+
+  assertThrows(
+    () => {
+      b.appendByte(-1);
+    },
+    Error,
+    "`byte` must be an 8-bit unsigned integer.",
+  );
+  assertThrows(
+    () => {
+      b.appendByte(256);
+    },
+    Error,
+    "`byte` must be an 8-bit unsigned integer.",
+  );
+  assertThrows(
+    () => {
+      b.appendByte(1.5);
+    },
+    Error,
+    "`byte` must be an 8-bit unsigned integer.",
+  );
+  assertThrows(
+    () => {
+      b.appendByte("" as unknown as number);
+    },
+    Error,
+    "`byte` must be an 8-bit unsigned integer.",
+  );
 });
 
 Deno.test("new Bytes.Builder()/capacity/length/append() - BufferSource", () => {
@@ -113,26 +142,26 @@ Deno.test("new Bytes.Builder()/capacity/length/append()", () => {
 
 Deno.test("new Bytes.Builder() - capacityMax", () => {
   const b = new Builder({ capacity: 4, capacityMax: 8 });
-  b.append(255);
+  b.appendByte(255);
   assertStrictEquals(b.length, 1);
   assertStrictEquals(b.capacity, 4);
-  b.append(255);
-  b.append(255);
-  b.append(255);
+  b.appendByte(255);
+  b.appendByte(255);
+  b.appendByte(255);
   assertStrictEquals(b.length, 4);
   assertStrictEquals(b.capacity, 4);
-  b.append(255);
+  b.appendByte(255);
   assertStrictEquals(b.length, 5);
   assertStrictEquals(b.capacity, 8);
-  b.append(255);
-  b.append(255);
-  b.append(255);
+  b.appendByte(255);
+  b.appendByte(255);
+  b.appendByte(255);
   assertStrictEquals(b.length, 8);
   assertStrictEquals(b.capacity, 8);
 
   assertThrows(
     () => {
-      b.append(255);
+      b.appendByte(255);
     },
     Error,
     "Max byte length exceeded.",
@@ -208,7 +237,6 @@ Deno.test("Bytes.Builder.prototype[Symbol.toStringTag]", () => {
 
 Deno.test("Bytes.Builder.prototype.append()", () => {
   const b = new Builder();
-  b.append(255);
   b.append(Uint8Array.of(255));
 
   assertThrows(
@@ -225,7 +253,7 @@ Deno.test("Bytes.Builder.prototype.duplicateAsArrayBuffer()", () => {
   const bc1 = b.duplicateAsArrayBuffer();
   assertStrictEquals(bc1.byteLength, 0);
 
-  b.append(255);
+  b.appendByte(255);
   assertStrictEquals(bc1.byteLength, 0);
   const bc2 = b.duplicateAsArrayBuffer();
   assertStrictEquals(bc2.byteLength, 1);
@@ -236,7 +264,7 @@ Deno.test("Bytes.Builder.prototype.duplicateAsUint8Array()", () => {
   const bc1 = b.duplicateAsUint8Array();
   assertStrictEquals(bc1.byteLength, 0);
 
-  b.append(255);
+  b.appendByte(255);
   assertStrictEquals(bc1.byteLength, 0);
   const bc2 = b.duplicateAsUint8Array();
   assertStrictEquals(bc2.byteLength, 1);
@@ -304,7 +332,7 @@ Deno.test("Bytes.Builder.prototype.toArrayBuffer()", () => {
 
   assertThrows(
     () => {
-      b.append(255);
+      b.appendByte(255);
     },
     Error,
     "This Builder is no longer available.",
@@ -312,7 +340,7 @@ Deno.test("Bytes.Builder.prototype.toArrayBuffer()", () => {
 
   assertThrows(
     () => {
-      b.append(255);
+      b.appendByte(255);
     },
     Error,
     "This Builder is no longer available.",
@@ -340,7 +368,7 @@ Deno.test("Bytes.Builder.prototype.toArrayBuffer()", () => {
   );
 
   const b2 = new Builder();
-  b2.append(255);
+  b2.appendByte(255);
   const b2c2 = b2.toArrayBuffer();
   assertStrictEquals(b2c2.byteLength, 1);
   assertStrictEquals(new Uint8Array(b2c2)[0], 255);
@@ -353,7 +381,7 @@ Deno.test("Bytes.Builder.prototype.toUint8Array()", () => {
 
   assertThrows(
     () => {
-      b.append(255);
+      b.appendByte(255);
     },
     Error,
     "This Builder is no longer available.",
@@ -361,7 +389,7 @@ Deno.test("Bytes.Builder.prototype.toUint8Array()", () => {
 
   assertThrows(
     () => {
-      b.append(255);
+      b.appendByte(255);
     },
     Error,
     "This Builder is no longer available.",
@@ -389,7 +417,7 @@ Deno.test("Bytes.Builder.prototype.toUint8Array()", () => {
   );
 
   const b2 = new Builder();
-  b2.append(255);
+  b2.appendByte(255);
   const b2c2 = b2.toUint8Array();
   assertStrictEquals(b2c2.byteLength, 1);
   assertStrictEquals(b2c2[0], 255);

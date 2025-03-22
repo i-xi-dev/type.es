@@ -11,7 +11,6 @@ import {
   type safeint,
   type uint16,
   type uint32,
-  type uint8,
 } from "../../_typedef/mod.ts";
 import {
   BigUint64,
@@ -125,16 +124,24 @@ export class Builder {
 
   // }
 
+  //XXX オプションでfill(repeat)
+  appendByte(byte: /* uint8 */ safeint): this {
+    Type.assertUint8(byte, "byte");
+    this.#assertValidState();
+
+    this.#growIfNeeded(Uint8.BYTE_LENGTH);
+    this.#bytes![this.#length] = byte;
+    this.#length = this.#length + Uint8.BYTE_LENGTH;
+    return this;
+  }
+
   // - BufferSourceの部分範囲だけ追加したければsubarray()などしてから渡せば良い
   // - SharedArrayBufferはBufferSourceに含まれない（がjsから実行した場合は弾かれない）
-  append(byteOrBytes: /* uint8 */ safeint | BufferSource): this { //TODO 型で分離する
+  append(byteOrBytes: BufferSource): this { //TODO 型で分離する
     this.#assertValidState();
 
     if (Type.isBufferSource(byteOrBytes)) {
       return this.#appendBytes(byteOrBytes);
-    } else if (Type.isUint8(byteOrBytes)) {
-      Type.assertUint8(byteOrBytes, "byteOrBytes");
-      return this.#appendByte(byteOrBytes);
     }
 
     throw new TypeError(
@@ -150,13 +157,6 @@ export class Builder {
     if (this.#isValidState() !== true) {
       throw new InvalidStateError("This Builder is no longer available.");
     }
-  }
-
-  #appendByte(byte: uint8): this {
-    this.#growIfNeeded(Uint8.BYTE_LENGTH);
-    this.#bytes![this.#length] = byte;
-    this.#length = this.#length + Uint8.BYTE_LENGTH;
-    return this;
   }
 
   #appendBytes(bytes: BufferSource): this {
@@ -244,7 +244,7 @@ export class Builder {
     const loaded = new Builder();
     for (const uint8Expected of value) {
       Type.assertUint8(uint8Expected, "value[*]");
-      loaded.#appendByte(uint8Expected as uint8);
+      loaded.appendByte(uint8Expected);
     }
     this.append(loaded.toArrayBuffer());
   }
@@ -257,7 +257,7 @@ export class Builder {
     const loaded = new Builder();
     for await (const uint8Expected of value) {
       Type.assertUint8(uint8Expected, "value[*]");
-      loaded.#appendByte(uint8Expected as uint8);
+      loaded.appendByte(uint8Expected);
     }
     this.append(loaded.toArrayBuffer());
   }
