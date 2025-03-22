@@ -80,7 +80,7 @@ type _LoadConfig =
 
 export class Builder {
   #length: safeint;
-  #buffer: Uint8Array<ArrayBuffer> | null;
+  #bytes: Uint8Array<ArrayBuffer> | null;
 
   constructor(init?: Init) {
     const { capacity, capacityMax } = _computeSize(init);
@@ -92,11 +92,11 @@ export class Builder {
     } else {
       buffer = new ArrayBuffer(capacity, { maxByteLength: capacityMax });
     }
-    this.#buffer = new Uint8Array(buffer);
+    this.#bytes = new Uint8Array(buffer);
   }
 
   get capacity(): safeint {
-    return this.#isValidState() ? this.#buffer!.byteLength : -1;
+    return this.#isValidState() ? this.#bytes!.byteLength : -1;
   }
 
   get length(): safeint {
@@ -105,7 +105,7 @@ export class Builder {
 
   get growable(): boolean {
     return this.#isValidState()
-      ? (this.#buffer!.buffer.resizable === true)
+      ? (this.#bytes!.buffer.resizable === true)
       : false;
   }
 
@@ -125,8 +125,9 @@ export class Builder {
 
   // }
 
-  // BufferSourceの部分範囲だけ追加したければsubarray()などしてから渡せば良い
-  append(byteOrBytes: /* uint8 */ safeint | BufferSource): this {
+  // - BufferSourceの部分範囲だけ追加したければsubarray()などしてから渡せば良い
+  // - SharedArrayBufferはBufferSourceに含まれない（がjsから実行した場合は弾かれない）
+  append(byteOrBytes: /* uint8 */ safeint | BufferSource): this { //TODO 型で分離する
     this.#assertValidState();
 
     if (Type.isBufferSource(byteOrBytes)) {
@@ -142,7 +143,7 @@ export class Builder {
   }
 
   #isValidState(): boolean {
-    return (this.#buffer !== null);
+    return (this.#bytes !== null);
   }
 
   #assertValidState(): void {
@@ -153,7 +154,7 @@ export class Builder {
 
   #appendByte(byte: uint8): this {
     this.#growIfNeeded(Uint8.BYTE_LENGTH);
-    this.#buffer![this.#length] = byte;
+    this.#bytes![this.#length] = byte;
     this.#length = this.#length + Uint8.BYTE_LENGTH;
     return this;
   }
@@ -162,7 +163,7 @@ export class Builder {
     // Type.assertBufferSource(bytes, assertionLabel);
 
     this.#growIfNeeded(bytes.byteLength);
-    this.#buffer!.set(
+    this.#bytes!.set(
       new Uint8Array(("buffer" in bytes) ? bytes.buffer : bytes),
       this.#length,
     );
@@ -171,11 +172,11 @@ export class Builder {
   }
 
   #growIfNeeded(byteLength: safeint): void {
-    if (this.length >= this.#buffer!.buffer.maxByteLength) {
+    if (this.length >= this.#bytes!.buffer.maxByteLength) {
       throw new QuotaExceededError("Max byte length exceeded.");
     }
 
-    if ((this.#length + byteLength) > this.#buffer!.byteLength) {
+    if ((this.#length + byteLength) > this.#bytes!.byteLength) {
       const extent = Math.max(byteLength, _DEFAULT_CAPACITY); //XXX どのくらいが適正？
       this.#grow(this.#length + extent);
     }
@@ -183,23 +184,23 @@ export class Builder {
 
   #grow(newCapacity: safeint): void {
     // if (_RESIZABLE === true) {
-    const buffer = this.#buffer!.buffer;
+    const buffer = this.#bytes!.buffer;
     buffer.resize(
       (newCapacity > buffer.maxByteLength) ? buffer.maxByteLength : newCapacity,
     );
     // }
     // else {
     //   const newBuffer = new Uint8Array(～);
-    //   newBuffer.set(this.#buffer, ExNumber.ZERO);
-    //   this.#buffer = newBuffer;
+    //   newBuffer.set(this.#bytes, ExNumber.ZERO);
+    //   this.#bytes = newBuffer;
     // }
   }
 
   toArrayBuffer(): ArrayBuffer {
     this.#assertValidState();
 
-    const buffer = this.#buffer!.buffer;
-    this.#buffer = null; //XXX transferはNode.jsが未実装
+    const buffer = this.#bytes!.buffer;
+    this.#bytes = null; //XXX transferはNode.jsが未実装
 
     buffer.resize(this.#length);
     return buffer;
@@ -211,20 +212,31 @@ export class Builder {
 
   duplicateAsArrayBuffer(): ArrayBuffer {
     this.#assertValidState();
-    return this.#buffer!.buffer.slice(ExNumber.ZERO, this.#length);
+    return this.#bytes!.buffer.slice(ExNumber.ZERO, this.#length);
   }
 
   duplicateAsUint8Array(): Uint8Array<ArrayBuffer> {
     return new Uint8Array(this.duplicateAsArrayBuffer());
   }
 
-  // copyTo(destination: ArrayBuffer, offset: safeint = ExNumber.ZERO): void {
-  //   Type.assertArrayBuffer(destination, "destination");
+  // - SharedArrayBufferはBufferSourceに含まれない（がjsから実行した場合は弾かれない）
+  copyTo(destination: BufferSource, offset: safeint = ExNumber.ZERO): void {
+    Type.assertBufferSource(destination, "destination");
+    Type.assertNonNegativeSafeInt(offset, "offset");
 
-  //   const dstBytes = new Uint8Array(destination);
-  //   this.#assertValidState();
-  //   dstBytes.set(this.#buffer!, offset);
-  // }
+    const dstBytes = new Uint8Array(
+      ("buffer" in destination) ? destination.buffer : destination,
+      offset, // offsetがdestinationの範囲外なら、new Uint8Array()でRangeErrorになる
+    );
+    this.#assertValidState();
+    if (dstBytes.length < this.#length) {
+      // Uint8Array#setでRangeErrorになるが、メッセージが割と意味不明なので
+      throw new RangeError(
+        "The length of the `destination` is not long enough.",
+      );
+    }
+    dstBytes.set(this.#bytes!.subarray(0, this.#length));
+  }
 
   loadFromUint8Iterable(value: Iterable<safeint /* uint8 */>): void {
     Type.assertIterable(value, "value");

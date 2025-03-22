@@ -244,6 +244,57 @@ Deno.test("Bytes.Builder.prototype.duplicateAsUint8Array()", () => {
 });
 
 Deno.test("Bytes.Builder.prototype.copyTo()", () => {
+  const b = new Builder();
+  b.loadFromUint8Iterable([1, 2, 3, 4]);
+  const c1 = new Uint8Array(6);
+  b.copyTo(c1);
+  assertStrictEquals(c1[0], 1);
+  assertStrictEquals(c1[1], 2);
+  assertStrictEquals(c1[2], 3);
+  assertStrictEquals(c1[3], 4);
+  assertStrictEquals(c1[4], 0);
+  assertStrictEquals(c1[5], 0);
+
+  b.copyTo(c1, 2);
+  assertStrictEquals(c1[0], 1);
+  assertStrictEquals(c1[1], 2);
+  assertStrictEquals(c1[2], 1);
+  assertStrictEquals(c1[3], 2);
+  assertStrictEquals(c1[4], 3);
+  assertStrictEquals(c1[5], 4);
+
+  assertThrows(
+    () => {
+      b.copyTo(c1, 3);
+    },
+    RangeError,
+    "The length of the `destination` is not long enough.",
+  );
+
+  const c2 = new Uint8Array(4);
+  b.copyTo(c2);
+  assertStrictEquals(c2[0], 1);
+  assertStrictEquals(c2[1], 2);
+  assertStrictEquals(c2[2], 3);
+  assertStrictEquals(c2[3], 4);
+
+  assertThrows(
+    () => {
+      const c3 = new Uint8Array(3);
+      b.copyTo(c3);
+    },
+    RangeError,
+    "The length of the `destination` is not long enough.",
+  );
+
+  assertThrows(
+    () => {
+      const c4 = new Uint8Array(3);
+      b.copyTo(c4, 4);
+    },
+    RangeError,
+    "", // Uint8Arrayがスローする "Start offset 4 is outside the bounds of the buffer"
+  );
 });
 
 Deno.test("Bytes.Builder.prototype.toArrayBuffer()", () => {
