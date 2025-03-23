@@ -1,5 +1,6 @@
 import { assertStrictEquals, unreachable } from "@std/assert";
 import { Text } from "../../../../mod.ts";
+import { delay } from "../../../test_utils.ts";
 
 Deno.test("Text.UsAsciiEncoderStream.prototype.encoding", () => {
   const encoder = new Text.UsAsciiEncoderStream();
@@ -54,22 +55,12 @@ const streamExpected1 = [
 ];
 
 Deno.test("Text.UsAsciiEncoderStream.prototype.readable,writable - U+007FまでのUTF-8との比較", async () => {
-  // deno-lint-ignore no-explicit-any
-  let ti: any;
-  const s = new ReadableStream({
-    start(controller) {
-      let c = 0;
-      ti = setInterval(() => {
-        if (c >= 15) {
-          clearInterval(ti);
-          controller.close();
-          return;
-        }
-        controller.enqueue(streamSrc1[c]);
-        c = c + 1;
-      }, 10);
-    },
-  });
+  const s = ReadableStream.from((async function* () {
+    for (let i = 0; i < streamSrc1.length; i++) {
+      await delay(10);
+      yield streamSrc1[i];
+    }
+  })());
 
   await (() => {
     return new Promise<void>((resolve) => {
@@ -95,22 +86,12 @@ Deno.test("Text.UsAsciiEncoderStream.prototype.readable,writable - U+007Fまで�
 });
 
 Deno.test("- TextEncoderStream.prototype.readable,writable - U+007FまでのUTF-8との比較", async () => {
-  // deno-lint-ignore no-explicit-any
-  let ti: any;
-  const s = new ReadableStream({
-    start(controller) {
-      let c = 0;
-      ti = setInterval(() => {
-        if (c >= 15) {
-          clearInterval(ti);
-          controller.close();
-          return;
-        }
-        controller.enqueue(streamSrc1[c]);
-        c = c + 1;
-      }, 10);
-    },
-  });
+  const s = ReadableStream.from((async function* () {
+    for (let i = 0; i < streamSrc1.length; i++) {
+      await delay(10);
+      yield streamSrc1[i];
+    }
+  })());
 
   await (() => {
     return new Promise<void>((resolve) => {
@@ -156,22 +137,12 @@ Deno.test("Text.UsAsciiEncoderStream.prototype.readable,writable - fatal:false",
     "A",
   ];
 
-  // deno-lint-ignore no-explicit-any
-  let ti: any;
-  const s = new ReadableStream({
-    start(controller) {
-      let c = 0;
-      ti = setInterval(() => {
-        if (c >= 15) {
-          clearInterval(ti);
-          controller.close();
-          return;
-        }
-        controller.enqueue(td[c]);
-        c = c + 1;
-      }, 10);
-    },
-  });
+  const s = ReadableStream.from((async function* () {
+    for (let i = 0; i < td.length; i++) {
+      await delay(10);
+      yield td[i];
+    }
+  })());
 
   await (() => {
     return new Promise<void>((resolve) => {
@@ -227,22 +198,12 @@ Deno.test("Text.UsAsciiEncoderStream.prototype.readable,writable - fatal:false(�
     "\uD800",
   ];
 
-  // deno-lint-ignore no-explicit-any
-  let ti: any;
-  const s = new ReadableStream({
-    start(controller) {
-      let c = 0;
-      ti = setInterval(() => {
-        if (c >= 15) {
-          clearInterval(ti);
-          controller.close();
-          return;
-        }
-        controller.enqueue(td[c]);
-        c = c + 1;
-      }, 10);
-    },
-  });
+  const s = ReadableStream.from((async function* () {
+    for (let i = 0; i < td.length; i++) {
+      await delay(10);
+      yield td[i];
+    }
+  })());
 
   await (() => {
     return new Promise<void>((resolve) => {
@@ -298,22 +259,12 @@ Deno.test("Text.UsAsciiEncoderStream.prototype.readable,writable - fatal:false, 
     "A",
   ];
 
-  // deno-lint-ignore no-explicit-any
-  let ti: any;
-  const s = new ReadableStream({
-    start(controller) {
-      let c = 0;
-      ti = setInterval(() => {
-        if (c >= 15) {
-          clearInterval(ti);
-          controller.close();
-          return;
-        }
-        controller.enqueue(td[c]);
-        c = c + 1;
-      }, 10);
-    },
-  });
+  const s = ReadableStream.from((async function* () {
+    for (let i = 0; i < td.length; i++) {
+      await delay(10);
+      yield td[i];
+    }
+  })());
 
   await (() => {
     return new Promise<void>((resolve) => {
@@ -372,22 +323,12 @@ Deno.test("Text.UsAsciiEncoderStream.prototype.readable,writable - fatal:true", 
     "A",
   ];
 
-  // deno-lint-ignore no-explicit-any
-  let ti: any;
-  const s = new ReadableStream({
-    start(controller) {
-      let c = 0;
-      ti = setInterval(() => {
-        if (c >= 15) {
-          clearInterval(ti);
-          controller.close();
-          return;
-        }
-        controller.enqueue(td[c]);
-        c = c + 1;
-      }, 10);
-    },
-  });
+  const s = ReadableStream.from((async function* () {
+    for (let i = 0; i < td.length; i++) {
+      await delay(10);
+      yield td[i];
+    }
+  })());
 
   await (() => {
     return new Promise<void>((resolve) => {
