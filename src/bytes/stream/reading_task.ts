@@ -136,7 +136,7 @@ export class ReadingTask extends Loading.Task<_Bytes> {
       ) {
         // ・AbortSignal.timeoutでabortされた場合
         // ・呼び出し側のAbortControllerでreason:TimeoutErrorでabortした場合
-        this._status = Loading.Status.ABORTED; //TODO timeout独自のstateにする？
+        this._status = Loading.Status.ABORTED; //XXX timeout独自のstateにする？
         // this._notifyProgress("timeout"); rejectされるのでわかる
       } else {
         // ・呼び出し側のAbortControllerでreason:AbortError,TimeoutError以外でabortした場合
@@ -153,5 +153,3 @@ export class ReadingTask extends Loading.Task<_Bytes> {
     }
   }
 }
-
-//TODO エラーメッセージ

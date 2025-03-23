@@ -494,7 +494,7 @@ export function _encode(
   toEncode: Uint8Array<ArrayBuffer>,
   options: _ResolvedOptions,
 ): string {
-  //TODO check toEncode
+  Type.assertUint8Array(toEncode, "toEncode");
 
   let _6bit1e: string;
   let _6bit2e: string;

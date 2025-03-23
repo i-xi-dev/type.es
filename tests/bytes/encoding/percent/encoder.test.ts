@@ -286,6 +286,14 @@ Deno.test("Bytes.PercentEncoder.prototype.encode()", () => {
   assertStrictEquals(encoder1.encode(Uint8Array.of(0)), "%00");
   assertStrictEquals(encoder1.encode(Uint8Array.of(0, 32, 65)), "%00%20%41");
   assertStrictEquals(encoder1.encode(Uint8Array.of(255)), "%FF");
+
+  assertThrows(
+    () => {
+      encoder1.encode([] as unknown as Uint8Array<ArrayBuffer>);
+    },
+    TypeError,
+    "`toEncode` must be an `Uint8Array<ArrayBuffer>`.",
+  );
 });
 
 Deno.test("Bytes.PercentEncoder.prototype.encode() - encodeSet", () => {

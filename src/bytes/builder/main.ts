@@ -49,7 +49,7 @@ function _computeSize(
 export namespace BytesBuilder {
   export type LoadFromIterableOptions = {
     byteOrder?: byteorder; // uint8の場合は無視
-    //TODO 範囲外はエラーにするかsaturateにするかtruncateにするか
+    //XXX 範囲外はエラーにするかsaturateにするかtruncateにするか
     //XXX 見込サイズ,
     //XXX 超えたらabortするサイズ,
     //XXX 逐次追加するか、すべてエラーなしの場合のみ追加するか
@@ -170,7 +170,7 @@ export class BytesBuilder {
   }
 
   //XXX オプションでfill(repeat)
-  //TODO オプションで範囲外はエラーにするかsaturateにするかtruncateにするか
+  //XXX オプションで範囲外はエラーにするかsaturateにするかtruncateにするか
   appendByte(byte: /* uint8 */ safeint): this {
     Type.assertUint8(byte, "byte");
     this.#appendByte(byte as uint8);

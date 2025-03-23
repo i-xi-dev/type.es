@@ -1,4 +1,4 @@
-import { assertStrictEquals } from "@std/assert";
+import { assertStrictEquals, assertThrows } from "@std/assert";
 import { Bytes } from "../../../../mod.ts";
 
 function test(arrayBuffer: ArrayBuffer): string {
@@ -37,6 +37,14 @@ Deno.test("Bytes.Base64Encoder.prototype.encode()", () => {
   assertStrictEquals(encoder.encode(r7), test(r7.buffer));
   assertStrictEquals(encoder.encode(r8), test(r8.buffer));
   assertStrictEquals(encoder.encode(r9), test(r9.buffer));
+
+  assertThrows(
+    () => {
+      encoder.encode([] as unknown as Uint8Array<ArrayBuffer>);
+    },
+    TypeError,
+    "`toEncode` must be an `Uint8Array<ArrayBuffer>`.",
+  );
 });
 
 Deno.test("Bytes.Base64Encoder.prototype.encode() - noPadding:true", () => {

@@ -453,7 +453,7 @@ export abstract class Encoder /* implements TextEncoder (encodingが"utf-8"で�
   /**
    * @see [TextEncoder.encode](https://developer.mozilla.org/en-US/docs/Web/API/TextEncoder/encode)
    */
-  encode(input?: string): Uint8Array<ArrayBuffer> {
+  encode(input?: string): Uint8Array<ArrayBuffer> { //TODO inputの型 encodeもdecodeも
     const { writtenBuffer } = this.#common.encode(
       this.prependBOM,
       false,
