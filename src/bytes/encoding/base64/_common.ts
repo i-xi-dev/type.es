@@ -333,8 +333,6 @@ export const _RFC4648URL_OPTIONS: _ResolvedOptions = Object.freeze({
 });
 
 //TODO throw
-//TODO RegExp "u"不要な場合は消す
-//TODO 型チェックはType.～に置き換え
 
 function _isBase64Char(value: unknown): value is _base64char {
   if (Type.isChar(value)) {
@@ -458,7 +456,7 @@ export function _decode(
       decodedBytes[_8bitI++] = (_6bit1 << 2) | (_6bit2 >> 4);
 
       // 8-bit (2)
-      if (typeof encodedBody[i + 2] !== "string") {
+      if (Type.isString(encodedBody[i + 2]) !== true) {
         decodedBytes[_8bitI++] = (_6bit2 & 0b001111) << 4;
         break;
       }
@@ -468,7 +466,7 @@ export function _decode(
       decodedBytes[_8bitI++] = ((_6bit2 & 0b001111) << 4) | (_6bit3 >> 2);
 
       // 8-bit (3)
-      if (typeof encodedBody[i + 3] !== "string") {
+      if (Type.isString(encodedBody[i + 3]) !== true) {
         decodedBytes[_8bitI++] = (_6bit3 & 0b000011) << 6;
         break;
       }
@@ -571,7 +569,7 @@ export function _resolveOptions(
   }
 
   let noPadding: boolean = defaultOptions.noPadding;
-  if (typeof options.noPadding === "boolean") {
+  if (Type.isBoolean(options.noPadding)) {
     noPadding = options.noPadding;
   }
 
