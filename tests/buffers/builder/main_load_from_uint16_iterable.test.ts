@@ -1,18 +1,18 @@
 import { assertRejects, assertStrictEquals, assertThrows } from "@std/assert";
-import { ByteOrder, Bytes } from "../../../mod.ts";
+import { Buffers, ByteOrder } from "../../../mod.ts";
 
-const { Builder } = Bytes;
+const { BytesBuilder } = Buffers;
 
 // Deno.test(" - 1", () => {
 //   const s1 = performance.now();
-//   const b1 = Builder.create();
+//   const b1 = BytesBuilder.create();
 //   const src = new Uint16Array(65535).fill(0x1234, 0, 65535);
 //   b1.loadFromUint16Iterable(src, { byteOrder: "little-endian" });
 //   console.log(performance.now() - s1);
 // });
 
-Deno.test("Bytes.Builder.prototype.loadFromUint16Iterable() - Array", () => {
-  const b1 = Builder.create();
+Deno.test("Buffers.BytesBuilder.prototype.loadFromUint16Iterable() - Array", () => {
+  const b1 = BytesBuilder.create();
   assertThrows(
     () => {
       b1.loadFromUint16Iterable(0 as unknown as Array<number>);
@@ -82,7 +82,7 @@ Deno.test("Bytes.Builder.prototype.loadFromUint16Iterable() - Array", () => {
   assertStrictEquals(a1be[4], 255);
   assertStrictEquals(a1be[5], 255);
 
-  const b2 = Builder.create();
+  const b2 = BytesBuilder.create();
   b2.loadFromUint16Iterable([0, 1, 65535], { byteOrder: "little-endian" });
   const a1le = b2.duplicateAsUint8Array();
   assertStrictEquals(a1le.length, 6);
@@ -93,7 +93,7 @@ Deno.test("Bytes.Builder.prototype.loadFromUint16Iterable() - Array", () => {
   assertStrictEquals(a1le[4], 255);
   assertStrictEquals(a1le[5], 255);
 
-  const b3 = Builder.create();
+  const b3 = BytesBuilder.create();
   b3.loadFromUint16Iterable([0, 1, 65535]);
   const a1x = b3.duplicateAsUint8Array();
   assertStrictEquals(a1x.length, 6);
@@ -114,15 +114,15 @@ Deno.test("Bytes.Builder.prototype.loadFromUint16Iterable() - Array", () => {
   }
 });
 
-Deno.test("Bytes.Builder.prototype.loadFromUint16Iterable() - Uint16Array", () => {
-  const b1 = Builder.create();
+Deno.test("Buffers.BytesBuilder.prototype.loadFromUint16Iterable() - Uint16Array", () => {
+  const b1 = BytesBuilder.create();
   b1.loadFromUint16Iterable(Uint16Array.of());
   assertStrictEquals(
     b1.duplicateAsUint8Array().byteLength,
     0,
   );
 
-  const b2 = Builder.create();
+  const b2 = BytesBuilder.create();
   b2.loadFromUint16Iterable(Uint16Array.of(0, 1, 65535), {
     byteOrder: "big-endian",
   });
@@ -135,7 +135,7 @@ Deno.test("Bytes.Builder.prototype.loadFromUint16Iterable() - Uint16Array", () =
   assertStrictEquals(a1be[4], 255);
   assertStrictEquals(a1be[5], 255);
 
-  const b3 = Builder.create();
+  const b3 = BytesBuilder.create();
   b3.loadFromUint16Iterable(Uint16Array.of(0, 1, 65535), {
     byteOrder: "little-endian",
   });
@@ -148,7 +148,7 @@ Deno.test("Bytes.Builder.prototype.loadFromUint16Iterable() - Uint16Array", () =
   assertStrictEquals(a1le[4], 255);
   assertStrictEquals(a1le[5], 255);
 
-  const b4 = Builder.create();
+  const b4 = BytesBuilder.create();
   b4.loadFromUint16Iterable(Uint16Array.of(0, 1, 65535));
   const a1x = b4.duplicateAsUint8Array();
   assertStrictEquals(a1x.length, 6);
@@ -169,8 +169,8 @@ Deno.test("Bytes.Builder.prototype.loadFromUint16Iterable() - Uint16Array", () =
   }
 });
 
-Deno.test("Bytes.Builder.prototype.loadFromUint16Iterable() - Generator", () => {
-  const b1 = Builder.create();
+Deno.test("Buffers.BytesBuilder.prototype.loadFromUint16Iterable() - Generator", () => {
+  const b1 = BytesBuilder.create();
   const g0 = (function* () {
   })();
   b1.loadFromUint16Iterable(g0);
@@ -192,7 +192,7 @@ Deno.test("Bytes.Builder.prototype.loadFromUint16Iterable() - Generator", () => 
   assertStrictEquals(a1be[4], 255);
   assertStrictEquals(a1be[5], 255);
 
-  const b2 = Builder.create();
+  const b2 = BytesBuilder.create();
   const g2 = (function* () {
     yield 0;
     yield 1;
@@ -209,7 +209,7 @@ Deno.test("Bytes.Builder.prototype.loadFromUint16Iterable() - Generator", () => 
   assertStrictEquals(a1le[4], 255);
   assertStrictEquals(a1le[5], 255);
 
-  const b3 = Builder.create();
+  const b3 = BytesBuilder.create();
   const g3 = (function* () {
     yield 0;
     yield 1;
@@ -236,8 +236,8 @@ Deno.test("Bytes.Builder.prototype.loadFromUint16Iterable() - Generator", () => 
   }
 });
 
-Deno.test("Bytes.Builder.prototype.loadFromUint16AsyncIterable() - Array", async () => {
-  const b1 = Builder.create();
+Deno.test("Buffers.BytesBuilder.prototype.loadFromUint16AsyncIterable() - Array", async () => {
+  const b1 = BytesBuilder.create();
   await assertRejects(
     async () => {
       await b1.loadFromUint16AsyncIterable(
@@ -296,8 +296,8 @@ Deno.test("Bytes.Builder.prototype.loadFromUint16AsyncIterable() - Array", async
   );
 });
 
-Deno.test("Bytes.Builder.prototype.loadFromUint16AsyncIterable() - AsyncGenerator", async () => {
-  const b1 = Builder.create();
+Deno.test("Buffers.BytesBuilder.prototype.loadFromUint16AsyncIterable() - AsyncGenerator", async () => {
+  const b1 = BytesBuilder.create();
   const g0 = (async function* () {
   })();
   await b1.loadFromUint16AsyncIterable(g0);
@@ -317,8 +317,8 @@ Deno.test("Bytes.Builder.prototype.loadFromUint16AsyncIterable() - AsyncGenerato
   assertStrictEquals(a1[2], 0xFFFF);
 });
 
-Deno.test("Bytes.Builder.prototype.loadFromUint16AsyncIterable() - AsyncGenerator", async () => {
-  const b1 = Builder.create();
+Deno.test("Buffers.BytesBuilder.prototype.loadFromUint16AsyncIterable() - AsyncGenerator", async () => {
+  const b1 = BytesBuilder.create();
   const g1 = (async function* () {
     yield 0;
     yield 1;
