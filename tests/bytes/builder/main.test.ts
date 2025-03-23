@@ -3,11 +3,11 @@ import {
   assertStrictEquals,
   assertThrows,
 } from "@std/assert";
-import { Buffers, ByteOrder } from "../../../mod.ts";
+import { ByteOrder, Bytes } from "../../../mod.ts";
 
-const { BytesBuilder } = Buffers;
+const { BytesBuilder } = Bytes;
 
-Deno.test("Buffers.BytesBuilder.create()/capacity/byteLength/appendByte()", () => {
+Deno.test("Bytes.BytesBuilder.create()/capacity/byteLength/appendByte()", () => {
   const b = BytesBuilder.create({ capacity: 2 });
   assertStrictEquals(b.capacity, 2);
   assertStrictEquals(b.byteLength, 0);
@@ -57,7 +57,7 @@ Deno.test("Buffers.BytesBuilder.create()/capacity/byteLength/appendByte()", () =
   );
 });
 
-Deno.test("Buffers.BytesBuilder.create()/capacity/byteLength/loadFromBufferSource()", () => {
+Deno.test("Bytes.BytesBuilder.create()/capacity/byteLength/loadFromBufferSource()", () => {
   const b = BytesBuilder.create();
 
   assertStrictEquals(b.capacity, 1_048_576);
@@ -78,7 +78,7 @@ Deno.test("Buffers.BytesBuilder.create()/capacity/byteLength/loadFromBufferSourc
   );
 });
 
-Deno.test("Buffers.BytesBuilder.create()/capacity/byteLength/loadFromBufferSource() - 2", () => {
+Deno.test("Bytes.BytesBuilder.create()/capacity/byteLength/loadFromBufferSource() - 2", () => {
   const b = BytesBuilder.create();
 
   assertStrictEquals(b.capacity, 1_048_576);
@@ -106,7 +106,7 @@ Deno.test("Buffers.BytesBuilder.create()/capacity/byteLength/loadFromBufferSourc
   }
 });
 
-Deno.test("Buffers.BytesBuilder.create()/capacity/byteLength/loadFromBufferSource()", () => {
+Deno.test("Bytes.BytesBuilder.create()/capacity/byteLength/loadFromBufferSource()", () => {
   const b = BytesBuilder.create({ capacity: 10 });
 
   assertStrictEquals(b.capacity, 10);
@@ -140,7 +140,7 @@ Deno.test("Buffers.BytesBuilder.create()/capacity/byteLength/loadFromBufferSourc
   );
 });
 
-Deno.test("Buffers.BytesBuilder.create() - capacityMax", () => {
+Deno.test("Bytes.BytesBuilder.create() - capacityMax", () => {
   const b = BytesBuilder.create({ capacity: 4, capacityMax: 8 });
   b.appendByte(255);
   assertStrictEquals(b.byteLength, 1);
@@ -168,7 +168,7 @@ Deno.test("Buffers.BytesBuilder.create() - capacityMax", () => {
   );
 });
 
-Deno.test("Buffers.BytesBuilder.create() - err", () => {
+Deno.test("Bytes.BytesBuilder.create() - err", () => {
   assertThrows(
     () => {
       BytesBuilder.create({ capacityMax: 536_870_913 });
@@ -192,7 +192,7 @@ Deno.test("Buffers.BytesBuilder.create() - err", () => {
   assertStrictEquals(b3.capacity, 1_048_576);
 });
 
-Deno.test("Buffers.BytesBuilder.prototype.growable", () => {
+Deno.test("Bytes.BytesBuilder.prototype.growable", () => {
   const b1 = BytesBuilder.create();
   assertStrictEquals(b1.growable, true);
   assertStrictEquals(b1.capacity, 1_048_576);
@@ -230,12 +230,12 @@ Deno.test("Buffers.BytesBuilder.prototype.growable", () => {
   assertStrictEquals(b7.capacity, 536_870_912);
 });
 
-Deno.test("Buffers.BytesBuilder.prototype[Symbol.toStringTag]", () => {
+Deno.test("Bytes.BytesBuilder.prototype[Symbol.toStringTag]", () => {
   const b1 = BytesBuilder.create();
   assertStrictEquals(b1[Symbol.toStringTag], "BytesBuilder");
 });
 
-Deno.test("Buffers.BytesBuilder.prototype.loadFromBufferSource()", () => {
+Deno.test("Bytes.BytesBuilder.prototype.loadFromBufferSource()", () => {
   const b = BytesBuilder.create();
   b.loadFromBufferSource(Uint8Array.of(255));
 
@@ -248,7 +248,7 @@ Deno.test("Buffers.BytesBuilder.prototype.loadFromBufferSource()", () => {
   );
 });
 
-Deno.test("Buffers.BytesBuilder.prototype.duplicateAsArrayBuffer()", () => {
+Deno.test("Bytes.BytesBuilder.prototype.duplicateAsArrayBuffer()", () => {
   const b = BytesBuilder.create();
   const bc1 = b.duplicateAsArrayBuffer();
   assertStrictEquals(bc1.byteLength, 0);
@@ -259,7 +259,7 @@ Deno.test("Buffers.BytesBuilder.prototype.duplicateAsArrayBuffer()", () => {
   assertStrictEquals(bc2.byteLength, 1);
 });
 
-Deno.test("Buffers.BytesBuilder.prototype.duplicateAsUint8Array()", () => {
+Deno.test("Bytes.BytesBuilder.prototype.duplicateAsUint8Array()", () => {
   const b = BytesBuilder.create();
   const bc1 = b.duplicateAsUint8Array();
   assertStrictEquals(bc1.byteLength, 0);
@@ -271,7 +271,7 @@ Deno.test("Buffers.BytesBuilder.prototype.duplicateAsUint8Array()", () => {
   assertStrictEquals(bc2[0], 255);
 });
 
-Deno.test("Buffers.BytesBuilder.prototype.copyTo()", () => {
+Deno.test("Bytes.BytesBuilder.prototype.copyTo()", () => {
   const b = BytesBuilder.create();
   b.loadFromUint8Iterable([1, 2, 3, 4]);
   const c1 = new Uint8Array(6);
@@ -325,7 +325,7 @@ Deno.test("Buffers.BytesBuilder.prototype.copyTo()", () => {
   );
 });
 
-Deno.test("Buffers.BytesBuilder.prototype.toArrayBuffer()", () => {
+Deno.test("Bytes.BytesBuilder.prototype.toArrayBuffer()", () => {
   const b = BytesBuilder.create();
   const bc1 = b.toArrayBuffer();
   assertStrictEquals(bc1.byteLength, 0);
@@ -374,7 +374,7 @@ Deno.test("Buffers.BytesBuilder.prototype.toArrayBuffer()", () => {
   assertStrictEquals(new Uint8Array(b2c2)[0], 255);
 });
 
-Deno.test("Buffers.BytesBuilder.prototype.toUint8Array()", () => {
+Deno.test("Bytes.BytesBuilder.prototype.toUint8Array()", () => {
   const b = BytesBuilder.create();
   const bc1 = b.toUint8Array();
   assertStrictEquals(bc1.byteLength, 0);

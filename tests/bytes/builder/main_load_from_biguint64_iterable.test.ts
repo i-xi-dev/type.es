@@ -1,9 +1,9 @@
 import { assertRejects, assertStrictEquals, assertThrows } from "@std/assert";
-import { Buffers, ByteOrder } from "../../../mod.ts";
+import { ByteOrder, Bytes } from "../../../mod.ts";
 
-const { BytesBuilder } = Buffers;
+const { BytesBuilder } = Bytes;
 
-Deno.test("Buffers.BytesBuilder.prototype.loadFromBigUint64Iterable() - Array", () => {
+Deno.test("Bytes.BytesBuilder.prototype.loadFromBigUint64Iterable() - Array", () => {
   const b1 = BytesBuilder.create();
   assertThrows(
     () => {
@@ -188,7 +188,7 @@ Deno.test("Buffers.BytesBuilder.prototype.loadFromBigUint64Iterable() - Array", 
   }
 });
 
-Deno.test("Buffers.BytesBuilder.prototype.loadFromBigUint64Iterable() - BigUint64Array", () => {
+Deno.test("Bytes.BytesBuilder.prototype.loadFromBigUint64Iterable() - BigUint64Array", () => {
   const b1 = BytesBuilder.create();
   b1.loadFromBigUint64Iterable(BigUint64Array.of());
   assertStrictEquals(b1.duplicateAsUint8Array().byteLength, 0);
@@ -315,7 +315,7 @@ Deno.test("Buffers.BytesBuilder.prototype.loadFromBigUint64Iterable() - BigUint6
   }
 });
 
-Deno.test("Buffers.BytesBuilder.prototype.loadFromBigUint64Iterable() - Generator", () => {
+Deno.test("Bytes.BytesBuilder.prototype.loadFromBigUint64Iterable() - Generator", () => {
   const b1 = BytesBuilder.create();
   const g0 = (function* () {
   })();
@@ -454,7 +454,7 @@ Deno.test("Buffers.BytesBuilder.prototype.loadFromBigUint64Iterable() - Generato
   }
 });
 
-Deno.test("Buffers.BytesBuilder.prototype.loadFromBigUint64AsyncIterable() - Array", async () => {
+Deno.test("Bytes.BytesBuilder.prototype.loadFromBigUint64AsyncIterable() - Array", async () => {
   const b1 = BytesBuilder.create();
   await assertRejects(
     async () => {
@@ -514,7 +514,7 @@ Deno.test("Buffers.BytesBuilder.prototype.loadFromBigUint64AsyncIterable() - Arr
   );
 });
 
-Deno.test("Buffers.BytesBuilder.prototype.loadFromBigUint64AsyncIterable() - AsyncGenerator", async () => {
+Deno.test("Bytes.BytesBuilder.prototype.loadFromBigUint64AsyncIterable() - AsyncGenerator", async () => {
   const b1 = BytesBuilder.create();
   const g0 = (async function* () {
   })();
@@ -535,7 +535,7 @@ Deno.test("Buffers.BytesBuilder.prototype.loadFromBigUint64AsyncIterable() - Asy
   assertStrictEquals(a1[2], 0xFFFF_FFFF_FFFF_FFFFn);
 });
 
-Deno.test("Buffers.BytesBuilder.prototype.loadFromBigUint64AsyncIterable() - AsyncGenerator", async () => {
+Deno.test("Bytes.BytesBuilder.prototype.loadFromBigUint64AsyncIterable() - AsyncGenerator", async () => {
   const b1 = BytesBuilder.create();
   const g1 = (async function* () {
     yield 0n;

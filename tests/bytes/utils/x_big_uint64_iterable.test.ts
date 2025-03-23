@@ -1,61 +1,61 @@
 import { assertStrictEquals, assertThrows } from "@std/assert";
-import { Buffers, ByteOrder } from "../../../mod.ts";
+import { ByteOrder, Bytes } from "../../../mod.ts";
 
-const { ArrayBuffer: ExArrayBuffer } = Buffers;
+const { BytesUtils } = Bytes;
 
-Deno.test("Buffers.ArrayBuffer.toBigUint64Iterable(Uint8Array)", () => {
+Deno.test("Bytes.BytesUtils.toBigUint64Iterable(Uint8Array)", () => {
   assertThrows(
     () => {
-      ExArrayBuffer.toBigUint64Iterable(0 as unknown as ArrayBuffer);
+      BytesUtils.toBigUint64Iterable(0 as unknown as ArrayBuffer);
     },
     TypeError,
     "`value` must be an `ArrayBuffer`.",
   );
   assertThrows(
     () => {
-      ExArrayBuffer.toBigUint64Iterable(1 as unknown as ArrayBuffer);
+      BytesUtils.toBigUint64Iterable(1 as unknown as ArrayBuffer);
     },
     TypeError,
     "`value` must be an `ArrayBuffer`.",
   );
   assertThrows(
     () => {
-      ExArrayBuffer.toBigUint64Iterable(Uint8Array.of(1).buffer);
+      BytesUtils.toBigUint64Iterable(Uint8Array.of(1).buffer);
     },
     RangeError,
     "The byte length of `value` must be divisible by 8.",
   );
   assertThrows(
     () => {
-      ExArrayBuffer.toBigUint64Iterable(Uint8Array.of(1, 2).buffer);
+      BytesUtils.toBigUint64Iterable(Uint8Array.of(1, 2).buffer);
     },
     RangeError,
     "The byte length of `value` must be divisible by 8.",
   );
   assertThrows(
     () => {
-      ExArrayBuffer.toBigUint64Iterable(Uint8Array.of(1, 2, 3).buffer);
+      BytesUtils.toBigUint64Iterable(Uint8Array.of(1, 2, 3).buffer);
     },
     RangeError,
     "The byte length of `value` must be divisible by 8.",
   );
   assertThrows(
     () => {
-      ExArrayBuffer.toBigUint64Iterable(Uint8Array.of(1, 2, 3, 4).buffer);
+      BytesUtils.toBigUint64Iterable(Uint8Array.of(1, 2, 3, 4).buffer);
     },
     RangeError,
     "The byte length of `value` must be divisible by 8.",
   );
   assertThrows(
     () => {
-      ExArrayBuffer.toBigUint64Iterable(Uint8Array.of(1, 2, 3, 4, 5).buffer);
+      BytesUtils.toBigUint64Iterable(Uint8Array.of(1, 2, 3, 4, 5).buffer);
     },
     RangeError,
     "The byte length of `value` must be divisible by 8.",
   );
   assertThrows(
     () => {
-      ExArrayBuffer.toBigUint64Iterable(
+      BytesUtils.toBigUint64Iterable(
         Uint8Array.of(1, 2, 3, 4, 5, 6).buffer,
       );
     },
@@ -64,7 +64,7 @@ Deno.test("Buffers.ArrayBuffer.toBigUint64Iterable(Uint8Array)", () => {
   );
   assertThrows(
     () => {
-      ExArrayBuffer.toBigUint64Iterable(
+      BytesUtils.toBigUint64Iterable(
         Uint8Array.of(1, 2, 3, 4, 5, 6, 7).buffer,
       );
     },
@@ -74,7 +74,7 @@ Deno.test("Buffers.ArrayBuffer.toBigUint64Iterable(Uint8Array)", () => {
 
   assertStrictEquals(
     [
-      ...ExArrayBuffer.toBigUint64Iterable(
+      ...BytesUtils.toBigUint64Iterable(
         Uint8Array.of().buffer,
         { byteOrder: "big-endian" },
       ),
@@ -83,7 +83,7 @@ Deno.test("Buffers.ArrayBuffer.toBigUint64Iterable(Uint8Array)", () => {
   );
   assertStrictEquals(
     [
-      ...ExArrayBuffer.toBigUint64Iterable(
+      ...BytesUtils.toBigUint64Iterable(
         Uint8Array.of(1, 0, 3, 2, 0, 0, 0, 0).buffer,
         { byteOrder: "big-endian" },
       ),
@@ -92,7 +92,7 @@ Deno.test("Buffers.ArrayBuffer.toBigUint64Iterable(Uint8Array)", () => {
   );
   assertStrictEquals(
     [
-      ...ExArrayBuffer.toBigUint64Iterable(
+      ...BytesUtils.toBigUint64Iterable(
         Uint8Array.of(1, 0, 3, 2, 5, 4, 7, 6, 1, 0, 3, 2, 0, 0, 0, 0).buffer,
         { byteOrder: "big-endian" },
       ),
@@ -102,7 +102,7 @@ Deno.test("Buffers.ArrayBuffer.toBigUint64Iterable(Uint8Array)", () => {
 
   assertStrictEquals(
     [
-      ...ExArrayBuffer.toBigUint64Iterable(
+      ...BytesUtils.toBigUint64Iterable(
         Uint8Array.of().buffer,
         { byteOrder: "little-endian" },
       ),
@@ -111,7 +111,7 @@ Deno.test("Buffers.ArrayBuffer.toBigUint64Iterable(Uint8Array)", () => {
   );
   assertStrictEquals(
     [
-      ...ExArrayBuffer.toBigUint64Iterable(
+      ...BytesUtils.toBigUint64Iterable(
         Uint8Array.of(1, 0, 3, 2, 0, 0, 0, 0).buffer,
         { byteOrder: "little-endian" },
       ),
@@ -120,7 +120,7 @@ Deno.test("Buffers.ArrayBuffer.toBigUint64Iterable(Uint8Array)", () => {
   );
   assertStrictEquals(
     [
-      ...ExArrayBuffer.toBigUint64Iterable(
+      ...BytesUtils.toBigUint64Iterable(
         Uint8Array.of(1, 0, 3, 2, 5, 4, 7, 6, 1, 0, 3, 2, 0, 0, 0, 0).buffer,
         { byteOrder: "little-endian" },
       ),
@@ -130,14 +130,14 @@ Deno.test("Buffers.ArrayBuffer.toBigUint64Iterable(Uint8Array)", () => {
 
   assertStrictEquals(
     [
-      ...ExArrayBuffer.toBigUint64Iterable(Uint8Array.of().buffer),
+      ...BytesUtils.toBigUint64Iterable(Uint8Array.of().buffer),
     ].join(","),
     "",
   );
   if (ByteOrder.nativeOrder === "big-endian") {
     assertStrictEquals(
       [
-        ...ExArrayBuffer.toBigUint64Iterable(
+        ...BytesUtils.toBigUint64Iterable(
           Uint8Array.of(1, 0, 3, 2, 0, 0, 0, 0).buffer,
         ),
       ].join(","),
@@ -145,7 +145,7 @@ Deno.test("Buffers.ArrayBuffer.toBigUint64Iterable(Uint8Array)", () => {
     );
     assertStrictEquals(
       [
-        ...ExArrayBuffer.toBigUint64Iterable(
+        ...BytesUtils.toBigUint64Iterable(
           Uint8Array.of(1, 0, 3, 2, 5, 4, 7, 6, 1, 0, 3, 2, 0, 0, 0, 0).buffer,
         ),
       ].join(","),
@@ -154,7 +154,7 @@ Deno.test("Buffers.ArrayBuffer.toBigUint64Iterable(Uint8Array)", () => {
   } else {
     assertStrictEquals(
       [
-        ...ExArrayBuffer.toBigUint64Iterable(
+        ...BytesUtils.toBigUint64Iterable(
           Uint8Array.of(1, 0, 3, 2, 0, 0, 0, 0).buffer,
         ),
       ].join(","),
@@ -162,7 +162,7 @@ Deno.test("Buffers.ArrayBuffer.toBigUint64Iterable(Uint8Array)", () => {
     );
     assertStrictEquals(
       [
-        ...ExArrayBuffer.toBigUint64Iterable(
+        ...BytesUtils.toBigUint64Iterable(
           Uint8Array.of(1, 0, 3, 2, 5, 4, 7, 6, 1, 0, 3, 2, 0, 0, 0, 0).buffer,
         ),
       ].join(","),

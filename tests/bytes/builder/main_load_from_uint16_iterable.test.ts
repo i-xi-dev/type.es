@@ -1,7 +1,7 @@
 import { assertRejects, assertStrictEquals, assertThrows } from "@std/assert";
-import { Buffers, ByteOrder } from "../../../mod.ts";
+import { ByteOrder, Bytes } from "../../../mod.ts";
 
-const { BytesBuilder } = Buffers;
+const { BytesBuilder } = Bytes;
 
 // Deno.test(" - 1", () => {
 //   const s1 = performance.now();
@@ -11,7 +11,7 @@ const { BytesBuilder } = Buffers;
 //   console.log(performance.now() - s1);
 // });
 
-Deno.test("Buffers.BytesBuilder.prototype.loadFromUint16Iterable() - Array", () => {
+Deno.test("Bytes.BytesBuilder.prototype.loadFromUint16Iterable() - Array", () => {
   const b1 = BytesBuilder.create();
   assertThrows(
     () => {
@@ -114,7 +114,7 @@ Deno.test("Buffers.BytesBuilder.prototype.loadFromUint16Iterable() - Array", () 
   }
 });
 
-Deno.test("Buffers.BytesBuilder.prototype.loadFromUint16Iterable() - Uint16Array", () => {
+Deno.test("Bytes.BytesBuilder.prototype.loadFromUint16Iterable() - Uint16Array", () => {
   const b1 = BytesBuilder.create();
   b1.loadFromUint16Iterable(Uint16Array.of());
   assertStrictEquals(
@@ -169,7 +169,7 @@ Deno.test("Buffers.BytesBuilder.prototype.loadFromUint16Iterable() - Uint16Array
   }
 });
 
-Deno.test("Buffers.BytesBuilder.prototype.loadFromUint16Iterable() - Generator", () => {
+Deno.test("Bytes.BytesBuilder.prototype.loadFromUint16Iterable() - Generator", () => {
   const b1 = BytesBuilder.create();
   const g0 = (function* () {
   })();
@@ -236,7 +236,7 @@ Deno.test("Buffers.BytesBuilder.prototype.loadFromUint16Iterable() - Generator",
   }
 });
 
-Deno.test("Buffers.BytesBuilder.prototype.loadFromUint16AsyncIterable() - Array", async () => {
+Deno.test("Bytes.BytesBuilder.prototype.loadFromUint16AsyncIterable() - Array", async () => {
   const b1 = BytesBuilder.create();
   await assertRejects(
     async () => {
@@ -296,7 +296,7 @@ Deno.test("Buffers.BytesBuilder.prototype.loadFromUint16AsyncIterable() - Array"
   );
 });
 
-Deno.test("Buffers.BytesBuilder.prototype.loadFromUint16AsyncIterable() - AsyncGenerator", async () => {
+Deno.test("Bytes.BytesBuilder.prototype.loadFromUint16AsyncIterable() - AsyncGenerator", async () => {
   const b1 = BytesBuilder.create();
   const g0 = (async function* () {
   })();
@@ -317,7 +317,7 @@ Deno.test("Buffers.BytesBuilder.prototype.loadFromUint16AsyncIterable() - AsyncG
   assertStrictEquals(a1[2], 0xFFFF);
 });
 
-Deno.test("Buffers.BytesBuilder.prototype.loadFromUint16AsyncIterable() - AsyncGenerator", async () => {
+Deno.test("Bytes.BytesBuilder.prototype.loadFromUint16AsyncIterable() - AsyncGenerator", async () => {
   const b1 = BytesBuilder.create();
   const g1 = (async function* () {
     yield 0;

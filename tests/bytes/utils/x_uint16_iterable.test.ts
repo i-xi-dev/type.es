@@ -1,33 +1,33 @@
 import { assertStrictEquals, assertThrows } from "@std/assert";
-import { Buffers, ByteOrder } from "../../../mod.ts";
+import { ByteOrder, Bytes } from "../../../mod.ts";
 
-const { ArrayBuffer: ExArrayBuffer } = Buffers;
+const { BytesUtils } = Bytes;
 
-Deno.test("Buffers.ArrayBuffer.toUint16Iterable(Uint8Array)", () => {
+Deno.test("Bytes.BytesUtils.toUint16Iterable(Uint8Array)", () => {
   assertThrows(
     () => {
-      ExArrayBuffer.toUint16Iterable(0 as unknown as ArrayBuffer);
+      BytesUtils.toUint16Iterable(0 as unknown as ArrayBuffer);
     },
     TypeError,
     "`value` must be an `ArrayBuffer`.",
   );
   assertThrows(
     () => {
-      ExArrayBuffer.toUint16Iterable(1 as unknown as ArrayBuffer);
+      BytesUtils.toUint16Iterable(1 as unknown as ArrayBuffer);
     },
     TypeError,
     "`value` must be an `ArrayBuffer`.",
   );
   assertThrows(
     () => {
-      ExArrayBuffer.toUint16Iterable(Uint8Array.of(1).buffer);
+      BytesUtils.toUint16Iterable(Uint8Array.of(1).buffer);
     },
     RangeError,
     "The byte length of `value` must be divisible by 2.",
   );
   assertThrows(
     () => {
-      ExArrayBuffer.toUint16Iterable(Uint8Array.of(1, 2, 3).buffer);
+      BytesUtils.toUint16Iterable(Uint8Array.of(1, 2, 3).buffer);
     },
     RangeError,
     "The byte length of `value` must be divisible by 2.",
@@ -35,7 +35,7 @@ Deno.test("Buffers.ArrayBuffer.toUint16Iterable(Uint8Array)", () => {
 
   assertStrictEquals(
     JSON.stringify([
-      ...ExArrayBuffer.toUint16Iterable(
+      ...BytesUtils.toUint16Iterable(
         Uint8Array.of().buffer,
         { byteOrder: "big-endian" },
       ),
@@ -44,7 +44,7 @@ Deno.test("Buffers.ArrayBuffer.toUint16Iterable(Uint8Array)", () => {
   );
   assertStrictEquals(
     JSON.stringify([
-      ...ExArrayBuffer.toUint16Iterable(
+      ...BytesUtils.toUint16Iterable(
         Uint8Array.of(1, 0, 3, 2).buffer,
         { byteOrder: "big-endian" },
       ),
@@ -53,7 +53,7 @@ Deno.test("Buffers.ArrayBuffer.toUint16Iterable(Uint8Array)", () => {
   );
   assertStrictEquals(
     JSON.stringify([
-      ...ExArrayBuffer.toUint16Iterable(
+      ...BytesUtils.toUint16Iterable(
         Uint8Array.of(1, 0, 3, 2, 5, 4, 7, 6).buffer,
         { byteOrder: "big-endian" },
       ),
@@ -64,7 +64,7 @@ Deno.test("Buffers.ArrayBuffer.toUint16Iterable(Uint8Array)", () => {
   const b2b = new Uint8Array(b2.buffer, 4, 8);
   assertStrictEquals(
     JSON.stringify([
-      ...ExArrayBuffer.toUint16Iterable(b2b.buffer, {
+      ...BytesUtils.toUint16Iterable(b2b.buffer, {
         byteOrder: "big-endian",
       }),
     ]),
@@ -73,7 +73,7 @@ Deno.test("Buffers.ArrayBuffer.toUint16Iterable(Uint8Array)", () => {
 
   assertStrictEquals(
     JSON.stringify([
-      ...ExArrayBuffer.toUint16Iterable(
+      ...BytesUtils.toUint16Iterable(
         Uint8Array.of().buffer,
         { byteOrder: "little-endian" },
       ),
@@ -82,7 +82,7 @@ Deno.test("Buffers.ArrayBuffer.toUint16Iterable(Uint8Array)", () => {
   );
   assertStrictEquals(
     JSON.stringify([
-      ...ExArrayBuffer.toUint16Iterable(
+      ...BytesUtils.toUint16Iterable(
         Uint8Array.of(1, 0, 3, 2).buffer,
         { byteOrder: "little-endian" },
       ),
@@ -91,7 +91,7 @@ Deno.test("Buffers.ArrayBuffer.toUint16Iterable(Uint8Array)", () => {
   );
   assertStrictEquals(
     JSON.stringify([
-      ...ExArrayBuffer.toUint16Iterable(
+      ...BytesUtils.toUint16Iterable(
         Uint8Array.of(1, 0, 3, 2, 5, 4, 7, 6).buffer,
         { byteOrder: "little-endian" },
       ),
@@ -102,7 +102,7 @@ Deno.test("Buffers.ArrayBuffer.toUint16Iterable(Uint8Array)", () => {
   const b3b = new Uint8Array(b3.buffer, 4, 8);
   assertStrictEquals(
     JSON.stringify([
-      ...ExArrayBuffer.toUint16Iterable(b3b.buffer, {
+      ...BytesUtils.toUint16Iterable(b3b.buffer, {
         byteOrder: "little-endian",
       }),
     ]),
@@ -111,14 +111,14 @@ Deno.test("Buffers.ArrayBuffer.toUint16Iterable(Uint8Array)", () => {
 
   assertStrictEquals(
     JSON.stringify([
-      ...ExArrayBuffer.toUint16Iterable(Uint8Array.of().buffer),
+      ...BytesUtils.toUint16Iterable(Uint8Array.of().buffer),
     ]),
     "[]",
   );
   if (ByteOrder.nativeOrder === "big-endian") {
     assertStrictEquals(
       JSON.stringify([
-        ...ExArrayBuffer.toUint16Iterable(
+        ...BytesUtils.toUint16Iterable(
           Uint8Array.of(1, 0, 3, 2).buffer,
         ),
       ]),
@@ -126,7 +126,7 @@ Deno.test("Buffers.ArrayBuffer.toUint16Iterable(Uint8Array)", () => {
     );
     assertStrictEquals(
       JSON.stringify([
-        ...ExArrayBuffer.toUint16Iterable(
+        ...BytesUtils.toUint16Iterable(
           Uint8Array.of(1, 0, 3, 2, 5, 4, 7, 6).buffer,
         ),
       ]),
@@ -134,14 +134,14 @@ Deno.test("Buffers.ArrayBuffer.toUint16Iterable(Uint8Array)", () => {
     );
     assertStrictEquals(
       JSON.stringify([
-        ...ExArrayBuffer.toUint16Iterable(b2b.buffer),
+        ...BytesUtils.toUint16Iterable(b2b.buffer),
       ]),
       "[0,0,256,770,1284,1798,257,257]",
     );
   } else {
     assertStrictEquals(
       JSON.stringify([
-        ...ExArrayBuffer.toUint16Iterable(
+        ...BytesUtils.toUint16Iterable(
           Uint8Array.of(1, 0, 3, 2).buffer,
         ),
       ]),
@@ -149,7 +149,7 @@ Deno.test("Buffers.ArrayBuffer.toUint16Iterable(Uint8Array)", () => {
     );
     assertStrictEquals(
       JSON.stringify([
-        ...ExArrayBuffer.toUint16Iterable(
+        ...BytesUtils.toUint16Iterable(
           Uint8Array.of(1, 0, 3, 2, 5, 4, 7, 6).buffer,
         ),
       ]),
@@ -157,7 +157,7 @@ Deno.test("Buffers.ArrayBuffer.toUint16Iterable(Uint8Array)", () => {
     );
     assertStrictEquals(
       JSON.stringify([
-        ...ExArrayBuffer.toUint16Iterable(b3b.buffer),
+        ...BytesUtils.toUint16Iterable(b3b.buffer),
       ]),
       "[0,0,1,515,1029,1543,257,257]",
     );
