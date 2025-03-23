@@ -240,7 +240,10 @@ Deno.test("Bytes.Base64DecoderStream.prototype.writable - error", async () => {
       console.log("UnderlyingSink.abort");
       //console.log(reason);
       assertStrictEquals(reason.name, "TypeError");
-      assertStrictEquals(reason.message, "decode error (1)");
+      assertStrictEquals(
+        reason.message,
+        "`encoded` contains invalid character.",
+      );
     },
   });
   const readable: ReadableStream<Uint8Array> = decoder
@@ -256,7 +259,7 @@ Deno.test("Bytes.Base64DecoderStream.prototype.writable - error", async () => {
     assertStrictEquals(e instanceof Error, true);
     if (e instanceof Error) {
       assertStrictEquals(e.name, "TypeError");
-      assertStrictEquals(e.message, "decode error (1)");
+      assertStrictEquals(e.message, "`encoded` contains invalid character.");
     }
   }
 });

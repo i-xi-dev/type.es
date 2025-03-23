@@ -69,6 +69,14 @@ Deno.test("Bytes.PercentDecoder.prototype.decode()", () => {
 
   assertThrows(
     () => {
+      decoder1.decode(0 as unknown as string);
+    },
+    TypeError,
+    "`encoded` must be a `string`.",
+  );
+
+  assertThrows(
+    () => {
       decoder1.decode("あ");
     },
     TypeError,

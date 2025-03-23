@@ -332,8 +332,6 @@ export const _RFC4648URL_OPTIONS: _ResolvedOptions = Object.freeze({
   paddingChar: "=",
 });
 
-//TODO throw
-
 function _isBase64Char(value: unknown): value is _base64char {
   if (Type.isChar(value)) {
     return (_BASE64_CHARS as Readonly<Array<string>>).includes(value);
@@ -384,6 +382,8 @@ export function _decode(
   encoded: string,
   options: _ResolvedOptions,
 ): Uint8Array<ArrayBuffer> {
+  Type.assertString(encoded, "encoded");
+
   let work: string = encoded;
   if (_forgiving === true) {
     // deno-lint-ignore no-control-regex
@@ -405,12 +405,12 @@ export function _decode(
     }
 
     if ((work.length % 4) === 1) {
-      throw new TypeError("forgiving decode error");
+      throw new TypeError("The length of `encoded` is invalid.");
     }
   }
 
   if (_isEncoded(work, options) !== true) {
-    throw new TypeError("decode error (1)");
+    throw new TypeError("`encoded` contains invalid character."); // (1)
   }
 
   const paddingStart = work.indexOf(options.paddingChar);
@@ -418,7 +418,7 @@ export function _decode(
   let encodedBody: string;
   if ((options.noPadding !== true) && (_forgiving !== true)) {
     if ((work.length % 4) !== 0) {
-      throw new TypeError("decode error (2)");
+      throw new TypeError("The padding of `encoded` is invalid.");
     }
 
     if (paddingStart >= 0) {
@@ -430,7 +430,7 @@ export function _decode(
     }
   } else {
     // if (paddingStart >= 0) {
-    //  throw new TypeError("decode error (3)"); (1)で例外になる
+    //  throw new TypeError("-"); (1)で例外になる
     // }
     paddingCount = (work.length % 4 === 0) ? 0 : 4 - (work.length % 4);
     encodedBody = work;
@@ -494,6 +494,8 @@ export function _encode(
   toEncode: Uint8Array<ArrayBuffer>,
   options: _ResolvedOptions,
 ): string {
+  //TODO check toEncode
+
   let _6bit1e: string;
   let _6bit2e: string;
   let _6bit3e: string;
@@ -580,7 +582,7 @@ export function _resolveOptions(
 
   // tableとpaddingの重複チェック
   if ((new Set([...rawTable, paddingChar])).size !== 65) {
-    throw new RangeError("options error: character duplicated");
+    throw new RangeError("`Base64Options` error: character duplicated.");
   }
 
   return Object.freeze({

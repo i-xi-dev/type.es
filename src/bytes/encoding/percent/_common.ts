@@ -295,6 +295,8 @@ export function _decode(
   encoded: string,
   options: _ResolvedOptions,
 ): Uint8Array<ArrayBuffer> {
+  Type.assertString(encoded, "encoded");
+
   if (/^[\u0020-\u007E]*$/.test(encoded) !== true) {
     throw new TypeError(
       "`encoded` must be a string consisting of only U+0020 through U+007E.",
@@ -385,6 +387,8 @@ export function _encode(
   toEncode: Uint8Array<ArrayBuffer>,
   options: _ResolvedOptions,
 ): string {
+  //TODO check toEncode
+
   let work: Array<uint8> = [];
   let encoded = EMPTY;
   for (const byte of toEncode) {

@@ -29,10 +29,18 @@ Deno.test("Bytes.base64Decode()", () => {
 
   assertThrows(
     () => {
+      Bytes.base64Decode(0 as unknown as string);
+    },
+    TypeError,
+    "`encoded` must be a `string`.",
+  );
+
+  assertThrows(
+    () => {
       Bytes.base64Decode("あ");
     },
     TypeError,
-    "forgiving decode error",
+    "The length of `encoded` is invalid.",
   );
 
   assertThrows(
@@ -40,7 +48,7 @@ Deno.test("Bytes.base64Decode()", () => {
       Bytes.base64Decode("AwIBAP_-_fw=");
     },
     TypeError,
-    "decode error (1)",
+    "`encoded` contains invalid character.",
   );
 
   assertThrows(
@@ -48,7 +56,7 @@ Deno.test("Bytes.base64Decode()", () => {
       Bytes.base64Decode("=AwIBAP/+/fw");
     },
     TypeError,
-    "decode error (1)",
+    "`encoded` contains invalid character.",
   );
 
   assertThrows(
@@ -56,7 +64,7 @@ Deno.test("Bytes.base64Decode()", () => {
       Bytes.base64Decode("=");
     },
     TypeError,
-    "forgiving decode error",
+    "The length of `encoded` is invalid.",
   );
 
   assertThrows(
@@ -64,7 +72,7 @@ Deno.test("Bytes.base64Decode()", () => {
       Bytes.base64Decode("AwIBAP/+/fw,");
     },
     TypeError,
-    "decode error (1)",
+    "`encoded` contains invalid character.",
   );
 });
 
@@ -89,7 +97,7 @@ Deno.test("Bytes.base64Decode() - noPadding:true", () => {
       Bytes.base64Decode("あ", { noPadding: true });
     },
     TypeError,
-    "forgiving decode error",
+    "The length of `encoded` is invalid.",
   );
 
   assertThrows(
@@ -97,7 +105,7 @@ Deno.test("Bytes.base64Decode() - noPadding:true", () => {
       Bytes.base64Decode("AwIBAP_-_fw=", { noPadding: true });
     },
     TypeError,
-    "decode error (1)",
+    "`encoded` contains invalid character.",
   );
 
   assertThrows(
@@ -105,7 +113,7 @@ Deno.test("Bytes.base64Decode() - noPadding:true", () => {
       Bytes.base64Decode("=AwIBAP/+/fw", { noPadding: true });
     },
     TypeError,
-    "decode error (1)",
+    "`encoded` contains invalid character.",
   );
 
   assertThrows(
@@ -113,7 +121,7 @@ Deno.test("Bytes.base64Decode() - noPadding:true", () => {
       Bytes.base64Decode("=", { noPadding: true });
     },
     TypeError,
-    "forgiving decode error",
+    "The length of `encoded` is invalid.",
   );
 
   assertThrows(
@@ -121,7 +129,7 @@ Deno.test("Bytes.base64Decode() - noPadding:true", () => {
       Bytes.base64Decode("AwIBAP/+/fw,", { noPadding: true });
     },
     TypeError,
-    "decode error (1)",
+    "`encoded` contains invalid character.",
   );
 });
 
@@ -148,7 +156,7 @@ Deno.test("Bytes.base64Decode() - paddingChar:'!'", () => {
       Bytes.base64Decode("AwIBAP/+/fw=", { paddingChar: "!" });
     },
     TypeError,
-    "decode error (1)",
+    "`encoded` contains invalid character.",
   );
 
   const decoded12z = Bytes.base64Decode("AwIBAP/+/fw", { paddingChar: "!" });
@@ -162,7 +170,7 @@ Deno.test("Bytes.base64Decode() - paddingChar:'!'", () => {
       Bytes.base64Decode("あ", { paddingChar: "!" });
     },
     TypeError,
-    "forgiving decode error",
+    "The length of `encoded` is invalid.",
   );
 
   assertThrows(
@@ -170,7 +178,7 @@ Deno.test("Bytes.base64Decode() - paddingChar:'!'", () => {
       Bytes.base64Decode("AwIBAP_-_fw!", { paddingChar: "!" });
     },
     TypeError,
-    "decode error (1)",
+    "`encoded` contains invalid character.",
   );
 
   assertThrows(
@@ -178,7 +186,7 @@ Deno.test("Bytes.base64Decode() - paddingChar:'!'", () => {
       Bytes.base64Decode("=AwIBAP/+/fw", { paddingChar: "!" });
     },
     TypeError,
-    "decode error (1)",
+    "`encoded` contains invalid character.",
   );
 
   assertThrows(
@@ -186,7 +194,7 @@ Deno.test("Bytes.base64Decode() - paddingChar:'!'", () => {
       Bytes.base64Decode("!", { paddingChar: "!" });
     },
     TypeError,
-    "forgiving decode error",
+    "The length of `encoded` is invalid.",
   );
 
   assertThrows(
@@ -194,7 +202,7 @@ Deno.test("Bytes.base64Decode() - paddingChar:'!'", () => {
       Bytes.base64Decode("AwIBAP/+/fw,", { paddingChar: "!" });
     },
     TypeError,
-    "decode error (1)",
+    "`encoded` contains invalid character.",
   );
 });
 
@@ -473,7 +481,7 @@ Deno.test("Bytes.base64Decode() - Rfc4648Base64UrlOptions", () => {
       Bytes.base64Decode("AwIBAP/+/fw=", opx);
     },
     RangeError,
-    "options error: character duplicated",
+    "`Base64Options` error: character duplicated.",
   );
 
   assertThrows(
@@ -481,7 +489,7 @@ Deno.test("Bytes.base64Decode() - Rfc4648Base64UrlOptions", () => {
       Bytes.base64Decode("AwIBAP/+/fw=", op);
     },
     TypeError,
-    "decode error (1)",
+    "`encoded` contains invalid character.",
   );
 
   assertThrows(
@@ -489,7 +497,7 @@ Deno.test("Bytes.base64Decode() - Rfc4648Base64UrlOptions", () => {
       Bytes.base64Decode("AwIBAP/+/fw", op);
     },
     TypeError,
-    "decode error (1)",
+    "`encoded` contains invalid character.",
   );
 
   assertThrows(
@@ -497,7 +505,7 @@ Deno.test("Bytes.base64Decode() - Rfc4648Base64UrlOptions", () => {
       Bytes.base64Decode("あ", op);
     },
     TypeError,
-    "forgiving decode error",
+    "The length of `encoded` is invalid.",
   );
 
   const decoded12 = Bytes.base64Decode("AwIBAP_-_fw=", op);
@@ -517,7 +525,7 @@ Deno.test("Bytes.base64Decode() - Rfc4648Base64UrlOptions", () => {
       Bytes.base64Decode("=AwIBAP_-_fw", op);
     },
     TypeError,
-    "decode error (1)",
+    "`encoded` contains invalid character.",
   );
 
   assertThrows(
@@ -525,7 +533,7 @@ Deno.test("Bytes.base64Decode() - Rfc4648Base64UrlOptions", () => {
       Bytes.base64Decode("=", op);
     },
     TypeError,
-    "forgiving decode error",
+    "The length of `encoded` is invalid.",
   );
 
   assertThrows(
@@ -533,7 +541,7 @@ Deno.test("Bytes.base64Decode() - Rfc4648Base64UrlOptions", () => {
       Bytes.base64Decode("AwIBAP_-_fw,", op);
     },
     TypeError,
-    "decode error (1)",
+    "`encoded` contains invalid character.",
   );
 });
 
@@ -629,7 +637,7 @@ Deno.test("Bytes.base64Decode() - Rfc4648Base64UrlOptions - deprecated-1", () =>
       Bytes.base64Decode("=AwIBAP_-_fw", op);
     },
     TypeError,
-    "decode error (1)",
+    "`encoded` contains invalid character.",
   );
 
   assertThrows(
@@ -637,7 +645,7 @@ Deno.test("Bytes.base64Decode() - Rfc4648Base64UrlOptions - deprecated-1", () =>
       Bytes.base64Decode("=", op);
     },
     TypeError,
-    "forgiving decode error",
+    "The length of `encoded` is invalid.",
   );
 
   assertThrows(
@@ -645,7 +653,7 @@ Deno.test("Bytes.base64Decode() - Rfc4648Base64UrlOptions - deprecated-1", () =>
       Bytes.base64Decode("AwIBAP_-_fw,", op);
     },
     TypeError,
-    "decode error (1)",
+    "`encoded` contains invalid character.",
   );
 });
 
@@ -807,7 +815,7 @@ Deno.test("Bytes.base64Decode() - Rfc4648Base64UrlOptions - deprecated-2", () =>
       Bytes.base64Decode("=AwIBAP_-_fw", op);
     },
     TypeError,
-    "decode error (1)",
+    "`encoded` contains invalid character.",
   );
 
   assertThrows(
@@ -815,7 +823,7 @@ Deno.test("Bytes.base64Decode() - Rfc4648Base64UrlOptions - deprecated-2", () =>
       Bytes.base64Decode("=", op);
     },
     TypeError,
-    "forgiving decode error",
+    "The length of `encoded` is invalid.",
   );
 
   assertThrows(
@@ -823,7 +831,7 @@ Deno.test("Bytes.base64Decode() - Rfc4648Base64UrlOptions - deprecated-2", () =>
       Bytes.base64Decode("AwIBAP_-_fw,", op);
     },
     TypeError,
-    "decode error (1)",
+    "`encoded` contains invalid character.",
   );
 });
 
