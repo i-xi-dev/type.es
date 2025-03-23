@@ -7,14 +7,14 @@ import {
   type safeint,
   type uint16,
   type uint32,
-  type uint8,
+  // type uint8,
 } from "../../_typedef/mod.ts";
 
-//XXX Uint8Arrayにすれば良いだけなので不要では
-export function toUint8Iterable(value: ArrayBuffer): Iterable<uint8> {
-  Type.assertArrayBuffer(value, "value");
-  return (new Uint8Array(value))[Symbol.iterator]() as Iterable<uint8>;
-}
+// Uint8Arrayにすれば良いだけなので不要
+// export function toUint8Iterable(value: ArrayBuffer): Iterable<uint8> {
+//   Type.assertArrayBuffer(value, "value");
+//   return (new Uint8Array(value))[Symbol.iterator]() as Iterable<uint8>;
+// }
 
 type _Uint8xArrayCtor =
   | Uint16ArrayConstructor

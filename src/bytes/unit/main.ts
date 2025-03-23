@@ -1,4 +1,4 @@
-export const Unit = {
+export const BytesUnit = {
   /**
    * B (byte)
    */
@@ -55,4 +55,4 @@ export const Unit = {
   PIB: "pebibyte",
 } as const;
 
-export type Unit = typeof Unit[keyof typeof Unit];
+export type BytesUnit = typeof BytesUnit[keyof typeof BytesUnit];
