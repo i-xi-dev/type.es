@@ -185,10 +185,20 @@ export class BytesBuilder {
     this.#length = this.#length + Uint8.BYTE_LENGTH;
   }
 
+  loadRandomBytes(byteLength: safeint): void {
+    Type.assertSafeIntInRange(byteLength, "byteLength", [0, 65536]); // 65536(Uint16.SIZE)はgetRandomValuesの制約
+    this.#assertValidState();
+
+    this.#growIfNeeded(byteLength);
+    const view = new Uint8Array(this.#bytes!.buffer, this.#length, byteLength);
+    globalThis.crypto.getRandomValues(view);
+    this.#length = this.#length + byteLength;
+  }
+
   // TypedArrayであるかに関係なくArrayBufferのbyte順通りにuint8で読み取る
   // - BufferSourceの部分範囲だけ追加したければsubarray()などしてから渡せば良い
   // - SharedArrayBufferはBufferSourceに含まれない（がjsから実行した場合は弾かれない）
-  loadFromBufferSource(bytes: BufferSource): this {
+  loadFromBufferSource(bytes: BufferSource): void {
     Type.assertBufferSource(bytes, "bytes");
     this.#assertValidState();
 
@@ -198,7 +208,6 @@ export class BytesBuilder {
       this.#length,
     );
     this.#length = this.#length + bytes.byteLength;
-    return this;
   }
 
   #isValidState(): boolean {

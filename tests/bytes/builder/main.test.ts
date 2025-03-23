@@ -422,3 +422,34 @@ Deno.test("Bytes.BytesBuilder.prototype.toUint8Array()", () => {
   assertStrictEquals(b2c2.byteLength, 1);
   assertStrictEquals(b2c2[0], 255);
 });
+
+Deno.test("Bytes.BytesBuilder.prototype.loadRandomBytes()", () => {
+  const b = BytesBuilder.create();
+  b.loadRandomBytes(12);
+  assertStrictEquals(b.byteLength, 12);
+
+  b.appendByte(255);
+  b.loadRandomBytes(12);
+  assertStrictEquals(b.byteLength, 25);
+  const bc1 = b.duplicateAsUint8Array();
+  assertStrictEquals(bc1[12], 255);
+  console.log(bc1);
+
+  b.loadRandomBytes(65536);
+  assertStrictEquals(b.byteLength, 25 + 65536);
+
+  assertThrows(
+    () => {
+      b.loadRandomBytes(65537);
+    },
+    TypeError,
+    "`byteLength` must be a safe integer in the range 0-65536.",
+  );
+  assertThrows(
+    () => {
+      b.loadRandomBytes(-1);
+    },
+    TypeError,
+    "`byteLength` must be a safe integer in the range 0-65536.",
+  );
+});
