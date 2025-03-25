@@ -1,40 +1,38 @@
 import { assertStrictEquals, assertThrows } from "@std/assert";
 import { ByteOrder, Bytes } from "../../../mod.ts";
 
-const { BytesUtils } = Bytes;
-
-Deno.test("Bytes.BytesUtils.toUint32Iterable(Uint8Array)", () => {
+Deno.test("Bytes.toUint32Iterable()", () => {
   assertThrows(
     () => {
-      BytesUtils.toUint32Iterable(0 as unknown as ArrayBuffer);
+      Bytes.toUint32Iterable(0 as unknown as ArrayBuffer);
     },
     TypeError,
     "`value` must be an `ArrayBuffer`.",
   );
   assertThrows(
     () => {
-      BytesUtils.toUint32Iterable(1 as unknown as ArrayBuffer);
+      Bytes.toUint32Iterable(1 as unknown as ArrayBuffer);
     },
     TypeError,
     "`value` must be an `ArrayBuffer`.",
   );
   assertThrows(
     () => {
-      BytesUtils.toUint32Iterable(Uint8Array.of(1).buffer);
+      Bytes.toUint32Iterable(Uint8Array.of(1).buffer);
     },
     RangeError,
     "The byte length of `value` must be divisible by 4.",
   );
   assertThrows(
     () => {
-      BytesUtils.toUint32Iterable(Uint8Array.of(1, 2).buffer);
+      Bytes.toUint32Iterable(Uint8Array.of(1, 2).buffer);
     },
     RangeError,
     "The byte length of `value` must be divisible by 4.",
   );
   assertThrows(
     () => {
-      BytesUtils.toUint32Iterable(Uint8Array.of(1, 2, 3).buffer);
+      Bytes.toUint32Iterable(Uint8Array.of(1, 2, 3).buffer);
     },
     RangeError,
     "The byte length of `value` must be divisible by 4.",
@@ -42,7 +40,7 @@ Deno.test("Bytes.BytesUtils.toUint32Iterable(Uint8Array)", () => {
 
   assertStrictEquals(
     JSON.stringify([
-      ...BytesUtils.toUint32Iterable(
+      ...Bytes.toUint32Iterable(
         Uint8Array.of().buffer,
         { byteOrder: "big-endian" },
       ),
@@ -51,7 +49,7 @@ Deno.test("Bytes.BytesUtils.toUint32Iterable(Uint8Array)", () => {
   );
   assertStrictEquals(
     JSON.stringify([
-      ...BytesUtils.toUint32Iterable(
+      ...Bytes.toUint32Iterable(
         Uint8Array.of(1, 0, 3, 2).buffer,
         { byteOrder: "big-endian" },
       ),
@@ -60,7 +58,7 @@ Deno.test("Bytes.BytesUtils.toUint32Iterable(Uint8Array)", () => {
   );
   assertStrictEquals(
     JSON.stringify([
-      ...BytesUtils.toUint32Iterable(
+      ...Bytes.toUint32Iterable(
         Uint8Array.of(1, 0, 3, 2, 5, 4, 7, 6).buffer,
         { byteOrder: "big-endian" },
       ),
@@ -70,7 +68,7 @@ Deno.test("Bytes.BytesUtils.toUint32Iterable(Uint8Array)", () => {
 
   assertStrictEquals(
     JSON.stringify([
-      ...BytesUtils.toUint32Iterable(
+      ...Bytes.toUint32Iterable(
         Uint8Array.of().buffer,
         { byteOrder: "little-endian" },
       ),
@@ -79,7 +77,7 @@ Deno.test("Bytes.BytesUtils.toUint32Iterable(Uint8Array)", () => {
   );
   assertStrictEquals(
     JSON.stringify([
-      ...BytesUtils.toUint32Iterable(
+      ...Bytes.toUint32Iterable(
         Uint8Array.of(1, 0, 3, 2).buffer,
         { byteOrder: "little-endian" },
       ),
@@ -88,7 +86,7 @@ Deno.test("Bytes.BytesUtils.toUint32Iterable(Uint8Array)", () => {
   );
   assertStrictEquals(
     JSON.stringify([
-      ...BytesUtils.toUint32Iterable(
+      ...Bytes.toUint32Iterable(
         Uint8Array.of(1, 0, 3, 2, 5, 4, 7, 6).buffer,
         { byteOrder: "little-endian" },
       ),
@@ -98,14 +96,14 @@ Deno.test("Bytes.BytesUtils.toUint32Iterable(Uint8Array)", () => {
 
   assertStrictEquals(
     JSON.stringify([
-      ...BytesUtils.toUint32Iterable(Uint8Array.of().buffer),
+      ...Bytes.toUint32Iterable(Uint8Array.of().buffer),
     ]),
     "[]",
   );
   if (ByteOrder.nativeOrder === "big-endian") {
     assertStrictEquals(
       JSON.stringify([
-        ...BytesUtils.toUint32Iterable(
+        ...Bytes.toUint32Iterable(
           Uint8Array.of(1, 0, 3, 2).buffer,
         ),
       ]),
@@ -113,7 +111,7 @@ Deno.test("Bytes.BytesUtils.toUint32Iterable(Uint8Array)", () => {
     );
     assertStrictEquals(
       JSON.stringify([
-        ...BytesUtils.toUint32Iterable(
+        ...Bytes.toUint32Iterable(
           Uint8Array.of(1, 0, 3, 2, 5, 4, 7, 6).buffer,
         ),
       ]),
@@ -122,7 +120,7 @@ Deno.test("Bytes.BytesUtils.toUint32Iterable(Uint8Array)", () => {
   } else {
     assertStrictEquals(
       JSON.stringify([
-        ...BytesUtils.toUint32Iterable(
+        ...Bytes.toUint32Iterable(
           Uint8Array.of(1, 0, 3, 2).buffer,
         ),
       ]),
@@ -130,7 +128,7 @@ Deno.test("Bytes.BytesUtils.toUint32Iterable(Uint8Array)", () => {
     );
     assertStrictEquals(
       JSON.stringify([
-        ...BytesUtils.toUint32Iterable(
+        ...Bytes.toUint32Iterable(
           Uint8Array.of(1, 0, 3, 2, 5, 4, 7, 6).buffer,
         ),
       ]),

@@ -7,7 +7,7 @@ import {
   type safeint,
   type uint16,
   type uint32,
-  // type uint8,
+  type uint8,
 } from "../../_typedef/mod.ts";
 
 // Uint8Arrayにすれば良いだけなので不要
@@ -15,6 +15,11 @@ import {
 //   Type.assertArrayBuffer(value, "value");
 //   return (new Uint8Array(value))[Symbol.iterator]() as Iterable<uint8>;
 // }
+
+export function toArray(value: ArrayBuffer): Array<uint8> {
+  Type.assertArrayBuffer(value, "value");
+  return [...new Uint8Array(value)] as Array<uint8>;
+}
 
 type _Uint8xArrayCtor =
   | Uint16ArrayConstructor
@@ -90,24 +95,3 @@ export function toBigUint64Iterable(
     return v.getBigUint64(o, e);
   }, options?.byteOrder);
 }
-
-/*XXX
-fromInt8Iterable
-fromAsyncInt8Iterable
-toInt8Iterable
-fromInt16Iterable
-fromAsyncInt16Iterable
-toInt16Iterable
-fromInt32Iterable
-fromAsyncInt32Iterable
-toInt32Iterable
-fromBigInt64Iterable
-fromAsyncBigInt64Iterable
-toBigInt64Iterable
-fromFloat32Iterable
-fromAsyncFloat32Iterable
-toFloat32Iterable
-fromFloat64Iterable
-fromAsyncFloat64Iterable
-toFloat64Iterable
-*/
