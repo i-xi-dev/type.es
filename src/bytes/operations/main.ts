@@ -1,14 +1,18 @@
-import * as ByteOrder from "../../basics/byte_order/mod.ts";
 import * as Type from "../../type/mod.ts";
 import {
   type biguint64,
   type byteorder,
   type int,
+  type radix,
   type safeint,
   type uint16,
   type uint32,
   type uint8,
 } from "../../_typedef/mod.ts";
+import { ByteOrder, Radix, String as ExString } from "../../basics/mod.ts";
+import { SafeInt } from "../../numerics/mod.ts";
+
+const { EMPTY } = ExString;
 
 // Uint8Arrayにすれば良いだけなので不要
 // export function toUint8Iterable(value: ArrayBuffer): Iterable<uint8> {
@@ -19,6 +23,55 @@ import {
 export function toArray(value: ArrayBuffer): Array<uint8> {
   Type.assertArrayBuffer(value, "value");
   return [...new Uint8Array(value)] as Array<uint8>;
+}
+
+const _ByteStringLength = {
+  [Radix.HEXADECIMAL]: 2,
+  [Radix.BINARY]: 8,
+  [Radix.DECIMAL]: 3,
+  [Radix.OCTAL]: 3,
+};
+
+export type ToStringIterableOptions = {
+  radix?: radix;
+  lowerCase?: boolean;
+  //XXX prefix,suffix,...
+};
+
+export function toStringIterable(
+  value: ArrayBuffer,
+  options?: ToStringIterableOptions,
+): Iterable<string> {
+  Type.assertArrayBuffer(value, "value");
+
+  const radix = options?.radix ?? Radix.HEXADECIMAL;
+  const resolvedOptions = {
+    radix,
+    lowerCase: options?.lowerCase === true,
+    minIntegerDigits: _ByteStringLength[radix],
+  };
+
+  return (function* (bytes: Uint8Array<ArrayBuffer>) {
+    for (const byte of bytes) {
+      yield SafeInt.toString(byte, resolvedOptions);
+    }
+  })(new Uint8Array(value));
+}
+
+export type ToStringOptions = {
+  radix?: radix;
+  lowerCase?: boolean;
+  //XXX prefix,suffix,...
+  separator?: string;
+};
+
+export function toString(
+  value: ArrayBuffer,
+  options?: ToStringOptions,
+): string {
+  const strings = [...toStringIterable(value, options)];
+  const separator = options?.separator ?? EMPTY;
+  return strings.join(separator);
 }
 
 type _Uint8xArrayCtor =

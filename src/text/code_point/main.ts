@@ -1,6 +1,6 @@
-import * as Radix from "../../basics/radix/mod.ts";
 import * as Type from "../../type/mod.ts";
 import { type codeplane, type codepoint } from "../../_typedef/mod.ts";
+import { Radix } from "../../basics/mod.ts";
 import { SafeInt } from "../../numerics/mod.ts";
 
 const _toStringOptions: SafeInt.ToStringOptions = {

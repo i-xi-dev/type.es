@@ -1,5 +1,5 @@
-import * as Radix from "../basics/radix/mod.ts";
 import { isString } from "./string.ts";
+import { Radix } from "../basics/mod.ts";
 import { type radix } from "../_typedef/mod.ts";
 
 export function isIntegerString(

@@ -1,6 +1,5 @@
 import * as ExBigInt from "../bigint/mod.ts";
 import * as ExNumber from "../number/mod.ts";
-import * as Radix from "../../basics/radix/mod.ts";
 import * as RoundingMode from "../rounding_mode/mod.ts";
 import * as Type from "../../type/mod.ts";
 import {
@@ -9,6 +8,7 @@ import {
   type roundingmode,
   type safeint,
 } from "../../_typedef/mod.ts";
+import { Radix } from "../../basics/mod.ts";
 
 export function clampToRange(
   value: safeint,
