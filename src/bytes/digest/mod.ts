@@ -1,4 +1,5 @@
 export * from "./main.ts";
+export * from "./md5.ts";
 export * from "./sha1.ts";
 export * from "./sha256.ts";
 export * from "./sha384.ts";
