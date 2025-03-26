@@ -10,6 +10,7 @@ import {
   type uint8,
 } from "../../_typedef/mod.ts";
 import { ByteOrder, Radix, String as ExString } from "../../basics/mod.ts";
+import { BytesSize } from "../size/mod.ts";
 import { SafeInt } from "../../numerics/mod.ts";
 
 const { EMPTY } = ExString;
@@ -147,4 +148,9 @@ export function toBigUint64Iterable(
   return _toUint8xIterable<biguint64>(value, BigUint64Array, (v, o, e) => {
     return v.getBigUint64(o, e);
   }, options?.byteOrder);
+}
+
+export function sizeOf(value: ArrayBuffer): BytesSize {
+  Type.assertArrayBuffer(value, "value");
+  return new BytesSize(value.byteLength);
 }

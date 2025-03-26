@@ -20,13 +20,27 @@ const _BYTES: Record<BytesUnit, safeint> = {
 /**
  * @example
  * ```javascript
+ * const size = new BytesSize(2_000);
+ * const unit = BytesUnit.KB;
+ * const kb = size.to(unit);
+ * // kb
+ * //   → 2
+ *
+ * const format = new Intl.NumberFormat("en", { style: "unit", unit });
+ * const kbStr = format.format(kb);
+ * // kbStr
+ * //   → "2 kB"
+ * ```
+ *
+ * @example
+ * ```javascript
  * const size = new BytesSize(2_048);
  * const unit = BytesUnit.KIB;
  * const kib = size.to(unit);
  * // kib
  * //   → 2
  *
- * const format = new Intl.NumberFormat("en", { style: "unit", unit });
+ * const format = new Intl.NumberFormat("en", { style: "unit", unit: "kilobyte" });// KiB not supported in Intl.NumberFormat
  * const kibStr = format.format(kib);
  * // kibStr
  * //   → "2 kB"
