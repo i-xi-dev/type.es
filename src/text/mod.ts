@@ -3,6 +3,7 @@ export * as CodePoint from "./code_point/mod.ts";
 export * as CodePointRange from "./code_point_range/mod.ts";
 export * from "./code_point_range_set/mod.ts";
 export * from "./encoding/mod.ts";
+export * from "./main.ts";
 export * as Rune from "./rune/mod.ts";
 export * from "./rune_expression/mod.ts";
 export * from "./unicode_block/mod.ts";
