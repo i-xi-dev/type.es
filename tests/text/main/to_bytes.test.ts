@@ -17,4 +17,16 @@ Deno.test("Text.toBytes()", () => {
     TypeError,
     "`text` must be a `string`.",
   );
+
+  assertStrictEquals(str(Text.toBytes("\u{2000B}")), "[240,160,128,139]");
+  assertStrictEquals(
+    str(Text.toBytes("\u{d840}\u{dc0b}")),
+    "[240,160,128,139]",
+  );
+
+  // lone surrogate * 2
+  assertStrictEquals(
+    str(Text.toBytes("\u{dc0b}\u{d840}")),
+    "[239,191,189,239,191,189]",
+  );
 });

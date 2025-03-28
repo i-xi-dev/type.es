@@ -7,23 +7,10 @@ import {
 } from "../_typedef/mod.ts";
 import { EMPTY as EMPTY_STRING } from "../_const/string.ts";
 import { Rune } from "./mod.ts";
-import { type safeint } from "../_typedef/mod.ts";
 
 export type AllowMalformedOptions = {
   allowMalformed?: boolean;
 };
-
-export function runeCountOf(
-  value: usvstring,
-  options?: AllowMalformedOptions,
-): safeint {
-  if (options?.allowMalformed === true) {
-    Type.assertString(value, "value");
-  } else {
-    Type.assertUSVString(value, "value");
-  }
-  return [...value].length;
-}
 
 //XXX fromSubstrings
 //XXX fromSubstringsAsync

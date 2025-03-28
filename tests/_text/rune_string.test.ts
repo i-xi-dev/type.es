@@ -3,49 +3,6 @@ import { xText } from "../../mod.ts";
 
 const { RuneString } = xText;
 
-Deno.test("RuneString.runeCountOf()", () => {
-  assertStrictEquals(RuneString.runeCountOf(""), 0);
-  assertStrictEquals(RuneString.runeCountOf("012"), 3);
-  assertStrictEquals(RuneString.runeCountOf("あい"), 2);
-  assertStrictEquals(RuneString.runeCountOf("\u{2000B}"), 1);
-
-  const e1 = "`value` must be a `USVString`.";
-  assertThrows(
-    () => {
-      RuneString.runeCountOf(undefined as unknown as string);
-    },
-    TypeError,
-    e1,
-  );
-  assertThrows(
-    () => {
-      RuneString.runeCountOf("\u{dc0b}\u{d840}");
-    },
-    TypeError,
-    e1,
-  );
-});
-
-Deno.test("RuneString.runeCountOf() - allowMalformed", () => {
-  const op = { allowMalformed: true } as const;
-
-  assertStrictEquals(RuneString.runeCountOf("", op), 0);
-  assertStrictEquals(RuneString.runeCountOf("012", op), 3);
-  assertStrictEquals(RuneString.runeCountOf("あい", op), 2);
-  assertStrictEquals(RuneString.runeCountOf("\u{2000B}", op), 1);
-
-  const e1 = "`value` must be a `string`.";
-  assertThrows(
-    () => {
-      RuneString.runeCountOf(undefined as unknown as string, op);
-    },
-    TypeError,
-    e1,
-  );
-
-  assertStrictEquals(RuneString.runeCountOf("\u{dc0b}\u{d840}", op), 2);
-});
-
 function _iToS(iterable: Iterable<string | number>): string {
   return JSON.stringify([...iterable]);
 }
