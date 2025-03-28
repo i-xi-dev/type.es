@@ -1,38 +1,38 @@
 import { assertStrictEquals, assertThrows } from "@std/assert";
 import { ByteOrder, Bytes } from "../../../mod.ts";
 
-Deno.test("Bytes.toUint32Iterable()", () => {
+Deno.test("Bytes.toUint32s()", () => {
   assertThrows(
     () => {
-      Bytes.toUint32Iterable(0 as unknown as ArrayBuffer);
+      Bytes.toUint32s(0 as unknown as ArrayBuffer);
     },
     TypeError,
     "`value` must be an `ArrayBuffer`.",
   );
   assertThrows(
     () => {
-      Bytes.toUint32Iterable(1 as unknown as ArrayBuffer);
+      Bytes.toUint32s(1 as unknown as ArrayBuffer);
     },
     TypeError,
     "`value` must be an `ArrayBuffer`.",
   );
   assertThrows(
     () => {
-      Bytes.toUint32Iterable(Uint8Array.of(1).buffer);
+      Bytes.toUint32s(Uint8Array.of(1).buffer);
     },
     RangeError,
     "The byte length of `value` must be divisible by 4.",
   );
   assertThrows(
     () => {
-      Bytes.toUint32Iterable(Uint8Array.of(1, 2).buffer);
+      Bytes.toUint32s(Uint8Array.of(1, 2).buffer);
     },
     RangeError,
     "The byte length of `value` must be divisible by 4.",
   );
   assertThrows(
     () => {
-      Bytes.toUint32Iterable(Uint8Array.of(1, 2, 3).buffer);
+      Bytes.toUint32s(Uint8Array.of(1, 2, 3).buffer);
     },
     RangeError,
     "The byte length of `value` must be divisible by 4.",
@@ -40,7 +40,7 @@ Deno.test("Bytes.toUint32Iterable()", () => {
 
   assertStrictEquals(
     JSON.stringify([
-      ...Bytes.toUint32Iterable(
+      ...Bytes.toUint32s(
         Uint8Array.of().buffer,
         { byteOrder: "big-endian" },
       ),
@@ -49,7 +49,7 @@ Deno.test("Bytes.toUint32Iterable()", () => {
   );
   assertStrictEquals(
     JSON.stringify([
-      ...Bytes.toUint32Iterable(
+      ...Bytes.toUint32s(
         Uint8Array.of(1, 0, 3, 2).buffer,
         { byteOrder: "big-endian" },
       ),
@@ -58,7 +58,7 @@ Deno.test("Bytes.toUint32Iterable()", () => {
   );
   assertStrictEquals(
     JSON.stringify([
-      ...Bytes.toUint32Iterable(
+      ...Bytes.toUint32s(
         Uint8Array.of(1, 0, 3, 2, 5, 4, 7, 6).buffer,
         { byteOrder: "big-endian" },
       ),
@@ -68,7 +68,7 @@ Deno.test("Bytes.toUint32Iterable()", () => {
 
   assertStrictEquals(
     JSON.stringify([
-      ...Bytes.toUint32Iterable(
+      ...Bytes.toUint32s(
         Uint8Array.of().buffer,
         { byteOrder: "little-endian" },
       ),
@@ -77,7 +77,7 @@ Deno.test("Bytes.toUint32Iterable()", () => {
   );
   assertStrictEquals(
     JSON.stringify([
-      ...Bytes.toUint32Iterable(
+      ...Bytes.toUint32s(
         Uint8Array.of(1, 0, 3, 2).buffer,
         { byteOrder: "little-endian" },
       ),
@@ -86,7 +86,7 @@ Deno.test("Bytes.toUint32Iterable()", () => {
   );
   assertStrictEquals(
     JSON.stringify([
-      ...Bytes.toUint32Iterable(
+      ...Bytes.toUint32s(
         Uint8Array.of(1, 0, 3, 2, 5, 4, 7, 6).buffer,
         { byteOrder: "little-endian" },
       ),
@@ -96,14 +96,14 @@ Deno.test("Bytes.toUint32Iterable()", () => {
 
   assertStrictEquals(
     JSON.stringify([
-      ...Bytes.toUint32Iterable(Uint8Array.of().buffer),
+      ...Bytes.toUint32s(Uint8Array.of().buffer),
     ]),
     "[]",
   );
   if (ByteOrder.nativeOrder === "big-endian") {
     assertStrictEquals(
       JSON.stringify([
-        ...Bytes.toUint32Iterable(
+        ...Bytes.toUint32s(
           Uint8Array.of(1, 0, 3, 2).buffer,
         ),
       ]),
@@ -111,7 +111,7 @@ Deno.test("Bytes.toUint32Iterable()", () => {
     );
     assertStrictEquals(
       JSON.stringify([
-        ...Bytes.toUint32Iterable(
+        ...Bytes.toUint32s(
           Uint8Array.of(1, 0, 3, 2, 5, 4, 7, 6).buffer,
         ),
       ]),
@@ -120,7 +120,7 @@ Deno.test("Bytes.toUint32Iterable()", () => {
   } else {
     assertStrictEquals(
       JSON.stringify([
-        ...Bytes.toUint32Iterable(
+        ...Bytes.toUint32s(
           Uint8Array.of(1, 0, 3, 2).buffer,
         ),
       ]),
@@ -128,7 +128,7 @@ Deno.test("Bytes.toUint32Iterable()", () => {
     );
     assertStrictEquals(
       JSON.stringify([
-        ...Bytes.toUint32Iterable(
+        ...Bytes.toUint32s(
           Uint8Array.of(1, 0, 3, 2, 5, 4, 7, 6).buffer,
         ),
       ]),

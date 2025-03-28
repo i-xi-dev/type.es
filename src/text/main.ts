@@ -1,11 +1,20 @@
 import * as Type from "../type/mod.ts";
 import { _utf8Decode, _utf8Encode } from "./_utils.ts";
-import { type safeint } from "../_typedef/mod.ts";
+import { type rune, type safeint } from "../_typedef/mod.ts";
 
 // allow malformed-string
 export function runeCountOf(value: string): safeint {
   Type.assertString(value, "value");
   return [...value].length;
+}
+
+//XXX fromRunes
+//XXX fromRunesAsync
+
+// allow malformed-string
+export function toRunes(value: string): Iterable<rune> {
+  Type.assertString(value, "value");
+  return value[Symbol.iterator]();
 }
 
 // UTF-8 (without BOM)
@@ -23,3 +32,7 @@ export function toBytes(text: string): Uint8Array<ArrayBuffer> {
 //TODO fromBytesStream(fromBytesIterable/Async)
 //TODO toRunes
 //TODO toGraphemes
+
+//XXX TextBuilder?
+//      loadFromStringIterable()
+//      loadFromStringAsyncIterable()

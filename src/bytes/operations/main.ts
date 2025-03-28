@@ -16,7 +16,7 @@ import { SafeInt } from "../../numerics/mod.ts";
 const { EMPTY } = ExString;
 
 // Uint8Arrayにすれば良いだけなので不要
-// export function toUint8Iterable(value: ArrayBuffer): Iterable<uint8> {
+// export function toUint8s(value: ArrayBuffer): Iterable<uint8> {
 //   Type.assertArrayBuffer(value, "value");
 //   return (new Uint8Array(value))[Symbol.iterator]() as Iterable<uint8>;
 // }
@@ -39,6 +39,7 @@ export type ToStringIterableOptions = {
   //XXX prefix,suffix,...
 };
 
+//TODO 他と命名則が違う (toFoos はあるが toFooIterable は無い)
 export function toStringIterable(
   value: ArrayBuffer,
   options?: ToStringIterableOptions,
@@ -123,7 +124,7 @@ export type ToUint8xIterableOptions = {
   byteOrder?: byteorder;
 };
 
-export function toUint16Iterable(
+export function toUint16s(
   value: ArrayBuffer,
   options?: ToUint8xIterableOptions,
 ): Iterable<uint16> {
@@ -132,7 +133,7 @@ export function toUint16Iterable(
   }, options?.byteOrder);
 }
 
-export function toUint32Iterable(
+export function toUint32s(
   value: ArrayBuffer,
   options?: ToUint8xIterableOptions,
 ): Iterable<uint32> {
@@ -141,7 +142,7 @@ export function toUint32Iterable(
   }, options?.byteOrder);
 }
 
-export function toBigUint64Iterable(
+export function toBigUint64s(
   value: ArrayBuffer,
   options?: ToUint8xIterableOptions,
 ): Iterable<biguint64> {

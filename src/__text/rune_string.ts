@@ -12,29 +12,6 @@ export type AllowMalformedOptions = {
   allowMalformed?: boolean;
 };
 
-//XXX fromSubstrings
-//XXX fromSubstringsAsync
-
-//XXX fromRunes
-//XXX fromRunesAsync
-
-export function toRunes(
-  value: usvstring,
-  options?: AllowMalformedOptions,
-): IterableIterator<rune, void, void> {
-  if (options?.allowMalformed === true) {
-    Type.assertString(value, "value");
-  } else {
-    Type.assertUSVString(value, "value");
-  }
-
-  return (function* (runes) {
-    for (const rune of runes) {
-      yield rune;
-    }
-  })(value);
-}
-
 export function fromCodePoints(
   value: Iterable<codepoint>,
   options?: AllowMalformedOptions,
