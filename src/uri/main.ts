@@ -1,5 +1,4 @@
 import * as Type from "../type/mod.ts";
-import * as UriScheme from "./scheme.ts";
 import { fromBytes as utf8Decode } from "../text/mod.ts";
 import { percentDecode } from "../bytes/mod.ts";
 import { SafeInt } from "../numerics/mod.ts";
@@ -8,6 +7,46 @@ import { type uint16 } from "../_typedef/mod.ts";
 
 const { EMPTY } = ExString;
 
+export namespace Uri {
+  export const Scheme = {
+    BLOB: "blob",
+    FILE: "file",
+    FTP: "ftp",
+    HTTP: "http",
+    HTTPS: "https",
+    WS: "ws",
+    WSS: "wss",
+  } as const;
+
+  export type QueryParameter = [name: string, value: string];
+
+  export function fromString(value: string): Uri {
+    Type.assertNonEmptyString(value, "value");
+
+    const parsed = URL.parse(value);
+    if (parsed) {
+      const scheme = parsed.protocol.replace(/:$/, EMPTY);
+      const portString = parsed.port;
+      //const pathString = parsed.pathname;
+      const rawQuery = parsed.search.replace(/^\?/, EMPTY);
+      const rawFragment = parsed.hash.replace(/^#/, EMPTY);
+
+      return new _Uri({
+        scheme,
+        userName: "TODO", // parsed.username,
+        password: "TODO", // parsed.password,
+        host: "TODO", // parsed.hostname,
+        port: _portOf(scheme, portString),
+        path: ["TODO"],
+        query: [...new URLSearchParams(rawQuery).entries()],
+        fragment: utf8Decode(percentDecode(rawFragment)),
+      });
+    }
+
+    throw new TypeError("`value` must be text representation of URL.");
+  }
+}
+
 interface Uri {
   scheme: string;
   userName: string;
@@ -15,11 +54,9 @@ interface Uri {
   host: string;
   port: uint16 | null;
   path: Array<string>;
-  query: Array<_QueryParameter>;
+  query: Array<Uri.QueryParameter>;
   fragment: string;
 }
-
-type _QueryParameter = [name: string, value: string];
 
 class _Uri implements Uri {
   readonly #scheme: string;
@@ -28,7 +65,7 @@ class _Uri implements Uri {
   readonly #host: string;
   readonly #port: uint16 | null;
   readonly #path: Array<string>;
-  readonly #query: Array<_QueryParameter>;
+  readonly #query: Array<Uri.QueryParameter>;
   readonly #fragment: string;
 
   constructor(record: Uri) {
@@ -66,7 +103,7 @@ class _Uri implements Uri {
     return globalThis.structuredClone(this.#path);
   }
 
-  get query(): Array<_QueryParameter> {
+  get query(): Array<Uri.QueryParameter> {
     return globalThis.structuredClone(this.#query);
   }
 
@@ -81,11 +118,11 @@ class _Uri implements Uri {
  * The default port numbers.
  */
 const _DefaultPortMap: Record<string, uint16> = {
-  [UriScheme.FTP]: 21,
-  [UriScheme.HTTP]: 80,
-  [UriScheme.HTTPS]: 443,
-  [UriScheme.WS]: 80,
-  [UriScheme.WSS]: 443,
+  [Uri.Scheme.FTP]: 21,
+  [Uri.Scheme.HTTP]: 80,
+  [Uri.Scheme.HTTPS]: 443,
+  [Uri.Scheme.WS]: 80,
+  [Uri.Scheme.WSS]: 443,
 } as const;
 
 function _portOf(scheme: string, portString: string): uint16 | null {
@@ -99,34 +136,4 @@ function _portOf(scheme: string, portString: string): uint16 | null {
   }
 
   return null;
-}
-
-export namespace Uri {
-  export const Scheme = UriScheme;
-
-  export function fromString(value: string): Uri {
-    Type.assertNonEmptyString(value, "value");
-
-    const parsed = URL.parse(value);
-    if (parsed) {
-      const scheme = parsed.protocol.replace(/:$/, EMPTY);
-      const portString = parsed.port;
-      //const pathString = parsed.pathname;
-      const rawQuery = parsed.search.replace(/^\?/, EMPTY);
-      const rawFragment = parsed.hash.replace(/^#/, EMPTY);
-
-      return new _Uri({
-        scheme,
-        userName: "TODO", // parsed.username,
-        password: "TODO", // parsed.password,
-        host: "TODO", // parsed.hostname,
-        port: _portOf(scheme, portString),
-        path: ["TODO"],
-        query: [...new URLSearchParams(rawQuery).entries()],
-        fragment: utf8Decode(percentDecode(rawFragment)),
-      });
-    }
-
-    throw new TypeError("`value` must be text representation of URL.");
-  }
 }
