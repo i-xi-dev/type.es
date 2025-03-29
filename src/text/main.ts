@@ -77,7 +77,7 @@ export function fromBytes(bytes: Uint8Array<ArrayBuffer>): string {
   return _utf8Decode(bytes); // throws TypeError if decoding-error
 }
 
-// UTF-8 (without BOM)
+// UTF-8 (without BOM) // BOMを付加しないが、textの先頭がU+FEFFだからと言って取り除きもしない
 // 注: allowMalformed:trueにした場合、lone surrogateは0xFFFDにされる
 export function toBytes(
   text: string,

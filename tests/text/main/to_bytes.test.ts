@@ -10,6 +10,16 @@ Deno.test("Text.toBytes()", () => {
     "[49,227,129,130,51,194,169]",
   );
 
+  assertStrictEquals(
+    str(Text.toBytes("1\uFEFFあ3\u{A9}")),
+    "[49,239,187,191,227,129,130,51,194,169]",
+  );
+
+  assertStrictEquals(
+    str(Text.toBytes("\uFEFF1あ3\u{A9}")),
+    "[239,187,191,49,227,129,130,51,194,169]",
+  );
+
   assertThrows(
     () => {
       Text.toBytes(null as unknown as string);

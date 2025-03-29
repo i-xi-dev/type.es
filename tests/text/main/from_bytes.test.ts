@@ -8,6 +8,16 @@ Deno.test("Text.fromBytes()", () => {
   const t1 = Text.fromBytes(Uint8Array.of(49, 227, 129, 130, 51, 194, 169));
   assertStrictEquals(t1, "1あ3\u{A9}");
 
+  const t1b = Text.fromBytes(
+    Uint8Array.of(0xEF, 0xBB, 0xBF, 49, 227, 129, 130, 51, 194, 169),
+  );
+  assertStrictEquals(t1b, "1あ3\u{A9}");
+
+  const t1x = Text.fromBytes(
+    Uint8Array.of(49, 0xEF, 0xBB, 0xBF, 227, 129, 130, 51, 194, 169),
+  );
+  assertStrictEquals(t1x, "1\uFEFFあ3\u{A9}");
+
   assertThrows(
     () => {
       Text.fromBytes([] as unknown as Uint8Array<ArrayBuffer>);
