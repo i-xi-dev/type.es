@@ -11,7 +11,7 @@ Deno.test("Text.fromBytes()", () => {
   const t1b = Text.fromBytes(
     Uint8Array.of(0xEF, 0xBB, 0xBF, 49, 227, 129, 130, 51, 194, 169),
   );
-  assertStrictEquals(t1b, "1あ3\u{A9}");
+  assertStrictEquals(t1b, "\uFEFF1あ3\u{A9}");
 
   const t1x = Text.fromBytes(
     Uint8Array.of(49, 0xEF, 0xBB, 0xBF, 227, 129, 130, 51, 194, 169),
@@ -43,4 +43,18 @@ Deno.test("Text.fromBytes()", () => {
     TypeError,
     "", // TextDecoderがスローする "The encoded data is not valid"
   );
+
+  const op = { removeBOM: true };
+
+  const bt1b = Text.fromBytes(
+    Uint8Array.of(0xEF, 0xBB, 0xBF, 49, 227, 129, 130, 51, 194, 169),
+    op,
+  );
+  assertStrictEquals(bt1b, "1あ3\u{A9}");
+
+  const bt1x = Text.fromBytes(
+    Uint8Array.of(49, 0xEF, 0xBB, 0xBF, 227, 129, 130, 51, 194, 169),
+    op,
+  );
+  assertStrictEquals(bt1x, "1\uFEFFあ3\u{A9}");
 });

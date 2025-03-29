@@ -70,15 +70,31 @@ export function toCodePoints(
   })(value);
 }
 
-// UTF-8 (without BOM)
+export type FromBytesOptions = {
+  removeBOM?: boolean;
+};
+
+// UTF-8
+// BOMはデフォルトでは取り除かない（取り除く場合はoptions.removeBOMを設定する）
 // lone surrogateはそもそもTextDecoderが受け付けないのでoptions.allowMalformedは必要ない
-export function fromBytes(bytes: Uint8Array<ArrayBuffer>): string {
+export function fromBytes(
+  bytes: Uint8Array<ArrayBuffer>,
+  options?: FromBytesOptions,
+): string {
   Type.assertUint8Array(bytes, "bytes");
+
+  if (
+    (options?.removeBOM === true) && (bytes[0] === 0xEF) &&
+    (bytes[1] === 0xBB) && (bytes[2] === 0xBF)
+  ) {
+    return _utf8Decode(bytes.subarray(3));
+  }
   return _utf8Decode(bytes); // throws TypeError if decoding-error
 }
 
-// UTF-8 (without BOM) // BOMを付加しないが、textの先頭がU+FEFFだからと言って取り除きもしない
-// 注: allowMalformed:trueにした場合、lone surrogateは0xFFFDにされる
+// UTF-8
+// BOMを付加しない（がtextの先頭がU+FEFFだからと言って取り除きもしない）
+// 注: allowMalformed:trueにした場合、lone surrogateはU+FFFDとしてエンコードされる（ので冪等性は失われる）
 export function toBytes(
   text: string,
   options?: Options,

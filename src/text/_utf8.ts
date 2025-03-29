@@ -4,7 +4,10 @@ export function _utf8Decode(value: Uint8Array<ArrayBuffer>): string {
   let decoder = _decoderRef?.deref();
 
   if (!decoder) {
-    decoder = new TextDecoder(undefined, { fatal: true });
+    decoder = new TextDecoder(undefined, {
+      fatal: true,
+      ignoreBOM: true,
+    });
     _decoderRef = new WeakRef(decoder);
   }
 
