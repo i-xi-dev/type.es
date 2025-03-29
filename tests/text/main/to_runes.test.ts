@@ -42,7 +42,7 @@ Deno.test("Text.toRunes()", () => {
     `["\u{29E3D}","\u304b","\u3099","\u585A","\u{E0101}"]`,
   );
 
-  const e1 = "`value` must be a `string`.";
+  const e1 = "`value` must be a `USVString`.";
   assertThrows(
     () => {
       Text.toRunes(undefined as unknown as string);
@@ -50,15 +50,18 @@ Deno.test("Text.toRunes()", () => {
     TypeError,
     e1,
   );
-  // assertThrows(
-  //   () => {
-  //     Text.toRunes("\u{dc0b}\u{d840}");
-  //   },
-  //   TypeError,
-  //   e1,
-  // );
+
+  assertThrows(
+    () => {
+      Text.toRunes("\u{dc0b}\u{d840}");
+    },
+    TypeError,
+    e1,
+  );
+
+  const op = { allowMalformed: true };
   assertStrictEquals(
-    str(Text.toRunes("\u{dc0b}\u{d840}")),
+    str(Text.toRunes("\u{dc0b}\u{d840}", op)),
     `["\\udc0b","\\ud840"]`,
   );
 });

@@ -15,7 +15,7 @@ Deno.test("Text.toBytes()", () => {
       Text.toBytes(null as unknown as string);
     },
     TypeError,
-    "`text` must be a `string`.",
+    "`text` must be a `USVString`.",
   );
 
   assertStrictEquals(str(Text.toBytes("\u{2000B}")), "[240,160,128,139]");
@@ -25,8 +25,16 @@ Deno.test("Text.toBytes()", () => {
   );
 
   // lone surrogate * 2
+  assertThrows(
+    () => {
+      Text.toBytes("\u{dc0b}\u{d840}");
+    },
+    TypeError,
+    "`text` must be a `USVString`.",
+  );
+  const op = { allowMalformed: true };
   assertStrictEquals(
-    str(Text.toBytes("\u{dc0b}\u{d840}")),
+    str(Text.toBytes("\u{dc0b}\u{d840}", op)),
     "[239,191,189,239,191,189]",
   );
 });

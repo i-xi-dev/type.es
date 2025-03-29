@@ -15,4 +15,22 @@ Deno.test("Text.fromBytes()", () => {
     TypeError,
     "`bytes` must be an `Uint8Array<ArrayBuffer>`.",
   );
+
+  // non-UTF-8 bytes
+  assertThrows(
+    () => {
+      Text.fromBytes(Uint8Array.of(239));
+    },
+    TypeError,
+    "", // TextDecoderがスローする "The encoded data is not valid"
+  );
+
+  // lone surrogate
+  assertThrows(
+    () => {
+      Text.fromBytes(Uint8Array.of(237, 160, 0));
+    },
+    TypeError,
+    "", // TextDecoderがスローする "The encoded data is not valid"
+  );
 });
