@@ -1,4 +1,4 @@
-import { assertStrictEquals, assertThrows } from "@std/assert";
+import { assertStrictEquals } from "@std/assert";
 import { Uri } from "../../mod.ts";
 
 Deno.test("Uri.prototype.scheme", () => {
