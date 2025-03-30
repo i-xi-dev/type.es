@@ -19,23 +19,21 @@ export namespace Uri {
     WSS: "wss",
   } as const;
 
-  export type Host = {
-    decode(): string;
-    toString(): string;
-    valueOf(): string;
-  };
+  // export type Host = {
+  //   isOpaque: boolean;
+  //   decode(): string;
+  //   toString(): string;
+  // };
 
-  export type Port = {
-    number: number;
-    toString(): string;
-    valueOf(): string;
-  };
+  // export type Port = {
+  //   number: number;
+  //   toString(): string;
+  // };
 
   export type Path = {
-    separator: string | null;
+    isOpaque: boolean;
     segments(): Array<string>;
     toString(): string;
-    valueOf(): string;
   };
 
   /**
@@ -46,13 +44,11 @@ export namespace Uri {
   export type Query = {
     parameters(): Array<QueryParameter>; // parse as "application/x-www-form-urlencoded"
     toString(): string;
-    valueOf(): string;
   };
 
   export type Fragment = {
     percentDecode(): string;
     toString(): string;
-    valueOf(): string;
   };
 
   export function fromString(value: string): Uri {
@@ -73,7 +69,7 @@ interface UriComponents {
   // password: string;
   host: string; // URL Standardではhostもnullと""で意味が違う
   port: uint16 | null;
-  path: Array<string>;
+  path: Uri.Path;
   query: Uri.Query | null;
   fragment: Uri.Fragment | null;
 }
@@ -93,6 +89,37 @@ export interface Uri extends UriComponents {
   // withFragment(fragment: string): Uri;
 }
 
+class _Path implements Uri.Path {
+  readonly #raw: string;
+  readonly #separator: string | null; // (今のところ?)これがnullである、すなわち、パスはopaque
+
+  constructor(rawPath: string, separator: string | null) {
+    this.#raw = rawPath;
+    this.#separator = separator;
+  }
+
+  get isOpaque(): boolean {
+    return (Type.isNonEmptyString(this.#separator) !== true);
+  }
+
+  segments(): Array<string> {
+    if (this.isOpaque === true) {
+      return [this.#raw];
+    }
+
+    const rawSegments =
+      (this.#raw.startsWith(this.#separator!)
+        ? this.#raw.substring(1)
+        : this.#raw).split(this.#separator!);
+    return rawSegments.map((segement) => utf8Decode(percentDecode(segement)));
+  }
+
+  // opaqueなパスで構文解析する場合など用
+  toString(): string {
+    return this.#raw;
+  }
+}
+
 class _Query implements Uri.Query {
   readonly #raw: string;
 
@@ -107,10 +134,6 @@ class _Query implements Uri.Query {
   // "application/x-www-form-urlencoded"以外で構文解析する場合など用
   toString(): string {
     return this.#raw;
-  }
-
-  valueOf(): string {
-    return this.toString();
   }
 }
 
@@ -129,10 +152,6 @@ class _Fragment implements Uri.Fragment {
   toString(): string {
     return this.#raw;
   }
-
-  valueOf(): string {
-    return this.toString();
-  }
 }
 
 class _UriObject implements Uri {
@@ -142,7 +161,7 @@ class _UriObject implements Uri {
   // readonly #password: string;
   readonly #host: string;
   readonly #port: uint16 | null;
-  readonly #path: Array<string>;
+  readonly #path: Uri.Path;
   readonly #query: Uri.Query | null;
   readonly #fragment: Uri.Fragment | null;
 
@@ -151,9 +170,9 @@ class _UriObject implements Uri {
     const scheme = url.protocol.replace(/:$/, EMPTY);
 
     this.#scheme = scheme;
-    this.#host = _decodeHost(scheme, url.hostname);
-    this.#port = _portOf(scheme, url.port);
-    this.#path = _pathOf(scheme, url.pathname); //TODO 区切り文字が何かを持ってるオブジェクトにする？
+    this.#host = _decodeHost(scheme, url.hostname); //TODO
+    this.#port = _portOf(scheme, url.port); //TODO
+    this.#path = _pathOf(scheme, url.pathname);
 
     const rawQuery = url.search.replace(/^\?/, EMPTY);
     if (Type.isNonEmptyString(rawQuery)) {
@@ -253,8 +272,8 @@ class _UriObject implements Uri {
   /**
    * Gets the path segments for this instance.
    */
-  get path(): Array<string> {
-    return globalThis.structuredClone(this.#path);
+  get path(): Uri.Path {
+    return this.#path;
   }
 
   /**
@@ -376,12 +395,10 @@ function _portOf(scheme: string, portString: string): uint16 | null {
   return null;
 }
 
-function _pathOf(scheme: string, rawPath: string): Array<string> {
+function _pathOf(scheme: string, rawPath: string): Uri.Path {
   if (_isSpecialScheme(scheme) !== true) {
-    return [rawPath]; // デコードすべき？（デコードするとspecialでないスキームで独自のセグメント分割がある場合に分割できなくなる
+    return new _Path(rawPath, null);
   }
 
-  const t = rawPath.replace(/^\//, EMPTY);
-  const segments = t.split("/");
-  return segments.map((segement) => utf8Decode(percentDecode(segement)));
+  return new _Path(rawPath, "/");
 }
