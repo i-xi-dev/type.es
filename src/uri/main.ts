@@ -19,41 +19,24 @@ export namespace Uri {
     WSS: "wss",
   } as const;
 
+  /**
+   * A query parameter represented as name-value pair.
+   */
   export type QueryParameter = [name: string, value: string];
 
-  export interface Object extends Uri {
-    toString(): string;
-  }
-
-  export function fromString(value: string): Uri.Object {
+  export function fromString(value: string): Uri {
     Type.assertNonEmptyString(value, "value");
 
     const parsed = URL.parse(value);
     if (parsed) {
-      const scheme = parsed.protocol.replace(/:$/, EMPTY);
-      const rawHost = parsed.hostname;
-      const portString = parsed.port;
-      //const pathString = parsed.pathname;
-      const rawQuery = parsed.search.replace(/^\?/, EMPTY);
-      const rawFragment = parsed.hash.replace(/^#/, EMPTY);
-
-      return new _UriObject({
-        scheme,
-        // userName: utf8Decode(percentDecode(parsed.username),
-        // password: utf8Decode(percentDecode(parsed.password),
-        host: _decodeHost(scheme, rawHost),
-        port: _portOf(scheme, portString),
-        path: ["TODO"],
-        query: [...new URLSearchParams(rawQuery).entries()],
-        fragment: utf8Decode(percentDecode(rawFragment)),
-      });
+      return new _UriObject(parsed);
     }
 
     throw new TypeError("`value` must be text representation of URL.");
   }
 }
 
-interface Uri {
+interface UriComponents {
   scheme: string;
   // userName: string;
   // password: string;
@@ -64,7 +47,22 @@ interface Uri {
   fragment: string;
 }
 
-class _UriObject implements Uri.Object {
+export interface Uri extends UriComponents {
+  // userInfo: ;
+  // authority: ;
+  // origin: ;
+  toString(): string;
+  // withoutUserInfo(): Uri;
+  // withPath(): Uri;
+  // hasQuery(): boolean;
+  // withQuery(query: Array<Uri.QueryParameter>): Uri;
+  // withoutQuery(): Uri;
+  // hasFragment(): boolean;
+  // withFragment(fragment: string): Uri;
+  // withoutFragment(): Uri;
+}
+
+class _UriObject implements Uri {
   readonly #scheme: string;
   // readonly #userName: string;
   // readonly #password: string;
@@ -74,15 +72,20 @@ class _UriObject implements Uri.Object {
   readonly #query: Array<Uri.QueryParameter>;
   readonly #fragment: string;
 
-  constructor(record: Uri) {
-    this.#scheme = record.scheme;
-    // this.#userName = record.userName;
-    // this.#password = record.password;
-    this.#host = record.host;
-    this.#port = record.port;
-    this.#path = record.path;
-    this.#query = record.query;
-    this.#fragment = record.fragment;
+  constructor(url: URL) {
+    const scheme = url.protocol.replace(/:$/, EMPTY);
+    const rawHost = url.hostname;
+    const portString = url.port;
+    //const pathString = url.pathname;
+    const rawQuery = url.search.replace(/^\?/, EMPTY);
+    const rawFragment = url.hash.replace(/^#/, EMPTY);
+
+    this.#scheme = scheme;
+    this.#host = _decodeHost(scheme, rawHost);
+    this.#port = _portOf(scheme, portString);
+    this.#path = ["TODO"];
+    this.#query = [...new URLSearchParams(rawQuery).entries()];
+    this.#fragment = utf8Decode(percentDecode(rawFragment));
   }
 
   /**
@@ -159,15 +162,46 @@ class _UriObject implements Uri.Object {
     return globalThis.structuredClone(this.#path);
   }
 
+  /**
+   * Gets the result of parsing the query for this instance in the `application/x-www-form-urlencoded` format.
+   *
+   * @example
+   * ```javascript
+   * const uri = Uri.fromString("http://example.com/foo?p1=%E5%80%A41&p2=123");
+   * const queryEntries = uri.query;
+   * // queryEntries
+   * //   → [ [ "p1", "値1" ], [ "p2", "123" ] ]
+   * ```
+   * @example
+   * ```javascript
+   * const uri = Uri.fromString("http://example.com/foo?textformat");
+   * const queryEntries = uri.query;
+   * // queryEntries
+   * //   → [ [ "textformat", "" ] ]
+   * ```
+   */
   get query(): Array<Uri.QueryParameter> {
     return globalThis.structuredClone(this.#query);
   }
 
+  /**
+   * Gets the fragment for this instance.
+   *
+   * @example
+   * ```javascript
+   * const uri = Uri.fromString("http://example.com/foo#%E7%B4%A0%E7%89%87");
+   * const percentDecodedFragment = uri.fragment;
+   * // percentDecodedFragment
+   * //   → "素片"
+   * ```
+   */
   get fragment(): string {
     return this.#fragment;
   }
 
-  //TODO toString()
+  //   toString(): string {
+  // TODO
+  //   }
 }
 
 /**
@@ -201,8 +235,10 @@ function _decodeHost(scheme: string, rawHost: string) {
   if (_isSpecialScheme(scheme) !== true) {
     return rawHost;
   }
+  if (Type.isNonEmptyString(rawHost) !== true) {
+    return rawHost;
+  }
 
-  // rawHostはURL#hostnameの前提なので_isSpecialSchemeであれば空文字列はありえない
   // IPv4やIPv6は"xn--"が出てこないので区別せずに処理して問題ない
   const parts = rawHost.split(".");
 
