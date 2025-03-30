@@ -19,10 +19,35 @@ export namespace Uri {
     WSS: "wss",
   } as const;
 
+  export type Host = {
+    decode(): string;
+    toString(): string;
+    valueOf(): string;
+  };
+
+  export type Port = {
+    number: number;
+    toString(): string;
+    valueOf(): string;
+  };
+
+  export type Path = {
+    separator: string | null;
+    segments(): Array<string>;
+    toString(): string;
+    valueOf(): string;
+  };
+
   /**
    * A query parameter represented as name-value pair.
    */
   export type QueryParameter = [name: string, value: string];
+
+  export type Query = {
+    parameters(): Array<QueryParameter>; // parse as "application/x-www-form-urlencoded"
+    toString(): string;
+    valueOf(): string;
+  };
 
   export type Fragment = {
     percentDecode(): string;
@@ -46,10 +71,10 @@ interface UriComponents {
   scheme: string;
   // userName: string;
   // password: string;
-  host: string;
+  host: string; // URL Standardではhostもnullと""で意味が違う
   port: uint16 | null;
   path: Array<string>;
-  query: Array<Uri.QueryParameter>;
+  query: Uri.Query | null;
   fragment: Uri.Fragment | null;
 }
 
@@ -68,7 +93,27 @@ export interface Uri extends UriComponents {
   // withFragment(fragment: string): Uri;
 }
 
-// ":~:text=%3D"のようなフラグメントを更に構文解析する必要がある場合用
+class _Query implements Uri.Query {
+  readonly #raw: string;
+
+  constructor(rawQuery: string) {
+    this.#raw = rawQuery;
+  }
+
+  parameters(): Array<Uri.QueryParameter> {
+    return [...new URLSearchParams(this.#raw).entries()];
+  }
+
+  // "application/x-www-form-urlencoded"以外で構文解析する場合など用
+  toString(): string {
+    return this.#raw;
+  }
+
+  valueOf(): string {
+    return this.toString();
+  }
+}
+
 class _Fragment implements Uri.Fragment {
   readonly #raw: string;
 
@@ -80,6 +125,7 @@ class _Fragment implements Uri.Fragment {
     return utf8Decode(percentDecode(this.#raw));
   }
 
+  // フラグメントを更に構文解析する場合など用（ex. ":~:text=%3D"）
   toString(): string {
     return this.#raw;
   }
@@ -97,31 +143,37 @@ class _UriObject implements Uri {
   readonly #host: string;
   readonly #port: uint16 | null;
   readonly #path: Array<string>;
-  readonly #query: Array<Uri.QueryParameter>;
+  readonly #query: Uri.Query | null;
   readonly #fragment: Uri.Fragment | null;
 
   constructor(url: URL) {
     this.#url = url;
     const scheme = url.protocol.replace(/:$/, EMPTY);
-    const rawQuery = url.search.replace(/^\?/, EMPTY);
-    const rawFragment = url.hash.replace(/^#/, EMPTY);
-
-    if (Type.isNonEmptyString(rawQuery) !== true) {
-      // searchが"?"のみの場合、getterでは""になるのに、実際は"?"だけ残るので""にする
-      // "?"だけで意味がある場合があるかもしれないが、searchParamsでは無いもの扱いになるのでよしとする
-      this.#url.search = EMPTY;
-    }
 
     this.#scheme = scheme;
     this.#host = _decodeHost(scheme, url.hostname);
     this.#port = _portOf(scheme, url.port);
     this.#path = _pathOf(scheme, url.pathname); //TODO 区切り文字が何かを持ってるオブジェクトにする？
-    this.#query = [...new URLSearchParams(rawQuery).entries()]; //TODO これも"?"だけの場合がある
 
+    const rawQuery = url.search.replace(/^\?/, EMPTY);
+    if (Type.isNonEmptyString(rawQuery)) {
+      this.#query = new _Query(rawQuery);
+    } else {
+      const urlWithoutFragment = new URL(url);
+      urlWithoutFragment.hash = EMPTY;
+      if (urlWithoutFragment.toString().endsWith("?")) {
+        // searchは""でクエリがnullではない場合（クエリが""(フラグメントを除いたURL末尾"?")の場合）
+        this.#query = new _Query(rawQuery);
+      } else {
+        this.#query = null;
+      }
+    }
+
+    const rawFragment = url.hash.replace(/^#/, EMPTY);
     if (Type.isNonEmptyString(rawFragment)) {
       this.#fragment = new _Fragment(rawFragment);
     } else if (url.toString().endsWith("#")) {
-      // hashは""でもURL末尾"#"の場合
+      // hashは""でフラグメントがnullではない場合（フラグメントが""(URL末尾が"#")の場合）
       this.#fragment = new _Fragment(EMPTY);
     } else {
       this.#fragment = null;
@@ -223,8 +275,8 @@ class _UriObject implements Uri {
    * //   → [ [ "textformat", "" ] ]
    * ```
    */
-  get query(): Array<Uri.QueryParameter> {
-    return globalThis.structuredClone(this.#query);
+  get query(): Uri.Query | null {
+    return this.#query;
   }
 
   /**
@@ -233,9 +285,11 @@ class _UriObject implements Uri {
    * @example
    * ```javascript
    * const uri = Uri.fromString("http://example.com/foo#%E7%B4%A0%E7%89%87");
-   * const percentDecodedFragment = uri.fragment;
-   * // percentDecodedFragment
+   * const { fragment } = uri;
+   * // fragment.percentDecode()
    * //   → "素片"
+   * // fragment.toString()
+   * //   → "%E7%B4%A0%E7%89%87"
    * ```
    */
   get fragment(): Uri.Fragment | null {
