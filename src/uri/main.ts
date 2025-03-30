@@ -1,55 +1,22 @@
 import * as Type from "../type/mod.ts";
 import { _decode } from "./_punycode.ts";
-import { fromBytes as utf8Decode } from "../text/mod.ts";
-import { percentDecode } from "../bytes/mod.ts";
-import { SafeInt } from "../numerics/mod.ts";
 import { String as ExString } from "../basics/mod.ts";
-import { type uint16 } from "../_typedef/mod.ts";
+import { UriFragment } from "./fragment/mod.ts";
+import { UriPath } from "./path/mod.ts";
+import { UriPort } from "./port/mod.ts";
+import { UriQuery, type UriQueryParameter } from "./query/mod.ts";
+import { UriScheme } from "./scheme/mod.ts";
 
 const { EMPTY } = ExString;
 
 export namespace Uri {
-  export const Scheme = {
-    BLOB: "blob",
-    FILE: "file",
-    FTP: "ftp",
-    HTTP: "http",
-    HTTPS: "https",
-    WS: "ws",
-    WSS: "wss",
-  } as const;
+  export const Scheme = {} as const;
 
   // export type Host = {
   //   isOpaque: boolean;
   //   decode(): string;
   //   toString(): string;
   // };
-
-  // export type Port = {
-  //   number: number;
-  //   toString(): string;
-  // };
-
-  export type Path = {
-    isOpaque: boolean;
-    segments(): Array<string>;
-    toString(): string;
-  };
-
-  /**
-   * A query parameter represented as name-value pair.
-   */
-  export type QueryParameter = [name: string, value: string];
-
-  export type Query = {
-    parameters(): Array<QueryParameter>; // parse as "application/x-www-form-urlencoded"
-    toString(): string;
-  };
-
-  export type Fragment = {
-    percentDecode(): string;
-    toString(): string;
-  };
 
   export function fromString(value: string): Uri {
     Type.assertNonEmptyString(value, "value");
@@ -68,10 +35,10 @@ interface UriComponents {
   // userName: string;
   // password: string;
   host: string; // URL Standardではhostもnullと""で意味が違う
-  port: uint16 | null;
-  path: Uri.Path;
-  query: Uri.Query | null;
-  fragment: Uri.Fragment | null;
+  port: UriPort | null;
+  path: UriPath;
+  query: UriQuery | null;
+  fragment: UriFragment | null;
 }
 
 export interface Uri extends UriComponents {
@@ -89,114 +56,27 @@ export interface Uri extends UriComponents {
   // withFragment(fragment: string): Uri;
 }
 
-class _Path implements Uri.Path {
-  readonly #raw: string;
-  readonly #separator: string | null; // (今のところ?)これがnullである、すなわち、パスはopaque
-
-  constructor(rawPath: string, separator: string | null) {
-    this.#raw = rawPath;
-    this.#separator = separator;
-  }
-
-  get isOpaque(): boolean {
-    return (Type.isNonEmptyString(this.#separator) !== true);
-  }
-
-  segments(): Array<string> {
-    if (this.isOpaque === true) {
-      return [this.#raw];
-    }
-
-    const rawSegments =
-      (this.#raw.startsWith(this.#separator!)
-        ? this.#raw.substring(1)
-        : this.#raw).split(this.#separator!);
-    return rawSegments.map((segement) => utf8Decode(percentDecode(segement)));
-  }
-
-  // opaqueなパスで構文解析する場合など用
-  toString(): string {
-    return this.#raw;
-  }
-}
-
-class _Query implements Uri.Query {
-  readonly #raw: string;
-
-  constructor(rawQuery: string) {
-    this.#raw = rawQuery;
-  }
-
-  parameters(): Array<Uri.QueryParameter> {
-    return [...new URLSearchParams(this.#raw).entries()];
-  }
-
-  // "application/x-www-form-urlencoded"以外で構文解析する場合など用
-  toString(): string {
-    return this.#raw;
-  }
-}
-
-class _Fragment implements Uri.Fragment {
-  readonly #raw: string;
-
-  constructor(rawFragment: string) {
-    this.#raw = rawFragment;
-  }
-
-  percentDecode(): string {
-    return utf8Decode(percentDecode(this.#raw));
-  }
-
-  // フラグメントを更に構文解析する場合など用（ex. ":~:text=%3D"）
-  toString(): string {
-    return this.#raw;
-  }
-}
-
 class _UriObject implements Uri {
   readonly #url: URL;
   readonly #scheme: string;
   // readonly #userName: string;
   // readonly #password: string;
   readonly #host: string;
-  readonly #port: uint16 | null;
-  readonly #path: Uri.Path;
-  readonly #query: Uri.Query | null;
-  readonly #fragment: Uri.Fragment | null;
+  readonly #port: UriPort | null;
+  readonly #path: UriPath;
+  readonly #query: UriQuery | null;
+  readonly #fragment: UriFragment | null;
 
   constructor(url: URL) {
     this.#url = url;
-    const scheme = url.protocol.replace(/:$/, EMPTY);
+    const scheme = UriScheme.of(url);
 
     this.#scheme = scheme;
     this.#host = _decodeHost(scheme, url.hostname); //TODO
-    this.#port = _portOf(scheme, url.port); //TODO
-    this.#path = _pathOf(scheme, url.pathname);
-
-    const rawQuery = url.search.replace(/^\?/, EMPTY);
-    if (Type.isNonEmptyString(rawQuery)) {
-      this.#query = new _Query(rawQuery);
-    } else {
-      const urlWithoutFragment = new URL(url);
-      urlWithoutFragment.hash = EMPTY;
-      if (urlWithoutFragment.toString().endsWith("?")) {
-        // searchは""でクエリがnullではない場合（クエリが""(フラグメントを除いたURL末尾"?")の場合）
-        this.#query = new _Query(rawQuery);
-      } else {
-        this.#query = null;
-      }
-    }
-
-    const rawFragment = url.hash.replace(/^#/, EMPTY);
-    if (Type.isNonEmptyString(rawFragment)) {
-      this.#fragment = new _Fragment(rawFragment);
-    } else if (url.toString().endsWith("#")) {
-      // hashは""でフラグメントがnullではない場合（フラグメントが""(URL末尾が"#")の場合）
-      this.#fragment = new _Fragment(EMPTY);
-    } else {
-      this.#fragment = null;
-    }
+    this.#port = UriPort.of(url);
+    this.#path = UriPath.of(url);
+    this.#query = UriQuery.of(url);
+    this.#fragment = UriFragment.of(url);
   }
 
   /**
@@ -265,14 +145,14 @@ class _UriObject implements Uri {
    * //   → 8080
    * ```
    */
-  get port(): uint16 | null {
+  get port(): UriPort | null {
     return this.#port;
   }
 
   /**
    * Gets the path segments for this instance.
    */
-  get path(): Uri.Path {
+  get path(): UriPath {
     return this.#path;
   }
 
@@ -294,7 +174,7 @@ class _UriObject implements Uri {
    * //   → [ [ "textformat", "" ] ]
    * ```
    */
-  get query(): Uri.Query | null {
+  get query(): UriQuery | null {
     return this.#query;
   }
 
@@ -311,7 +191,7 @@ class _UriObject implements Uri {
    * //   → "%E7%B4%A0%E7%89%87"
    * ```
    */
-  get fragment(): Uri.Fragment | null {
+  get fragment(): UriFragment | null {
     return this.#fragment;
   }
 
@@ -326,35 +206,8 @@ class _UriObject implements Uri {
   }
 }
 
-/**
- * The default port numbers.
- */
-const _DefaultPortMap: Record<string, uint16> = {
-  [Uri.Scheme.FTP]: 21,
-  [Uri.Scheme.HTTP]: 80,
-  [Uri.Scheme.HTTPS]: 443,
-  [Uri.Scheme.WS]: 80,
-  [Uri.Scheme.WSS]: 443,
-} as const;
-
-/**
- * The [special schemes](https://url.spec.whatwg.org/#special-scheme).
- */
-const _SpecialSchemes: Array<string> = [
-  Uri.Scheme.FILE,
-  Uri.Scheme.FTP,
-  Uri.Scheme.HTTP,
-  Uri.Scheme.HTTPS,
-  Uri.Scheme.WS,
-  Uri.Scheme.WSS,
-];
-
-function _isSpecialScheme(scheme: string): boolean {
-  return _SpecialSchemes.includes(scheme);
-}
-
 function _decodeHost(scheme: string, rawHost: string) {
-  if (_isSpecialScheme(scheme) !== true) {
+  if (UriScheme.isSpecial(scheme) !== true) {
     return rawHost;
   }
   if (Type.isNonEmptyString(rawHost) !== true) {
@@ -380,25 +233,4 @@ function _decodeHost(scheme: string, rawHost: string) {
     return decoded;
   }
   throw new Error("failed: punicode decode");
-}
-
-function _portOf(scheme: string, portString: string): uint16 | null {
-  if (Type.isNonEmptyString(portString)) {
-    // #rawPortは URL#port の前提なので範囲チェック等はしない
-    return SafeInt.fromString(portString);
-  }
-
-  if (Object.keys(_DefaultPortMap).includes(scheme)) {
-    return _DefaultPortMap[scheme];
-  }
-
-  return null;
-}
-
-function _pathOf(scheme: string, rawPath: string): Uri.Path {
-  if (_isSpecialScheme(scheme) !== true) {
-    return new _Path(rawPath, null);
-  }
-
-  return new _Path(rawPath, "/");
 }
