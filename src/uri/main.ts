@@ -63,6 +63,7 @@ export interface Uri extends UriComponents {
 }
 
 class _UriObject implements Uri {
+  readonly #url: URL;
   readonly #scheme: string;
   // readonly #userName: string;
   // readonly #password: string;
@@ -73,19 +74,28 @@ class _UriObject implements Uri {
   readonly #fragment: string;
 
   constructor(url: URL) {
+    this.#url = url;
     const scheme = url.protocol.replace(/:$/, EMPTY);
-    const rawHost = url.hostname;
-    const portString = url.port;
-    const rawPath = url.pathname;
     const rawQuery = url.search.replace(/^\?/, EMPTY);
     const rawFragment = url.hash.replace(/^#/, EMPTY);
 
+    if (Type.isNonEmptyString(rawQuery) !== true) {
+      // searchが"?"のみの場合、getterでは""になるのに、実際は"?"だけ残るので""にする
+      // "?"だけで意味がある場合があるかもしれないが、searchParamsでは無いもの扱いになるのでよしとする
+      this.#url.search = EMPTY;
+    }
+    if (Type.isNonEmptyString(rawFragment) !== true) {
+      // hashが"#"のみの場合、getterでは""になるのに、実際は"#"だけ残るので""にする
+      //TODO "#"はHTMLの場合"#top"扱いになるが、fragmentが""なのかnullなのかはhashだけでは判別できない
+      this.#url.hash = EMPTY;
+    }
+
     this.#scheme = scheme;
-    this.#host = _decodeHost(scheme, rawHost);
-    this.#port = _portOf(scheme, portString);
-    this.#path = _pathOf(scheme, rawPath);
+    this.#host = _decodeHost(scheme, url.hostname);
+    this.#port = _portOf(scheme, url.port);
+    this.#path = _pathOf(scheme, url.pathname);//XXX 区切り文字が何かを持ってるオブジェクトにする？
     this.#query = [...new URLSearchParams(rawQuery).entries()];
-    this.#fragment = utf8Decode(percentDecode(rawFragment));
+    this.#fragment = utf8Decode(percentDecode(rawFragment));//TODO デコードしてしまうと":~:text=%3D"のような場合に問題
   }
 
   /**
@@ -202,9 +212,9 @@ class _UriObject implements Uri {
     return this.#fragment;
   }
 
-  //   toString(): string {
-  // TODO
-  //   }
+  toString(): string {
+    return this.#url.toString();
+  }
 }
 
 /**

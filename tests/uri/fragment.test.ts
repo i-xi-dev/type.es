@@ -57,4 +57,13 @@ Deno.test("Uri.prototype.fragment", () => {
       .fragment,
     ' !"<>`%3',
   );
+  
+  assertStrictEquals(
+    Uri.fromString("http://example.com:80/hoge#:~:text=foo").fragment,
+    ":~:text=foo",
+  );
+  assertStrictEquals(
+    Uri.fromString("http://example.com:80/hoge#:~:text=%E3%81%82").fragment,
+    ":~:text=あ",
+  );
 });
