@@ -15,55 +15,54 @@ Deno.test("Uri.prototype.fragment", () => {
   );
   const u6 = Uri.fromString("data:,Hello%2C%20World!");
 
-  assertStrictEquals(u0.fragment, "");
-  assertStrictEquals(u0b.fragment, "");
-  assertStrictEquals(u1.fragment, "");
-  assertStrictEquals(u2.fragment, "");
-  assertStrictEquals(u3.fragment, "");
-  assertStrictEquals(u4.fragment, "");
-  assertStrictEquals(u5.fragment, "");
-  assertStrictEquals(u6.fragment, "");
+  assertStrictEquals(u0.fragment, null);
+  assertStrictEquals(u0b.fragment, null);
+  assertStrictEquals(u1.fragment, null);
+  assertStrictEquals(u2.fragment, null);
+  assertStrictEquals(u3.fragment, null);
+  assertStrictEquals(u4.fragment, null);
+  assertStrictEquals(u5.fragment, null);
+  assertStrictEquals(u6.fragment, null);
 
-  assertStrictEquals(
-    Uri.fromString("http://example.com:80/hoge#").fragment,
-    "",
-  );
-  assertStrictEquals(
-    Uri.fromString("http://example.com:80/hoge#f<o>o").fragment,
-    "f<o>o",
-  );
-  assertStrictEquals(
-    Uri.fromString("http://example.com:80/hoge#foo#5").fragment,
-    "foo#5",
-  );
-  assertStrictEquals(
-    Uri.fromString("http://example.com:80/hoge#foo#5=%3CA").fragment,
-    "foo#5=<A",
-  );
-  assertStrictEquals(
-    Uri.fromString("http://example.com:80/hoge#foo#5%3DA").fragment,
-    "foo#5=A",
-  );
-  assertStrictEquals(
-    Uri.fromString("http://example.com:80/hoge#%E3%81%82").fragment,
-    "あ",
-  );
-  assertStrictEquals(
-    Uri.fromString("http://example.com:80/hoge#あ").fragment,
-    "あ",
-  );
-  assertStrictEquals(
-    Uri.fromString("http://example.com:80/hoge#%20!%22%3C%3E%60%3")
-      .fragment,
-    ' !"<>`%3',
-  );
-  
-  assertStrictEquals(
-    Uri.fromString("http://example.com:80/hoge#:~:text=foo").fragment,
-    ":~:text=foo",
-  );
-  assertStrictEquals(
-    Uri.fromString("http://example.com:80/hoge#:~:text=%E3%81%82").fragment,
-    ":~:text=あ",
-  );
+  const f7 = Uri.fromString("http://example.com:80/hoge#").fragment;
+  assertStrictEquals(f7?.toString(), "");
+  assertStrictEquals(f7?.percentDecode(), "");
+
+  const f8 = Uri.fromString("http://example.com:80/hoge#f<o>o").fragment;
+  assertStrictEquals(f8?.toString(), "f%3Co%3Eo");
+  assertStrictEquals(f8?.percentDecode(), "f<o>o");
+
+  const f9 = Uri.fromString("http://example.com:80/hoge#foo#5").fragment;
+  assertStrictEquals(f9?.toString(), "foo#5");
+  assertStrictEquals(f9?.percentDecode(), "foo#5");
+
+  const f10 = Uri.fromString("http://example.com:80/hoge#foo#5=%3CA").fragment;
+  assertStrictEquals(f10?.toString(), "foo#5=%3CA");
+  assertStrictEquals(f10?.percentDecode(), "foo#5=<A");
+
+  const f11 = Uri.fromString("http://example.com:80/hoge#foo#5%3DA").fragment;
+  assertStrictEquals(f11?.toString(), "foo#5%3DA");
+  assertStrictEquals(f11?.percentDecode(), "foo#5=A");
+
+  const f12 = Uri.fromString("http://example.com:80/hoge#%E3%81%82").fragment;
+  assertStrictEquals(f12?.toString(), "%E3%81%82");
+  assertStrictEquals(f12?.percentDecode(), "あ");
+
+  const f13 = Uri.fromString("http://example.com:80/hoge#あ").fragment;
+  assertStrictEquals(f13?.toString(), "%E3%81%82");
+  assertStrictEquals(f13?.percentDecode(), "あ");
+
+  const f14 =
+    Uri.fromString("http://example.com:80/hoge#%20!%22%3C%3E%60%3").fragment;
+  assertStrictEquals(f14?.toString(), "%20!%22%3C%3E%60%3");
+  assertStrictEquals(f14?.percentDecode(), ' !"<>`%3');
+
+  const f15 = Uri.fromString("http://example.com:80/hoge#:~:text=foo").fragment;
+  assertStrictEquals(f15?.toString(), ":~:text=foo");
+  assertStrictEquals(f15?.percentDecode(), ":~:text=foo");
+
+  const f16 =
+    Uri.fromString("http://example.com:80/hoge#:~:text=%E3%81%82").fragment;
+  assertStrictEquals(f16?.toString(), ":~:text=%E3%81%82");
+  assertStrictEquals(f16?.percentDecode(), ":~:text=あ");
 });

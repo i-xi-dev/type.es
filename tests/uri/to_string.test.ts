@@ -44,7 +44,7 @@ Deno.test("Uri.prototype.toString()", () => {
   );
   assertStrictEquals(
     Uri.fromString("http://example.com:80/hoge#").toString(),
-    "http://example.com/hoge",
+    "http://example.com/hoge#",
   );
   assertStrictEquals(
     Uri.fromString("http://example.com:80/hoge#f<o>o").toString(),

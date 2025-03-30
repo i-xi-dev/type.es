@@ -24,6 +24,12 @@ export namespace Uri {
    */
   export type QueryParameter = [name: string, value: string];
 
+  export type Fragment = {
+    percentDecode(): string;
+    toString(): string;
+    valueOf(): string;
+  };
+
   export function fromString(value: string): Uri {
     Type.assertNonEmptyString(value, "value");
 
@@ -44,7 +50,7 @@ interface UriComponents {
   port: uint16 | null;
   path: Array<string>;
   query: Array<Uri.QueryParameter>;
-  fragment: string;
+  fragment: Uri.Fragment | null;
 }
 
 export interface Uri extends UriComponents {
@@ -58,8 +64,29 @@ export interface Uri extends UriComponents {
   // withQuery(query: Array<Uri.QueryParameter>): Uri;
   // withoutQuery(): Uri;
   // hasFragment(): boolean;
+  withoutFragment(): Uri;
   // withFragment(fragment: string): Uri;
-  // withoutFragment(): Uri;
+}
+
+// ":~:text=%3D"のようなフラグメントを更に構文解析する必要がある場合用
+class _Fragment implements Uri.Fragment {
+  readonly #raw: string;
+
+  constructor(rawFragment: string) {
+    this.#raw = rawFragment;
+  }
+
+  percentDecode(): string {
+    return utf8Decode(percentDecode(this.#raw));
+  }
+
+  toString(): string {
+    return this.#raw;
+  }
+
+  valueOf(): string {
+    return this.toString();
+  }
 }
 
 class _UriObject implements Uri {
@@ -71,7 +98,7 @@ class _UriObject implements Uri {
   readonly #port: uint16 | null;
   readonly #path: Array<string>;
   readonly #query: Array<Uri.QueryParameter>;
-  readonly #fragment: string;
+  readonly #fragment: Uri.Fragment | null;
 
   constructor(url: URL) {
     this.#url = url;
@@ -84,18 +111,21 @@ class _UriObject implements Uri {
       // "?"だけで意味がある場合があるかもしれないが、searchParamsでは無いもの扱いになるのでよしとする
       this.#url.search = EMPTY;
     }
-    if (Type.isNonEmptyString(rawFragment) !== true) {
-      // hashが"#"のみの場合、getterでは""になるのに、実際は"#"だけ残るので""にする
-      //TODO "#"はHTMLの場合"#top"扱いになるが、fragmentが""なのかnullなのかはhashだけでは判別できない
-      this.#url.hash = EMPTY;
-    }
 
     this.#scheme = scheme;
     this.#host = _decodeHost(scheme, url.hostname);
     this.#port = _portOf(scheme, url.port);
-    this.#path = _pathOf(scheme, url.pathname);//XXX 区切り文字が何かを持ってるオブジェクトにする？
-    this.#query = [...new URLSearchParams(rawQuery).entries()];
-    this.#fragment = utf8Decode(percentDecode(rawFragment));//TODO デコードしてしまうと":~:text=%3D"のような場合に問題
+    this.#path = _pathOf(scheme, url.pathname); //TODO 区切り文字が何かを持ってるオブジェクトにする？
+    this.#query = [...new URLSearchParams(rawQuery).entries()]; //TODO これも"?"だけの場合がある
+
+    if (Type.isNonEmptyString(rawFragment)) {
+      this.#fragment = new _Fragment(rawFragment);
+    } else if (url.toString().endsWith("#")) {
+      // hashは""でもURL末尾"#"の場合
+      this.#fragment = new _Fragment(EMPTY);
+    } else {
+      this.#fragment = null;
+    }
   }
 
   /**
@@ -208,12 +238,18 @@ class _UriObject implements Uri {
    * //   → "素片"
    * ```
    */
-  get fragment(): string {
+  get fragment(): Uri.Fragment | null {
     return this.#fragment;
   }
 
   toString(): string {
     return this.#url.toString();
+  }
+
+  withoutFragment(): Uri {
+    const url = new URL(this.#url);
+    url.hash = EMPTY;
+    return new _UriObject(url);
   }
 }
 
