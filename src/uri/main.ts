@@ -76,14 +76,14 @@ class _UriObject implements Uri {
     const scheme = url.protocol.replace(/:$/, EMPTY);
     const rawHost = url.hostname;
     const portString = url.port;
-    //const pathString = url.pathname;
+    const rawPath = url.pathname;
     const rawQuery = url.search.replace(/^\?/, EMPTY);
     const rawFragment = url.hash.replace(/^#/, EMPTY);
 
     this.#scheme = scheme;
     this.#host = _decodeHost(scheme, rawHost);
     this.#port = _portOf(scheme, portString);
-    this.#path = ["TODO"];
+    this.#path = _pathOf(scheme, rawPath);
     this.#query = [...new URLSearchParams(rawQuery).entries()];
     this.#fragment = utf8Decode(percentDecode(rawFragment));
   }
@@ -158,6 +158,9 @@ class _UriObject implements Uri {
     return this.#port;
   }
 
+  /**
+   * Gets the path segments for this instance.
+   */
   get path(): Array<string> {
     return globalThis.structuredClone(this.#path);
   }
@@ -271,4 +274,14 @@ function _portOf(scheme: string, portString: string): uint16 | null {
   }
 
   return null;
+}
+
+function _pathOf(scheme: string, rawPath: string): Array<string> {
+  if (_isSpecialScheme(scheme) !== true) {
+    return [rawPath]; // デコードすべき？（デコードするとspecialでないスキームで独自のセグメント分割がある場合に分割できなくなる
+  }
+
+  const t = rawPath.replace(/^\//, EMPTY);
+  const segments = t.split("/");
+  return segments.map((segement) => utf8Decode(percentDecode(segement)));
 }
