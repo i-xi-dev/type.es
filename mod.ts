@@ -10,6 +10,7 @@ export * as Spatial from "./src/spatial/mod.ts";
 export * as Text from "./src/text/mod.ts";
 export * as Time from "./src/time/mod.ts";
 export * as Type from "./src/type/mod.ts";
+export * from "./src/uri/mod.ts";
 
 //TODO
 export * as Uint8Iterable from "./src/__2/uint8_iterable.ts";
