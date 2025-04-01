@@ -33,7 +33,7 @@ export class UriQuery {
   }
 
   // parse as "application/x-www-form-urlencoded"
-  parameters(): Array<UriQueryParameter> {
+  toParameters(): Array<UriQueryParameter> {
     return [...new URLSearchParams(this.#raw).entries()];
   }
 
