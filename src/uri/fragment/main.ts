@@ -24,7 +24,8 @@ export class UriFragment {
     }
   }
 
-  percentDecode(): string {
+  // 場合によっては構文解析できなくなるのでtoStringと使い分けること
+  toPercentDecoded(): string {
     return _utfPercentDecode(this.#raw);
   }
 
