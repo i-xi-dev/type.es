@@ -10,21 +10,6 @@ import { UriScheme } from "./scheme/mod.ts";
 const { EMPTY } = ExString;
 
 export namespace Uri {
-  // export namespace Query {
-  //   /**
-  //    * A query parameter represented as name-value pair.
-  //    */
-  //   export type Parameter = [name: string, value: string];
-  // }
-
-  export interface Query {
-    // URLSearchParamsを使えばいい
-    // entries(): Iterable<Query.Parameter>;
-
-    // "application/x-www-form-urlencoded"以外で構文解析する場合など用
-    toString(): string;
-  }
-
   export function fromString(value: string): Uri {
     Type.assertNonEmptyString(value, "value");
 
@@ -44,7 +29,7 @@ interface UriComponents {
   host: UriHost | null;
   port: uint16 | null;
   path: UriPath;
-  query: Uri.Query | null; //string | nullにする、WwwFormUrlEncodedとして独立させる
+  query: string | null;
   fragment: UriFragment | null; //string|nullにし、Fragmentは独立させる
 }
 
@@ -90,38 +75,20 @@ function _portOf(url: URL): uint16 | null {
   return null;
 }
 
-function _queryOf(url: URL): Uri.Query | null {
+function _queryOf(url: URL): string | null {
   const rawQuery = url.search.replace(/^\?/, EMPTY);
 
   if (Type.isNonEmptyString(rawQuery)) {
-    return new _Query(rawQuery);
+    return rawQuery;
   } else {
     const urlWithoutFragment = new URL(url);
     urlWithoutFragment.hash = EMPTY;
     if (urlWithoutFragment.toString().endsWith("?")) {
       // searchは""でクエリがnullではない場合（クエリが""(フラグメントを除いたURL末尾"?")の場合）
-      return new _Query(EMPTY);
+      return EMPTY;
     }
   }
   return null;
-}
-
-class _Query implements Uri.Query {
-  readonly #raw: string;
-  // readonly #parameters: Array<Uri.Query.Parameter>;
-
-  constructor(raw: string) {
-    this.#raw = raw;
-    // this.#parameters = [...new URLSearchParams(this.#raw).entries()];
-  }
-
-  // entries(): Iterable<Uri.Query.Parameter> {
-  //   return globalThis.structuredClone(this.#parameters);
-  // }
-
-  toString(): string {
-    return this.#raw;
-  }
 }
 
 class _UriObject implements Uri {
@@ -208,25 +175,7 @@ class _UriObject implements Uri {
     return UriPath.of(this.#url);
   }
 
-  /**
-   * Gets the result of parsing the query for this instance in the `application/x-www-form-urlencoded` format.
-   *
-   * @example
-   * ```javascript
-   * const uri = Uri.fromString("http://example.com/foo?p1=%E5%80%A41&p2=123");
-   * const queryEntries = uri.query;
-   * // queryEntries
-   * //   → [ [ "p1", "値1" ], [ "p2", "123" ] ]
-   * ```
-   * @example
-   * ```javascript
-   * const uri = Uri.fromString("http://example.com/foo?textformat");
-   * const queryEntries = uri.query;
-   * // queryEntries
-   * //   → [ [ "textformat", "" ] ]
-   * ```
-   */
-  get query(): Uri.Query | null {
+  get query(): string | null {
     return _queryOf(this.#url);
   }
 

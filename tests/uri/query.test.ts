@@ -36,38 +36,38 @@ Deno.test("Uri.prototype.query", () => {
 
   const q7 = Uri.fromString("http://example.com:80/hoge?").query;
   // assertStrictEquals(str(q7?.entries()), "[]");
-  assertStrictEquals(q7?.toString(), "");
+  assertStrictEquals(q7, "");
 
   const q8 = Uri.fromString("http://example.com:80/hoge?=").query;
   // assertStrictEquals(str(q8?.entries()), '[["",""]]');
-  assertStrictEquals(q8?.toString(), "=");
+  assertStrictEquals(q8, "=");
 
   const q9 = Uri.fromString("http://example.com:80/hoge?=&=").query;
   // assertStrictEquals(str(q9?.entries()), '[["",""],["",""]]');
-  assertStrictEquals(q9?.toString(), "=&=");
+  assertStrictEquals(q9, "=&=");
 
   const q10 = Uri.fromString("http://example.com:80/hoge?foo").query;
   // assertStrictEquals(str(q10?.entries()), '[["foo",""]]');
-  assertStrictEquals(q10?.toString(), "foo");
+  assertStrictEquals(q10, "foo");
 
   const q11 = Uri.fromString("http://example.com:80/hoge?foo=5").query;
   // assertStrictEquals(str(q11?.entries()), '[["foo","5"]]');
-  assertStrictEquals(q11?.toString(), "foo=5");
+  assertStrictEquals(q11, "foo=5");
 
   const q12 = Uri.fromString("http://example.com:80/hoge?foo=5#bar").query;
   // assertStrictEquals(str(q12?.entries()), '[["foo","5"]]');
-  assertStrictEquals(q12?.toString(), "foo=5");
+  assertStrictEquals(q12, "foo=5");
 
   const q13 = Uri.fromString("http://example.com:80/hoge?foo=5%3D6").query;
   // assertStrictEquals(str(q13?.entries()), '[["foo","5=6"]]');
-  assertStrictEquals(q13?.toString(), "foo=5%3D6");
+  assertStrictEquals(q13, "foo=5%3D6");
 
   const q14 =
     Uri.fromString("http://example.com:80/hoge?foo=5%3D6&bar=a").query;
   // assertStrictEquals(str(q14?.entries()), '[["foo","5=6"],["bar","a"]]');
-  assertStrictEquals(q14?.toString(), "foo=5%3D6&bar=a");
+  assertStrictEquals(q14, "foo=5%3D6&bar=a");
 
   const q15 = Uri.fromString("http://example.com:80/hoge?foo=%E3%81%82").query;
   // assertStrictEquals(str(q15?.entries()), '[["foo","あ"]]');
-  assertStrictEquals(q15?.toString(), "foo=%E3%81%82");
+  assertStrictEquals(q15, "foo=%E3%81%82");
 });
