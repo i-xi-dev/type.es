@@ -69,10 +69,10 @@ export interface Components {
   // origin: ;
   toString(): string;
   // withoutUserInfo(): Components;
-  // withPath(): Components;
-  // hasQuery(): boolean;
+  // withPath(): Components; up()とか
+  // hasNonEmptyQuery(): boolean;
   withoutQuery(): Components;
-  // withQuery(query: Array<Uri.QueryParameter>): Components;
+  withQuery(rawQuery: string): Components;
   // hasNonEmptyFragment(): boolean;
   withoutFragment(): Components;
   withFragment(rawFragment: string): Components;
@@ -370,6 +370,14 @@ class _UriComponents implements Components {
     return new _UriComponents(url);
   }
 
+  withQuery(rawQuery: string): Components {
+    Type.assertNonEmptyString(rawQuery, "rawQuery");
+    const url = new URL(this.#url);
+    //XXX %エンコードはどうする（エンコードされていなければエラーにする？）
+    url.search = "?" + rawQuery;
+    return new _UriComponents(url);
+  }
+
   withoutFragment(): Components {
     const url = new URL(this.#url);
     url.hash = EMPTY;
@@ -379,8 +387,8 @@ class _UriComponents implements Components {
   withFragment(rawFragment: string): Components {
     Type.assertNonEmptyString(rawFragment, "rawFragment");
     const url = new URL(this.#url);
-    //XXX エンコードはどうする（しない(エンコードされていなければエラー) or する）
-    url.hash = "#" + rawFragment; // 0x20,0x22,0x3C,0x3E,0x60 の%エンコードは自動でやってくれる
+    //XXX %エンコードはどうする（エンコードされていなければエラーにする？）
+    url.hash = "#" + rawFragment;
     return new _UriComponents(url);
   }
 }

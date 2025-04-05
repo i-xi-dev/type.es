@@ -32,13 +32,11 @@ Deno.test("Uri.prototype.withFragment()", () => {
   const u7 = Uri.fromString("http://example.com:80/hoge#foo")
     .withFragment("あ");
   assertStrictEquals(u7.toString(), "http://example.com/hoge#%E3%81%82");
-});
 
-Deno.test("Uri.prototype.withFragment()", () => {
-  const u1 = Uri.fromString("http://example.com:80/hoge#foo");
+  const ue1 = Uri.fromString("http://example.com:80/hoge#foo");
   assertThrows(
     () => {
-      u1.withFragment(1 as unknown as string);
+      ue1.withFragment(1 as unknown as string);
     },
     TypeError,
     "`rawFragment` must be a non-empty string.",
