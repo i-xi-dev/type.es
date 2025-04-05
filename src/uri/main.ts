@@ -1,19 +1,41 @@
 import * as Type from "../type/mod.ts";
+import { _decode as _punycodeDecode } from "./_punycode.ts";
 import { _utfPercentDecode } from "./_utils.ts";
 import { Path } from "./path/mod.ts";
 import { SafeInt } from "../numerics/mod.ts";
 import { String as ExString } from "../basics/mod.ts";
 import { type uint16 } from "../_typedef/mod.ts";
-import { UriHost } from "./host/main.ts";
-import { UriScheme } from "./scheme/mod.ts";
+import { UriScheme } from "./scheme/mod.ts"; //TODO
 
 const { EMPTY } = ExString;
+
+//XXX 外に出す？
+const IpAddressFamily = {
+  IPV4: "IPv4",
+  IPV6: "IPv6",
+} as const;
+type IpAddressFamily = typeof IpAddressFamily[keyof typeof IpAddressFamily];
+
+//XXX 外に出す？
+type IpAddress = {
+  address: string;
+  family: IpAddressFamily;
+};
+
+export interface Host {
+  isIpAddress: boolean;
+  ipAddress: IpAddress | null;
+  isDomain: boolean;
+  domain: string | null;
+  isOpaque: boolean;
+  toString(): string;
+}
 
 export interface Components {
   scheme: string;
   // userName: string;
   // password: string;
-  host: UriHost | null;
+  host: Host | null;
   port: uint16 | null;
   path: Path;
   query: string | null;
@@ -41,6 +63,91 @@ export function fromString(value: string): Components {
   }
 
   throw new TypeError("`value` must be text representation of URL.");
+}
+
+function _decodeDomain(rawHost: string): string {
+  const parts = rawHost.split(".");
+
+  const decodedParts = parts.map((part) => {
+    if (part.startsWith("xn--")) { // 小文字の"xn--"で判定しているのは、rawHostはURL#hostnameの前提だから。
+      return _punycodeDecode(part.substring(4));
+    } else {
+      return part;
+    }
+  });
+  // const decoded = decodedParts.join(".");
+  return decodedParts.join(".");
+
+  // // デコード出来ているかチェック //XXX テストして消す
+  // const test = new URL(scheme + "://example.com/");
+  // test.hostname = decoded;
+  // if (test.hostname === rawHost) {
+  //   return decoded;
+  // }
+  // throw new Error("failed: punicode decode");
+}
+
+class _Host implements Host {
+  readonly #raw: string;
+  readonly #ipAddressFamily: IpAddressFamily | null;
+  readonly #isOpaque: boolean;
+  readonly #decodedDomain: string;
+
+  constructor(raw: string, specialScheme: boolean) {
+    this.#raw = raw;
+    this.#ipAddressFamily = null;
+    this.#isOpaque = false;
+    this.#decodedDomain = EMPTY;
+
+    if (raw.startsWith("[")) {
+      this.#ipAddressFamily = IpAddressFamily.IPV6;
+    } else if (specialScheme !== true) {
+      this.#isOpaque = true;
+    } else if (/^[0-9]+.[0-9]+.[0-9]+.[0-9]+$/.test(raw)) { // URLがパースした結果なのでこれ以上チェックする必要はない
+      this.#ipAddressFamily = IpAddressFamily.IPV4;
+    } else {
+      this.#decodedDomain = _decodeDomain(raw);
+    }
+  }
+
+  get isIpAddress(): boolean {
+    return Type.isNonEmptyString(this.#ipAddressFamily);
+  }
+
+  get ipAddress(): IpAddress | null {
+    if (this.isIpAddress === true) {
+      const address = (this.#ipAddressFamily === IpAddressFamily.IPV4)
+        ? this.#raw
+        : this.#raw.slice(1, -1);
+      return {
+        address,
+        family: this.#ipAddressFamily!,
+      };
+    }
+    return null;
+  }
+
+  get isDomain(): boolean {
+    return Type.isNonEmptyString(this.#decodedDomain);
+  }
+
+  get domain(): string | null {
+    return this.#decodedDomain;
+  }
+
+  get isOpaque(): boolean {
+    return this.#isOpaque;
+  }
+
+  toString(): string {
+    return this.#raw;
+  }
+}
+
+export function _hostOf(url: URL): Host | null {
+  const scheme = UriScheme.of(url);
+  return new _Host(url.hostname, UriScheme.isSpecial(scheme));
+  //XXX nullホストと空ホストは区別できるのか（URLオブジェクトの内部処理では区別してると思われるが、外から区別できるか）
 }
 
 /**
@@ -178,8 +285,8 @@ class _UriComponents implements Components {
    * //   → "ドメイン名例.jp"
    * ```
    */
-  get host(): UriHost | null {
-    return UriHost.of(this.#url);
+  get host(): Host | null {
+    return _hostOf(this.#url);
   }
 
   /**
