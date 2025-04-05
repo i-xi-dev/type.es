@@ -1,9 +1,10 @@
 import * as Type from "../type/mod.ts";
+import { _utfPercentDecode } from "./_utils.ts";
+import { Path } from "./path/mod.ts";
 import { SafeInt } from "../numerics/mod.ts";
 import { String as ExString } from "../basics/mod.ts";
 import { type uint16 } from "../_typedef/mod.ts";
 import { UriHost } from "./host/main.ts";
-import { UriPath } from "./path/mod.ts";
 import { UriScheme } from "./scheme/mod.ts";
 
 const { EMPTY } = ExString;
@@ -14,7 +15,7 @@ export interface Components {
   // password: string;
   host: UriHost | null;
   port: uint16 | null;
-  path: UriPath;
+  path: Path;
   query: string | null;
   fragment: string | null;
   // userInfo: ;
@@ -52,6 +53,45 @@ const _DefaultPortMap: Record<string, uint16> = {
   [UriScheme.WS]: 80,
   [UriScheme.WSS]: 443,
 } as const;
+
+class _Path implements Path {
+  readonly #raw: string;
+  readonly #separator: string | null; // (今のところ?)これがnullである、すなわち、パスはopaque
+  readonly #isOpaque: boolean;
+  readonly #segments: Array<string>;
+
+  constructor(raw: string, specialScheme: boolean) {
+    this.#raw = raw;
+    this.#separator = (specialScheme === true) ? "/" : null;
+    this.#isOpaque = Type.isNonEmptyString(this.#separator) !== true;
+    if (this.#isOpaque === true) {
+      this.#segments = [];
+    } else {
+      const joined = this.#raw.startsWith(this.#separator!)
+        ? this.#raw.substring(1)
+        : this.#raw;
+      this.#segments = joined.split(this.#separator!)
+        .map((segement) => _utfPercentDecode(segement));
+    }
+  }
+
+  get isOpaque(): boolean {
+    return this.#isOpaque;
+  }
+
+  segment(): Iterable<string> {
+    return globalThis.structuredClone(this.#segments);
+  }
+
+  toString(): string {
+    return this.#raw;
+  }
+}
+
+function _pathOf(url: URL): Path {
+  const scheme = UriScheme.of(url);
+  return new _Path(url.pathname, UriScheme.isSpecial(scheme));
+}
 
 function _portOf(url: URL): uint16 | null {
   const scheme = UriScheme.of(url);
@@ -177,8 +217,8 @@ class _UriComponents implements Components {
   /**
    * Gets the path segments for this instance.
    */
-  get path(): UriPath {
-    return UriPath.of(this.#url);
+  get path(): Path {
+    return _pathOf(this.#url);
   }
 
   get query(): string | null {
