@@ -2,39 +2,52 @@ import * as Type from "../../type/mod.ts";
 import { _utfPercentDecode } from "../_utils.ts";
 import { UriScheme } from "../scheme/mod.ts";
 
-export class UriPath {
+export interface UriPath {
+  isOpaque: boolean;
+
+  segment(): Iterable<string>;
+
+  // opaqueなパスで構文解析する場合など用
+  toString(): string;
+}
+
+class _Path implements UriPath {
   readonly #raw: string;
   readonly #separator: string | null; // (今のところ?)これがnullである、すなわち、パスはopaque
+  readonly #isOpaque: boolean;
+  readonly #segments: Array<string>;
 
-  private constructor(rawPath: string, separator: string | null) {
-    this.#raw = rawPath;
-    this.#separator = separator;
-  }
-
-  static of(url: URL): UriPath {
-    const scheme = UriScheme.of(url);
-    const separator = UriScheme.isSpecial(scheme) ? "/" : null;
-    return new UriPath(url.pathname, separator);
+  constructor(raw: string, specialScheme: boolean) {
+    this.#raw = raw;
+    this.#separator = (specialScheme === true) ? "/" : null;
+    this.#isOpaque = Type.isNonEmptyString(this.#separator) !== true;
+    if (this.#isOpaque === true) {
+      this.#segments = [];
+    } else {
+      const joined = this.#raw.startsWith(this.#separator!)
+        ? this.#raw.substring(1)
+        : this.#raw;
+      this.#segments = joined.split(this.#separator!)
+        .map((segement) => _utfPercentDecode(segement));
+    }
   }
 
   get isOpaque(): boolean {
-    return (Type.isNonEmptyString(this.#separator) !== true);
+    return this.#isOpaque;
   }
 
-  segments(): Array<string> {
-    if (this.isOpaque === true) {
-      return [this.#raw];
-    }
-
-    const rawSegments =
-      (this.#raw.startsWith(this.#separator!)
-        ? this.#raw.substring(1)
-        : this.#raw).split(this.#separator!);
-    return rawSegments.map((segement) => _utfPercentDecode(segement));
+  segment(): Iterable<string> {
+    return globalThis.structuredClone(this.#segments);
   }
 
-  // opaqueなパスで構文解析する場合など用
   toString(): string {
     return this.#raw;
+  }
+}
+
+export namespace UriPath {
+  export function of(url: URL): UriPath {
+    const scheme = UriScheme.of(url);
+    return new _Path(url.pathname, UriScheme.isSpecial(scheme));
   }
 }

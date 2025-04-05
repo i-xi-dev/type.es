@@ -1,5 +1,5 @@
-import { type safeint } from "../_typedef/mod.ts";
-import { String as ExString } from "../basics/mod.ts";
+import { type safeint } from "../../_typedef/mod.ts";
+import { String as ExString } from "../../basics/mod.ts";
 
 const { EMPTY } = ExString;
 

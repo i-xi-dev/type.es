@@ -1,23 +1,16 @@
 import * as Type from "../type/mod.ts";
-import { _decode } from "./_punycode.ts";
+import { SafeInt } from "../numerics/mod.ts";
 import { String as ExString } from "../basics/mod.ts";
+import { type uint16 } from "../_typedef/mod.ts";
 import { UriFragment } from "./fragment/mod.ts";
+import { UriHost } from "./host/main.ts";
 import { UriPath } from "./path/mod.ts";
-import { UriPort } from "./port/mod.ts";
-import { UriQuery, type UriQueryParameter } from "./query/mod.ts";
+import { UriQuery } from "./query/mod.ts";
 import { UriScheme } from "./scheme/mod.ts";
 
 const { EMPTY } = ExString;
 
 export namespace Uri {
-  export const Scheme = {} as const;
-
-  // export type Host = {
-  //   isOpaque: boolean;
-  //   decode(): string;
-  //   toString(): string;
-  // };
-
   export function fromString(value: string): Uri {
     Type.assertNonEmptyString(value, "value");
 
@@ -34,8 +27,8 @@ interface UriComponents {
   scheme: string;
   // userName: string;
   // password: string;
-  host: string; // URL Standardではhostもnullと""で意味が違う
-  port: UriPort | null;
+  host: UriHost | null;
+  port: uint16 | null;
   path: UriPath;
   query: UriQuery | null;
   fragment: UriFragment | null;
@@ -56,27 +49,38 @@ export interface Uri extends UriComponents {
   // withFragment(fragment: string): Uri;
 }
 
+/**
+ * The default port numbers.
+ */
+const _DefaultPortMap: Record<string, uint16> = {
+  [UriScheme.FTP]: 21,
+  [UriScheme.HTTP]: 80,
+  [UriScheme.HTTPS]: 443,
+  [UriScheme.WS]: 80,
+  [UriScheme.WSS]: 443,
+} as const;
+
+function _portOf(url: URL): uint16 | null {
+  const scheme = UriScheme.of(url);
+  const rawPort = url.port;
+
+  if (Type.isNonEmptyString(rawPort)) {
+    // #rawPortは URL#port の前提なので範囲チェック等はしない
+    return SafeInt.fromString(rawPort);
+  }
+
+  if (Object.keys(_DefaultPortMap).includes(scheme)) {
+    return _DefaultPortMap[scheme];
+  }
+
+  return null;
+}
+
 class _UriObject implements Uri {
   readonly #url: URL;
-  readonly #scheme: string;
-  // readonly #userName: string;
-  // readonly #password: string;
-  readonly #host: string;
-  readonly #port: UriPort | null;
-  readonly #path: UriPath;
-  readonly #query: UriQuery | null;
-  readonly #fragment: UriFragment | null;
 
   constructor(url: URL) {
     this.#url = url;
-    const scheme = UriScheme.of(url);
-
-    this.#scheme = scheme;
-    this.#host = _decodeHost(scheme, url.hostname); //TODO
-    this.#port = UriPort.of(url);
-    this.#path = UriPath.of(url);
-    this.#query = UriQuery.of(url);
-    this.#fragment = UriFragment.of(url);
   }
 
   /**
@@ -91,7 +95,7 @@ class _UriObject implements Uri {
    * ```
    */
   get scheme(): string {
-    return this.#scheme;
+    return UriScheme.of(this.#url);
   }
 
   // get userName(): string {
@@ -113,8 +117,8 @@ class _UriObject implements Uri {
    * //   → "ドメイン名例.jp"
    * ```
    */
-  get host(): string {
-    return this.#host;
+  get host(): UriHost | null {
+    return UriHost.of(this.#url);
   }
 
   /**
@@ -145,15 +149,15 @@ class _UriObject implements Uri {
    * //   → 8080
    * ```
    */
-  get port(): UriPort | null {
-    return this.#port;
+  get port(): uint16 | null {
+    return _portOf(this.#url);
   }
 
   /**
    * Gets the path segments for this instance.
    */
   get path(): UriPath {
-    return this.#path;
+    return UriPath.of(this.#url);
   }
 
   /**
@@ -175,7 +179,7 @@ class _UriObject implements Uri {
    * ```
    */
   get query(): UriQuery | null {
-    return this.#query;
+    return UriQuery.of(this.#url);
   }
 
   /**
@@ -192,7 +196,7 @@ class _UriObject implements Uri {
    * ```
    */
   get fragment(): UriFragment | null {
-    return this.#fragment;
+    return UriFragment.of(this.#url);
   }
 
   toString(): string {
@@ -204,33 +208,4 @@ class _UriObject implements Uri {
     url.hash = EMPTY;
     return new _UriObject(url);
   }
-}
-
-function _decodeHost(scheme: string, rawHost: string) {
-  if (UriScheme.isSpecial(scheme) !== true) {
-    return rawHost;
-  }
-  if (Type.isNonEmptyString(rawHost) !== true) {
-    return rawHost;
-  }
-
-  // IPv4やIPv6は"xn--"が出てこないので区別せずに処理して問題ない
-  const parts = rawHost.split(".");
-
-  const decodedParts = parts.map((part) => {
-    if (part.startsWith("xn--")) { // 小文字の"xn--"で判定しているのは、rawHostはURL#hostnameの前提だから。
-      return _decode(part.substring(4));
-    } else {
-      return part;
-    }
-  });
-  const decoded = decodedParts.join(".");
-
-  // デコード出来ているかチェック //XXX テストして消す
-  const test = new URL("http://example.com/");
-  test.hostname = decoded;
-  if (test.hostname === rawHost) {
-    return decoded;
-  }
-  throw new Error("failed: punicode decode");
 }

@@ -4,33 +4,42 @@ import { String as ExString } from "../../basics/mod.ts";
 
 const { EMPTY } = ExString;
 
-export class UriFragment {
-  readonly #raw: string;
+export interface UriFragment {
+  // フラグメントを更に構文解析する場合など用（ex. ":~:text=%3D"）
+  toString(): string;
 
-  private constructor(rawFragment: string) {
-    this.#raw = rawFragment;
+  // 場合によっては構文解析できなくなるのでtoStringと使い分けること
+  toDecoded(): string;
+}
+
+class _Fragment implements UriFragment {
+  readonly #raw: string;
+  readonly #decoded: string;
+
+  constructor(raw: string) {
+    this.#raw = raw;
+    this.#decoded = _utfPercentDecode(raw);
   }
 
-  static of(url: URL): UriFragment | null {
+  toString(): string {
+    return this.#raw;
+  }
+
+  toDecoded(): string {
+    return this.#decoded;
+  }
+}
+
+export namespace UriFragment {
+  export function of(url: URL): UriFragment | null {
     const rawFragment = url.hash.replace(/^#/, EMPTY);
 
     if (Type.isNonEmptyString(rawFragment)) {
-      return new UriFragment(rawFragment);
+      return new _Fragment(rawFragment);
     } else if (url.toString().endsWith("#")) {
       // hashは""でフラグメントがnullではない場合（フラグメントが""(URL末尾が"#")の場合）
-      return new UriFragment(EMPTY);
-    } else {
-      return null;
+      return new _Fragment(EMPTY);
     }
-  }
-
-  // 場合によっては構文解析できなくなるのでtoStringと使い分けること
-  toPercentDecoded(): string {
-    return _utfPercentDecode(this.#raw);
-  }
-
-  // フラグメントを更に構文解析する場合など用（ex. ":~:text=%3D"）
-  toString(): string {
-    return this.#raw;
+    return null;
   }
 }

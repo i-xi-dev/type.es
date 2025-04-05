@@ -3,24 +3,19 @@ import { Uri } from "../../mod.ts";
 
 Deno.test("Uri.prototype.port", () => {
   const a0 = Uri.fromString("http://example.com/");
-  assertStrictEquals(a0.port?.number, 80);
-  assertStrictEquals(a0.port?.toString(), "");
+  assertStrictEquals(a0.port, 80);
 
   const u0 = Uri.fromString("http://example.com:8080/");
-  assertStrictEquals(u0.port?.number, 8080);
-  assertStrictEquals(u0.port?.toString(), "8080");
+  assertStrictEquals(u0.port, 8080);
 
   const u0b = Uri.fromString("Http://example.COM:8080/");
-  assertStrictEquals(u0b.port?.number, 8080);
-  assertStrictEquals(u0b.port?.toString(), "8080");
+  assertStrictEquals(u0b.port, 8080);
 
   const u1 = Uri.fromString("http://example.com:80/hoge");
-  assertStrictEquals(u1.port?.number, 80);
-  assertStrictEquals(u1.port?.toString(), "");
+  assertStrictEquals(u1.port, 80);
 
   const u2 = Uri.fromString("https://example.com:80/hoge");
-  assertStrictEquals(u2.port?.number, 80);
-  assertStrictEquals(u2.port?.toString(), "80");
+  assertStrictEquals(u2.port, 80);
 
   const u3 = Uri.fromString("file:///D:/hoge/index.txt");
   assertStrictEquals(u3.port, null);
