@@ -71,8 +71,8 @@ export interface Components {
   // withoutUserInfo(): Components;
   // withPath(): Components;
   // hasQuery(): boolean;
+  withoutQuery(): Components;
   // withQuery(query: Array<Uri.QueryParameter>): Components;
-  // withoutQuery(): Components;
   // hasFragment(): boolean;
   withoutFragment(): Components;
   // withFragment(fragment: string): Components;
@@ -362,6 +362,12 @@ class _UriComponents implements Components {
 
   toString(): string {
     return this.#url.toString();
+  }
+
+  withoutQuery(): Components {
+    const url = new URL(this.#url);
+    url.search = EMPTY;
+    return new _UriComponents(url);
   }
 
   withoutFragment(): Components {
