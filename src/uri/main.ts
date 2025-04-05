@@ -8,13 +8,6 @@ import { Scheme } from "./scheme/mod.ts";
 
 const { EMPTY } = ExString;
 
-//XXX 外に出す？
-const IpAddressFamily = {
-  IPV4: "IPv4",
-  IPV6: "IPv6",
-} as const;
-type IpAddressFamily = typeof IpAddressFamily[keyof typeof IpAddressFamily];
-
 /**
  * The [special schemes](https://url.spec.whatwg.org/#special-scheme).
  */
@@ -30,6 +23,13 @@ const _SpecialSchemes: Array<string> = [
 function _schemeOf(url: URL): string {
   return url.protocol.replace(/:$/, EMPTY);
 }
+
+//XXX 外に出す？
+const IpAddressFamily = {
+  IPV4: "IPv4",
+  IPV6: "IPv6",
+} as const;
+type IpAddressFamily = typeof IpAddressFamily[keyof typeof IpAddressFamily];
 
 //XXX 外に出す？
 type IpAddress = {
@@ -73,9 +73,9 @@ export interface Components {
   // hasQuery(): boolean;
   withoutQuery(): Components;
   // withQuery(query: Array<Uri.QueryParameter>): Components;
-  // hasFragment(): boolean;
+  // hasNonEmptyFragment(): boolean;
   withoutFragment(): Components;
-  // withFragment(fragment: string): Components;
+  withFragment(rawFragment: string): Components;
 }
 
 export function fromString(value: string): Components {
@@ -373,6 +373,14 @@ class _UriComponents implements Components {
   withoutFragment(): Components {
     const url = new URL(this.#url);
     url.hash = EMPTY;
+    return new _UriComponents(url);
+  }
+
+  withFragment(rawFragment: string): Components {
+    Type.assertNonEmptyString(rawFragment, "rawFragment");
+    const url = new URL(this.#url);
+    //XXX エンコードはどうする（しない(エンコードされていなければエラー) or する）
+    url.hash = "#" + rawFragment; // 0x20,0x22,0x3C,0x3E,0x60 の%エンコードは自動でやってくれる
     return new _UriComponents(url);
   }
 }
