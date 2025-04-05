@@ -8,20 +8,7 @@ import { UriScheme } from "./scheme/mod.ts";
 
 const { EMPTY } = ExString;
 
-export namespace Uri {
-  export function fromString(value: string): Uri {
-    Type.assertNonEmptyString(value, "value");
-
-    const parsed = URL.parse(value);
-    if (parsed) {
-      return new _UriObject(parsed);
-    }
-
-    throw new TypeError("`value` must be text representation of URL.");
-  }
-}
-
-interface UriComponents {
+export interface Components {
   scheme: string;
   // userName: string;
   // password: string;
@@ -30,21 +17,29 @@ interface UriComponents {
   path: UriPath;
   query: string | null;
   fragment: string | null;
-}
-
-export interface Uri extends UriComponents {
   // userInfo: ;
   // authority: ;
   // origin: ;
   toString(): string;
-  // withoutUserInfo(): Uri;
-  // withPath(): Uri;
+  // withoutUserInfo(): Components;
+  // withPath(): Components;
   // hasQuery(): boolean;
-  // withQuery(query: Array<Uri.QueryParameter>): Uri;
-  // withoutQuery(): Uri;
+  // withQuery(query: Array<Uri.QueryParameter>): Components;
+  // withoutQuery(): Components;
   // hasFragment(): boolean;
-  withoutFragment(): Uri;
-  // withFragment(fragment: string): Uri;
+  withoutFragment(): Components;
+  // withFragment(fragment: string): Components;
+}
+
+export function fromString(value: string): Components {
+  Type.assertNonEmptyString(value, "value");
+
+  const parsed = URL.parse(value);
+  if (parsed) {
+    return new _UriComponents(parsed);
+  }
+
+  throw new TypeError("`value` must be text representation of URL.");
 }
 
 /**
@@ -102,7 +97,7 @@ function _fragmentOf(url: URL): string | null {
   return null;
 }
 
-class _UriObject implements Uri {
+class _UriComponents implements Components {
   readonly #url: URL;
 
   constructor(url: URL) {
@@ -198,9 +193,9 @@ class _UriObject implements Uri {
     return this.#url.toString();
   }
 
-  withoutFragment(): Uri {
+  withoutFragment(): Components {
     const url = new URL(this.#url);
     url.hash = EMPTY;
-    return new _UriObject(url);
+    return new _UriComponents(url);
   }
 }

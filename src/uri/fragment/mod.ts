@@ -1,1 +1,1 @@
-export * as UriFragmentIdentifier from "./identifier.ts";
+export * as FragmentIdentifier from "./identifier.ts";
