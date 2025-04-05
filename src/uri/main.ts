@@ -2,7 +2,6 @@ import * as Type from "../type/mod.ts";
 import { SafeInt } from "../numerics/mod.ts";
 import { String as ExString } from "../basics/mod.ts";
 import { type uint16 } from "../_typedef/mod.ts";
-import { UriFragment } from "./fragment/mod.ts";
 import { UriHost } from "./host/main.ts";
 import { UriPath } from "./path/mod.ts";
 import { UriScheme } from "./scheme/mod.ts";
@@ -30,7 +29,7 @@ interface UriComponents {
   port: uint16 | null;
   path: UriPath;
   query: string | null;
-  fragment: UriFragment | null; //string|nullにし、Fragmentは独立させる
+  fragment: string | null;
 }
 
 export interface Uri extends UriComponents {
@@ -87,6 +86,18 @@ function _queryOf(url: URL): string | null {
       // searchは""でクエリがnullではない場合（クエリが""(フラグメントを除いたURL末尾"?")の場合）
       return EMPTY;
     }
+  }
+  return null;
+}
+
+function _fragmentOf(url: URL): string | null {
+  const rawFragment = url.hash.replace(/^#/, EMPTY);
+
+  if (Type.isNonEmptyString(rawFragment)) {
+    return rawFragment;
+  } else if (url.toString().endsWith("#")) {
+    // hashは""でフラグメントがnullではない場合（フラグメントが""(URL末尾が"#")の場合）
+    return EMPTY;
   }
   return null;
 }
@@ -179,21 +190,8 @@ class _UriObject implements Uri {
     return _queryOf(this.#url);
   }
 
-  /**
-   * Gets the fragment for this instance.
-   *
-   * @example
-   * ```javascript
-   * const uri = Uri.fromString("http://example.com/foo#%E7%B4%A0%E7%89%87");
-   * const { fragment } = uri;
-   * // fragment.percentDecode()
-   * //   → "素片"
-   * // fragment.toString()
-   * //   → "%E7%B4%A0%E7%89%87"
-   * ```
-   */
-  get fragment(): UriFragment | null {
-    return UriFragment.of(this.#url);
+  get fragment(): string | null {
+    return _fragmentOf(this.#url);
   }
 
   toString(): string {
