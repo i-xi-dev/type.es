@@ -5,12 +5,26 @@ import { type uint16 } from "../_typedef/mod.ts";
 import { UriFragment } from "./fragment/mod.ts";
 import { UriHost } from "./host/main.ts";
 import { UriPath } from "./path/mod.ts";
-import { UriQuery } from "./query/mod.ts";
 import { UriScheme } from "./scheme/mod.ts";
 
 const { EMPTY } = ExString;
 
 export namespace Uri {
+  // export namespace Query {
+  //   /**
+  //    * A query parameter represented as name-value pair.
+  //    */
+  //   export type Parameter = [name: string, value: string];
+  // }
+
+  export interface Query {
+    // URLSearchParamsを使えばいい
+    // entries(): Iterable<Query.Parameter>;
+
+    // "application/x-www-form-urlencoded"以外で構文解析する場合など用
+    toString(): string;
+  }
+
   export function fromString(value: string): Uri {
     Type.assertNonEmptyString(value, "value");
 
@@ -30,8 +44,8 @@ interface UriComponents {
   host: UriHost | null;
   port: uint16 | null;
   path: UriPath;
-  query: UriQuery | null;
-  fragment: UriFragment | null;
+  query: Uri.Query | null; //string | nullにする、WwwFormUrlEncodedとして独立させる
+  fragment: UriFragment | null; //string|nullにし、Fragmentは独立させる
 }
 
 export interface Uri extends UriComponents {
@@ -74,6 +88,40 @@ function _portOf(url: URL): uint16 | null {
   }
 
   return null;
+}
+
+function _queryOf(url: URL): Uri.Query | null {
+  const rawQuery = url.search.replace(/^\?/, EMPTY);
+
+  if (Type.isNonEmptyString(rawQuery)) {
+    return new _Query(rawQuery);
+  } else {
+    const urlWithoutFragment = new URL(url);
+    urlWithoutFragment.hash = EMPTY;
+    if (urlWithoutFragment.toString().endsWith("?")) {
+      // searchは""でクエリがnullではない場合（クエリが""(フラグメントを除いたURL末尾"?")の場合）
+      return new _Query(EMPTY);
+    }
+  }
+  return null;
+}
+
+class _Query implements Uri.Query {
+  readonly #raw: string;
+  // readonly #parameters: Array<Uri.Query.Parameter>;
+
+  constructor(raw: string) {
+    this.#raw = raw;
+    // this.#parameters = [...new URLSearchParams(this.#raw).entries()];
+  }
+
+  // entries(): Iterable<Uri.Query.Parameter> {
+  //   return globalThis.structuredClone(this.#parameters);
+  // }
+
+  toString(): string {
+    return this.#raw;
+  }
 }
 
 class _UriObject implements Uri {
@@ -178,8 +226,8 @@ class _UriObject implements Uri {
    * //   → [ [ "textformat", "" ] ]
    * ```
    */
-  get query(): UriQuery | null {
-    return UriQuery.of(this.#url);
+  get query(): Uri.Query | null {
+    return _queryOf(this.#url);
   }
 
   /**
