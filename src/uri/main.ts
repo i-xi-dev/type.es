@@ -1,11 +1,10 @@
 import * as Type from "../type/mod.ts";
 import { _decode as _punycodeDecode } from "./_punycode.ts";
 import { _utfPercentDecode } from "./_utils.ts";
-import { Path } from "./path/mod.ts";
 import { SafeInt } from "../numerics/mod.ts";
 import { String as ExString } from "../basics/mod.ts";
 import { type uint16 } from "../_typedef/mod.ts";
-import { UriScheme } from "./scheme/mod.ts"; //TODO
+import { Scheme } from "./scheme/mod.ts";
 
 const { EMPTY } = ExString;
 
@@ -15,6 +14,22 @@ const IpAddressFamily = {
   IPV6: "IPv6",
 } as const;
 type IpAddressFamily = typeof IpAddressFamily[keyof typeof IpAddressFamily];
+
+/**
+ * The [special schemes](https://url.spec.whatwg.org/#special-scheme).
+ */
+const _SpecialSchemes: Array<string> = [
+  Scheme.FILE,
+  Scheme.FTP,
+  Scheme.HTTP,
+  Scheme.HTTPS,
+  Scheme.WS,
+  Scheme.WSS,
+];
+
+function _schemeOf(url: URL): string {
+  return url.protocol.replace(/:$/, EMPTY);
+}
 
 //XXX 外に出す？
 type IpAddress = {
@@ -28,6 +43,15 @@ export interface Host {
   isDomain: boolean;
   domain: string | null;
   isOpaque: boolean;
+  toString(): string;
+}
+
+export interface Path {
+  isOpaque: boolean;
+
+  segment(): Iterable<string>;
+
+  // opaqueなパスで構文解析する場合など用
   toString(): string;
 }
 
@@ -144,9 +168,9 @@ class _Host implements Host {
   }
 }
 
-export function _hostOf(url: URL): Host | null {
-  const scheme = UriScheme.of(url);
-  return new _Host(url.hostname, UriScheme.isSpecial(scheme));
+function _hostOf(url: URL): Host | null {
+  const scheme = _schemeOf(url);
+  return new _Host(url.hostname, _SpecialSchemes.includes(scheme));
   //XXX nullホストと空ホストは区別できるのか（URLオブジェクトの内部処理では区別してると思われるが、外から区別できるか）
 }
 
@@ -154,11 +178,11 @@ export function _hostOf(url: URL): Host | null {
  * The default port numbers.
  */
 const _DefaultPortMap: Record<string, uint16> = {
-  [UriScheme.FTP]: 21,
-  [UriScheme.HTTP]: 80,
-  [UriScheme.HTTPS]: 443,
-  [UriScheme.WS]: 80,
-  [UriScheme.WSS]: 443,
+  [Scheme.FTP]: 21,
+  [Scheme.HTTP]: 80,
+  [Scheme.HTTPS]: 443,
+  [Scheme.WS]: 80,
+  [Scheme.WSS]: 443,
 } as const;
 
 class _Path implements Path {
@@ -196,12 +220,12 @@ class _Path implements Path {
 }
 
 function _pathOf(url: URL): Path {
-  const scheme = UriScheme.of(url);
-  return new _Path(url.pathname, UriScheme.isSpecial(scheme));
+  const scheme = _schemeOf(url);
+  return new _Path(url.pathname, _SpecialSchemes.includes(scheme));
 }
 
 function _portOf(url: URL): uint16 | null {
-  const scheme = UriScheme.of(url);
+  const scheme = _schemeOf(url);
   const rawPort = url.port;
 
   if (Type.isNonEmptyString(rawPort)) {
@@ -263,7 +287,7 @@ class _UriComponents implements Components {
    * ```
    */
   get scheme(): string {
-    return UriScheme.of(this.#url);
+    return _schemeOf(this.#url);
   }
 
   // get userName(): string {
