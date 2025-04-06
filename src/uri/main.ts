@@ -8,6 +8,8 @@ import { Scheme } from "./scheme/mod.ts";
 
 const { EMPTY } = ExString;
 
+const _OPAQUE_ORIGIN = "null";
+
 /**
  * The [special schemes](https://url.spec.whatwg.org/#special-scheme).
  */
@@ -66,7 +68,7 @@ export interface Components {
   fragment: string | null;
   // userInfo: ;
   // authority: ;
-  // origin: ;
+  origin: string;
   toString(): string;
   // withoutUserInfo(): Components;
   // withPath(): Components; up()とか
@@ -76,6 +78,7 @@ export interface Components {
   // hasNonEmptyFragment(): boolean;
   withoutFragment(): Components;
   withFragment(rawFragment: string): Components;
+  isSameOrigin(other: Components | string): boolean;
 }
 
 export function fromString(value: string): Components {
@@ -360,6 +363,23 @@ class _UriComponents implements Components {
     return _fragmentOf(this.#url);
   }
 
+  get origin(): string {
+    const nonOpaqueSchemes: Array<string> = [
+      Scheme.BLOB,
+      Scheme.FTP,
+      Scheme.HTTP,
+      Scheme.HTTPS,
+      Scheme.WS,
+      Scheme.WSS,
+    ];
+    if (nonOpaqueSchemes.includes(this.scheme) === true) {
+      return this.#url.origin;
+    }
+    // fileスキームは実装依存。ここではopaqueとする
+
+    return _OPAQUE_ORIGIN;
+  }
+
   toString(): string {
     return this.#url.toString();
   }
@@ -390,5 +410,10 @@ class _UriComponents implements Components {
     //XXX %エンコードはどうする（エンコードされていなければエラーにする？）
     url.hash = "#" + rawFragment;
     return new _UriComponents(url);
+  }
+
+  // https://html.spec.whatwg.org/multipage/browsers.html#same-origin
+  isSameOrigin(other: Components | string): boolean {
+    throw new Error("TODO");
   }
 }
