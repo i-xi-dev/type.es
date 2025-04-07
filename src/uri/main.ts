@@ -2,9 +2,9 @@ import * as Type from "../type/mod.ts";
 import { _decode as _punycodeDecode } from "./_punycode.ts";
 import { _utfPercentDecode } from "./_utils.ts";
 import { SafeInt } from "../numerics/mod.ts";
+import { Scheme } from "./scheme/mod.ts";
 import { String as ExString } from "../basics/mod.ts";
 import { type uint16 } from "../_typedef/mod.ts";
-import { Scheme } from "./scheme/mod.ts";
 
 const { EMPTY } = ExString;
 
@@ -271,6 +271,24 @@ function _fragmentOf(url: URL): string | null {
   return null;
 }
 
+const _nonOpaqueSchemes: Array<string> = [
+  Scheme.BLOB,
+  Scheme.FTP,
+  Scheme.HTTP,
+  Scheme.HTTPS,
+  Scheme.WS,
+  Scheme.WSS,
+];
+
+function _originOf(url: URL): string {
+  const scheme = _schemeOf(url);
+  if (_nonOpaqueSchemes.includes(scheme) === true) {
+    return url.origin;
+  }
+  // fileスキームは実装依存。ここではopaqueとする
+  return _OPAQUE_ORIGIN;
+}
+
 class _UriComponents implements Components {
   readonly #url: URL;
 
@@ -413,7 +431,13 @@ class _UriComponents implements Components {
   }
 
   // https://html.spec.whatwg.org/multipage/browsers.html#same-origin
+  // jsでならURL型も渡せるがfileスキームの場合の結果が環境依存になるので注意
   isSameOrigin(other: Components | string): boolean {
-    throw new Error("TODO");
+    if (Type.isNonEmptyString(other)) {
+      return URL.canParse(other)
+        ? (this.origin === _originOf(URL.parse(other)!))
+        : false;
+    }
+    return this.origin === other?.origin;
   }
 }
