@@ -57,7 +57,7 @@ Deno.test("Uri.prototype.isSameOrigin() - string", () => {
   assertStrictEquals(u6A.isSameOrigin(u6A.toString()), true); // opaqueとopaqueでtrue
 });
 
-Deno.test("Uri.prototype.originEquals() - any", () => {
+Deno.test("Uri.prototype.isSameOrigin() - any", () => {
   const u0A = Uri.fromString("http://example.com:8080/");
 
   assertStrictEquals(

@@ -79,4 +79,21 @@ Deno.test("Uri.prototype.toString()", () => {
     Uri.fromString("http://example.com:80/hoge?fo o").toString(),
     "http://example.com/hoge?fo%20o",
   );
+
+  assertStrictEquals(
+    Uri.fromString("http://u:p@example.com/").toString(),
+    "http://example.com/",
+  );
+  assertStrictEquals(
+    Uri.fromString("http://u@example.com/").toString(),
+    "http://example.com/",
+  );
+  assertStrictEquals(
+    Uri.fromString("http://@example.com/").toString(),
+    "http://example.com/",
+  );
+  assertStrictEquals(
+    Uri.fromString("http://:@example.com/").toString(),
+    "http://example.com/",
+  );
 });

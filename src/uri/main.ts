@@ -291,9 +291,15 @@ function _originOf(url: URL): string {
 
 class _UriComponents implements Components {
   readonly #url: URL;
+  readonly #userName: string;
+  readonly #password: string;
 
   constructor(url: URL) {
     this.#url = url;
+    this.#userName = url.username;
+    this.#password = url.password;
+    url.username = EMPTY;
+    url.password = EMPTY;
   }
 
   /**
