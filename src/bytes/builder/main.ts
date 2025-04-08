@@ -301,7 +301,9 @@ export class BytesBuilder {
     const buffer = this.#bytes!.buffer;
     this.#bytes = null; //XXX transferはNode.jsが未実装
 
-    buffer.resize(this.#length);
+    if (buffer.resizable === true) {
+      buffer.resize(this.#length);
+    }
     return buffer;
   }
 

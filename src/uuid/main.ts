@@ -50,7 +50,8 @@ function _toBytesString(value: string): string {
   return value.toLowerCase().replace(/^urn:uuid:/, EMPTY).replace(/-/g, EMPTY);
 }
 
-// publicにはしない（ビッグエンディアンにする必要がある）
+// 文字列表現からUint128にするなら"-"を除いて先頭に"0x"を付けてBigInt()すれば良い
+
 function _fromString(value: string): Uint8Array<ArrayBuffer> {
   const bytesString = _toBytesString(value);
 
@@ -177,12 +178,12 @@ export function versionOf(uuid: string): safeint {
   });
 }
 
-export function timestampOf(uuidV7: string): safeint {
-  if (isVariant10xx(uuidV7) && (versionOf(uuidV7) !== 7)) {
-    throw new TypeError("TODO");
+export function timestampOf(value: string): safeint {
+  if (isVariant10xx(value) && (versionOf(value) !== 7)) {
+    throw new TypeError("`value` must be text representation of UUIDv7.");
   }
 
-  const bytes = _fromString(uuidV7);
+  const bytes = _fromString(value);
   let work = (new DataView(bytes.buffer)).getBigUint64(0);
   work = work >> 16n;
   return Number(work);
