@@ -1,0 +1,30 @@
+import { assertStrictEquals, assertThrows } from "@std/assert";
+import { Uuid } from "../../mod.ts";
+
+Deno.test("Uuid.isVariant10xx()", () => {
+  assertStrictEquals(Uuid.isVariant10xx("00000000-0000-0000-0000-000000000000"), false);
+  assertStrictEquals(Uuid.isVariant10xx("00000000-0000-0000-1000-000000000000"), false);
+  assertStrictEquals(Uuid.isVariant10xx("00000000-0000-0000-2000-000000000000"), false);
+  assertStrictEquals(Uuid.isVariant10xx("00000000-0000-0000-3000-000000000000"), false);
+  assertStrictEquals(Uuid.isVariant10xx("00000000-0000-0000-4000-000000000000"), false);
+  assertStrictEquals(Uuid.isVariant10xx("00000000-0000-0000-5000-000000000000"), false);
+  assertStrictEquals(Uuid.isVariant10xx("00000000-0000-0000-6000-000000000000"), false);
+  assertStrictEquals(Uuid.isVariant10xx("00000000-0000-0000-7000-000000000000"), false);
+  assertStrictEquals(Uuid.isVariant10xx("00000000-0000-0000-8000-000000000000"), true);
+  assertStrictEquals(Uuid.isVariant10xx("00000000-0000-0000-9000-000000000000"), true);
+  assertStrictEquals(Uuid.isVariant10xx("00000000-0000-0000-a000-000000000000"), true);
+  assertStrictEquals(Uuid.isVariant10xx("00000000-0000-0000-A000-000000000000"), true);
+  assertStrictEquals(Uuid.isVariant10xx("00000000-0000-0000-b000-000000000000"), true);
+  assertStrictEquals(Uuid.isVariant10xx("00000000-0000-0000-c000-000000000000"), false);
+  assertStrictEquals(Uuid.isVariant10xx("00000000-0000-0000-d000-000000000000"), false);
+  assertStrictEquals(Uuid.isVariant10xx("00000000-0000-0000-e000-000000000000"), false);
+  assertStrictEquals(Uuid.isVariant10xx("00000000-0000-0000-f000-000000000000"), false);
+
+  assertThrows(
+    () => {
+      Uuid.isVariant10xx("");
+    },
+    TypeError,
+    "`value` must be text representation of UUID.",
+  );
+});
