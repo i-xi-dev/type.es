@@ -164,6 +164,10 @@ export function variantOf(uuid: string): safeint {
   });
 }
 
+export function isVariant10xx(uuid: string): boolean {
+  return [8, 9, 10, 11].includes(variantOf(uuid));
+}
+
 /**
  * Gets the [version](https://datatracker.ietf.org/doc/html/rfc9562#name-version-field) of this UUID.
  */
@@ -174,7 +178,7 @@ export function versionOf(uuid: string): safeint {
 }
 
 export function timestampOf(uuidV7: string): safeint {
-  if (versionOf(uuidV7) !== 7) {
+  if (isVariant10xx(uuidV7) && (versionOf(uuidV7) !== 7)) {
     throw new TypeError("TODO");
   }
 
