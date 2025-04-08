@@ -9,8 +9,8 @@ const { EMPTY } = ExString;
 const _BYTES = 16;
 
 export type FormatOptions = {
-  upperCase?: boolean; //
-  noHyphens?: boolean;
+  upperCase?: boolean;
+  asURN?: boolean;
 };
 
 function _stringify(
@@ -21,16 +21,16 @@ function _stringify(
     lowerCase: options?.upperCase !== true,
   };
 
-  const joiner = (options?.noHyphens === true) ? EMPTY : "-";
-
   // [0..4]-[4..6]-[6..8]-[8..9]-[9..10]-[10..]
-  return [
+  const str = [
     Bytes.toString(bytes.slice(0, 4).buffer, resolvedOptions),
     Bytes.toString(bytes.slice(4, 6).buffer, resolvedOptions),
     Bytes.toString(bytes.slice(6, 8).buffer, resolvedOptions),
     Bytes.toString(bytes.slice(8, 10).buffer, resolvedOptions),
     Bytes.toString(bytes.slice(10).buffer, resolvedOptions),
-  ].join(joiner);
+  ].join("-");
+
+  return (options?.asURN === true) ? ("urn:uuid:" + str) : str;
 }
 
 function _isUuidString(test: string): boolean {
@@ -62,12 +62,80 @@ function _fromString(value: string): Uint8Array<ArrayBuffer> {
   return builder.toUint8Array();
 }
 
-/** @deprecated Use `crypto.randomUUID()`. */
+/**
+ * Creates a `string` that represents the UUIDv4.
+ *
+ * @deprecated Use `crypto.randomUUID()`.
+ * @param options -
+ * @returns A `string` that represents the UUIDv4.
+ */
 export function generateRandom(options?: FormatOptions): string {
   const bytes = globalThis.crypto.getRandomValues(new Uint8Array(_BYTES));
 
   // 7バイト目の上位4ビットは0100₂固定（13桁目の文字列表現は"4"固定）
   bytes[6] = (bytes[6] as uint8) & 0x0F | 0x40;
+
+  // 9バイト目の上位2ビットは10₂固定（17桁目の文字列表現は"8","9","A","B"のどれか）
+  bytes[8] = (bytes[8] as uint8) & 0x3F | 0x80;
+
+  return _stringify(bytes, options);
+}
+
+const _v7m = Object.seal({
+  last: globalThis.performance.now(),
+});
+
+function _timestamp(): safeint {
+  return Math.trunc(
+    globalThis.performance.timeOrigin + globalThis.performance.now(),
+  );
+}
+
+const _v7Counter = (function* () {
+  let last = Number.MIN_SAFE_INTEGER;
+  let cnt = 0;
+  while (true) {
+    const curr = _timestamp();
+    if (last < curr) {
+      last = curr;
+      cnt = 0;
+    } else { // if (last === curr) { // last > currはありえない
+      cnt++;
+    }
+
+    yield {
+      timestamp: last,
+      counter: cnt,
+    };
+  }
+})();
+
+/**
+ * Creates a `string` that represents the UUIDv7.
+ *
+ * @param options -
+ * @returns A `string` that represents the UUIDv7.
+ */
+export function generateUnixTimeBased(options?: FormatOptions): string {
+  const bytes = globalThis.crypto.getRandomValues(new Uint8Array(_BYTES));
+
+  const { timestamp, counter } = _v7Counter.next().value;
+
+  // 先頭48ビットにミリ秒精度の現在時刻をビッグエンディアンでセット
+  const tsBuffer = new ArrayBuffer(8);
+  const tsView = new DataView(tsBuffer);
+  tsView.setBigUint64(0, BigInt(timestamp));
+  bytes.set(new Uint8Array(tsBuffer, 2), 0);
+
+  // 次の12ビットはミリ秒未満ナノ秒までをセットすることもできるが、
+  // ミリ秒未満をブラウザで確実に取る方法が結局のところ無いので、
+  // RFC9562の6.2のMethod 1で実装する
+  tsView.setBigUint64(0, 0n);
+  tsView.setUint16(0, counter);
+  bytes.set(new Uint8Array(tsBuffer, 0, 2), 6);
+
+  // 7バイト目の上位4ビットは0111₂固定（13桁目の文字列表現は"7"固定）
+  bytes[6] = (bytes[6] as uint8) & 0x0F | 0x70;
 
   // 9バイト目の上位2ビットは10₂固定（17桁目の文字列表現は"8","9","A","B"のどれか）
   bytes[8] = (bytes[8] as uint8) & 0x3F | 0x80;
