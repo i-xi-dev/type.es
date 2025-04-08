@@ -82,6 +82,25 @@ export function generateRandom(options?: FormatOptions): string {
   return _stringify(bytes, options);
 }
 
+async function _generateNameBased(
+  compute: Bytes.ComputeDigest,
+  options?: FormatOptions,
+): Promise<string> {
+  throw new Error("TODO");
+}
+
+export function generateMd5NameBased(
+  options?: FormatOptions,
+): Promise<string> {
+  return _generateNameBased(Bytes.computeMd5, options);
+}
+
+export function generateSha1NameBased(
+  options?: FormatOptions,
+): Promise<string> {
+  return _generateNameBased(Bytes.computeSha1, options);
+}
+
 const _v7m = Object.seal({
   last: globalThis.performance.now(),
 });

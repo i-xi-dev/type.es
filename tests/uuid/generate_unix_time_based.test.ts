@@ -15,6 +15,7 @@ Deno.test("Uuid.generateUnixTimeBased()", () => {
   let curr = "";
   for (let i = 0; i <= 100; i++) {
     curr = Uuid.generateUnixTimeBased();
+    // console.log(curr);
     assertStrictEquals(curr > prev, true);
     prev = curr;
   }
