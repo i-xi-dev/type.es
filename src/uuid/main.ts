@@ -87,6 +87,9 @@ export function max(options?: FormatOptions): string {
   return _stringify(bytes, options);
 }
 
+/**
+ * Gets the [variant](https://datatracker.ietf.org/doc/html/rfc9562#name-variant-field) of this UUID.
+ */
 export function variantOf(uuid: string): safeint {
   const normalized = _normalizeString(uuid);
   return SafeInt.fromString(normalized.charAt(16), {
@@ -94,6 +97,9 @@ export function variantOf(uuid: string): safeint {
   });
 }
 
+/**
+ * Gets the [version](https://datatracker.ietf.org/doc/html/rfc9562#name-version-field) of this UUID.
+ */
 export function versionOf(uuid: string): safeint {
   const normalized = _normalizeString(uuid);
   return SafeInt.fromString(normalized.charAt(12), {
