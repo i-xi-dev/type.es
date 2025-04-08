@@ -38,13 +38,13 @@ function _isUuidString(test: string): boolean {
     return false;
   }
 
-  return /^(?:(?:urn:uuid:)?[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}|[0-9a-f]{32})$/i
+  return /^(?:(?:urn:uuid:)?[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})$/i
     .test(test);
 }
 
-function _normalizeString(value: string): string {
+function _toBytesString(value: string): string {
   if (_isUuidString(value) !== true) {
-    throw new RangeError("TODO");
+    throw new TypeError("`value` must be text representation of UUID.");
   }
 
   return value.toLowerCase().replace(/^urn:uuid:/, EMPTY).replace(/-/g, EMPTY);
@@ -52,13 +52,13 @@ function _normalizeString(value: string): string {
 
 // publicにはしない（ビッグエンディアンにする必要がある）
 function _fromString(value: string): Uint8Array<ArrayBuffer> {
-  const normalized = _normalizeString(value);
+  const bytesString = _toBytesString(value);
 
   const builder = Bytes.BytesBuilder.create({
     capacity: _BYTES,
     capacityMax: _BYTES,
   });
-  builder.loadFromString(normalized);
+  builder.loadFromString(bytesString);
   return builder.toUint8Array();
 }
 
@@ -159,8 +159,7 @@ export function max(options?: FormatOptions): string {
  * Gets the [variant](https://datatracker.ietf.org/doc/html/rfc9562#name-variant-field) of this UUID.
  */
 export function variantOf(uuid: string): safeint {
-  const normalized = _normalizeString(uuid);
-  return SafeInt.fromString(normalized.charAt(16), {
+  return SafeInt.fromString(_toBytesString(uuid).charAt(16), {
     radix: Radix.HEXADECIMAL,
   });
 }
@@ -169,8 +168,18 @@ export function variantOf(uuid: string): safeint {
  * Gets the [version](https://datatracker.ietf.org/doc/html/rfc9562#name-version-field) of this UUID.
  */
 export function versionOf(uuid: string): safeint {
-  const normalized = _normalizeString(uuid);
-  return SafeInt.fromString(normalized.charAt(12), {
+  return SafeInt.fromString(_toBytesString(uuid).charAt(12), {
     radix: Radix.HEXADECIMAL,
   });
+}
+
+export function timestampOf(uuidV7: string): safeint {
+  if (versionOf(uuidV7) !== 7) {
+    throw new TypeError("TODO");
+  }
+
+  const bytes = _fromString(uuidV7);
+  let work = (new DataView(bytes.buffer)).getBigUint64(0);
+  work = work >> 16n;
+  return Number(work);
 }
