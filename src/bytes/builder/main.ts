@@ -3,6 +3,8 @@ import {
   ByteOrder,
   InvalidStateError,
   QuotaExceededError,
+  Radix,
+  String as ExString,
 } from "../../basics/mod.ts";
 import {
   type biguint64,
@@ -13,7 +15,14 @@ import {
   type uint32,
   type uint8,
 } from "../../_typedef/mod.ts";
-import { BigUint64, Uint16, Uint32, Uint8 } from "../../numerics/mod.ts";
+import {
+  BigUint64,
+  SafeInt,
+  Uint16,
+  Uint32,
+  Uint8,
+} from "../../numerics/mod.ts";
+import { digitCountOf } from "../operations/mod.ts";
 
 const _DEFAULT_CAPACITY = 1_048_576;
 
@@ -132,6 +141,7 @@ const _U64Conf: _LoadConfig<bigint, BigUint64Array<ArrayBuffer>> = {
 export class BytesBuilder {
   #length: safeint;
   #bytes: Uint8Array<ArrayBuffer> | null;
+  //XXX order持つべき？
 
   private constructor(buffer: ArrayBuffer, offset: safeint) {
     this.#length = offset;
@@ -244,6 +254,46 @@ export class BytesBuilder {
     //   this.#bytes = newBuffer;
     // }
   }
+
+  //XXX optionsで
+  // - radix
+  // - separatorなし固定長、separatorあり固定長、separatorあり可変長、
+  // 000afff0 → [ 0x0, 0xA, 0xFF, 0xF0 ]
+  loadFromString(bytesAsString: string): void {
+    Type.assertString(bytesAsString, "bytesAsString");
+
+    if (bytesAsString.length <= 0) {
+      return;
+    }
+
+    const radix = Radix.HEXADECIMAL;
+    if ((bytesAsString.length % digitCountOf(radix)!) !== 0) {
+      throw new RangeError(
+        "`bytesAsString` must be text representation of byte sequence.",
+      );
+    }
+    const pattern = Radix.integerPatternOf(radix);
+    if (new RegExp(pattern).test(bytesAsString) !== true) {
+      throw new RangeError(
+        "`bytesAsString` must be text representation of byte sequence.",
+      );
+    }
+
+    const bytes = (function* (chars, length) {
+      for (let i = 0; i < length; i += 2) {
+        yield SafeInt.fromString(chars.next().value! + chars.next().value!, {
+          radix,
+        });
+      }
+    })(ExString.toChars(bytesAsString), bytesAsString.length);
+
+    this.loadFromUint8Iterable(bytes);
+  }
+
+  // // \u0000\u000A\u00FF\u00F0 → [ 0x0, 0xA, 0xFF, 0xF0 ]
+  // /** @deprecated */
+  // loadFromBinaryString(): void {
+  // }
 
   toArrayBuffer(): ArrayBuffer {
     this.#assertValidState();

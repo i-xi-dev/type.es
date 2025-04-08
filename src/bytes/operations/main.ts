@@ -26,12 +26,20 @@ export function toArray(value: ArrayBuffer): Array<uint8> {
   return [...new Uint8Array(value)] as Array<uint8>;
 }
 
-const _ByteStringLength = {
-  [Radix.HEXADECIMAL]: 2,
-  [Radix.BINARY]: 8,
-  [Radix.DECIMAL]: 3,
-  [Radix.OCTAL]: 3,
-};
+export function digitCountOf(radix: radix): safeint | undefined {
+  switch (radix) {
+    case Radix.HEXADECIMAL:
+      return 2;
+    case Radix.BINARY:
+      return 8;
+    case Radix.DECIMAL:
+      return 3;
+    case Radix.OCTAL:
+      return 3;
+    default:
+      return undefined;
+  }
+}
 
 export type ToStringIterableOptions = {
   radix?: radix;
@@ -50,7 +58,7 @@ export function toStringIterable(
   const resolvedOptions = {
     radix,
     lowerCase: options?.lowerCase === true,
-    minIntegerDigits: _ByteStringLength[radix],
+    minIntegerDigits: digitCountOf(radix),
   };
 
   return (function* (bytes: Uint8Array<ArrayBuffer>) {
