@@ -1,4 +1,5 @@
 import * as Bytes from "../bytes/mod.ts";
+import * as Text from "../text/mod.ts";
 import * as Type from "../type/mod.ts";
 import { type safeint, type uint8 } from "../_typedef/mod.ts";
 import { Radix, String as ExString } from "../basics/mod.ts";
@@ -83,22 +84,53 @@ export function generateRandom(options?: FormatOptions): string {
 }
 
 async function _generateNameBased(
-  compute: Bytes.ComputeDigest,
+  namespaceUuid: string,
+  name: string,
+  version: 3 | 5,
   options?: FormatOptions,
 ): Promise<string> {
-  throw new Error("TODO");
+  Type.assertString(name, "name");
+  const namespaceBytes = _fromString(namespaceUuid);
+  const nameBytes = Text.toBytes(name);
+
+  const bytes = new Uint8Array(namespaceBytes.length + nameBytes.length);
+  bytes.set(namespaceBytes, 0);
+  bytes.set(nameBytes, namespaceBytes.length);
+
+  let digestBytes: Uint8Array<ArrayBuffer>;
+  if (version === 5) {
+    digestBytes = new Uint8Array(await Bytes.computeSha1(bytes));
+
+    // 7バイト目の上位4ビットは0101₂固定（13桁目の文字列表現は"5"固定）
+    digestBytes[6] = (digestBytes[6] as uint8) & 0x0F | 0x50;
+  } else { // if (version === 3) {
+    digestBytes = new Uint8Array(await Bytes.computeMd5(bytes));
+
+    // 7バイト目の上位4ビットは0011₂固定（13桁目の文字列表現は"3"固定）
+    digestBytes[6] = (digestBytes[6] as uint8) & 0x0F | 0x30;
+  }
+
+  // 9バイト目の上位2ビットは10₂固定（17桁目の文字列表現は"8","9","A","B"のどれか）
+  digestBytes[8] = (digestBytes[8] as uint8) & 0x3F | 0x80;
+
+  // 17バイト目以降は破棄
+  return _stringify(digestBytes.slice(0, 16), options);
 }
 
 export function generateMd5NameBased(
+  namespaceUuid: string,
+  name: string,
   options?: FormatOptions,
 ): Promise<string> {
-  return _generateNameBased(Bytes.computeMd5, options);
+  return _generateNameBased(namespaceUuid, name, 3, options);
 }
 
 export function generateSha1NameBased(
+  namespaceUuid: string,
+  name: string,
   options?: FormatOptions,
 ): Promise<string> {
-  return _generateNameBased(Bytes.computeSha1, options);
+  return _generateNameBased(namespaceUuid, name, 5, options);
 }
 
 const _v7m = Object.seal({
@@ -207,3 +239,12 @@ export function timestampOf(value: string): safeint {
   work = work >> 16n;
   return Number(work);
 }
+
+//XXX uuidEquals()
+
+export const Namespace = {
+  DNS: "6ba7b810-9dad-11d1-80b4-00c04fd430c8",
+  URL: "6ba7b811-9dad-11d1-80b4-00c04fd430c8",
+  OID: "6ba7b812-9dad-11d1-80b4-00c04fd430c8",
+  X500: "6ba7b814-9dad-11d1-80b4-00c04fd430c8",
+} as const;
