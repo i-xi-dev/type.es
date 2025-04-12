@@ -6,6 +6,8 @@ export * from "./code_plane.ts";
 export * from "./code_point.ts";
 export * from "./code_point_range.ts";
 export * from "./collection.ts";
+export * from "./events.ts";
+export * from "./function.ts";
 export * from "./i18n.ts";
 export * from "./integer.ts";
 export * from "./integer_string.ts";
