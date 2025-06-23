@@ -2,6 +2,8 @@ import { _Options, _RFC4648_OPTIONS, _RFC4648URL_OPTIONS } from "./_common.ts";
 
 export type Base64Options = _Options;
 
+//TODO Make it compatible with options of Uint8Array.fromBase64/Uint8Array.prototype.toBase64
+
 export namespace Base64Options {
   /**
    * The options for [RFC 4648 Base64](https://datatracker.ietf.org/doc/html/rfc4648#section-4).

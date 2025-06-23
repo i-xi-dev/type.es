@@ -19,6 +19,7 @@ import { Base64Options } from "./options.ts";
  * encoder.encode(Uint8Array.of(0x03, 0x02, 0x01, 0x00, 0xFF, 0xFE, 0xFD, 0xFC));
  * // → "AwIBAP_-_fw"
  * ```
+ * @deprecated Use the `Uint8Array.prototype.toBase64()`.
  */
 export class Base64Encoder implements Encoder {
   /**
